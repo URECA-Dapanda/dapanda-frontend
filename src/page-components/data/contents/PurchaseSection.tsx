@@ -1,7 +1,7 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Slider } from "@/components/ui/slider";
+import { Button } from "@ui/button";
+import { Card, CardContent } from "@ui/card";
+import { Slider } from "@ui/slider";
 import { useState } from "react";
 
 export default function PurchaseSection() {

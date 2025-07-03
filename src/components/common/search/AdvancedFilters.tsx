@@ -1,8 +1,8 @@
 import { memo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
+import { Card, CardContent } from "@ui/card";
+import { Label } from "@ui/label";
+import { Slider } from "@ui/slider";
 
 function AdvancedFilters({ showFilters }: { showFilters: boolean }) {
   const [dataAmount, setDataAmount] = useState([1]);

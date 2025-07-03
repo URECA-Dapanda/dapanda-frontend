@@ -1,4 +1,4 @@
-import KakaoLoginButton from "@/components/common/KakaoLoginButton";
+import KakaoLoginButton from "@components/common/KakaoLoginButton";
 import { Wifi } from "lucide-react";
 
 export default function LandingPageContent() {

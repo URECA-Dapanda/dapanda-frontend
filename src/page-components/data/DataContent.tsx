@@ -1,4 +1,4 @@
-import SearchFilter from "@/components/common/SearchFilter";
+import SearchFilter from "@components/common/search/SearchFilter";
 import PurchaseSection from "./contents/PurchaseSection";
 import SellButton from "./contents/SellButton";
 import SaleList from "./contents/SaleList";

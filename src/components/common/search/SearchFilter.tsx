@@ -1,8 +1,8 @@
 "use client";
 import { memo, useState } from "react";
-import SearchBar from "./search/SearchBar";
-import SortDropdown from "./search/SortDropdown";
-import AdvancedFilters from "./search/AdvancedFilters";
+import SearchBar from "./SearchBar";
+import SortDropdown from "./SortDropdown";
+import AdvancedFilters from "./AdvancedFilters";
 
 function SearchFilter() {
   const [showFilters, setShowFilters] = useState(false);

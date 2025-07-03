@@ -1,8 +1,8 @@
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { SaleItemType } from "@/types/Sale";
+import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar";
+import { Button } from "@ui/button";
+import { Card, CardContent } from "@ui/card";
+import { SaleItemType } from "@types/Sale";
 import { useRouter } from "next/navigation";
 import { memo, useCallback, useMemo } from "react";
 

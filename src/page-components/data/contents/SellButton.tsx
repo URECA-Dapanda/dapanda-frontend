@@ -1,6 +1,6 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { useSaleStore } from "@/stores/useSaleStore";
+import { Button } from "@ui/button";
+import { useSaleStore } from "@stores/useSaleStore";
 import { Plus } from "lucide-react";
 
 export default function SellButton() {
