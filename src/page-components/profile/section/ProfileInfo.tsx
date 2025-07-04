@@ -5,7 +5,7 @@ import { UserType } from "@/types/User";
 import { useQuery } from "@tanstack/react-query";
 
 function ProfileInfo() {
-  const { data } = useQuery<UserType>({
+  const { data } = useQuery<Partial<UserType>>({
     queryKey: ["user/info"],
     queryFn: getUserInfo,
   });
