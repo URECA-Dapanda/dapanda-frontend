@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import BottomNavigation from "@components/common/navigation/BottomNavigation";
-import SharedHeader from "@components/common/SharedHeader";
+import SharedHeader from "@/components/common/header/SharedHeader";
 import ProviderWrapper from "@components/common/ProviderWrapper";
 
 const geistSans = Geist({
@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased w-[375px] h-[812px] mx-auto overflow-hidden`}
       >
         <ProviderWrapper>
           <SharedHeader />

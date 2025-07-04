@@ -1,10 +1,10 @@
 "use client";
 import { Button } from "@ui/button";
-import { useSaleStore } from "@stores/useSaleStore";
 import { Plus } from "lucide-react";
+import { useConfigStore } from "@/stores/useConfigStore";
 
 export default function SellButton() {
-  const handleShowSellSheet = useSaleStore(
+  const handleShowSellSheet = useConfigStore(
     (state) => state.handleShowSellSheet
   );
 

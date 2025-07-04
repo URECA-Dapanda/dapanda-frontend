@@ -12,9 +12,17 @@ function NavigationButton({
 }: PropsWithChildren<NavigationButtonProps>) {
   const router = useRouter();
   const pathname = usePathname();
+  /**
+   * @constant userId 추후에 실제 id 읽어오기
+   */
+  const userId = 12;
 
   const handleButtonClick = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-    router.push(`${e.currentTarget.value}`);
+    router.push(
+      `${e.currentTarget.value}${
+        e.currentTarget.value === "/profile" ? `/${userId}` : ""
+      }`
+    );
   }, []);
 
   return (
