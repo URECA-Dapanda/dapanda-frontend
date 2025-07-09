@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased w-[375px] h-[812px] mx-auto overflow-hidden`}
+        className={`antialiased w-[375px] h-[812px] mx-auto overflow-hidden`}
       >
         <ProviderWrapper>
           <SharedHeader />

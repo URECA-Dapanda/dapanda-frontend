@@ -1,9 +1,90 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css");
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
+@theme {
+  /* custom colors */
+  --color-primary-50: rgba(255, 240, 250, 1);
+  --color-primary-100: rgba(255, 228, 247, 1);
+  --color-primary-200: rgba(255, 201, 240, 1);
+  --color-primary-300: rgba(255, 156, 226, 1);
+  --color-primary-400: rgba(255, 95, 204, 1);
+  --color-primary-500: rgba(255, 48, 180, 1);
+  --color-primary-600: rgba(245, 13, 147, 1);
+  --color-primary-700: rgba(230, 0, 126, 1);
+  --color-primary-800: rgba(176, 4, 96, 1);
+
+  --color-secondary-50: rgba(238, 243, 255, 1);
+  --color-secondary-100: rgba(220, 230, 255, 1);
+  --color-secondary-200: rgba(199, 213, 254, 1);
+  --color-secondary-300: rgba(165, 185, 252, 1);
+  --color-secondary-400: rgba(129, 147, 248, 1);
+  --color-secondary-500: rgba(99, 111, 241, 1);
+  --color-secondary-600: rgba(70, 71, 229, 1);
+  --color-secondary-700: rgba(58, 56, 202, 1);
+  --color-secondary-800: rgba(48, 48, 163, 1);
+
+  --color-text-black: rgba(23, 23, 27, 1);
+  --color-text-white: rgba(255, 255, 255, 1);
+
+  --color-bg-white: rgba(255, 255, 255, 1);
+  --color-bg-black: rgba(23, 23, 27, 1);
+  --color-bg-primary: rgba(230, 0, 126, 1);
+  --color-bg-primary2: rgba(253, 237, 246, 1);
+  --color-bg-secondary: rgba(220, 230, 255, 1);
+  --color-bg-secondary2: rgba(195, 212, 255, 1);
+  --color-bg-error: rgba(237, 33, 36, 1);
+  --color-bg-warning: rgba(254, 185, 63, 1);
+  --color-bg-success: rgba(45, 183, 69, 1);
+  --color-bg-ivory: rgba(255, 232, 198, 1);
+
+  --color-gray-100: rgba(245, 247, 250, 1);
+  --color-gray-200: rgba(240, 240, 245, 1);
+  --color-gray-300: rgba(225, 225, 235, 1);
+  --color-gray-400: rgba(202, 204, 216, 1);
+  --color-gray-500: rgba(173, 175, 187, 1);
+  --color-gray-600: rgba(133, 136, 152, 1);
+  --color-gray-700: rgba(53, 54, 63, 1);
+  --color-gray-800: rgba(35, 37, 43, 1);
+
+  --color-border-secondary: rgba(229, 231, 235, 1);
+  --color-border-black: rgba(23, 23, 27, 1);
+
+  --color-black-22: rgba(23, 23, 27, 0.22);
+  /* custom colors */
+  --font-title: "Pretendard";
+  --font-heading-h1: "Pretendard";
+  --font-heading-h2: "Pretendard";
+  --font-heading-h3: "Pretendard";
+  --font-title-lg: "Pretendard";
+  --font-title-md: "Pretendard";
+  --font-title-sm: "Pretendard";
+  --font-body-lg: "Pretendard";
+  --font-body-md: "Pretendard";
+  --font-body-sm: "Pretendard";
+  --font-body-xs: "Pretendard";
+  --font-body-xxs: "Pretendard";
+  --font-caption-lg: "Pretendard";
+  --font-caption-md: "Pretendard";
+  --font-caption-sm: "Pretendard";
+  --text-title: 32px;
+  --text-heading-h1: 32px;
+  --text-heading-h2: 24px;
+  --text-heading-h3: 20px;
+  --text-title-lg: 24px;
+  --text-title-md: 20px;
+  --text-title-sm: 16px;
+  --text-body-lg: 20px;
+  --text-body-md: 16px;
+  --text-body-sm: 14px;
+  --text-body-xs: 12px;
+  --text-body-xxs: 10px;
+  --text-caption-lg: 12px;
+  --text-caption-md: 10px;
+  --text-caption-sm: 8px;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -43,7 +124,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-:root {
+/* :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -76,7 +157,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-}
+} */
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -134,12 +215,16 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 45 100% 70%;
     --radius: 0.75rem;
+    --font-sans: Pretendard, ui-sans-serif, system-ui;
   }
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  html {
+    font-family: var(--font-sans); /* 👈 기본 sans 계열로 Pretendard 지정 */
   }
   body {
     @apply bg-background text-foreground;
@@ -179,6 +264,81 @@
 
   .warm-bg {
     background-color: #ffe8c6;
+  }
+
+  .text-title {
+    font-family: var(--font-title);
+    font-size: var(--text-title);
+  }
+
+  .text-heading-h1 {
+    font-family: var(--font-heading-h1);
+    font-size: var(--text-heading-h1);
+  }
+
+  .text-heading-h2 {
+    font-family: var(--font-heading-h2);
+    font-size: var(--text-heading-h2);
+  }
+
+  .text-heading-h3 {
+    font-family: var(--font-heading-h3);
+    font-size: var(--text-heading-h3);
+  }
+
+  .text-title-lg {
+    font-family: var(--font-title-lg);
+    font-size: var(--text-title-lg);
+  }
+
+  .text-title-md {
+    font-family: var(--font-title-md);
+    font-size: var(--text-title-md);
+  }
+
+  .text-title-sm {
+    font-family: var(--font-title-sm);
+    font-size: var(--text-title-sm);
+  }
+
+  .text-body-lg {
+    font-family: var(--font-body-lg);
+    font-size: var(--text-body-lg);
+  }
+
+  .text-body-md {
+    font-family: var(--font-body-md);
+    font-size: var(--text-body-md);
+  }
+
+  .text-body-sm {
+    font-family: var(--font-body-sm);
+    font-size: var(--text-body-sm);
+  }
+
+  .text-body-xs {
+    font-family: var(--font-body-xs);
+    font-size: var(--text-body-xs);
+  }
+
+  .text-body-xxs {
+    font-family: var(--font-body-xxs);
+    font-size: var(--text-body-xxs);
+  }
+
+  .text-caption-lg {
+    font-family: var(--font-caption-lg);
+    font-size: var(--text-caption-lg);
+  }
+
+  .text-caption-md {
+    font-family: var(--font-caption-md);
+    font-size: var(--text-caption-md);
+  }
+
+  .text-caption-sm {
+    font-family: var(--font-caption-sm);
+    font-size: var(--text-caption-sm);
   }
 }
 
