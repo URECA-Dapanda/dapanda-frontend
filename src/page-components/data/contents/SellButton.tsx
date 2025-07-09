@@ -1,0 +1,24 @@
+"use client";
+import { Button } from "@ui/button";
+import { Plus } from "lucide-react";
+import { useConfigStore } from "@/stores/useConfigStore";
+
+export default function SellButton() {
+  const handleShowSellSheet = useConfigStore(
+    (state) => state.handleShowSellSheet
+  );
+
+  return (
+    <div className="flex justify-end mb-4">
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleShowSellSheet}
+        className="flex items-center gap-1 border-[#ffd964] text-[#119c72] hover:bg-[#fefaef] bg-transparent"
+      >
+        <Plus className="w-4 h-4" />
+        데이터 판매하기
+      </Button>
+    </div>
+  );
+}
