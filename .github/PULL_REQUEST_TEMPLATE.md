@@ -18,8 +18,8 @@
 
 ## ✅ 체크리스트
 
-- [] 현재 Branch에 Merge 대상 Branch를 Merge 하여 코드를 최신화 했나요?
-- [] 모든 Conflict를 수정 완료 했나요?
-- [] Build test를 진행했나요? (npm run build)
-- [] 불필요한 log는 삭제했나요?
-- [] `application.yml` 파일을 수정했다면, Notion에 업로드 및 공유했나요?
+- [ ] 현재 Branch에 Merge 대상 Branch를 Merge 하여 코드를 최신화 했나요?
+- [ ] 모든 Conflict를 수정 완료 했나요?
+- [ ] Build test를 진행했나요? (npm run build)
+- [ ] 불필요한 log는 삭제했나요?
+- [ ] `application.yml` 파일을 수정했다면, Notion에 업로드 및 공유했나요?
