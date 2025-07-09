@@ -1,4 +1,4 @@
-import AvatarIcon from "@/components/common/header/AvatarIcon";
+import AvatarIcon from "@/components/common/AvatarIcon";
 import { Button } from "@ui/button";
 import { Card, CardContent } from "@ui/card";
 import ProfileInfo from "./ProfileInfo";

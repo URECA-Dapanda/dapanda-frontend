@@ -7,7 +7,7 @@ function RechargeCashButton() {
   const router = useRouter();
 
   const handleChargeButtonClick = useCallback(() => {
-    router.push("/cash");
+    router.push("/checkout");
   }, []);
 
   return (

@@ -16,8 +16,10 @@ const nextConfig: NextConfig = {
       "@page-components": path.resolve(__dirname, "src/page-components"),
       "@stores": path.resolve(__dirname, "src/stores"),
       "@styles": path.resolve(__dirname, "src/styles"),
-      "@types": path.resolve(__dirname, "src/types"),
+      "@type": path.resolve(__dirname, "src/types"),
     };
+
+    return config;
   },
 };
 

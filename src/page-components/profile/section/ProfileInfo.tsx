@@ -18,7 +18,7 @@ function ProfileInfo() {
           <p className="text-sm text-gray-600">가입일: 2024.01.15</p>
           <div className="flex items-center gap-2 mt-1">
             <div className="flex text-[#ffd964]">
-              {"★".repeat(data.recommend)}
+              {"★".repeat(data.recommend!)}
             </div>
             <span className="text-sm text-gray-600">(4.8)</span>
           </div>

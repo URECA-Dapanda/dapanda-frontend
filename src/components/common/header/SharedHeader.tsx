@@ -1,7 +1,7 @@
 import { Wifi } from "lucide-react";
 import HeaderTitle from "./HeaderTitle";
 import HeaderCash from "./HeaderCash";
-import AvatarIcon from "./AvatarIcon";
+import AvatarIcon from "../AvatarIcon";
 
 export default function SharedHeader() {
   return (

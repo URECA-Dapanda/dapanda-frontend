@@ -26,11 +26,7 @@ export default function MenuList() {
       <CardContent className="p-0">
         <div className="divide-y divide-[#ffe8c6]">
           {menuList.map(({ title, target }, i) => (
-            <MenuItem
-              title={title}
-              key={`${i}_${title}`}
-              handleButtonClick={target}
-            />
+            <MenuItem title={title} key={`${i}_${title}`} target={target} />
           ))}
         </div>
       </CardContent>

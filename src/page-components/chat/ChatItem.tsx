@@ -1,6 +1,6 @@
 "use client";
 
-import AvatarIcon from "@/components/common/header/AvatarIcon";
+import AvatarIcon from "@/components/common/AvatarIcon";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChatProps } from "@/types/Chat";
 import { useRouter } from "next/navigation";

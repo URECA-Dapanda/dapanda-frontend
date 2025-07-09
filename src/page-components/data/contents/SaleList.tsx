@@ -1,4 +1,4 @@
-import { SaleItemType } from "@types/Sale";
+import { SaleItemType } from "@type/Sale";
 import { memo } from "react";
 import SaleItem from "./SaleItem";
 

@@ -2,7 +2,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar";
 import { Button } from "@ui/button";
 import { Card, CardContent } from "@ui/card";
-import { SaleItemType } from "@types/Sale";
+import { SaleItemType } from "@type/Sale";
 import { useRouter } from "next/navigation";
 import { memo, useCallback, useMemo } from "react";
 
