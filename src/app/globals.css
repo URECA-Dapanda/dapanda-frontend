@@ -3,58 +3,9 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@config "../../tailwind.config.js";
 
 @theme {
-  /* custom colors */
-  --color-primary-50: rgba(255, 240, 250, 1);
-  --color-primary-100: rgba(255, 228, 247, 1);
-  --color-primary-200: rgba(255, 201, 240, 1);
-  --color-primary-300: rgba(255, 156, 226, 1);
-  --color-primary-400: rgba(255, 95, 204, 1);
-  --color-primary-500: rgba(255, 48, 180, 1);
-  --color-primary-600: rgba(245, 13, 147, 1);
-  --color-primary-700: rgba(230, 0, 126, 1);
-  --color-primary-800: rgba(176, 4, 96, 1);
-
-  --color-secondary-50: rgba(238, 243, 255, 1);
-  --color-secondary-100: rgba(220, 230, 255, 1);
-  --color-secondary-200: rgba(199, 213, 254, 1);
-  --color-secondary-300: rgba(165, 185, 252, 1);
-  --color-secondary-400: rgba(129, 147, 248, 1);
-  --color-secondary-500: rgba(99, 111, 241, 1);
-  --color-secondary-600: rgba(70, 71, 229, 1);
-  --color-secondary-700: rgba(58, 56, 202, 1);
-  --color-secondary-800: rgba(48, 48, 163, 1);
-
-  --color-text-black: rgba(23, 23, 27, 1);
-  --color-text-white: rgba(255, 255, 255, 1);
-
-  --color-bg-white: rgba(255, 255, 255, 1);
-  --color-bg-black: rgba(23, 23, 27, 1);
-  --color-bg-primary: rgba(230, 0, 126, 1);
-  --color-bg-primary2: rgba(253, 237, 246, 1);
-  --color-bg-secondary: rgba(220, 230, 255, 1);
-  --color-bg-secondary2: rgba(195, 212, 255, 1);
-  --color-bg-error: rgba(237, 33, 36, 1);
-  --color-bg-warning: rgba(254, 185, 63, 1);
-  --color-bg-success: rgba(45, 183, 69, 1);
-  --color-bg-ivory: rgba(255, 232, 198, 1);
-
-  --color-gray-100: rgba(245, 247, 250, 1);
-  --color-gray-200: rgba(240, 240, 245, 1);
-  --color-gray-300: rgba(225, 225, 235, 1);
-  --color-gray-400: rgba(202, 204, 216, 1);
-  --color-gray-500: rgba(173, 175, 187, 1);
-  --color-gray-600: rgba(133, 136, 152, 1);
-  --color-gray-700: rgba(53, 54, 63, 1);
-  --color-gray-800: rgba(35, 37, 43, 1);
-
-  --color-border-secondary: rgba(229, 231, 235, 1);
-  --color-border-black: rgba(23, 23, 27, 1);
-
-  --color-black-22: rgba(23, 23, 27, 0.22);
-  /* custom colors */
-
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -198,7 +149,9 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
 }
 
@@ -234,96 +187,6 @@
 
   .warm-bg {
     background-color: #ffe8c6;
-  }
-
-  .title-lg {
-    font-family: "Pretendard";
-    font-size: 24px;
-    font-weight: 600;
-  }
-
-  .title-md {
-    font-family: "Pretendard";
-    font-size: 20px;
-    font-weight: 600;
-  }
-
-  .title-sm {
-    font-family: "Pretendard";
-    font-size: 16px;
-    font-weight: 600;
-  }
-
-  .title-xs {
-    font-family: "Pretendard";
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  .h1 {
-    font-family: "Pretendard";
-    font-size: 32px;
-    font-weight: 700;
-  }
-
-  .h2 {
-    font-family: "Pretendard";
-    font-size: 24px;
-    font-weight: 700;
-  }
-
-  .h3 {
-    font-family: "Pretendard";
-    font-size: 20px;
-    font-weight: 700;
-  }
-
-  .body-lg {
-    font-family: "Pretendard";
-    font-size: 20px;
-    font-weight: 500;
-  }
-
-  .body-md {
-    font-family: "Pretendard";
-    font-size: 16px;
-    font-weight: 500;
-  }
-
-  .body-sm {
-    font-family: "Pretendard";
-    font-size: 14px;
-    font-weight: 500;
-  }
-
-  .body-xs {
-    font-family: "Pretendard";
-    font-size: 12px;
-    font-weight: 500;
-  }
-
-  .body-xxs {
-    font-family: "Pretendard";
-    font-size: 10px;
-    font-weight: 500;
-  }
-
-  .caption-lg {
-    font-family: "Pretendard";
-    font-size: 12px;
-    font-weight: 300;
-  }
-
-  .caption-md {
-    font-family: "Pretendard";
-    font-size: 10px;
-    font-weight: 300;
-  }
-
-  .caption-sm {
-    font-family: "Pretendard";
-    font-size: 8px;
-    font-weight: 300;
   }
 }
 
