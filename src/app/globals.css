@@ -54,36 +54,6 @@
 
   --color-black-22: rgba(23, 23, 27, 0.22);
   /* custom colors */
-  --font-title: "Pretendard";
-  --font-heading-h1: "Pretendard";
-  --font-heading-h2: "Pretendard";
-  --font-heading-h3: "Pretendard";
-  --font-title-lg: "Pretendard";
-  --font-title-md: "Pretendard";
-  --font-title-sm: "Pretendard";
-  --font-body-lg: "Pretendard";
-  --font-body-md: "Pretendard";
-  --font-body-sm: "Pretendard";
-  --font-body-xs: "Pretendard";
-  --font-body-xxs: "Pretendard";
-  --font-caption-lg: "Pretendard";
-  --font-caption-md: "Pretendard";
-  --font-caption-sm: "Pretendard";
-  --text-title: 32px;
-  --text-heading-h1: 32px;
-  --text-heading-h2: 24px;
-  --text-heading-h3: 20px;
-  --text-title-lg: 24px;
-  --text-title-md: 20px;
-  --text-title-sm: 16px;
-  --text-body-lg: 20px;
-  --text-body-md: 16px;
-  --text-body-sm: 14px;
-  --text-body-xs: 12px;
-  --text-body-xxs: 10px;
-  --text-caption-lg: 12px;
-  --text-caption-md: 10px;
-  --text-caption-sm: 8px;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -124,7 +94,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* :root {
+:root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -157,7 +127,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-} */
+}
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -266,79 +236,94 @@
     background-color: #ffe8c6;
   }
 
-  .text-title {
-    font-family: var(--font-title);
-    font-size: var(--text-title);
+  .title-lg {
+    font-family: "Pretendard";
+    font-size: 24px;
+    font-weight: 600;
   }
 
-  .text-heading-h1 {
-    font-family: var(--font-heading-h1);
-    font-size: var(--text-heading-h1);
+  .title-md {
+    font-family: "Pretendard";
+    font-size: 20px;
+    font-weight: 600;
   }
 
-  .text-heading-h2 {
-    font-family: var(--font-heading-h2);
-    font-size: var(--text-heading-h2);
+  .title-sm {
+    font-family: "Pretendard";
+    font-size: 16px;
+    font-weight: 600;
   }
 
-  .text-heading-h3 {
-    font-family: var(--font-heading-h3);
-    font-size: var(--text-heading-h3);
+  .title-xs {
+    font-family: "Pretendard";
+    font-size: 14px;
+    font-weight: 600;
   }
 
-  .text-title-lg {
-    font-family: var(--font-title-lg);
-    font-size: var(--text-title-lg);
+  .h1 {
+    font-family: "Pretendard";
+    font-size: 32px;
+    font-weight: 700;
   }
 
-  .text-title-md {
-    font-family: var(--font-title-md);
-    font-size: var(--text-title-md);
+  .h2 {
+    font-family: "Pretendard";
+    font-size: 24px;
+    font-weight: 700;
   }
 
-  .text-title-sm {
-    font-family: var(--font-title-sm);
-    font-size: var(--text-title-sm);
+  .h3 {
+    font-family: "Pretendard";
+    font-size: 20px;
+    font-weight: 700;
   }
 
-  .text-body-lg {
-    font-family: var(--font-body-lg);
-    font-size: var(--text-body-lg);
+  .body-lg {
+    font-family: "Pretendard";
+    font-size: 20px;
+    font-weight: 500;
   }
 
-  .text-body-md {
-    font-family: var(--font-body-md);
-    font-size: var(--text-body-md);
+  .body-md {
+    font-family: "Pretendard";
+    font-size: 16px;
+    font-weight: 500;
   }
 
-  .text-body-sm {
-    font-family: var(--font-body-sm);
-    font-size: var(--text-body-sm);
+  .body-sm {
+    font-family: "Pretendard";
+    font-size: 14px;
+    font-weight: 500;
   }
 
-  .text-body-xs {
-    font-family: var(--font-body-xs);
-    font-size: var(--text-body-xs);
+  .body-xs {
+    font-family: "Pretendard";
+    font-size: 12px;
+    font-weight: 500;
   }
 
-  .text-body-xxs {
-    font-family: var(--font-body-xxs);
-    font-size: var(--text-body-xxs);
+  .body-xxs {
+    font-family: "Pretendard";
+    font-size: 10px;
+    font-weight: 500;
   }
 
-  .text-caption-lg {
-    font-family: var(--font-caption-lg);
-    font-size: var(--text-caption-lg);
+  .caption-lg {
+    font-family: "Pretendard";
+    font-size: 12px;
+    font-weight: 300;
   }
 
-  .text-caption-md {
-    font-family: var(--font-caption-md);
-    font-size: var(--text-caption-md);
+  .caption-md {
+    font-family: "Pretendard";
+    font-size: 10px;
+    font-weight: 300;
   }
 
-  .text-caption-sm {
-    font-family: var(--font-caption-sm);
-    font-size: var(--text-caption-sm);
+  .caption-sm {
+    font-family: "Pretendard";
+    font-size: 8px;
+    font-weight: 300;
   }
 }
 
