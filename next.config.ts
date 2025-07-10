@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
       "@constants": path.resolve(__dirname, "src/constants"),
       "@hooks": path.resolve(__dirname, "src/hooks"),
       "@lib": path.resolve(__dirname, "src/lib"),
-      "@page-components": path.resolve(__dirname, "src/page-components"),
+      "@feature": path.resolve(__dirname, "src/feature"),
       "@stores": path.resolve(__dirname, "src/stores"),
       "@styles": path.resolve(__dirname, "src/styles"),
       "@type": path.resolve(__dirname, "src/types"),
