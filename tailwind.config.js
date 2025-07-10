@@ -54,15 +54,12 @@ module.exports = {
         "color-bg-primary2": "rgba(253, 237, 246, 1)",
       },
       fontFamily: {
-        // ✅ 폰트 키는 이대로 유지해도 OK
         pretendard: ["Pretendard", "sans-serif"],
-        // ...
       },
       fontSize: {
         title: "32px",
         heading1: "32px",
         heading2: "24px",
-        // ...
       },
     },
   },

@@ -145,13 +145,11 @@
     @apply border-border outline-ring/50;
   }
   html {
-    font-family: var(--font-sans); /* 👈 기본 sans 계열로 Pretendard 지정 */
+    font-family: var(--font-sans);
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings:
-      "rlig" 1,
-      "calt" 1;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
