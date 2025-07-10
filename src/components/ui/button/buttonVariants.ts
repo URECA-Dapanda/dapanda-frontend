@@ -31,7 +31,9 @@ export const buttonVariants = cva(
         large: "w-[327px] h-[35px] px-4 py-2 rounded-[6px]",
         pill: "w-[70px] h-[35px] px-[6px] py-[5px] rounded-[20px]",
         small: "w-[52px] h-[35px] px-4 py-2 rounded-[6px]",
+        modalFull: "w-[288px] h-[34px] px-4 py-2 rounded-[6px]",
         half: "w-[135px] h-[35px] px-4 py-2 rounded-[6px]",
+        medium: "w-[191px] h-[29px] px-4 py-2 rounded-[6px]",
       },
     },
     defaultVariants: {

@@ -1,11 +1,5 @@
 import { Button } from "@ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/select";
 import { memo, useCallback, useState } from "react";
 
 function SortDropdown() {
@@ -27,7 +21,7 @@ function SortDropdown() {
       </Select>
       <Button
         onClick={handleSearch}
-        size="sm"
+        size="small"
         className="h-8 bg-[#119c72] hover:bg-[#0d7a5a] text-white"
       >
         검색

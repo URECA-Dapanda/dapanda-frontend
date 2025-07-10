@@ -1,21 +1,10 @@
 "use client";
-import {
-  ChangeEvent,
-  Dispatch,
-  memo,
-  SetStateAction,
-  useCallback,
-  useState,
-} from "react";
+import { ChangeEvent, Dispatch, memo, SetStateAction, useCallback, useState } from "react";
 import { Button } from "@ui/button";
 import { Input } from "@ui/input";
 import { Search, SlidersHorizontal } from "lucide-react";
 
-function SearchBar({
-  setShowFilters,
-}: {
-  setShowFilters: Dispatch<SetStateAction<boolean>>;
-}) {
+function SearchBar({ setShowFilters }: { setShowFilters: Dispatch<SetStateAction<boolean>> }) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -38,8 +27,8 @@ function SearchBar({
         />
       </div>
       <Button
-        variant="outline"
-        size="sm"
+        variant="ghost"
+        size="small"
         onClick={handleClick}
         className="h-10 px-3 border-[#ffe8c6] text-[#119c72]"
       >
