@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import BottomNavigation from "@components/common/navigation/BottomNavigation";
-import SharedHeader from "@/components/common/header/SharedHeader";
 import ProviderWrapper from "@components/common/ProviderWrapper";
+import SharedHeader from "@components/common/header/SharedHeader";
+import BottomNavigation from "@components/common/navigation/BottomNavigation";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "DaPanDa",
@@ -16,9 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body
-        className={`antialiased w-[375px] h-[812px] mx-auto overflow-hidden`}
-      >
+      <body className={`antialiased w-[375px] h-[812px] mx-auto overflow-hidden`}>
         <ProviderWrapper>
           <SharedHeader />
           {children}
