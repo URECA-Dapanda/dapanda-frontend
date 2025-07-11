@@ -7,37 +7,28 @@ interface BaseModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
-  position?: "center" | "bottom";
   className?: string;
 }
 
-export default function BaseModal({
-  isOpen,
-  onClose,
-  children,
-  position = "center",
-  className = "",
-}: BaseModalProps) {
+export default function BaseModal({ isOpen, onClose, children, className = "" }: BaseModalProps) {
   if (!isOpen) return null;
-
-  const positionStyle =
-    position === "center" ? "items-center justify-center" : "items-end justify-center";
 
   return (
     <AnimatePresence>
       <motion.div
-        className={`fixed inset-0 z-50 flex ${positionStyle}`}
+        className="fixed inset-0 z-50 flex items-center justify-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+        <div className="absolute inset-0 bg-black/60" onClick={onClose} />
+
         <motion.div
-          initial={{ scale: 0.95, y: position === "bottom" ? 100 : 0, opacity: 0 }}
-          animate={{ scale: 1, y: 0, opacity: 1 }}
-          exit={{ scale: 0.95, y: position === "bottom" ? 100 : 0, opacity: 0 }}
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.95, opacity: 0 }}
           transition={{ type: "spring", damping: 30, stiffness: 300 }}
-          className={`relative bg-white rounded-3xl p-6 m-4 w-[327px] ${className}`}
+          className={`relative bg-white p-6 m-4 w-[327px] rounded-3xl ${className}`}
         >
           {children}
         </motion.div>
