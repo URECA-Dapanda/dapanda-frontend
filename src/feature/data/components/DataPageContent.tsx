@@ -22,7 +22,7 @@ export default function DataPageContent() {
             <button>Button</button>
           </CardContentComponent>
         </CardComponent>
-        <CardComponent variant="outlined" size={"small"}>
+        <CardComponent variant="outlined" size={"small"} color="border-color-primary-300">
           <CardContentComponent size={"medium"}>
             <button>Button</button>
           </CardContentComponent>
