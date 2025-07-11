@@ -7,9 +7,8 @@ const mockDataList = () =>
         id: 23433,
         price: "2,000원",
         title: "2GB 데이터 판매",
-      }),
-        100;
-    });
+      });
+    }, 100);
   });
 
 export async function getChatContentInfo() {
