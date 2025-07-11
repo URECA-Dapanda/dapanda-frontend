@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@lib/utils";
 import { CardContent } from "@ui/card";
 import { PropsWithChildren, useMemo } from "react";
@@ -6,27 +8,28 @@ import { PropsWithChildren, useMemo } from "react";
 type CardContentSize = "large" | "medium" | "small" | number;
 
 interface CardContentProps {
-//   variant: CardContentVariant;
+  //   variant: CardContentVariant;
   size: CardContentSize;
 }
 
 export default function CardContentComponent({
-//   variant = "rows",
+  //   variant = "rows",
   size = "medium",
   children,
-}: PropsWithChildren<CardContentProps>) {
+}: PropsWithChildren<Partial<CardContentProps>>) {
   const calculatedSize = useMemo(() => {
+    let value;
     switch (size) {
       case "large":
-        return 8;
+        value = 8;
       case "medium":
-        return 6;
+        value = 6;
       case "small":
-        return 4;
+        value = 4;
       default:
-        return size;
+        value = size;
     }
+    return `p-${value}`;
   }, [size]);
-  const padding = `p-${calculatedSize}`;
-  return <CardContent className={cn(padding)}>{children}</CardContent>;
+  return <CardContent className={cn(calculatedSize)}>{children}</CardContent>;
 }
