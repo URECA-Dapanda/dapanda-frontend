@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { ButtonComponent } from "@/components/common/button";
 
 export default function ChatContent() {
   return (
@@ -8,18 +8,22 @@ export default function ChatContent() {
       <h2 className="font-bold text-lg">버튼 테스트</h2>
 
       <div className="flex gap-4 flex-wrap">
-        <Button>기본 버튼1</Button>
-        <Button variant="secondary">기본 버튼2</Button>
-        <Button disabled>비활성</Button>
-        <Button size="pill">Pill 버튼</Button>
-        <Button size="small">짧</Button>
-        <Button size="modalFull">모달 Full</Button>
+        <ButtonComponent variant="main" size="md" className="bg-bg-primary text-white">
+          리뷰남기기 test
+        </ButtonComponent>
+        <div className="flex gap-2">
+          <ButtonComponent variant="modalPrimary" size="md" className="bg-bg-primary text-white">
+            신고하기
+          </ButtonComponent>
 
-        <Button size="half">모달1</Button>
-        <Button size="half" variant="halfOutline">
-          모달2
-        </Button>
-        <Button size="medium">중간 사이즈 버튼</Button>
+          <ButtonComponent
+            variant="modalSecondary"
+            size="md"
+            className="border border-bg-primary text-bg-primary hover:bg-white"
+          >
+            취소하기
+          </ButtonComponent>
+        </div>
       </div>
 
       <div className="mt-10">
