@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import BaseModal from "@/components/common/modal/BaseModal";
-// import ModalHeader from "@/components/common/modal/ModalHeader";
+import ModalHeader from "@/components/common/modal/ModalHeader";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +17,7 @@ export default function Home() {
       </button>
 
       <BaseModal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        {/* <ModalHeader title="테스트 모달" onClose={() => setIsOpen(false)} /> */}
+        <ModalHeader title="테스트 모달" onClose={() => setIsOpen(false)} />
         <div className="text-sm text-gray-700 space-y-3">
           <p>이건 테스트용 모달입니다.</p>
           <p>Tailwind 디자인 시스템이 잘 적용되었는지 확인해보세요.</p>
