@@ -27,5 +27,5 @@ export default function CardContentComponent({
         return `p-${size}`;
     }
   }, [size]);
-  return <CardContent className={cn(calculatedSize)}>{children}</CardContent>;
+  return <CardContent className={cn(calculatedSize, "h-full")}>{children}</CardContent>;
 }
