@@ -11,6 +11,8 @@ import { getMapList } from "@feature/map/api/mapRequest";
 import SelectTypeCard from "@feature/map/components/sections/regist/SelectTypeCard";
 import { getChatContentInfo } from "@feature/chat/api/chatRequest";
 import ContentInfoCard from "@feature/chat/components/sections/ContentInfoCard";
+import CurrentCashCard from "@feature/mypage/components/sections/CurrentCashCard";
+import FilterCard from "./sections/filter/FilterCard";
 
 export default function DataPageContent() {
   const { data: dataList, isPending } = useQuery({
@@ -26,7 +28,10 @@ export default function DataPageContent() {
     queryFn: getChatContentInfo,
   });
   return (
-    <div className="overflow-y-auto max-h-[100vh] space-y-10 p-4 bg-gray-400">
+    <div className="overflow-y-auto max-h-[100vh] space-y-10 p-4 mt-10 bg-gray-400">
+      <FilterCard />
+      <CurrentCashCard isInterection={true} />
+      <CurrentCashCard />
       <SelectTypeCard />
       {chatInfoData && <ContentInfoCard data={chatInfoData} />}
       {dataList && dataList.map((item) => <DataItemCard data={item} key={item.id} />)}

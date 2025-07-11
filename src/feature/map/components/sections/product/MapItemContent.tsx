@@ -8,7 +8,7 @@ export default function MapItemCardContent({
 }: ProductItemProps<MapType>) {
   return (
     <Fragment>
-      <div className="grid grid-cols-[auto_1fr_auto] gap-4 items-center mt-[-20]">
+      <div className="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
         {/* 왼쪽 이미지 */}
         <div className="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center">
           <ImageIcon />

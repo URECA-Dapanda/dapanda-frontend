@@ -18,7 +18,7 @@ export default function ContentInfoCard({ data: { id, price, title } }: Contents
 
   return (
     <InfoCard handleClick={handleClick}>
-      <div className="flex items-center mt-[-25]  gap-x-4">
+      <div className="flex items-center  gap-x-4">
         <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
           {/* something */}
         </div>
