@@ -3,23 +3,34 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@lib/utils";
 import { useMemo } from "react";
 
-type InputRadius = "lg" | "md"| "sm" | number;
+type InputRadius = "lg" | "md" | "sm" | number;
 
 interface InputComponentProps {
-    color:string;
+    color: string;
     radius: InputRadius;
     size: "sm" | "md" | "lg";
     className: string;
     placeholder: string;
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    disabled: boolean;
+    type?: "text" | "number";
+    required?: boolean;
 }
 
-
-
-export default function InputComponent({color, radius, size, className, placeholder, value, onChange}:Partial<InputComponentProps>) {
-    const inputRadius = useMemo(()=>{
-        switch(radius) {
+export default function InputComponent({ 
+    color, 
+    radius, 
+    size, 
+    className, 
+    placeholder, 
+    value, 
+    onChange, 
+    disabled,
+    type = "text",
+    required, }: Partial<InputComponentProps>) {
+    const inputRadius = useMemo(() => {
+        switch (radius) {
             case "lg":
                 return "rounded-[12px]";
             case "md":
@@ -30,8 +41,8 @@ export default function InputComponent({color, radius, size, className, placehol
                 return `rounded-[${radius}px]`;
         }
     }, [radius]);
-    const inputSize = useMemo(()=>{
-        switch(size) {
+    const inputSize = useMemo(() => {
+        switch (size) {
             case "sm":
                 return "h-[17px]";
             case "md":
@@ -40,5 +51,12 @@ export default function InputComponent({color, radius, size, className, placehol
                 return "h-[105px]";
         }
     }, [size]);
-    return (<Input className={cn(className, inputRadius, inputSize, color)} placeholder={placeholder} value={value} onChange={onChange} />);
+    return (<Input 
+        className={cn(className, inputRadius, inputSize, color)} 
+        placeholder={placeholder} 
+        value={value} 
+        onChange={onChange} 
+        disabled={disabled}
+        type={type}
+        required={required} />);
 }
