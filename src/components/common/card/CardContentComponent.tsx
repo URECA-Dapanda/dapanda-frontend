@@ -1,8 +1,9 @@
 "use client";
 
 import { PropsWithChildren, useMemo } from "react";
-import { cn } from "@lib/utils";
 import { CardContent } from "@ui/card";
+
+import { cn } from "@lib/utils";
 
 type CardContentSize = "lg" | "md" | "sm" | number;
 

@@ -1,7 +1,8 @@
 import { PropsWithChildren } from "react";
 import { Card } from "@ui/card";
-import { cn } from "@lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
+
+import { cn } from "@lib/utils";
 
 type CardVariant = "material" | "flat" | "outlined";
 type CardSize = "lg" | "md" | "sm" | number;
