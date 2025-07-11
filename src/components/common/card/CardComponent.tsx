@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { Card } from "../../ui/card";
+import { Card } from "@ui/card";
 import { cn } from "@lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
@@ -37,7 +37,7 @@ const cardVariant = cva("inline-flex gap-2 whitespace-nowrap rounded-md transiti
   },
 });
 
-/** 
+/**
  * `CardComponent`는 다양한 스타일, 크기, 색상 옵션을 가진 재사용 가능한 카드 컴포넌트입니다.
  *
  * 이 컴포넌트는 `shadcn/ui` 라이브러리의 `Card` 컴포넌트를 기반으로 하며,

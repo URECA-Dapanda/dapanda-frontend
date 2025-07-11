@@ -1,5 +1,5 @@
-import { CardHeader, CardTitle } from "@ui/card";
 import { PropsWithChildren } from "react";
+import { CardHeader, CardTitle } from "@ui/card";
 
 interface CardHeaderComponentProp {
   title?: string;
