@@ -6,7 +6,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "DaPanDa",
-  description: "Please Input Description",
+  description: "URECA final project DaPanDa",
 };
 
 export default function RootLayout({
