@@ -34,9 +34,8 @@ const mockDataList = () =>
           score: 4.8,
           type: "와이파이",
         },
-      ]),
-        500;
-    });
+      ]);
+    }, 500);
   });
 
 export async function getMapList() {

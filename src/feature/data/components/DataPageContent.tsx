@@ -15,7 +15,7 @@ import CurrentCashCard from "@feature/mypage/components/sections/CurrentCashCard
 import FilterCard from "./sections/filter/FilterCard";
 
 export default function DataPageContent() {
-  const { data: dataList, isPending } = useQuery({
+  const { data: dataList } = useQuery({
     queryKey: ["/data"],
     queryFn: getDataList,
   });

@@ -31,9 +31,8 @@ const mockDataList = () =>
           userId: 123,
           userName: "김데이터",
         },
-      ]),
-        100;
-    });
+      ]);
+    }, 100);
   });
 
 export async function getDataList() {
