@@ -4,7 +4,7 @@ import { cn } from "@lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 type CardVariant = "material" | "flat" | "outlined";
-type CardSize = "large" | "medium" | "small" | number;
+type CardSize = "lg" | "md" | "sm" | number;
 type CardColor =
   | {
       from: string;
@@ -26,14 +26,14 @@ const cardVariant = cva("inline-flex gap-2 whitespace-nowrap rounded-md transiti
       outlined: "border shadow-xs dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
     },
     size: {
-      medium: "h-36 w-full",
-      large: "h-38 w-full",
-      small: "h-30 w-full",
+      md: "h-36 w-full",
+      lg: "h-38 w-full",
+      sm: "h-30 w-full",
     },
   },
   defaultVariants: {
     variant: "material",
-    size: "medium",
+    size: "md",
   },
 });
 
@@ -50,9 +50,9 @@ const cardVariant = cva("inline-flex gap-2 whitespace-nowrap rounded-md transiti
  *  - `"outlined"`: 외곽선만 있는 스타일
  *
  * @param size - 카드의 높이를 지정합니다.
- *  - `"large"`: 152px (`h-38`)
- *  - `"medium"`: 144px (`h-36`)
- *  - `"small"`: 120px (`h-30`)
+ *  - `"lg"`: 152px (`h-38`)
+ *  - `"md"`: 144px (`h-36`)
+ *  - `"sm"`: 120px (`h-30`)
  *  - 숫자 값을 직접 넘겨서 커스텀도 가능 (`number`는 현재 사용되지 않음)
  *
  * @param color - 카드 배경 색상
