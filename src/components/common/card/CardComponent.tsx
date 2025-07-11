@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@lib/utils";
 
 type CardVariant = "material" | "flat" | "outlined";
-type CardSize = "lg" | "md" | "sm" | number;
+type CardSize = "lg" | "md" | "sm" | "xs" | number;
 type CardColor =
   | {
       from: string;
@@ -32,6 +32,7 @@ const cardVariant = cva(
         md: "h-36 w-full",
         lg: "h-38 w-full",
         sm: "h-30 w-full",
+        xs: "h-20 w-full",
       },
     },
     defaultVariants: {
