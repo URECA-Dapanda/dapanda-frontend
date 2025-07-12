@@ -1,5 +1,7 @@
-import ChatContent from "@/components/feature/chat/ChatContent";
-
 export default function ChatPage() {
-  return <ChatContent />;
+  return (
+    <main className="p-4">
+      <h1 className="text-xl font-bold">채팅</h1>
+    </main>
+  );
 }
