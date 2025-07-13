@@ -9,8 +9,8 @@ interface ModalHeaderProps {
 export default function ModalHeader({ title, onClose }: ModalHeaderProps) {
   return (
     <div className="flex items-center justify-between mb-6">
-      <h2 className="h3 text-color-text-black">{title}</h2>
-      <Button variant="ghost" size="sm" onClick={onClose} className="p-1">
+      <h2 className="h3 text-black">{title}</h2>
+      <Button variant="ghost" size="sm" onClick={onClose} className="p-2">
         <X className="w-5 h-5" />
       </Button>
     </div>

@@ -3,6 +3,8 @@
 import { ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
+import { cn } from "@/lib/utils";
+
 interface BaseModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -28,7 +30,7 @@ export default function BaseModal({ isOpen, onClose, children, className = "" }:
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ type: "spring", damping: 30, stiffness: 300 }}
-          className={`relative bg-white p-6 m-4 w-[327px] rounded-3xl ${className}`}
+          className={cn("relative bg-white p-6 m-4 w-[327px] rounded-30", className)}
         >
           {children}
         </motion.div>
