@@ -55,14 +55,13 @@ export default function MapPage() {
         disabled
       />
 
-    {/* 모달 바텀시트 열기 버튼 */}
+    {/* 모달형 바텀시트 */}
     <button
       className="px-4 py-2 bg-blue-500 text-white rounded"
       onClick={() => setIsModalOpen(true)}
     >
       모달 바텀시트 열기
     </button>
-    {/* 모달 바텀시트 */}
     <BaseBottomSheet
       isOpen={isModalOpen}
       onClose={() => setIsModalOpen(false)}
@@ -75,10 +74,10 @@ export default function MapPage() {
 
     {/* 스냅형 바텀시트 */}
       <BaseBottomSheet
-        isOpen={isSnapOpen}ㅌ
+        isOpen={isSnapOpen}
         onClose={() => setIsSnapOpen(false)}
         variant="snap"
-        snapHeight={500}
+        snapHeight={300}
       >
         <BottomSheetHeader title="데이터 목록" />
         <div className="p-4">...</div>
