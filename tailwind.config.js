@@ -108,8 +108,8 @@ module.exports = {
         200: "200px",
       },
       boxShadow: {
-        nav: "0px -2px 4px 0px rgba(0, 0, 0, 0.25)",
-        header: "0px 2px 4px 0px rgba(0, 0, 0, 0.25)",
+        nav: "0px -4px 8px 0px rgba(0, 0, 0, 0.05)",
+        header: "0px 4px 8px 0px rgba(0, 0, 0, 0.05)",
         default: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
         material: "0px 20px 35px 0px rgba(0, 0, 0, 0.05)",
       },
