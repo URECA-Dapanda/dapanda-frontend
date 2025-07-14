@@ -6,7 +6,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "DaPanDa",
-  description: "Please Input Description",
+  description: "URECA final project DaPanDa",
 };
 
 export default function RootLayout({
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`antialiased w-[375px] h-[812px] mx-auto overflow-hidden`}>
+      <body className={`antialiased w-[375px] h-[812px] mx-auto overflow-hidden relative`}>
         <ProviderWrapper>
           <SharedHeader />
           {children}
