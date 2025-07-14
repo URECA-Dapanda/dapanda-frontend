@@ -16,7 +16,7 @@ export default function BaseBottomSheet({
   onClose,
   children,
   variant = "modal",
-  snapHeight = 500,
+  snapHeight = 300,
 }: BaseBottomSheetProps) {
   const BOTTOM_OFFSET = 54;
   const HEADER_OFFSET = 54;
