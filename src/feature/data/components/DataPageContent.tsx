@@ -1,11 +1,9 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import CardComponent from "@components/common/card/CardComponent";
 import CardContentComponent from "@components/common/card/CardContentComponent";
 import CardHeaderComponent from "@components/common/card/CardHeaderComponent";
-import DataItemCard from "./sections/product/DataItemCard";
-import { useQuery } from "@tanstack/react-query";
-import { getDataList } from "../api/dataRequest";
 import MapItemCard from "@feature/map/components/sections/product/MapItemCard";
 import { getMapList } from "@feature/map/api/mapRequest";
 import SelectTypeCard from "@feature/map/components/sections/regist/SelectTypeCard";
@@ -16,10 +14,6 @@ import FilterCard from "./sections/filter/FilterCard";
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 
 export default function DataPageContent() {
-  const { data: dataList } = useQuery({
-    queryKey: ["/data"],
-    queryFn: getDataList,
-  });
   const { data: mapList } = useQuery({
     queryKey: ["map"],
     queryFn: getMapList,
@@ -35,7 +29,8 @@ export default function DataPageContent() {
       <CurrentCashCard />
       <SelectTypeCard />
       {chatInfoData && <ContentInfoCard data={chatInfoData} />}
-      {dataList && dataList.map((item) => <DataItemCard data={item} key={item.id} />)}
+      {/*      {dataList && dataList.map((item) => <DataItemCard data={item} key={item.id} />)}*/}
+
       {mapList && mapList.map((item) => <MapItemCard data={item} key={item.id} />)}
 
       <CardComponent variant="material" size={"lg"}>

@@ -3,28 +3,15 @@
 import React, { useRef, useEffect, memo } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import { getDataList } from "@feature/data/api/dataRequest";
+import DataItemCard from "@feature/data/components/sections/product/DataItemCard";
 
-// 🚧 더미 API: 20개씩 페이징된 데이터를 반환
-const fetchItems = async ({ pageParam = 0 }): Promise<{ items: string[]; nextCursor?: number }> => {
-  await new Promise((r) => setTimeout(r, 500)); // simulate network latency
-  const start = pageParam;
-  const end = pageParam + 20;
-  const items = Array.from({ length: 20 }, (_, i) => `Item ${start + i + 1}`);
-
-  const hasMore = end < 200;
-  return {
-    items,
-    nextCursor: hasMore ? end : undefined,
-  };
-};
-
-// ✅ 실제 Infinite + Virtualized List 컴포넌트
 function VirtualizedInfiniteList() {
   const parentRef = useRef<HTMLDivElement | null>(null);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ["items"],
-    queryFn: fetchItems,
+    queryFn: getDataList,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     initialPageParam: 0,
   });
@@ -34,7 +21,7 @@ function VirtualizedInfiniteList() {
   const rowVirtualizer = useVirtualizer({
     count: hasNextPage ? flatItems.length + 1 : flatItems.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 60,
+    estimateSize: () => 200,
     overscan: 5,
   });
 
@@ -77,11 +64,10 @@ function VirtualizedInfiniteList() {
                 width: "100%",
                 transform: `translateY(${virtualRow.start}px)`,
                 padding: "16px",
-                borderBottom: "1px solid #eee",
                 background: "white",
               }}
             >
-              {isLoaderRow ? "Loading more..." : item}
+              {isLoaderRow ? "Loading more..." : <DataItemCard data={item} key={item.id} />}
             </div>
           );
         })}
