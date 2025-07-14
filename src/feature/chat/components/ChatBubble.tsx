@@ -13,10 +13,8 @@ export default function ChatBubble({ message, currentUserId }: ChatBubbleProps) 
   const timeText = formatTimeToAmPm(message.createdAt);
 
   const baseClasses =
-    "w-fit max-w-[244px] px-3 py-3 rounded-2xl whitespace-pre-wrap body-sm border border-color-primary-200 text-color-text-black";
-  const bubbleClasses = isMine
-    ? "bg-color-bg-primary2 rounded-br-none"
-    : "bg-color-bg-white rounded-bl-none";
+    "w-fit max-w-[244px] px-3 py-3 rounded-2xl whitespace-pre-wrap body-sm border border-primary-200 text-black";
+  const bubbleClasses = isMine ? "bg-primary2 rounded-br-none" : "bg-white rounded-bl-none";
 
   const bubble = <div className={cn(baseClasses, bubbleClasses)}>{message.text}</div>;
 
@@ -26,7 +24,7 @@ export default function ChatBubble({ message, currentUserId }: ChatBubbleProps) 
         <img
           src={message.senderAvatar ?? "/images/default-avatar.png"}
           alt="상대방 아바타"
-          className="w-8 h-8 rounded-full"
+          className="w-[30px] h-[30px] rounded-full"
         />
       )}
 
@@ -34,12 +32,12 @@ export default function ChatBubble({ message, currentUserId }: ChatBubbleProps) 
         {isMine ? (
           <>
             {bubble}
-            <span className="body-xs text-color-gray-500 mt-1">{timeText}</span>
+            <span className="body-xs text-gray-500 mt-1">{timeText}</span>
           </>
         ) : (
           <div className="flex items-end gap-1">
             {bubble}
-            <span className="body-xs text-color-gray-500">{timeText}</span>
+            <span className="body-xs text-gray-500">{timeText}</span>
           </div>
         )}
       </div>
