@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`antialiased w-[375px] h-[812px] mx-auto overflow-hidden`}>
+      <body className={`antialiased w-[375px] h-[812px] mx-auto overflow-hidden relative`}>
         <ProviderWrapper>
           <SharedHeader />
           {children}
