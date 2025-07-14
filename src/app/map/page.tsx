@@ -1,11 +1,12 @@
 "use client";
-
 import { useState } from "react";
 import InputComponent from "@/components/common/input/InputComponent";
-
+import { BottomSheetHeader, BaseBottomSheet } from "@components/common/bottomsheet";
 export default function MapPage() {
   const [textValue, setTextValue] = useState("");
   const [numberValue, setNumberValue] = useState("123");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSnapOpen, setIsSnapOpen] = useState(false);
 
   return (
     <div className="p-24 space-y-24 bg-gray-50 min-h-screen">
@@ -47,6 +48,51 @@ export default function MapPage() {
 
       {/* disabled 테스트 */}
       <InputComponent radius="md" size="md" value="비활성화됨" onChange={() => {}} disabled />
+
+      {/* 모달형 바텀시트 */}
+      <button
+        className="px-4 py-2 bg-blue-500 text-white rounded"
+        onClick={() => setIsModalOpen(true)}
+      >
+        모달 바텀시트 열기
+      </button>
+      <BaseBottomSheet isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} variant="modal">
+        <BottomSheetHeader title="모달 바텀시트" />
+        <p>모달 바텀시트의 내용입니다.</p>
+      </BaseBottomSheet>
+
+      {/* 스냅형 바텀시트 */}
+      <BaseBottomSheet
+        isOpen={isSnapOpen}
+        onClose={() => setIsSnapOpen(false)}
+        variant="snap"
+        snapHeight={300}
+      >
+        <BottomSheetHeader title="데이터 목록" />
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+        <div className="p-4">...</div>
+      </BaseBottomSheet>
     </div>
   );
 }
