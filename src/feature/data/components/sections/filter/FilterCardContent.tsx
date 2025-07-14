@@ -6,18 +6,18 @@ import { useState } from "react";
 export default function FilterCardContent() {
   const [value, setValue] = useState<number[]>([1]);
   return (
-    <div className="flex flex-col items-center text-center gap-16">
-      <h2 className="text-2xl font-bold text-gray-900">{formatDataSize(value[0])}</h2>
-      <p className="body-sm text-gray-500">원하는 용량을 선택하세요</p>
+    <div className="flex flex-col items-center text-center gap-12">
+      <h2 className="h1 text-black">{formatDataSize(value[0])}</h2>
+      <p className="body-sm text-gray-600">원하는 용량을 선택하세요</p>
 
       <Slider
         value={value}
         onValueChange={setValue}
-        max={10}
+        max={5}
       />
 
-      <Button className="w-full mt-2 bg-white text-black border border-gray-300 hover:bg-gray-100">
-        확인
+      <Button className="w-[280px] bg-white title-xs text-black rounded-6 hover:bg-gray-100">
+        확정
       </Button>
     </div>
   );

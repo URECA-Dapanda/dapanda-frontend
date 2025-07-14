@@ -28,7 +28,7 @@ export default function Slider({
         onValueChange={onValueChange}
         className="w-full"
       />
-      <div className="flex justify-between body-sm text-gray-500 mt-1">
+      <div className="flex justify-between body-xs text-gray-600 mt-1">
         <span>{formatDataSize(min)}</span>
         <span>{formatDataSize(max)}</span>
       </div>
