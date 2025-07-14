@@ -1,7 +1,7 @@
+import { useState } from "react";
 import { ButtonComponent } from "@/components/common/button";
 import Slider from "@components/common/slider/SliderComponent";
 import { formatDataSize } from "@lib/formatters";
-import { useState } from "react";
 
 export default function FilterCardContent() {
   const [value, setValue] = useState<number[]>([1]);
