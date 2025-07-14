@@ -19,11 +19,11 @@ function AvatarIcon({ size = "small", avatar }: Partial<AvatarProps>) {
   const iconSize = useMemo(() => {
     switch (size) {
       case "small":
-        return "w-8 h-8";
+        return "w-32 h-32";
       case "medium":
-        return "w-12 h-12";
+        return "w-48 h-48";
       case "large":
-        return "w-16 h-16";
+        return "w-64 h-64";
       default:
         return size;
     }
@@ -32,9 +32,7 @@ function AvatarIcon({ size = "small", avatar }: Partial<AvatarProps>) {
   return avatarImage ? (
     <Avatar className={iconSize}>
       <AvatarImage src="/placeholder.svg" />
-      <AvatarFallback className="primary-gradient text-black">
-        {avatarImage}
-      </AvatarFallback>
+      <AvatarFallback className="primary-gradient text-black">{avatarImage}</AvatarFallback>
     </Avatar>
   ) : null;
 }

@@ -1,5 +1,6 @@
 import { formatTimeToAmPm } from "@/lib/time";
 import type { ChatMessage } from "@/feature/chat/types/message";
+import AvatarIcon from "@/components/common/AvatarIcon";
 
 import { cn } from "@/lib/utils";
 
@@ -21,11 +22,7 @@ export default function ChatBubble({ message, currentUserId }: ChatBubbleProps) 
   return (
     <div className={cn("flex items-end gap-2", isMine ? "justify-end" : "justify-start")}>
       {!isMine && (
-        <img
-          src={message.senderAvatar ?? "/images/default-avatar.png"}
-          alt="상대방 아바타"
-          className="w-[30px] h-[30px] rounded-full"
-        />
+        <AvatarIcon avatar={message.senderAvatar ?? "/images/default-avatar.png"} size="small" />
       )}
 
       <div className="flex flex-col items-start">

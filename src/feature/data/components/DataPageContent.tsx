@@ -28,7 +28,7 @@ export default function DataPageContent() {
     queryFn: getChatContentInfo,
   });
   return (
-    <div className="overflow-y-auto max-h-[100vh] space-y-10 p-4 mt-10 bg-gray-400">
+    <div className="overflow-y-auto max-h-[calc(100vh-112px)] sticky top-56 left-0 space-y-10 p-16">
       <FilterCard />
       <CurrentCashCard isInterection={true} />
       <CurrentCashCard />

@@ -3,9 +3,10 @@ import { cva, type VariantProps } from "class-variance-authority";
 export const badgeVariants = cva("inline-flex items-center justify-center rounded-full body-xxs", {
   variants: {
     variant: {
-      mapcategory: "p-0 w-[58px] h-[25px] rounded-full text-black",
-      count: "min-w-5 h-[22px] rounded-full bg-bg-primary text-white",
-      label: "px-3 py-1 bg-bg-primary text-white",
+      mapcategory: "p-0 w-[58px] text-black",
+      count: "min-w-5 bg-primary text-white",
+      label: "px-3 bg-primary text-white",
+      outlined: "bg-white border border-primary/20 text-black",
     },
     size: {
       sm: "h-[20px]",
