@@ -69,16 +69,13 @@ export default function MapPage() {
       variant="modal"
     >
       <BottomSheetHeader title="모달 바텀시트" />
-        <div className="px-6 py-4 space-y-2">
           <p>모달 바텀시트의 내용입니다.</p>
-          <p>닫으려면 바깥 영역을 클릭하거나 아래로 드래그하세요.</p>
-        </div>
     </BaseBottomSheet>
 
 
     {/* 스냅형 바텀시트 */}
       <BaseBottomSheet
-        isOpen={isSnapOpen}
+        isOpen={isSnapOpen}ㅌ
         onClose={() => setIsSnapOpen(false)}
         variant="snap"
         snapHeight={500}

@@ -38,14 +38,14 @@ export default function BaseBottomSheet({
     <>
       {isOpen && variant === "modal" && (
         <div
-          className="fixed inset-0 bg-black/30 z-20"
+          className="fixed inset-0 bg-black-60 z-20"
           onClick={onClose}
         />
       )}
 
       <div className="fixed inset-0 flex items-end justify-center z-30 pointer-events-none">
         <motion.div
-          className="bg-white rounded-t-[20px] pointer-events-auto"
+          className="bg-white rounded-t-20 pointer-events-auto p-24"
           style={{
             width: "375px",
             height:
