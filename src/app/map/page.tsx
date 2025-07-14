@@ -9,7 +9,7 @@ export default function MapPage() {
   const [isSnapOpen, setIsSnapOpen] = useState(false);
 
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+    <div className="p-24 space-y-24 bg-gray-50 min-h-screen">
       <h1 className="text-xl font-bold">InputComponent 테스트</h1>
 
       {/* 텍스트 인풋 - lg */}
@@ -47,32 +47,21 @@ export default function MapPage() {
       />
 
       {/* disabled 테스트 */}
-      <InputComponent
-        radius="md"
-        size="md"
-        value="비활성화됨"
-        onChange={() => { }}
-        disabled
-      />
+      <InputComponent radius="md" size="md" value="비활성화됨" onChange={() => {}} disabled />
 
-    {/* 모달형 바텀시트 */}
-    <button
-      className="px-4 py-2 bg-blue-500 text-white rounded"
-      onClick={() => setIsModalOpen(true)}
-    >
-      모달 바텀시트 열기
-    </button>
-    <BaseBottomSheet
-      isOpen={isModalOpen}
-      onClose={() => setIsModalOpen(false)}
-      variant="modal"
-    >
-      <BottomSheetHeader title="모달 바텀시트" />
-          <p>모달 바텀시트의 내용입니다.</p>
-    </BaseBottomSheet>
+      {/* 모달형 바텀시트 */}
+      <button
+        className="px-4 py-2 bg-blue-500 text-white rounded"
+        onClick={() => setIsModalOpen(true)}
+      >
+        모달 바텀시트 열기
+      </button>
+      <BaseBottomSheet isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} variant="modal">
+        <BottomSheetHeader title="모달 바텀시트" />
+        <p>모달 바텀시트의 내용입니다.</p>
+      </BaseBottomSheet>
 
-
-    {/* 스냅형 바텀시트 */}
+      {/* 스냅형 바텀시트 */}
       <BaseBottomSheet
         isOpen={isSnapOpen}
         onClose={() => setIsSnapOpen(false)}
@@ -103,10 +92,7 @@ export default function MapPage() {
         <div className="p-4">...</div>
         <div className="p-4">...</div>
         <div className="p-4">...</div>
-
       </BaseBottomSheet>
-
-
     </div>
   );
-} 
+}

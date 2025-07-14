@@ -8,9 +8,9 @@ export default function MapItemCardContent({
 }: ProductItemProps<MapType>) {
   return (
     <Fragment>
-      <div className="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
+      <div className="grid grid-cols-[auto_1fr_auto] gap-16 items-center">
         {/* 왼쪽 이미지 */}
-        <div className="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center">
+        <div className="w-56 h-56 bg-gray-200 rounded-full flex items-center justify-center">
           <ImageIcon />
         </div>
 
@@ -21,7 +21,7 @@ export default function MapItemCardContent({
             {Array.from({ length: 5 }, (_, i) => (
               <Star key={i} />
             ))}{" "}
-            <span className="body-xs text-black ml-1">({score})</span>
+            <span className="body-xs text-black ml-4">({score})</span>
           </div>
           <span className="body-xs text-gray-400">{address}</span>
         </div>
@@ -30,24 +30,22 @@ export default function MapItemCardContent({
         <div className="flex flex-col items-end">
           <span
             className={`${
-              type === "와이파이"
-                ? "bg-color-bg-primary2 text-color-text-black"
-                : "bg-color-bg-secondary2 text-color-text-black"
-            } body-xxs rounded-full px-2 py-0.5 mb-1`}
+              type === "와이파이" ? "bg-primary2 text-black" : "bg-secondary2 text-black"
+            } body-xxs rounded-circle px-8 py-2 mb-4`}
           >
             {type}
           </span>
-          <span className="text-pink-600 font-bold body-md">{price}</span>
+          <span className="text-primary body-md">{price}</span>
           <span className="body-xs text-gray-700">10분당</span>
         </div>
       </div>
 
       {/* 버튼 영역 */}
-      <div className="flex gap-2 mt-2">
-        <button className="bg-pink-600 text-white body-xs rounded-lg px-4 py-2 flex-1">
+      <div className="flex gap-8 mt-8">
+        <button className="bg-primary text-white body-xs rounded-6 px-16 py-8 flex-6">
           이용하기
         </button>
-        <button className="border border-gray-300 text-gray-700 body-xs rounded-lg px-4 py-2 flex-1">
+        <button className="border border-gray-300 text-gray-700 body-xs rounded-6 px-16 py-8 flex-2">
           채팅하기
         </button>
       </div>
