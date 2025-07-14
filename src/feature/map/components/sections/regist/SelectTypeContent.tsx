@@ -12,7 +12,7 @@ export default function SelectTypeContent({
 }: PropsWithChildren<SelectTypeContentProps>) {
   return (
     <div className="flex items-center gap-x-4">
-      <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+      <div className="w-48 h-48 bg-gray-100 rounded-full flex items-center justify-center">
         {children}
       </div>
       <div className="flex flex-col justify-center">
