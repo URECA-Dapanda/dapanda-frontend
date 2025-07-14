@@ -24,7 +24,7 @@ const cardVariant = cva("inline-flex gap-2 whitespace-nowrap transition-all roun
     variant: {
       material: "border-none shadow-material",
       flat: "border-none shadow-none",
-      outlined: "border dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+      outlined: "border",
     },
     size: {
       md: "h-144 w-full",
