@@ -1,39 +1,23 @@
-"use client";
+import { VirtualItem } from "@tanstack/react-virtual";
+import React, { memo } from "react";
 
-import React, { useRef, useEffect, memo } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useVirtualizer } from "@tanstack/react-virtual";
-import { getDataList } from "@feature/data/api/dataRequest";
-import DataItemCard from "@feature/data/components/sections/product/DataItemCard";
+interface VirtualizedListProps<T> {
+  mode?: "scroll" | "button";
+  parentRef: React.RefObject<HTMLDivElement | null>;
+  rowVirtualizer: any;
+  items: T[];
+  isFetchingNextPage: boolean;
+  renderItem: (item: T, index: number) => React.ReactNode;
+}
 
-function VirtualizedInfiniteList() {
-  const parentRef = useRef<HTMLDivElement | null>(null);
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: ["items"],
-    queryFn: getDataList,
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-    initialPageParam: 0,
-  });
-
-  const flatItems = data?.pages.flatMap((page) => page.items) ?? [];
-
-  const rowVirtualizer = useVirtualizer({
-    count: hasNextPage ? flatItems.length + 1 : flatItems.length,
-    getScrollElement: () => parentRef.current,
-    estimateSize: () => 200,
-    overscan: 5,
-  });
-
-  useEffect(() => {
-    const virtualItems = rowVirtualizer.getVirtualItems();
-    const lastItem = virtualItems[virtualItems.length - 1];
-
-    if (lastItem && lastItem.index >= flatItems.length - 1 && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [rowVirtualizer.getVirtualItems()]);
-
+function VirtualizedList<T>({
+  parentRef,
+  rowVirtualizer,
+  items,
+  mode = "scroll",
+  isFetchingNextPage,
+  renderItem,
+}: VirtualizedListProps<T>) {
   return (
     <div
       ref={parentRef}
@@ -50,9 +34,9 @@ function VirtualizedInfiniteList() {
           width: "100%",
         }}
       >
-        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-          const isLoaderRow = virtualRow.index > flatItems.length - 1;
-          const item = flatItems[virtualRow.index];
+        {rowVirtualizer.getVirtualItems().map((virtualRow: VirtualItem) => {
+          const isLoaderRow = virtualRow.index > items.length - 1;
+          const item = items[virtualRow.index];
 
           return (
             <div
@@ -67,7 +51,11 @@ function VirtualizedInfiniteList() {
                 background: "white",
               }}
             >
-              {isLoaderRow ? "Loading more..." : <DataItemCard data={item} key={item.id} />}
+              {isLoaderRow
+                ? isFetchingNextPage
+                  ? "Loading more..."
+                  : null
+                : renderItem(item, virtualRow.index)}
             </div>
           );
         })}
@@ -76,6 +64,4 @@ function VirtualizedInfiniteList() {
   );
 }
 
-export default memo(VirtualizedInfiniteList, (prevProps, nextProps) => {
-  return prevProps === nextProps;
-});
+export default memo(VirtualizedList) as typeof VirtualizedList;

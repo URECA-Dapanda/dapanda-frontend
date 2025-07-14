@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
 import CardComponent from "@components/common/card/CardComponent";
 import CardContentComponent from "@components/common/card/CardContentComponent";
 import CardHeaderComponent from "@components/common/card/CardHeaderComponent";
@@ -12,8 +12,20 @@ import ContentInfoCard from "@feature/chat/components/sections/ContentInfoCard";
 import CurrentCashCard from "@feature/mypage/components/sections/CurrentCashCard";
 import FilterCard from "./sections/filter/FilterCard";
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
+import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
+import { getDataList } from "../api/dataRequest";
+import DataItemCard from "./sections/product/DataItemCard";
+import { DataType } from "../types/dataType";
 
 export default function DataPageContent() {
+  const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage } =
+    useVirtualizedInfiniteQuery<DataType>({
+      queryKey: ["dataItems"],
+      queryFn: ({ pageParam = 0 }:QueryFunctionContext) => getDataList({ pageParam }),
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      estimateSize: () => 200,
+    });
+
   const { data: mapList } = useQuery({
     queryKey: ["map"],
     queryFn: getMapList,
@@ -69,7 +81,13 @@ export default function DataPageContent() {
           <button>Button</button>
         </CardContentComponent>
       </CardComponent>
-      <VirtualizedInfiniteList />
+      <VirtualizedInfiniteList
+        parentRef={parentRef}
+        rowVirtualizer={rowVirtualizer}
+        items={flatItems}
+        isFetchingNextPage={isFetchingNextPage}
+        renderItem={(item: DataType) => <DataItemCard data={item} />}
+      />
     </div>
   );
 }
