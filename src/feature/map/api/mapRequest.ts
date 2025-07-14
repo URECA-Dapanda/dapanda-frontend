@@ -1,10 +1,10 @@
 import { MapType } from "../types/mapType";
 
-const mockDataList = () =>
+const mockDataList = (num: number) =>
   new Promise<MapType[]>((resolve) => {
     setTimeout(() => {
-      resolve([
-        {
+      resolve(
+        Array.from({ length: 20 }, (_, i) => ({
           id: 1,
           title: "스타벅스 강남역",
           price: "300원",
@@ -13,32 +13,25 @@ const mockDataList = () =>
           location: "41.40338, 2.17403",
           score: 4.8,
           type: "와이파이",
-        },
-        {
-          id: 2,
-          title: "강남역 2번출구 앞",
-          price: "400원",
-          address: "서울시 강남구 강남대로 123",
-          isOpen: true,
-          location: "41.40338, 2.17403",
-          score: 4.6,
-          type: "핫스팟",
-        },
-        {
-          id: 3,
-          title: "강남역 11번출구",
-          price: "200원",
-          address: "서울시 강남구 강남대로 456",
-          isOpen: false,
-          location: "41.40338, 2.17403",
-          score: 4.8,
-          type: "와이파이",
-        },
-      ]);
+        }))
+      );
     }, 500);
   });
 
-export async function getMapList() {
-  const data = await mockDataList();
-  return data;
+function isNumber(value: unknown): value is number {
+  return typeof value === "number";
+}
+
+export async function getMapList({
+  pageParam = 0,
+}: {
+  pageParam?: number | unknown;
+}): Promise<{ items: MapType[]; nextCursor?: number }> {
+  console.log("GET API MAP LIST", pageParam);
+  if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
+  const start = pageParam;
+  const end = pageParam + 20;
+  const hasMore = end < 200;
+  const data = await mockDataList(start);
+  return { items: data, nextCursor: hasMore ? end : undefined };
 }

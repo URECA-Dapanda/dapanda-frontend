@@ -12,11 +12,13 @@ export function useVirtualizedInfiniteQuery<TData>({
   queryFn,
   getNextPageParam,
   estimateSize = () => 100,
+  mode = "scroll",
 }: {
   queryKey: string[];
   queryFn: (ctx: QueryFunctionContext) => Promise<PageResponse<TData>>;
   getNextPageParam: (lastPage: PageResponse<TData>, allPages: PageResponse<TData>[]) => unknown;
   estimateSize?: () => number;
+  mode?: "scroll" | "button";
 }) {
   const parentRef = useRef<HTMLDivElement | null>(null);
 
@@ -39,6 +41,8 @@ export function useVirtualizedInfiniteQuery<TData>({
   });
 
   useEffect(() => {
+    if (mode !== "scroll") return;
+
     const virtualItems = rowVirtualizer.getVirtualItems();
     const lastItem = virtualItems[virtualItems.length - 1];
 
@@ -52,5 +56,7 @@ export function useVirtualizedInfiniteQuery<TData>({
     rowVirtualizer,
     flatItems,
     isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
   };
 }

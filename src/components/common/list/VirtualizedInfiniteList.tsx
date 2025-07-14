@@ -1,5 +1,5 @@
 import { VirtualItem } from "@tanstack/react-virtual";
-import React, { memo } from "react";
+import React, { Fragment, memo } from "react";
 
 interface VirtualizedListProps<T> {
   mode?: "scroll" | "button";
@@ -7,6 +7,8 @@ interface VirtualizedListProps<T> {
   rowVirtualizer: any;
   items: T[];
   isFetchingNextPage: boolean;
+  fetchNextPage: () => void;
+  hasNextPage: boolean;
   renderItem: (item: T, index: number) => React.ReactNode;
 }
 
@@ -15,52 +17,80 @@ function VirtualizedList<T>({
   rowVirtualizer,
   items,
   mode = "scroll",
+  hasNextPage,
   isFetchingNextPage,
+  fetchNextPage,
   renderItem,
 }: VirtualizedListProps<T>) {
+  const virtualItems = rowVirtualizer.getVirtualItems();
+
+  const totalHeight = rowVirtualizer.getTotalSize();
+
   return (
-    <div
-      ref={parentRef}
-      style={{
-        height: "600px",
-        overflow: "auto",
-        border: "1px solid #ccc",
-      }}
-    >
+    <Fragment>
       <div
         style={{
-          height: `${rowVirtualizer.getTotalSize()}px`,
-          position: "relative",
-          width: "100%",
+          height: "600px",
+          overflow: "auto",
+          border: "1px solid #ccc",
         }}
       >
-        {rowVirtualizer.getVirtualItems().map((virtualRow: VirtualItem) => {
-          const isLoaderRow = virtualRow.index > items.length - 1;
-          const item = items[virtualRow.index];
+        <div
+          ref={parentRef}
+          style={{
+            height: `${totalHeight}px`,
+            position: "relative",
+            width: "100%",
+          }}
+        >
+          {virtualItems.map((virtualRow: VirtualItem) => {
+            const isLoaderRow = virtualRow.index > items.length - 1;
+            const item = items[virtualRow.index];
 
-          return (
-            <div
-              key={virtualRow.index}
+            return (
+              <div
+                key={virtualRow.index}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  transform: `translateY(${virtualRow.start}px)`,
+                  padding: "16px",
+                  background: "white",
+                }}
+              >
+                {mode === "scroll" && isLoaderRow
+                  ? isFetchingNextPage
+                    ? "Loading more..."
+                    : null
+                  : !isLoaderRow
+                  ? renderItem(item, virtualRow.index)
+                  : null}
+              </div>
+            );
+          })}
+        </div>
+        {mode === "button" && hasNextPage && (
+          <div style={{ textAlign: "center" }} className={`${mode === "button" ? "" : "hidden"}`}>
+            <button
+              onClick={fetchNextPage}
+              disabled={isFetchingNextPage}
               style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                transform: `translateY(${virtualRow.start}px)`,
-                padding: "16px",
-                background: "white",
+                padding: "8px 16px",
+                background: "#333",
+                color: "#fff",
+                borderRadius: "4px",
+                border: "none",
+                cursor: isFetchingNextPage ? "not-allowed" : "pointer",
               }}
             >
-              {isLoaderRow
-                ? isFetchingNextPage
-                  ? "Loading more..."
-                  : null
-                : renderItem(item, virtualRow.index)}
-            </div>
-          );
-        })}
+              {isFetchingNextPage ? "로딩 중..." : "더보기"}
+            </button>
+          </div>
+        )}
       </div>
-    </div>
+    </Fragment>
   );
 }
 
