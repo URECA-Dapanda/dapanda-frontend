@@ -13,6 +13,7 @@ import { getChatContentInfo } from "@feature/chat/api/chatRequest";
 import ContentInfoCard from "@feature/chat/components/sections/ContentInfoCard";
 import CurrentCashCard from "@feature/mypage/components/sections/CurrentCashCard";
 import FilterCard from "./sections/filter/FilterCard";
+import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 
 export default function DataPageContent() {
   const { data: dataList } = useQuery({
@@ -73,6 +74,7 @@ export default function DataPageContent() {
           <button>Button</button>
         </CardContentComponent>
       </CardComponent>
+      <VirtualizedInfiniteList />
     </div>
   );
 }
