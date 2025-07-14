@@ -6,10 +6,7 @@ interface NavigationButtonProps {
   target: string;
 }
 
-function NavigationButton({
-  target,
-  children,
-}: PropsWithChildren<NavigationButtonProps>) {
+function NavigationButton({ target, children }: PropsWithChildren<NavigationButtonProps>) {
   const router = useRouter();
   const pathname = usePathname();
   /**
@@ -19,16 +16,14 @@ function NavigationButton({
 
   const handleButtonClick = useCallback((e: MouseEvent<HTMLButtonElement>) => {
     router.push(
-      `${e.currentTarget.value}${
-        e.currentTarget.value === "/profile" ? `/${userId}` : ""
-      }`
+      `${e.currentTarget.value}${e.currentTarget.value === "/mypage" ? `/${userId}` : ""}`
     );
   }, []);
 
   return (
     <button
       className={`flex flex-col items-center py-2 ${
-        target === pathname ? "text-[#119c72]" : "text-gray-400"
+        target === pathname ? "text-primary" : "text-gray-400"
       }`}
       value={target}
       onClick={handleButtonClick}

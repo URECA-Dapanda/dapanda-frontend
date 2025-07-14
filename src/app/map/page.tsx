@@ -8,7 +8,7 @@ export default function MapPage() {
   const [numberValue, setNumberValue] = useState("123");
 
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+    <div className="p-24 space-y-24 bg-gray-50 min-h-screen">
       <h1 className="text-xl font-bold">InputComponent 테스트</h1>
 
       {/* 텍스트 인풋 - lg */}
@@ -46,13 +46,7 @@ export default function MapPage() {
       />
 
       {/* disabled 테스트 */}
-      <InputComponent
-        radius="md"
-        size="md"
-        value="비활성화됨"
-        onChange={() => {}}
-        disabled
-      />
+      <InputComponent radius="md" size="md" value="비활성화됨" onChange={() => {}} disabled />
     </div>
   );
-} 
+}
