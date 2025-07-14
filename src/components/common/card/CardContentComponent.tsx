@@ -18,11 +18,11 @@ export default function CardContentComponent({
   const calculatedSize = useMemo(() => {
     switch (size) {
       case "lg":
-        return "p-8";
+        return "p-32";
       case "md":
-        return "p-6";
+        return "p-24";
       case "sm":
-        return "p-4";
+        return "p-16";
       default:
         return `p-${size}`;
     }
