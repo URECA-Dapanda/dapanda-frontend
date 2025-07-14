@@ -22,9 +22,9 @@ interface CardComponentProps {
 const cardVariant = cva("inline-flex gap-2 whitespace-nowrap transition-all rounded-20 py-0 ", {
   variants: {
     variant: {
-      material: "border-none shadow-[0px_20px_35px_0px_rgba(0,0,0,0.05)]",
+      material: "border-none shadow-material",
       flat: "border-none shadow-none",
-      outlined: "border shadow-xs dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+      outlined: "border dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
     },
     size: {
       md: "h-144 w-full",

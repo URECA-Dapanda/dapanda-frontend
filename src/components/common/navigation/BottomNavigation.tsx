@@ -4,8 +4,8 @@ import NavigationButton from "./NavigationButton";
 
 export default async function BottomNavigation() {
   return (
-    <div className="fixed bottom-0 bg-white border-t shadow-lg" style={{ width: "375px" }}>
-      <div className="grid grid-cols-4 px-8">
+    <div className="fixed bottom-0 bg-white border-none overflow-x-clip" style={{ width: "375px" }}>
+      <div className="grid grid-cols-4 px-8 shadow-nav">
         <NavigationButton target={"/data"}>
           <Fragment>
             <Wifi className="w-20 h-20 mb-4" />
