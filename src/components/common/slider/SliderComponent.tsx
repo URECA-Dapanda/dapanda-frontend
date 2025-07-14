@@ -1,4 +1,5 @@
 import { Slider as BaseSlider } from "@ui/slider";
+import { formatDataSize } from "@lib/formatters";
 
 interface SliderProps {
   value: number[];
@@ -7,10 +8,6 @@ interface SliderProps {
   max?: number;
   step?: number;
   className?: string;
-}
-
-function formatLabel(val: number) {
-  return val < 1 ? `${Math.round(val * 1000)}MB` : `${val}GB`;
 }
 
 export default function Slider({
@@ -32,8 +29,8 @@ export default function Slider({
         className="w-full"
       />
       <div className="flex justify-between body-sm text-gray-500 mt-1">
-        <span>{formatLabel(min)}</span>
-        <span>{formatLabel(max)}</span>
+        <span>{formatDataSize(min)}</span>
+        <span>{formatDataSize(max)}</span>
       </div>
     </div>
   );
