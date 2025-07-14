@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import * as SliderPrimitive from "@radix-ui/react-slider";
+
 import { cn } from "@/lib/utils";
 
 function Slider({
@@ -35,15 +36,15 @@ function Slider({
       <SliderPrimitive.Track
         data-slot="slider-track"
         className={cn(
-          "bg-gray-300 relative grow overflow-hidden rounded-6",
-          "data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full",
+          "bg-white relative grow overflow-hidden rounded-6",
+          "data-[orientation=horizontal]:h-8 data-[orientation=horizontal]:w-full",
           "data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5"
         )}
       >
         <SliderPrimitive.Range
           data-slot="slider-range"
           className={cn(
-            "bg-black absolute",
+            "bg-primary absolute",
             "data-[orientation=horizontal]:h-full",
             "data-[orientation=vertical]:w-full"
           )}
@@ -55,9 +56,8 @@ function Slider({
           data-slot="slider-thumb"
           key={index}
           className={cn(
-            "bg-white border-primary-500 ring-warning/50",
-            "block size-4 shrink-0 rounded-circle border shadow-sm",
-            "transition-colors hover:ring-4 focus-visible:ring-4",
+            "bg-white border-primary",
+            "block size-20 shrink-0 rounded-circle border-2",
             "focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
           )}
         />

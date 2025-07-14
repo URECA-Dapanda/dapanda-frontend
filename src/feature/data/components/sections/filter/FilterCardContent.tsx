@@ -1,5 +1,5 @@
 import { Button } from "@ui/button";
-import Slider from "@/components/common/Slider";
+import Slider from "@components/common/slider/SliderComponent";
 import { useState } from "react";
 
 export default function FilterCardContent() {
