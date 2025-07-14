@@ -9,7 +9,7 @@ interface ItemCardProps {
 export default function InfoCard({ handleClick, children }: PropsWithChildren<ItemCardProps>) {
   return (
     <div onClick={handleClick} className={`${handleClick ? "hover:cursor-pointer" : ""}`}>
-      <CardComponent variant="outlined" size="xs" color={"border-bg-primary"}>
+      <CardComponent variant="outlined" size="xs" color={"border-primary"}>
         <CardContentComponent size={"sm"}>{children}</CardContentComponent>
       </CardComponent>
     </div>

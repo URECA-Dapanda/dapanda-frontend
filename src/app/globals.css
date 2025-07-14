@@ -59,10 +59,6 @@
   .warm-bg {
     background-color: #ffe8c6;
   }
-
-  .custom-drop {
-    box-shadow: 0px 20px 35px 0px rgba(0, 0, 0, 0.05);
-  }
 }
 
 button:active {
