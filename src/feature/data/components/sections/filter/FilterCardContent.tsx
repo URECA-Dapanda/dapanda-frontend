@@ -1,4 +1,4 @@
-import { Button } from "@ui/button";
+import { ButtonComponent } from "@/components/common/button";
 import Slider from "@components/common/slider/SliderComponent";
 import { formatDataSize } from "@lib/formatters";
 import { useState } from "react";
@@ -16,9 +16,9 @@ export default function FilterCardContent() {
         max={5}
       />
 
-      <Button className="w-[280px] bg-white title-xs text-black rounded-6 hover:bg-gray-100">
+      <ButtonComponent variant="nonoutline" className="w-[280px]">
         확정
-      </Button>
+      </ButtonComponent>
     </div>
   );
 }
