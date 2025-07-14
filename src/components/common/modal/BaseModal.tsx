@@ -30,7 +30,7 @@ export default function BaseModal({ isOpen, onClose, children, className = "" }:
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ type: "spring", damping: 30, stiffness: 300 }}
-          className={cn("relative bg-white p-6 m-4 w-[327px] rounded-30", className)}
+          className={cn("relative bg-white p-24 m-16 w-[327px] rounded-30", className)}
         >
           {children}
         </motion.div>
