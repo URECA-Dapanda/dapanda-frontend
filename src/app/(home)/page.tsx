@@ -1,15 +1,22 @@
 "use client";
 
-import { useState } from "react";
-import BaseModal from "@/components/common/modal/BaseModal";
-import ModalHeader from "@/components/common/modal/ModalHeader";
+// import { useState } from "react";
+// import BaseModal from "@/components/common/modal/BaseModal";
+// import ModalHeader from "@/components/common/modal/ModalHeader";
+
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white px-4">
-      <button
+      <div className="flex flex-wrap items-center gap-2 md:flex-row">
+        <Button>Button</Button>
+        <Button className="bg-primary text-white rounded-20">디버그 버튼</Button>
+      </div>
+
+      {/* <button
         onClick={() => setIsOpen(true)}
         className="px-6 py-3 bg-color-primary-700 text-white rounded-xl font-semibold hover:bg-color-primary-600"
       >
@@ -29,7 +36,7 @@ export default function Home() {
             닫기
           </button>
         </div>
-      </BaseModal>
+      </BaseModal> */}
     </div>
   );
 }
