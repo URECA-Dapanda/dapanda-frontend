@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilterCard from "./sections/filter/FilterCard";
 import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
 import { PurchaseModeTabs } from "@/components/common/tabs";
@@ -10,10 +10,17 @@ import { getDataList } from "../api/dataRequest";
 import { DataType } from "../types/dataType";
 import DataItemCard from "./sections/product/DataItemCard";
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
+import { useHeaderStore } from "@stores/useHeaderStore";
 
 export default function DataPageContent() {
   const [sheetOpen, setSheetOpen] = useState(true);
   const [tab, setTab] = useState("normal");
+
+  const setIsVisible = useHeaderStore((state)=>state.setIsVisible);
+
+  useEffect(()=>{
+    setIsVisible(sheetOpen);
+  },[sheetOpen, setIsVisible])
 
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<DataType>({
@@ -35,6 +42,8 @@ export default function DataPageContent() {
       <BaseBottomSheet
         isOpen={sheetOpen}
         onClose={() => setSheetOpen(false)}
+        onSnapUp={() => setSheetOpen(true)}
+        onSnapDown={() => setSheetOpen(false)}
         variant="snap"
         snapHeight={250}
       >
