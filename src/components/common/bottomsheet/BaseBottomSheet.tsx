@@ -61,7 +61,7 @@ export default function BaseBottomSheet({
       }}
       drag="y">
         <motion.div
-          className="bg-white rounded-t-20 pointer-events-auto p-24"
+          className="bg-white rounded-t-50 pointer-events-auto"
           style={{
             width: "375px",
             height:
