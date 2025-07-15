@@ -1,42 +1,40 @@
 "use client";
 
-// import { useState } from "react";
-// import BaseModal from "@/components/common/modal/BaseModal";
-// import ModalHeader from "@/components/common/modal/ModalHeader";
-
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { UserDropdownMenu } from "@/components/common/dropdown/UserDropdownMenu";
+import { chatMenuOptions, dataSortOptions } from "@/components/common/dropdown/dropdownConfig";
 
 export default function Home() {
-  // const [isOpen, setIsOpen] = useState(false);
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [selectedSort, setSelectedSort] = useState("정렬");
+
+  const handleReport = () => {
+    setReportModalOpen(true);
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white px-4">
-      <div className="flex flex-wrap items-center gap-2 md:flex-row">
-        <Button>Button</Button>
-        <Button className="bg-primary text-white rounded-20">디버그 버튼</Button>
-      </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white px-4 gap-20">
+      {/* 메뉴형 드롭다운 */}
+      <UserDropdownMenu options={chatMenuOptions(handleReport)}>
+        <Button variant="ghost" size="icon">
+          <img src="/icons/more.svg" alt="더보기" />
+        </Button>
+      </UserDropdownMenu>
 
-      {/* <button
-        onClick={() => setIsOpen(true)}
-        className="px-6 py-3 bg-color-primary-700 text-white rounded-xl font-semibold hover:bg-color-primary-600"
-      >
-        모달 열기
-      </button>
+      {/* 선택형 드롭다운 */}
+      <UserDropdownMenu options={dataSortOptions} onSelectLabel={setSelectedSort}>
+        <button className="body-sm px-12 py-6 rounded-6 bg-gray-100">{selectedSort}</button>
+      </UserDropdownMenu>
 
-      <BaseModal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ModalHeader title="테스트 모달" onClose={() => setIsOpen(false)} />
-        <div className="text-sm text-gray-700 space-y-3">
-          <p>이건 테스트용 모달입니다.</p>
-          <p>Tailwind 디자인 시스템이 잘 적용되었는지 확인해보세요.</p>
-
-          <button
-            onClick={() => setIsOpen(false)}
-            className="mt-4 px-4 py-2 bg-gray-200 rounded-md text-sm font-medium hover:bg-gray-300"
-          >
+      {reportModalOpen && (
+        <div className="mt-4 p-4 border rounded-md text-error">
+          신고 모달이 열렸습니다!
+          <button onClick={() => setReportModalOpen(false)} className="ml-4 underline text-sm">
             닫기
           </button>
         </div>
-      </BaseModal> */}
+      )}
     </div>
   );
 }
