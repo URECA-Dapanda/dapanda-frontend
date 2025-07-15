@@ -34,7 +34,7 @@ function CollapseVirtualizedList<T>({
   const getCardTop = (virtualRow: VirtualItem, index: number) =>
     isExpanded ? virtualRow.start : index * 10;
 
-  const containerHeight = isExpanded ? 600 : 100;
+  const containerHeight = isExpanded ? 600 : 250;
 
   return (
     <>
@@ -42,7 +42,7 @@ function CollapseVirtualizedList<T>({
         ref={parentRef}
         style={{
           height: containerHeight,
-          overflow: !isExpanded ? "visible" : "auto",
+          overflow: "auto",
           position: "relative",
         }}
       >
@@ -87,7 +87,7 @@ function CollapseVirtualizedList<T>({
       <div
         style={{
           textAlign: "center",
-          marginTop: 8,
+          marginTop: -150,
           position: "relative",
           zIndex: !isExpanded ? items.length + 1 : undefined,
         }}
