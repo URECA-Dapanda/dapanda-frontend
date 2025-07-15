@@ -52,7 +52,6 @@ export function useVirtualizedInfiniteQuery<TData>({
 
       const distanceToBottom = scrollHeight - scrollBottom;
 
-      // 스크롤이 하단 150px 이내로 내려왔을 때만 fetch
       if (distanceToBottom < 150) {
         fetchNextPage();
       }
