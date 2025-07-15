@@ -20,6 +20,14 @@ function CollapseVirtualizedList<T>({
 }: CollapseVirtualizedListProps<T>) {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  useEffect(() => {
+    if (isExpanded) {
+      rowVirtualizer.scrollToIndex(0);
+      console.log("Expanded, scrolling to top");
+    }
+    console.log("collapsed, scrolling to top");
+  }, [isExpanded, rowVirtualizer]);
+
   const totalHeight = rowVirtualizer.getTotalSize();
   const virtualItems = rowVirtualizer.getVirtualItems();
 
@@ -27,8 +35,6 @@ function CollapseVirtualizedList<T>({
     isExpanded ? virtualRow.start : index * 10;
 
   const containerHeight = isExpanded ? 600 : 100;
-
-  console.log("QWRQ", virtualItems[0].index > items.length - 1, isFetchingNextPage);
 
   return (
     <>
@@ -62,6 +68,7 @@ function CollapseVirtualizedList<T>({
                   transform: `translateY(${getCardTop(virtualRow, index)}px)`,
                   padding: "0 16px",
                   zIndex: !isExpanded ? items.length - index : undefined,
+                  borderRadius: !isExpanded ? 8 : undefined,
                   transition: "transform 0.3s ease",
                   visibility: !isExpanded && index > 3 ? "hidden" : "visible",
                 }}
