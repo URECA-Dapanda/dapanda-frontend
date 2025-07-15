@@ -29,6 +29,7 @@ function VirtualizedList<T>({
   return (
     <Fragment>
       <div
+        ref={parentRef}
         style={{
           height: "600px",
           overflow: "auto",
@@ -36,7 +37,6 @@ function VirtualizedList<T>({
         }}
       >
         <div
-          ref={parentRef}
           style={{
             height: `${totalHeight}px`,
             position: "relative",

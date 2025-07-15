@@ -1,9 +1,6 @@
 "use client";
 
 import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
-import CardComponent from "@components/common/card/CardComponent";
-import CardContentComponent from "@components/common/card/CardContentComponent";
-import CardHeaderComponent from "@components/common/card/CardHeaderComponent";
 import MapItemCard from "@feature/map/components/sections/product/MapItemCard";
 import { getMapList } from "@feature/map/api/mapRequest";
 import SelectTypeCard from "@feature/map/components/sections/regist/SelectTypeCard";

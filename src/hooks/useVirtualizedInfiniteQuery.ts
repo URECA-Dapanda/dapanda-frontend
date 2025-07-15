@@ -43,13 +43,24 @@ export function useVirtualizedInfiniteQuery<TData>({
   useEffect(() => {
     if (mode !== "scroll") return;
 
-    const virtualItems = rowVirtualizer.getVirtualItems();
-    const lastItem = virtualItems[virtualItems.length - 1];
+    const el = parentRef.current;
+    if (!el || isFetchingNextPage || !hasNextPage) return;
 
-    if (lastItem && lastItem.index >= flatItems.length - 1 && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [rowVirtualizer.getVirtualItems()]);
+    const handleScroll = () => {
+      const scrollBottom = el.scrollTop + el.clientHeight;
+      const scrollHeight = el.scrollHeight;
+
+      const distanceToBottom = scrollHeight - scrollBottom;
+
+      // 스크롤이 하단 150px 이내로 내려왔을 때만 fetch
+      if (distanceToBottom < 150) {
+        fetchNextPage();
+      }
+    };
+
+    el.addEventListener("scroll", handleScroll);
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [mode, isFetchingNextPage, hasNextPage, fetchNextPage]);
 
   return {
     parentRef,
