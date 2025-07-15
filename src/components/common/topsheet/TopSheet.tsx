@@ -16,7 +16,7 @@ export default function TopSheet({ type, data }: TopSheetProps) {
   const [expanded, setExpanded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const sheetHeight = expanded ? (type === "wifi" ? 500 : 480) : 315;
+  const sheetHeight = expanded ? (type === "wifi" ? 480 : 440) : 280;
   const getImageStyle = (expanded: boolean, type: "post" | "wifi") => {
     if (expanded) {
       return {
@@ -31,7 +31,7 @@ export default function TopSheet({ type, data }: TopSheetProps) {
 
     if (type === "post") {
       return {
-        top: 24,
+        top: 10,
         right: -40,
         width: 240,
         height: 240,
@@ -53,7 +53,6 @@ export default function TopSheet({ type, data }: TopSheetProps) {
   return (
     <motion.div
       className="absolute top-0 w-[375px] bg-secondary shadow-default rounded-b-30 overflow-hidden"
-      style={{ height: sheetHeight }}
       animate={{ y: expanded ? -10 : 0 }}
       transition={{ type: "spring", damping: 20, stiffness: 200 }}
       drag="y"
@@ -76,16 +75,16 @@ export default function TopSheet({ type, data }: TopSheetProps) {
       />
 
       <motion.div
-        className="relative z-10 pl-[30px] px-4 space-y-1"
+        className="relative z-10 pl-30 px-4 space-y-1"
         animate={{
-          paddingTop: expanded ? 250 : type === "wifi" ? 51 : 60,
+          paddingTop: expanded ? 240 : type === "wifi" ? 51 : 60,
         }}
         transition={{ type: "spring", damping: 20, stiffness: 200 }}
       >
         {type === "post" && data.hasReported && (
           <>
             <motion.div
-              className="absolute top-4 right-4 z-20 rounded-full bg-white shadow-default w-30 h-30 flex items-center justify-center"
+              className="absolute top-8 right-4 z-20 rounded-full bg-white shadow-default w-30 h-30 flex items-center justify-center"
               animate={{ y: expanded ? 20 : 0 }}
               transition={{ type: "spring", damping: 20, stiffness: 200 }}
             >
@@ -97,12 +96,12 @@ export default function TopSheet({ type, data }: TopSheetProps) {
               </BadgeComponent>
               <h2 className="h1">{data.title}</h2>
             </div>
-            <div className="flex flex-col gap-[8px]">
+            <div className="flex flex-col gap-8">
               <p className="title-md">{data.price}원</p>
-              <p className="body-xs">{data.unitPrice}원/100MB</p>
+              {expanded && <p className="body-xs">{data.unitPrice}원/100MB</p>}
 
               {data.recentPrice && data.averagePrice && (
-                <div className="flex gap-[12px] pt-[23px] flex-wrap">
+                <div className="flex gap-12 pt-20 flex-wrap">
                   <BadgeComponent variant="meta" size="md" className="bg-white">
                     최근거래가: {data.recentPrice}원
                   </BadgeComponent>
@@ -116,7 +115,7 @@ export default function TopSheet({ type, data }: TopSheetProps) {
         )}
         {type === "wifi" && (
           <>
-            <div className="space-y-[8px]">
+            <div className="space-y-8">
               <BadgeComponent variant="meta" size="md" className="bg-primary2 text-black">
                 와이파이
               </BadgeComponent>
@@ -124,15 +123,14 @@ export default function TopSheet({ type, data }: TopSheetProps) {
               <p className="caption-md text-gray-500">{data.address}</p>
             </div>
 
-            <div className="flex flex-col gap-[8px] pt-[10px]">
+            <div className="flex flex-col gap-8 pt-12">
               <p className="body-xs">
                 {data.openTime} ~ {data.closeTime}
               </p>
               <p className="body-xs">{data.pricePer10min}원/10분</p>
-              <p className="body-sm">{data.description}</p>
-
+              {expanded && <p className="body-sm">{data.description}</p>}
               {data.recentPrice && data.averagePrice && (
-                <div className="flex gap-[12px] pt-[10px] flex-wrap">
+                <div className="flex gap-12 pt-4 flex-wrap">
                   <BadgeComponent variant="outlined" size="sm" className="body-xxs">
                     최근 거래가: {data.recentPrice}원
                   </BadgeComponent>
@@ -147,12 +145,15 @@ export default function TopSheet({ type, data }: TopSheetProps) {
       </motion.div>
 
       {!expanded ? (
-        <div className="pt-8 flex flex-col items-center text-gray-500">
-          <p className="text-caption-sm pt-4">아래로 쓸어내려서 열기</p>
+        <div onClick={() => setExpanded(true)} className="flex justify-center pt-16 pb-8">
+          <div className="w-[30%] h-1.5 bg-gray-400/60 rounded-full" />
         </div>
       ) : (
-        <div className="pt-8 flex flex-col items-center text-gray-500">
-          <p className="text-caption-sm">위로 밀어서 닫기</p>
+        <div
+          onClick={() => setExpanded(false)}
+          className="flex justify-center pt-12 pb-8 cursor-pointer"
+        >
+          <div className="w-[30%] h-1.5 bg-gray-400/60 rounded-full" />
         </div>
       )}
 

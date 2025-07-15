@@ -44,5 +44,19 @@ export default function ChatPageContent() {
         </FullScreenModal>
       )}
     </div>
+
+    // <div className="relative w-full min-h-screen overflow-hidden bg-white">
+    //   <TopSheet type="post" data={postData} onImageClick={() => setIsModalOpen(true)} />
+
+    //   {isModalOpen && (
+    //     <FullScreenModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+    //       <img
+    //         src={postData.imageUrl}
+    //         alt="확대 이미지"
+    //         className="max-w-screen max-h-screen w-auto h-auto object-contain"
+    //       />
+    //     </FullScreenModal>
+    //   )}
+    // </div>
   );
 }
