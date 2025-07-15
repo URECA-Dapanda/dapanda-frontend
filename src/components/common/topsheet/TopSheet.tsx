@@ -1,22 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { Siren } from "lucide-react";
 import { motion } from "framer-motion";
 import FullScreenModal from "@/components/common/modal/FullScreenModal";
 import { BadgeComponent } from "@/components/common/badge";
-import { Siren } from "lucide-react";
+import type { TopSheetProps } from "@/components/common/topsheet/topSheet.types";
 
-interface TopSheetProps {
-  type: "post" | "wifi";
-  data: any;
-  onImageClick: () => void;
-}
-
-export default function TopSheet({ type, data }: TopSheetProps) {
+export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
   const [expanded, setExpanded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const sheetHeight = expanded ? (type === "wifi" ? 480 : 440) : 280;
   const getImageStyle = (expanded: boolean, type: "post" | "wifi") => {
     if (expanded) {
       return {
