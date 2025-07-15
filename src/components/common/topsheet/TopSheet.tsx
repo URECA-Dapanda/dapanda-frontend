@@ -16,8 +16,7 @@ export default function TopSheet({ type, data }: TopSheetProps) {
   const [expanded, setExpanded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const sheetHeight = expanded ? 480 : 311;
-
+  const sheetHeight = expanded ? (type === "wifi" ? 500 : 480) : 315;
   const getImageStyle = (expanded: boolean, type: "post" | "wifi") => {
     if (expanded) {
       return {
@@ -43,7 +42,7 @@ export default function TopSheet({ type, data }: TopSheetProps) {
 
     return {
       top: 51,
-      right: 24,
+      right: 12,
       width: 140,
       height: 140,
       rotate: 0,
@@ -78,7 +77,9 @@ export default function TopSheet({ type, data }: TopSheetProps) {
 
       <motion.div
         className="relative z-10 pl-[30px] px-4 space-y-1"
-        animate={{ paddingTop: expanded ? 250 : 60 }}
+        animate={{
+          paddingTop: expanded ? 250 : type === "wifi" ? 51 : 60,
+        }}
         transition={{ type: "spring", damping: 20, stiffness: 200 }}
       >
         {type === "post" && data.hasReported && (
@@ -144,6 +145,16 @@ export default function TopSheet({ type, data }: TopSheetProps) {
           </>
         )}
       </motion.div>
+
+      {!expanded ? (
+        <div className="pt-8 flex flex-col items-center text-gray-500">
+          <p className="text-caption-sm pt-4">아래로 쓸어내려서 열기</p>
+        </div>
+      ) : (
+        <div className="pt-8 flex flex-col items-center text-gray-500">
+          <p className="text-caption-sm">위로 밀어서 닫기</p>
+        </div>
+      )}
 
       {isModalOpen && (
         <FullScreenModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
