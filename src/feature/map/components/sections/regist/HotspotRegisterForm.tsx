@@ -27,7 +27,7 @@ export default function HotspotRegistForm() {
         placeholder="예: 강남역 2번 출구 앞"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        className="w-full mb-16 border border-gray-300 px-3"
+        className="w-full mb-12 px-3"
         radius="md"
         size="md"
         color=""
@@ -37,11 +37,17 @@ export default function HotspotRegistForm() {
 
       {/* 설명 */}
       <label className="title-sm mb-12 block">설명</label>
-      <textarea
-        className="w-full h-24 rounded-10 border border-gray-300 px-3 py-2 resize-none text-sm mb-16"
+      <InputComponent
+        as="textarea"
         placeholder="위치 설명, 이용 조건 등을 입력해주세요"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        className="mb-12"
+        radius="md"
+        size="md"
+        disabled={false}
+        required
+        rows={3}
       />
 
         {/* 가격 */}
@@ -61,7 +67,7 @@ export default function HotspotRegistForm() {
         placeholder="예: 300"
         value={price}
         onChange={(e) => setPrice(e.target.value)}
-        className="w-full mb-16 border border-gray-300 px-3"
+        className="w-full mb-12 px-3"
         radius="md"
         size="md"
         color=""
@@ -70,12 +76,12 @@ export default function HotspotRegistForm() {
       />
 
       {/* 이용 시작 시간 */}
-      <label className="title-sm font-medium mb-12 block">이용 시작 시간</label>
+      <label className="title-sm mb-12 block">이용 시작 시간</label>
       <InputComponent
         placeholder="예: 09:00"
         value={startTime}
         onChange={(e) => setStartTime(e.target.value)}
-        className="w-full mb-16 border border-gray-300 px-3"
+        className="w-full mb-12 px-3"
         radius="md"
         size="md"
         color=""
@@ -85,7 +91,7 @@ export default function HotspotRegistForm() {
       {/* 사진 첨부 */}
       <label className="title-sm mb-12 block">사진 첨부</label>
       <div className="flex gap-12 mb-24">
-        <div className="w-[80px] h-[80px] border border-dashed border-primary rounded-20 flex items-center justify-center text-pink-500 text-2xl">
+        <div className="w-80 h-80 border border-dashed border-primary rounded-20 flex items-center justify-center text-pink-500 text-2xl">
           <Camera className="w-32 h-32"/>
         </div>
         <div className="w-80 h-80 bg-primary-50 rounded-20" />
