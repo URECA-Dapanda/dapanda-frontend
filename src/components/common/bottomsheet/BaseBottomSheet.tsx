@@ -6,6 +6,8 @@ import { ReactNode, useEffect, useState } from "react";
 interface BaseBottomSheetProps {
   isOpen: boolean;
   onClose?: () => void;
+  onSnapUp?: () => void;
+  onSnapDown?: () => void; 
   children: ReactNode;
   variant?: "snap" | "modal";
   snapHeight?: number;
@@ -14,6 +16,8 @@ interface BaseBottomSheetProps {
 export default function BaseBottomSheet({
   isOpen,
   onClose,
+  onSnapUp,
+  onSnapDown,
   children,
   variant = "modal",
   snapHeight = 300,
@@ -53,10 +57,17 @@ export default function BaseBottomSheet({
       }
       onDragEnd={(event, info) => {
         if (info.offset.y > 100 || info.velocity.y > 500) {
-          if (variant === "modal") onClose?.();
-          if (variant === "snap") setSheetY(snapHeight);
+          if (variant === "modal") {
+            onClose?.();
+          } else if (variant === "snap") {
+            setSheetY(snapHeight);
+            onSnapDown?.();
+          }
         } else {
           setSheetY(0);
+          if (variant === "snap") {
+            onSnapUp?.();
+          }
         }
       }}
       drag="y">
