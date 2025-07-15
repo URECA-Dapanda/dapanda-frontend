@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSlidingHighlight } from "@/components/common/tabs/useSlidingHighlight";
 import { motion } from "framer-motion";
 
@@ -27,8 +27,8 @@ export default function SlidingTabs({
   onChange,
   variant = "outline",
   delay = 0,
-  contentClassName = "",
-}: SlidingTabsProps) {
+}: //contentClassName = "",
+SlidingTabsProps) {
   const { setTriggerRef, highlightStyle } = useSlidingHighlight(tabs, value);
 
   const handleChange = (next: string) => {
