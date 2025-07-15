@@ -16,12 +16,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`antialiased w-[375px] h-[812px] mx-auto overflow-hidden relative`}>
-        <ProviderWrapper>
-          <SharedHeader />
-          {children}
-          <BottomNavigation />
-        </ProviderWrapper>
+      <body className="flex flex-col min-h-screen w-full">
+        <main className="antialiased flex-1 w-[375px] h-[812px] mx-auto overflow-hidden relative">
+          <ProviderWrapper>
+            <SharedHeader />
+            {children}
+            <BottomNavigation />
+          </ProviderWrapper>
+        </main>
       </body>
     </html>
   );

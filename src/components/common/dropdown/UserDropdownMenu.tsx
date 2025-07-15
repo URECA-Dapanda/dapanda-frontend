@@ -1,5 +1,7 @@
 "use client";
 
+import { ReactNode } from "react";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -7,68 +9,73 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
-import { ReactNode } from "react";
+import { dropdownVariants } from "@/components/common/dropdown/dropdownVariants";
+import { DropdownOption } from "@/components/common/dropdown/dropdown.types";
+import { DropdownItemContent } from "@/components/common/dropdown/DropdownItemContent";
+
 import { cn } from "@/lib/utils";
 
-export type MenuAction =
-  | { type: "link"; href: string }
-  | { type: "action"; onClick: () => void }
-  | { type: "separator" }
-  | { type: "custom"; element: ReactNode };
-
-export interface DropdownMenuOption {
-  label?: string;
-  icon?: React.ElementType;
-  action: MenuAction;
-  disabled?: boolean;
-  className?: string;
-}
-
-interface UserDropdownMenuProps {
-  options: DropdownMenuOption[];
+interface DropdownProps {
+  options: DropdownOption[];
   children: ReactNode;
+  align?: "start" | "end" | "center";
+  widthClass?: string;
+  onSelectLabel?: (label: string) => void;
+  selectedLabel?: string;
 }
 
-export function UserDropdownMenu({ options, children }: UserDropdownMenuProps) {
+export function UserDropdownMenu({
+  options,
+  children,
+  align = "end",
+  widthClass = "w-[224px]",
+  onSelectLabel,
+}: DropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-      <DropdownMenuContent sideOffset={8} align="end" className="w-[160px] p-1">
-        {options.map((option, idx) => {
-          const { action, label, icon: Icon, className, disabled } = option;
+      <DropdownMenuContent sideOffset={8} align={align} className={cn(widthClass, "p-1")}>
+        {options.map((opt, idx) => {
+          const { action, label, icon, className, disabled, variant, inset } = opt;
 
           if (action.type === "separator") {
-            return <DropdownMenuSeparator key={idx} />;
+            return <DropdownMenuSeparator key={`separator-${idx}`} />;
           }
 
           if (action.type === "custom") {
-            return <div key={idx}>{action.element}</div>;
+            return <div key={`custom-${idx}`}>{action.element}</div>;
           }
 
-          const content = (
-            <span className="flex items-center gap-3 body-sm text-color-text-black">
-              {Icon && <Icon className={cn("w-16 h-16 ml-2")} />}
-              {label}
-            </span>
-          );
+          const content = <DropdownItemContent icon={icon} label={label} />;
+          const itemClass = cn(dropdownVariants({ variant, inset }), className);
 
           if (action.type === "link") {
             return (
-              <Link href={action.href} key={idx}>
-                <DropdownMenuItem asChild className={className}>
+              <DropdownMenuItem
+                key={`link-${idx}`}
+                variant={variant}
+                inset={inset}
+                disabled={disabled}
+                className={itemClass}
+              >
+                <Link href={action.href} className="w-full h-full flex items-center">
                   {content}
-                </DropdownMenuItem>
-              </Link>
+                </Link>
+              </DropdownMenuItem>
             );
           }
 
           return (
             <DropdownMenuItem
-              key={idx}
-              onClick={action.onClick}
+              key={`action-${idx}`}
+              onClick={() => {
+                action.onClick?.();
+                if (onSelectLabel && label) onSelectLabel(label);
+              }}
               disabled={disabled}
-              className={className}
+              variant={variant}
+              inset={inset}
+              className={itemClass}
             >
               {content}
             </DropdownMenuItem>
