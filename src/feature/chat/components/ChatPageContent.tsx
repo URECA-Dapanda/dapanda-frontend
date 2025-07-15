@@ -7,7 +7,7 @@ import FullScreenModal from "@/components/common/modal/FullScreenModal";
 export default function ChatPageContent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const postData = {
+  /*const postData = {
     imageUrl: "/2gb.png",
     uploadTime: "3시간",
     title: "5GB",
@@ -17,7 +17,7 @@ export default function ChatPageContent() {
     averagePrice: 2100,
     hasReported: true,
   };
-
+*/
   const wifiData = {
     imageUrl: "/starbucks.png",
     place: "스타벅스 강남점",
