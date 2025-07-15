@@ -44,7 +44,7 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
           }
         : {
             top: 51,
-            right: 12,
+            right: 10,
             width: 140,
             height: 140,
             rotate: 0,
@@ -91,7 +91,7 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
           {type === "post" && data.hasReported && (
             <>
               <motion.div
-                className="absolute top-20 right-4 z-20 rounded-full bg-white shadow-default w-30 h-30 flex items-center justify-center"
+                className="absolute top-16 right-4 z-20 rounded-full bg-white shadow-default w-30 h-30 flex items-center justify-center"
                 animate={{ y: expanded ? 20 : 0 }}
                 transition={{ type: "spring", damping: 20, stiffness: 200 }}
               >
