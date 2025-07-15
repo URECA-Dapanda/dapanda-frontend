@@ -12,36 +12,45 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getImageStyle = (expanded: boolean, type: "post" | "wifi") => {
-    if (expanded) {
-      return {
-        top: 51,
-        left: "50%",
-        x: "-50%",
-        width: 200,
-        height: 200,
-        rotate: 0,
-      };
-    }
-
     if (type === "post") {
-      return {
-        top: 10,
-        right: -40,
-        width: 240,
-        height: 240,
-        rotate: 19.66,
-        x: 0,
-      };
+      return expanded
+        ? {
+            top: 51,
+            left: "50%",
+            x: "-50%",
+            width: 200,
+            height: 200,
+            rotate: 0,
+          }
+        : {
+            top: 10,
+            right: -37,
+            width: 240,
+            height: 240,
+            rotate: 19.66,
+            x: 0,
+          };
     }
 
-    return {
-      top: 51,
-      right: 12,
-      width: 140,
-      height: 140,
-      rotate: 0,
-      x: 0,
-    };
+    if (type === "wifi") {
+      return expanded
+        ? {
+            top: 51,
+            left: "50%",
+            x: "-50%",
+            width: 200,
+            height: 200,
+            rotate: 0,
+          }
+        : {
+            top: 51,
+            right: 12,
+            width: 140,
+            height: 140,
+            rotate: 0,
+            x: 0,
+          };
+    }
   };
 
   return (
@@ -82,7 +91,7 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
           {type === "post" && data.hasReported && (
             <>
               <motion.div
-                className="absolute top-8 right-4 z-20 rounded-full bg-white shadow-default w-30 h-30 flex items-center justify-center"
+                className="absolute top-20 right-4 z-20 rounded-full bg-white shadow-default w-30 h-30 flex items-center justify-center"
                 animate={{ y: expanded ? 20 : 0 }}
                 transition={{ type: "spring", damping: 20, stiffness: 200 }}
               >
