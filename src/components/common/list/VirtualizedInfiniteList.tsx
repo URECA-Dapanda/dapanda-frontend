@@ -38,7 +38,7 @@ function VirtualizedList<T>({
       >
         <div
           style={{
-            height: `${totalHeight}px`,
+            height: `${totalHeight - 200}px`,
             position: "relative",
             width: "100%",
           }}
@@ -56,8 +56,7 @@ function VirtualizedList<T>({
                   left: 0,
                   width: "100%",
                   transform: `translateY(${virtualRow.start}px)`,
-                  padding: "16px",
-                  background: "white",
+                  padding: "0px 16px",
                 }}
               >
                 {mode === "scroll" && isLoaderRow
