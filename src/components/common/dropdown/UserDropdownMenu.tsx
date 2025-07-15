@@ -52,6 +52,7 @@ export function UserDropdownMenu({
           if (action.type === "link") {
             return (
               <DropdownMenuItem
+                asChild
                 key={`link-${idx}`}
                 variant={variant}
                 inset={inset}
