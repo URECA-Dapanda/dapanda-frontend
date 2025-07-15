@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { VirtualItem, Virtualizer } from "@tanstack/react-virtual";
+import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 
 interface CollapseVirtualizedListProps<T> {
   parentRef: React.RefObject<HTMLDivElement | null>;
@@ -21,11 +22,7 @@ function CollapseVirtualizedList<T>({
   const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
-    if (isExpanded) {
-      rowVirtualizer.scrollToIndex(0);
-      console.log("Expanded, scrolling to top");
-    }
-    console.log("collapsed, scrolling to top");
+    rowVirtualizer.scrollToIndex(0);
   }, [isExpanded, rowVirtualizer]);
 
   const totalHeight = rowVirtualizer.getTotalSize();
@@ -42,7 +39,7 @@ function CollapseVirtualizedList<T>({
         ref={parentRef}
         style={{
           height: containerHeight,
-          overflow: "auto",
+          overflow: !isExpanded ? "hidden" : "auto",
           position: "relative",
         }}
       >
@@ -50,6 +47,7 @@ function CollapseVirtualizedList<T>({
           style={{
             height: `${totalHeight}px`,
             position: "relative",
+            overflow: isExpanded ? "hidden" : "auto",
             width: "100%",
           }}
         >
@@ -87,25 +85,24 @@ function CollapseVirtualizedList<T>({
       <div
         style={{
           textAlign: "center",
-          marginTop: -150,
+          marginTop: isExpanded ? -50 : -150,
           position: "relative",
           zIndex: !isExpanded ? items.length + 1 : undefined,
         }}
       >
         <button
           onClick={() => setIsExpanded((prev) => !prev)}
+          className="text-primary"
           style={{
             padding: "8px 16px",
-            background: "#333",
-            color: "#fff",
             borderRadius: 4,
             border: "none",
             cursor: "pointer",
             position: "relative",
-            zIndex: !isExpanded ? items.length + 1 : undefined, // ✅ 카드 위로
+            zIndex: !isExpanded ? items.length + 1 : undefined,
           }}
         >
-          {isExpanded ? "접기" : "더보기"}
+          {isExpanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
         </button>
       </div>
     </>
