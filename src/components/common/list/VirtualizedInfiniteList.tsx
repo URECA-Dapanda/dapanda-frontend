@@ -33,7 +33,6 @@ function VirtualizedList<T>({
         style={{
           height: "600px",
           overflow: "auto",
-          border: "1px solid #ccc",
         }}
       >
         <div
