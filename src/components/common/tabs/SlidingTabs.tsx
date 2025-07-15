@@ -80,11 +80,11 @@ export default function SlidingTabs({
         ))}
       </TabsList>
 
-      {tabs.map((tab) => (
+      {/* {tabs.map((tab) => (
         <TabsContent key={tab.value} value={tab.value} className={contentClassName}>
           {tab.content}
         </TabsContent>
-      ))}
+      ))} */}
     </Tabs>
   );
 }
