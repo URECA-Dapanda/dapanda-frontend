@@ -3,6 +3,14 @@
 import { useState } from "react";
 import { Siren } from "lucide-react";
 import { motion } from "framer-motion";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+
 import FullScreenModal from "@/components/common/modal/FullScreenModal";
 import { BadgeComponent } from "@/components/common/badge";
 import type { TopSheetProps } from "@/components/common/topsheet/topSheet.types";
@@ -10,7 +18,7 @@ import type { TopSheetProps } from "@/components/common/topsheet/topSheet.types"
 export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
   const [expanded, setExpanded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const imageUrls: string[] = Array.isArray(data.imageUrl) ? data.imageUrl : [data.imageUrl];
   const getImageStyle = (expanded: boolean, type: "post" | "wifi") => {
     if (type === "post") {
       return expanded
@@ -23,7 +31,7 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
             rotate: 0,
           }
         : {
-            top: 10,
+            top: 56,
             right: -37,
             width: 240,
             height: 240,
@@ -31,26 +39,7 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
             x: 0,
           };
     }
-
-    if (type === "wifi") {
-      return expanded
-        ? {
-            top: 51,
-            left: "50%",
-            x: "-50%",
-            width: 200,
-            height: 200,
-            rotate: 0,
-          }
-        : {
-            top: 51,
-            right: 10,
-            width: 140,
-            height: 140,
-            rotate: 0,
-            x: 0,
-          };
-    }
+    return {};
   };
 
   return (
@@ -60,38 +49,92 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
       dragConstraints={{ top: 0, bottom: 0 }}
     >
       <motion.div
-        className="w-full h-full"
+        className="w-full h-full pt-52"
         drag="y"
         transition={{ type: "decay", damping: 20, stiffness: 200 }}
         dragConstraints={{ top: 0, bottom: 0 }}
         onDragEnd={(event, info) => {
-          if (info.offset.y > 60 || info.velocity.y > 500) {
+          if (info.offset.y > 56 || info.velocity.y > 500) {
             setExpanded(true);
           } else {
             setExpanded(false);
           }
         }}
       >
-        <motion.img
-          src={data.imageUrl}
-          alt="대표 이미지"
-          onClick={onImageClick}
-          className="cursor-zoom-in absolute rounded-12 z-30"
-          animate={getImageStyle(expanded, type)}
-          transition={{ type: "spring", damping: 20, stiffness: 200 }}
-        />
-
+        {type === "post" && (
+          <motion.img
+            src={data.imageUrl}
+            alt="대표 이미지"
+            onClick={onImageClick}
+            className="cursor-zoom-in absolute rounded-12 z-30"
+            animate={getImageStyle(expanded, type)}
+            transition={{ type: "spring", damping: 20, stiffness: 200 }}
+          />
+        )}
+        {type === "wifi" && (
+          <>
+            {expanded ? (
+              <div className="pt-6 pb-2 flex justify-center">
+                {imageUrls.length > 1 ? (
+                  <Carousel
+                    className="w-full max-w-[280px]"
+                    opts={{
+                      watchDrag: false,
+                    }}
+                  >
+                    <CarouselContent>
+                      {imageUrls.map((url, idx) => (
+                        <CarouselItem className="basis-[100%]">
+                          <img
+                            src={url}
+                            alt={`와이파이 이미지 ${idx + 1}`}
+                            onClick={onImageClick}
+                            className="w-[200px] h-[200px] object-cover rounded-12 mx-auto cursor-zoom-in"
+                          />
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                  </Carousel>
+                ) : (
+                  <img
+                    src={imageUrls[0]}
+                    alt="와이파이 이미지"
+                    onClick={onImageClick}
+                    className="w-[200px] h-[200px] object-cover rounded-12 mx-auto cursor-zoom-in"
+                  />
+                )}
+              </div>
+            ) : (
+              <img
+                src={imageUrls[0]}
+                alt="와이파이 대표 이미지"
+                className="cursor-zoom-in absolute rounded-12 z-30"
+                style={{
+                  top: 75,
+                  right: 30,
+                  width: 140,
+                  height: 140,
+                  position: "absolute",
+                  objectFit: "cover",
+                }}
+                onClick={onImageClick}
+              />
+            )}
+          </>
+        )}
         <motion.div
           className="relative z-10 pl-30 px-4 space-y-1"
           animate={{
-            paddingTop: expanded ? 260 : type === "wifi" ? 51 : 60,
+            paddingTop: type === "wifi" ? (expanded ? 20 : 20) : expanded ? 200 : 60,
           }}
           transition={{ type: "spring", damping: 20, stiffness: 200 }}
         >
           {type === "post" && data.hasReported && (
             <>
               <motion.div
-                className="absolute top-16 right-4 z-20 rounded-full bg-white shadow-default w-30 h-30 flex items-center justify-center"
+                className="absolute top-4 right-4 z-20 rounded-full bg-white shadow-default w-30 h-30 flex items-center justify-center"
                 animate={{ y: expanded ? 20 : 0 }}
                 transition={{ type: "spring", damping: 20, stiffness: 200 }}
               >
@@ -167,7 +210,7 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
       {isModalOpen && (
         <FullScreenModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           <img
-            src={data.imageUrl}
+            src={Array.isArray(data.imageUrl) ? data.imageUrl[0] : data.imageUrl}
             alt="확대 이미지"
             className="w-auto h-auto max-w-screen max-h-screen object-contain"
           />

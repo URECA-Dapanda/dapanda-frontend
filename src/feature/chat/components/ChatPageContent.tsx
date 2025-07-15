@@ -7,19 +7,19 @@ import FullScreenModal from "@/components/common/modal/FullScreenModal";
 export default function ChatPageContent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  /*const postData = {
-    imageUrl: "/2gb.png",
-    uploadTime: "3시간",
-    title: "5GB",
-    price: 5000,
-    unitPrice: 1000,
-    recentPrice: 2000,
-    averagePrice: 2100,
-    hasReported: true,
-  };
-*/
+  // const postData = {
+  //   imageUrl: "/2gb.png",
+  //   uploadTime: "3시간",
+  //   title: "5GB",
+  //   price: 5000,
+  //   unitPrice: 1000,
+  //   recentPrice: 2000,
+  //   averagePrice: 2100,
+  //   hasReported: true,
+  // };
+
   const wifiData = {
-    imageUrl: "/starbucks.png",
+    imageUrl: ["/starbucks.png", "/starbucks.png", "/starbucks.png"],
     place: "스타벅스 강남점",
     address: "서울 서대문구 연세로 22",
     openTime: "08:00",
@@ -37,7 +37,7 @@ export default function ChatPageContent() {
       {isModalOpen && (
         <FullScreenModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           <img
-            src={wifiData.imageUrl}
+            src={wifiData.imageUrl[0]}
             alt="확대 이미지"
             className="max-w-screen max-h-screen w-auto h-auto object-contain"
           />

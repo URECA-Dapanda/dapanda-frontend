@@ -10,7 +10,7 @@ export interface PostData {
 }
 
 export interface WifiData {
-  imageUrl: string;
+  imageUrl: string[];
   place: string;
   address: string;
   openTime: string;
