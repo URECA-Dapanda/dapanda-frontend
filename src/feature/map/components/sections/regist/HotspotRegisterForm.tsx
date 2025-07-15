@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Camera } from "lucide-react";
 import InputComponent from "@components/common/input/InputComponent";
 import { ButtonComponent } from "@components/common/button";
 import { badgeVariants } from "@components/common/badge/badgeVariants";
@@ -85,18 +86,17 @@ export default function HotspotRegistForm() {
       <label className="title-sm mb-12 block">사진 첨부</label>
       <div className="flex gap-12 mb-24">
         <div className="w-[80px] h-[80px] border border-dashed border-primary rounded-20 flex items-center justify-center text-pink-500 text-2xl">
-          아이콘
+          <Camera className="w-32 h-32"/>
         </div>
-        <div className="w-[80px] h-[80px] bg-primary-50 rounded-20" />
-        <div className="w-[80px] h-[80px] bg-primary-50 rounded-20" />
+        <div className="w-80 h-80 bg-primary-50 rounded-20" />
+        <div className="w-80 h-80 bg-primary-50 rounded-20" />
       </div>
 
       {/* 등록하기 버튼 */}
       <ButtonComponent
         className="w-full"
-        variant="primary"
+        variant="secondary"
         size="4xl"
-        color="bg-primary text-white"
         onClick={handleSubmit}
       >
         등록하기
