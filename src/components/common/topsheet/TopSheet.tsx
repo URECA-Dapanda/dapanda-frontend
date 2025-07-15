@@ -62,7 +62,7 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
       <motion.img
         src={data.imageUrl}
         alt="대표 이미지"
-        onClick={() => setIsModalOpen(true)}
+        onClick={onImageClick}
         className="cursor-zoom-in absolute rounded-12 z-30"
         animate={getImageStyle(expanded, type)}
         transition={{ type: "spring", damping: 20, stiffness: 200 }}
