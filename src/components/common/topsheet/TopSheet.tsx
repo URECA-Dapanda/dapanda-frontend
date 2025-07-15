@@ -84,7 +84,7 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
                   >
                     <CarouselContent>
                       {imageUrls.map((url, idx) => (
-                        <CarouselItem className="basis-[100%]">
+                        <CarouselItem key={idx} className="basis-[100%]">
                           <img
                             src={url}
                             alt={`와이파이 이미지 ${idx + 1}`}
