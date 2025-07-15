@@ -9,6 +9,7 @@ export const buttonVariants = cva(
         secondary: "bg-secondary text-color-text-black",
         outlinePrimary: "border border-primary text-primary bg-white",
         outlineGray: "border border-gray-300 text-color-text-black bg-white",
+        nonoutline: "bg-white text-black title-xs",
         loading: "bg-gray-300 text-white",
         card: "bg-white text-color-text-black border border-gray-300",
 

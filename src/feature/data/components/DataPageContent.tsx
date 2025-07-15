@@ -1,11 +1,6 @@
 "use client";
 
-import CardComponent from "@components/common/card/CardComponent";
-import CardContentComponent from "@components/common/card/CardContentComponent";
-import CardHeaderComponent from "@components/common/card/CardHeaderComponent";
-import DataItemCard from "./sections/product/DataItemCard";
-import { useQuery } from "@tanstack/react-query";
-import { getDataList } from "../api/dataRequest";
+import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
 import MapItemCard from "@feature/map/components/sections/product/MapItemCard";
 import { getMapList } from "@feature/map/api/mapRequest";
 import SelectTypeCard from "@feature/map/components/sections/regist/SelectTypeCard";
@@ -13,16 +8,45 @@ import { getChatContentInfo } from "@feature/chat/api/chatRequest";
 import ContentInfoCard from "@feature/chat/components/sections/ContentInfoCard";
 import CurrentCashCard from "@feature/mypage/components/sections/CurrentCashCard";
 import FilterCard from "./sections/filter/FilterCard";
+import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
+import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
+import { getDataList } from "../api/dataRequest";
+import DataItemCard from "./sections/product/DataItemCard";
+import { DataType } from "../types/dataType";
+import { MapType } from "@feature/map/types/mapType";
+import CollapseVirtualizedList from "@components/common/list/CollapseVirtualizedList";
 
 export default function DataPageContent() {
-  const { data: dataList } = useQuery({
-    queryKey: ["/data"],
-    queryFn: getDataList,
+  const {
+    parentRef: parentRefForData,
+    rowVirtualizer: rowVirtualizerForData,
+    flatItems: flatItemsForData,
+    isFetchingNextPage: isFetchingNextPageForData,
+    hasNextPage: hasNextPageForData,
+    fetchNextPage: fetchNextPageForData,
+  } = useVirtualizedInfiniteQuery<DataType>({
+    queryKey: ["dataItems"],
+    queryFn: ({ pageParam = 0 }: QueryFunctionContext) => getDataList({ pageParam }),
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    estimateSize: () => 200,
+    mode: "scroll",
   });
-  const { data: mapList } = useQuery({
-    queryKey: ["map"],
-    queryFn: getMapList,
+
+  const {
+    parentRef: parentRefForMap,
+    rowVirtualizer: rowVirtualizerForMap,
+    flatItems: flatItemsForMap,
+    isFetchingNextPage: isFetchingNextPageForMap,
+    hasNextPage: hasNextPageForMap,
+    fetchNextPage: fetchNextPageForMap,
+  } = useVirtualizedInfiniteQuery<MapType>({
+    queryKey: ["mapItems"],
+    queryFn: ({ pageParam = 0 }: QueryFunctionContext) => getMapList({ pageParam }),
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    estimateSize: () => 200,
+    mode: "button",
   });
+
   const { data: chatInfoData } = useQuery({
     queryKey: ["chat/info"],
     queryFn: getChatContentInfo,
@@ -34,45 +58,38 @@ export default function DataPageContent() {
       <CurrentCashCard />
       <SelectTypeCard />
       {chatInfoData && <ContentInfoCard data={chatInfoData} />}
-      {dataList && dataList.map((item) => <DataItemCard data={item} key={item.id} />)}
-      {mapList && mapList.map((item) => <MapItemCard data={item} key={item.id} />)}
 
-      <CardComponent variant="material" size={"lg"}>
-        <CardHeaderComponent title="Test Card"></CardHeaderComponent>
-        <CardContentComponent size={"lg"}>
-          <button>Button</button>
-        </CardContentComponent>
-      </CardComponent>
-      <div className="grid grid-cols-2 gap-1 w-full">
-        <CardComponent
-          variant="flat"
-          size="md"
-          color="bg-gradient-to-r from-color-primary-300 to-color-secondary-300"
-        >
-          <CardHeaderComponent title="Test Card"></CardHeaderComponent>
-          <CardContentComponent>
-            <button>Button</button>
-          </CardContentComponent>
-        </CardComponent>
-        <CardComponent variant="outlined" size={"sm"} color="border-color-primary-300">
-          <CardContentComponent size={"md"}>
-            <button>Button</button>
-          </CardContentComponent>
-        </CardComponent>
-      </div>
+      <CollapseVirtualizedList
+        parentRef={parentRefForData}
+        rowVirtualizer={rowVirtualizerForData}
+        items={flatItemsForData}
+        isFetchingNextPage={isFetchingNextPageForData}
+        hasNextPage={hasNextPageForData}
+        fetchNextPage={fetchNextPageForData}
+        renderItem={(item: DataType) => <DataItemCard data={item} />}
+      />
 
-      <CardComponent variant="material" size={"sm"} color="bg-color-primary-300">
-        <CardHeaderComponent title="Test Card"></CardHeaderComponent>
-        <CardContentComponent size={"sm"}>
-          <button>Button</button>
-        </CardContentComponent>
-      </CardComponent>
-      <CardComponent variant="material" size={"sm"}>
-        <CardHeaderComponent title="Test Card"></CardHeaderComponent>
-        <CardContentComponent size={"md"}>
-          <button>Button</button>
-        </CardContentComponent>
-      </CardComponent>
+      <VirtualizedInfiniteList
+        mode="scroll"
+        parentRef={parentRefForData}
+        rowVirtualizer={rowVirtualizerForData}
+        items={flatItemsForData}
+        isFetchingNextPage={isFetchingNextPageForData}
+        hasNextPage={hasNextPageForData}
+        fetchNextPage={fetchNextPageForData}
+        renderItem={(item: DataType) => <DataItemCard data={item} />}
+      />
+
+      <VirtualizedInfiniteList
+        mode="button"
+        parentRef={parentRefForMap}
+        rowVirtualizer={rowVirtualizerForMap}
+        items={flatItemsForMap}
+        isFetchingNextPage={isFetchingNextPageForMap}
+        hasNextPage={hasNextPageForMap}
+        fetchNextPage={fetchNextPageForMap}
+        renderItem={(item: MapType) => <MapItemCard data={item} />}
+      />
     </div>
   );
 }
