@@ -37,7 +37,7 @@ function VirtualizedList<T>({
       >
         <div
           style={{
-            height: `${totalHeight - 200}px`,
+            height: `${totalHeight - 100}px`,
             position: "relative",
             width: "100%",
           }}
