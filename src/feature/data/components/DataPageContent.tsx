@@ -14,6 +14,7 @@ import { getDataList } from "../api/dataRequest";
 import DataItemCard from "./sections/product/DataItemCard";
 import { DataType } from "../types/dataType";
 import { MapType } from "@feature/map/types/mapType";
+import CollapseVirtualizedList from "@components/common/list/CollapseVirtualizedList";
 
 export default function DataPageContent() {
   const {
@@ -57,6 +58,16 @@ export default function DataPageContent() {
       <CurrentCashCard />
       <SelectTypeCard />
       {chatInfoData && <ContentInfoCard data={chatInfoData} />}
+
+      <CollapseVirtualizedList
+        parentRef={parentRefForData}
+        rowVirtualizer={rowVirtualizerForData}
+        items={flatItemsForData}
+        isFetchingNextPage={isFetchingNextPageForData}
+        hasNextPage={hasNextPageForData}
+        fetchNextPage={fetchNextPageForData}
+        renderItem={(item: DataType) => <DataItemCard data={item} />}
+      />
 
       <VirtualizedInfiniteList
         mode="scroll"

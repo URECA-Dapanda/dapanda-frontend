@@ -1,10 +1,10 @@
 import { MapType } from "../types/mapType";
 
-const mockDataList = (num: number) =>
+const mockDataList = () =>
   new Promise<MapType[]>((resolve) => {
     setTimeout(() => {
       resolve(
-        Array.from({ length: 20 }, (_, i) => ({
+        Array.from({ length: 20 }, () => ({
           id: 1,
           title: "스타벅스 강남역",
           price: "300원",
@@ -29,9 +29,9 @@ export async function getMapList({
 }): Promise<{ items: MapType[]; nextCursor?: number }> {
   console.log("GET API MAP LIST", pageParam);
   if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
-  const start = pageParam;
+
   const end = pageParam + 20;
   const hasMore = end < 200;
-  const data = await mockDataList(start);
+  const data = await mockDataList();
   return { items: data, nextCursor: hasMore ? end : undefined };
 }

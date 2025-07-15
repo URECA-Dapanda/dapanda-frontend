@@ -1,10 +1,10 @@
-import { VirtualItem } from "@tanstack/react-virtual";
+import { VirtualItem, Virtualizer } from "@tanstack/react-virtual";
 import React, { Fragment, memo } from "react";
 
 interface VirtualizedListProps<T> {
   mode?: "scroll" | "button";
   parentRef: React.RefObject<HTMLDivElement | null>;
-  rowVirtualizer: any;
+  rowVirtualizer: Virtualizer<HTMLDivElement, Element>;
   items: T[];
   isFetchingNextPage: boolean;
   fetchNextPage: () => void;
