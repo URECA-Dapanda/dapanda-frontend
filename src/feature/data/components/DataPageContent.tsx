@@ -13,7 +13,7 @@ import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfinite
 import { useHeaderStore } from "@stores/useHeaderStore";
 
 export default function DataPageContent() {
-  const [sheetOpen, setSheetOpen] = useState(true);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [tab, setTab] = useState("normal");
 
   const setIsVisible = useHeaderStore((state)=>state.setIsVisible);
