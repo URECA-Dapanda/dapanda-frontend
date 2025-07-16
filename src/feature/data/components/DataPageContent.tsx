@@ -86,18 +86,24 @@ export default function DataPageContent() {
                 selectedLabel={sortLabel}
                 onSelectLabel={setSortLabel}
               >
-                <button className="flex items-center p-6 bg-white rounded-6 shadow">
+                <ButtonComponent
+                  variant="withIcon"
+                  size="sm"
+                  className="p-6 body-xs"
+                >
                   {sortLabel}
                   <ChevronDown className="w-20 h-20" />
-                </button>
+                </ButtonComponent>
               </UserDropdownMenu>
-              <button
+              
+              <ButtonComponent 
+                variant="withIcon"
+                size="sm"
+                className="p-6 body-xs"
                 onClick={() => {setSheetOpen(false);}}
-                className="flex items-center p-6 bg-white rounded-6 shadow"
-              >
-                SEARCH
+              >SEARCH
                 <SlidersHorizontal className="w-20 h-20" />
-              </button>
+              </ButtonComponent>
             </div>
           )}
 
