@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import ProviderWrapper from "@components/common/ProviderWrapper";
-import SharedHeader from "@components/common/header/SharedHeader";
 import BottomNavigation from "@components/common/navigation/BottomNavigation";
 import "./globals.css";
 
