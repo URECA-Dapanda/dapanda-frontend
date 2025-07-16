@@ -32,7 +32,7 @@ export function DataUsageDonut({ current: used, total, unit = "GB" }: DataUsageD
     <svg height={radius * 2} width={radius * 2} className="relative">
       {/* Background circle */}
       <circle
-        stroke="#fde7f0"
+        stroke="#FDEDF6"
         fill="transparent"
         strokeWidth={stroke}
         r={normalizedRadius}
@@ -41,7 +41,7 @@ export function DataUsageDonut({ current: used, total, unit = "GB" }: DataUsageD
       />
       {/* Foreground progress */}
       <circle
-        stroke="#d81b60"
+        stroke="#E6007E"
         fill="transparent"
         strokeWidth={stroke}
         strokeLinecap="round"

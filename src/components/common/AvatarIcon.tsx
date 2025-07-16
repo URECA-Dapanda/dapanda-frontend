@@ -31,7 +31,7 @@ function AvatarIcon({ size = "small", avatar }: Partial<AvatarProps>) {
 
   return avatarImage ? (
     <Avatar className={iconSize}>
-      <AvatarImage src="/placeholder.svg" />
+      <AvatarImage />
       <AvatarFallback className="primary-gradient text-black">{avatarImage}</AvatarFallback>
     </Avatar>
   ) : null;

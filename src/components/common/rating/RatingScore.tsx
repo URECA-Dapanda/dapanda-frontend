@@ -1,112 +1,220 @@
 "use client";
-import React, { useRef, useState, useCallback } from "react";
-import { Star, StarHalf, StarOff } from "lucide-react";
 
-export interface CustomRatingProps {
-  value?: number;
-  defaultValue?: number;
-  max?: number;
-  precision?: number;
-  readOnly?: boolean;
-  onChange?: (value: number | null) => void;
-  size?: number;
-}
+import { cn } from "@/lib/utils";
+import { useControllableState } from "@radix-ui/react-use-controllable-state";
+import { type LucideProps, StarIcon } from "lucide-react";
+import {
+  Children,
+  cloneElement,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import type { KeyboardEvent, MouseEvent, ReactElement, ReactNode } from "react";
 
-/**
- * 사용자 정의 Rating 컴포넌트
- * - 드래그, 클릭으로 별점 선택 가능
- * - 0.5 단위 소수점 별점 지원
- * - readOnly 모드 지원
- */
-export default function CustomRating({
-  value,
-  defaultValue = 0,
-  max = 5,
-  precision = 0.5,
-  readOnly = false,
-  onChange,
-  size = 24,
-}: CustomRatingProps) {
-  const [hoverValue, setHoverValue] = useState<number | null>(null);
-  const [internalValue, setInternalValue] = useState(defaultValue);
-  const ref = useRef<HTMLDivElement>(null);
+type RatingContextValue = {
+  value: number;
+  readOnly: boolean;
+  hoverValue: number | null;
+  focusedStar: number | null;
+  handleValueChange: (
+    event: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>,
+    value: number
+  ) => void;
+  handleKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
+  setHoverValue: (value: number | null) => void;
+  setFocusedStar: (value: number | null) => void;
+};
 
-  const displayValue = value ?? internalValue;
+const RatingContext = createContext<RatingContextValue | null>(null);
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
-      if (readOnly || !ref.current) return;
+const useRating = () => {
+  const context = useContext(RatingContext);
+  if (!context) {
+    throw new Error("useRating must be used within a Rating component");
+  }
+  return context;
+};
 
-      const { left, width } = ref.current.getBoundingClientRect();
-      const percent = (e.clientX - left) / width;
-      let newHover = Math.round((percent * max) / precision) * precision;
-      newHover = Math.min(max, Math.max(precision, newHover));
-      setHoverValue(newHover);
-    },
-    [max, precision, readOnly]
-  );
+export type RatingButtonProps = LucideProps & {
+  index?: number;
+  icon?: ReactElement<LucideProps>;
+};
 
-  const handleClick = () => {
-    if (readOnly || hoverValue == null) return;
-    onChange?.(hoverValue);
-    setInternalValue(hoverValue);
-  };
+export const RatingButton = ({
+  index: providedIndex,
+  size = 20,
+  className,
+  icon = <StarIcon />,
+}: RatingButtonProps) => {
+  const {
+    value,
+    readOnly,
+    hoverValue,
+    focusedStar,
+    handleValueChange,
+    handleKeyDown,
+    setHoverValue,
+    setFocusedStar,
+  } = useRating();
 
-  const handleLeave = () => {
-    setHoverValue(null);
-  };
+  const index = providedIndex ?? 0;
+  const isActive = index < (hoverValue ?? focusedStar ?? value ?? 0);
+  let tabIndex = -1;
 
-  // 위의 CustomRating 코드에서 이 부분만 교체
-
-  const renderIcon = (i: number) => {
-    const active = hoverValue ?? displayValue;
-    const iconValue = (i + 1) * precision;
-
-    if (iconValue <= active) {
-      return <Star size={size} fill="currentColor" />;
-    }
-
-    if (iconValue - precision < active) {
-      // 0.5점일 때 반만 채워진 아이콘
-      return (
-        <div style={{ position: "relative", display: "inline-block", width: size }}>
-          <div
-            style={{
-              width: "50%",
-              overflow: "hidden",
-              position: "absolute",
-              top: 0,
-              left: 0,
-            }}
-          >
-            <Star size={size} fill="currentColor" />
-          </div>
-          <StarOff size={size} />
-        </div>
-      );
-    }
-
-    return <StarOff size={size} />;
-  };
-
-  const iconCount = Math.floor(max / precision);
+  if (!readOnly) {
+    tabIndex = value === index + 1 ? 0 : -1;
+  }
 
   return (
-    <div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleLeave}
-      onClick={handleClick}
-      style={{
-        display: "inline-flex",
-        gap: 2,
-        cursor: readOnly ? "default" : "pointer",
-        fontSize: size,
-      }}
+    <button
+      type="button"
+      onClick={(event) => handleValueChange(event, index + 1)}
+      onMouseEnter={() => !readOnly && setHoverValue(index + 1)}
+      onKeyDown={handleKeyDown}
+      onFocus={() => setFocusedStar(index + 1)}
+      onBlur={() => setFocusedStar(null)}
+      disabled={readOnly}
+      className={cn(
+        "rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "p-0.5",
+        readOnly && "cursor-default",
+        className
+      )}
+      tabIndex={tabIndex}
     >
-      {Array.from({ length: iconCount }, (_, i) => (
-        <span key={i}>{renderIcon(i)}</span>
-      ))}
-    </div>
+      {cloneElement(icon, {
+        size,
+        className: cn(
+          "transition-colors duration-200",
+          isActive && "fill-current",
+          !readOnly && "cursor-pointer"
+        ),
+        "aria-hidden": "true",
+      })}
+    </button>
   );
-}
+};
+
+export type RatingProps = {
+  defaultValue?: number;
+  value?: number;
+  onChange?: (
+    event: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>,
+    value: number
+  ) => void;
+  onValueChange?: (value: number) => void;
+  readOnly?: boolean;
+  className?: string;
+  children?: ReactNode;
+};
+
+export const Rating = ({
+  value: controlledValue,
+  onValueChange: controlledOnValueChange,
+  defaultValue,
+  onChange,
+  readOnly = false,
+  className,
+  children,
+  ...props
+}: RatingProps) => {
+  const [hoverValue, setHoverValue] = useState<number | null>(null);
+  const [focusedStar, setFocusedStar] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [value, onValueChange] = useControllableState({
+    defaultProp: defaultValue ?? 0,
+    prop: controlledValue,
+    onChange: controlledOnValueChange,
+  });
+
+  const handleValueChange = useCallback(
+    (event: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>, newValue: number) => {
+      if (!readOnly) {
+        onChange?.(event, newValue);
+        onValueChange?.(newValue);
+      }
+    },
+    [readOnly, onChange, onValueChange]
+  );
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLButtonElement>) => {
+      if (readOnly) {
+        return;
+      }
+
+      const total = Children.count(children);
+      let newValue = focusedStar !== null ? focusedStar : value ?? 0;
+
+      switch (event.key) {
+        case "ArrowRight":
+          if (event.shiftKey || event.metaKey) {
+            newValue = total;
+          } else {
+            newValue = Math.min(total, newValue + 1);
+          }
+          break;
+        case "ArrowLeft":
+          if (event.shiftKey || event.metaKey) {
+            newValue = 1;
+          } else {
+            newValue = Math.max(1, newValue - 1);
+          }
+          break;
+        default:
+          return;
+      }
+
+      event.preventDefault();
+      setFocusedStar(newValue);
+      handleValueChange(event, newValue);
+    },
+    [focusedStar, value, children, readOnly, handleValueChange]
+  );
+
+  useEffect(() => {
+    if (focusedStar !== null && containerRef.current) {
+      const buttons = containerRef.current.querySelectorAll("button");
+      buttons[focusedStar - 1]?.focus();
+    }
+  }, [focusedStar]);
+
+  const contextValue: RatingContextValue = {
+    value: value ?? 0,
+    readOnly,
+    hoverValue,
+    focusedStar,
+    handleValueChange,
+    handleKeyDown,
+    setHoverValue,
+    setFocusedStar,
+  };
+
+  return (
+    <RatingContext.Provider value={contextValue}>
+      <div
+        ref={containerRef}
+        className={cn("inline-flex items-center gap-0.5", className)}
+        role="radiogroup"
+        aria-label="Rating"
+        onMouseLeave={() => setHoverValue(null)}
+        {...props}
+      >
+        {Children.map(children, (child, index) => {
+          if (!child) {
+            return null;
+          }
+
+          return cloneElement(child as ReactElement<RatingButtonProps>, {
+            index,
+          });
+        })}
+        {readOnly && <p>( {controlledValue} )</p>}
+      </div>
+    </RatingContext.Provider>
+  );
+};
