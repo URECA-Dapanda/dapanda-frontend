@@ -1,104 +1,50 @@
 "use client";
+
 import { useState } from "react";
-import InputComponent from "@/components/common/input/InputComponent";
+import { useRouter } from "next/navigation";
+import MapContainer from "@/feature/map/components/sections/product/MapContainer";
+import MapItemCard from "@/feature/map/components/sections/product/MapItemCard";
 import { BottomSheetHeader, BaseBottomSheet } from "@components/common/bottomsheet";
-// import HotspotRegistForm from "@/feature/map/components/sections/regist/HotspotRegisterForm";
+import { MapType } from "@/feature/map/types/mapType";
+
 export default function MapPage() {
-  const [textValue, setTextValue] = useState("");
-  const [numberValue, setNumberValue] = useState("123");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
   const [isSnapOpen, setIsSnapOpen] = useState(false);
+  const [storeList, setStoreList] = useState<MapType[]>([]);
 
   return (
-    <div className="px-24 space-y-24 min-h-screen">
-      <h1 className="text-xl font-bold">InputComponent 테스트</h1>
+    <div className="relative w-full h-[calc(100vh-56px)]">
+      <MapContainer onStoreListUpdate={setStoreList} />
 
-      {/* 텍스트 인풋 - lg */}
-      <InputComponent
-        radius="lg"
-        size="lg"
-        placeholder="텍스트 입력 인풋 필드 (lg)"
-        value={textValue}
-        onChange={(e) => setTextValue(e.target.value)}
-        type="text"
-        disabled={false}
-        required
-      />
-
-      {/* 숫자 인풋 - md */}
-      <InputComponent
-        radius="md"
-        size="md"
-        placeholder="숫자 입력 인풋 필드 (md)"
-        value={numberValue}
-        onChange={(e) => setNumberValue(e.target.value)}
-        className="w-full"
-        type="number"
-        disabled={false}
-      />
-
-      {/* 작은 인풋 - md */}
-      <InputComponent
-        radius="sm"
-        size="md"
-        placeholder="작은 인풋"
-        value={textValue}
-        onChange={(e) => setTextValue(e.target.value)}
-        disabled={false}
-      />
-
-      {/* disabled 테스트 */}
-      <InputComponent radius="md" size="md" value="비활성화됨" onChange={() => {}} disabled />
-
-      {/* 핫스팟 등록 폼 */}
-      {/* <div className="mt-16">
-        <HotspotRegistForm />
-      </div> */}
-
-      {/* 모달형 바텀시트 */}
+      {/* 등록 버튼 */}
       <button
-        className="px-4 py-2 bg-blue-500 text-white rounded"
-        onClick={() => setIsModalOpen(true)}
+        className="absolute top-24 right-24 z-10 px-16 py-8 bg-primary text-white rounded-20 shadow-md body-sm"
+        onClick={() => router.push("/map/regist/hotspot")}
       >
-        모달 바텀시트 열기
+        + 등록
       </button>
-      <BaseBottomSheet isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} variant="modal">
-        <BottomSheetHeader title="모달 바텀시트" />
-        <p>모달 바텀시트의 내용입니다.</p>
-      </BaseBottomSheet>
 
-      {/* 스냅형 바텀시트 */}
+      {/* 목록 보기 버튼 */}
+      <button
+        onClick={() => setIsSnapOpen(true)}
+        className="absolute bottom-80 left-1/2 -translate-x-1/2 z-10 px-20 py-10 bg-white border border-gray-400 rounded-20 text-black shadow-md body-sm"
+      >
+        목록 보기
+      </button>
+
+      {/* 바텀시트 - 카드 목록 */}
       <BaseBottomSheet
         isOpen={isSnapOpen}
-        onClose={() => setIsSnapOpen(false)}
+        onClose={() => setIsSnapOpen(false)} // 닫기 동작 시 상태 업데이트
         variant="snap"
-        snapHeight={300}
+        snapHeight={360}
       >
-        <BottomSheetHeader title="데이터 목록" />
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
-        <div className="p-4">...</div>
+        <BottomSheetHeader title="주변 매장 목록" />
+        <div className="p-4 space-y-12 mt-12">
+          {storeList.map((store) => (
+            <MapItemCard key={store.id} data={store} />
+          ))}
+        </div>
       </BaseBottomSheet>
     </div>
   );
