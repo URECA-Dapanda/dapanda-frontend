@@ -33,8 +33,16 @@ export default function DataPageContent() {
 
   return (
     <div className="relative h-[100dvh] w-full bg-primary2">
+      {/* 왼쪽 상단 로고 */}
+      <div className="absolute top-[-150] left-[-44] z-20">
+        <img src="/dpd-logo.png" alt="logo" className="w-[237px]"/>
+      </div>
+      {/* 오른쪽 상단 로고 */}
+      <div className="absolute top-[-100] right-0 z-20">
+        <img src="/dpd-main-logo.png" alt="logo" className="w-96"/>
+      </div>
       {/* 상단 필터 영역 */}
-      <div className="sticky top-0 z-10 bg-primary2 p-4">
+      <div className="sticky top-0 z-10 bg-primary2 p-4 mt-44">
         <FilterCard />
       </div>
 
@@ -45,7 +53,7 @@ export default function DataPageContent() {
         onSnapUp={() => setSheetOpen(true)}
         onSnapDown={() => setSheetOpen(false)}
         variant="snap"
-        snapHeight={250}
+        snapHeight={260}
       >
         <div className="space-y-4">
           {/* 탭 */}
