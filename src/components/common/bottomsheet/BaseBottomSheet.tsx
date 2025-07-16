@@ -42,39 +42,58 @@ export default function BaseBottomSheet({
     }
   }, [isOpen, variant, snapHeight]);
 
-  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const threshold = 100;
+  const screenHeight = typeof window !== "undefined" ? window.innerHeight : 1000;
+
+  const handleDragEnd = (
+    event: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo
+  ) => {
     const offset = info.offset.y;
     const velocity = info.velocity.y;
 
-    if (variant === "modal") {
-      if (offset > 100 || velocity > 500) {
-        onClose?.();
-      } else {
-        setSheetY(FULL_HEIGHT);
-      }
-    } else if (variant === "snap") {
-      if (offset > 100 || velocity > 500) {
-        setSheetY(snapHeight);
-        onSnapDown?.();
-      } else {
-        setSheetY(FULL_HEIGHT);
-        onSnapUp?.();
-      }
-    } else if (variant === "hybrid") {
-      const threshold = 100;
-      const screenHeight = window.innerHeight;
+    if (!variant) return;
 
-      if (offset > threshold && velocity > 300) {
-        setSheetY(screenHeight);
-        onClose?.();
-      } else if (offset < -threshold || velocity < -300) {
-        setSheetY(FULL_HEIGHT);
-        onSnapUp?.();
-      } else {
-        setSheetY(snapHeight);
+    const shouldClose = offset > threshold && velocity > 300;
+    const shouldOpenFull = offset < -threshold || velocity < -300;
+
+    switch (variant) {
+      case "modal": {
+        if (shouldClose) onClose?.();
+        else setSheetY(FULL_HEIGHT);
+        break;
       }
+
+      case "snap": {
+        if (shouldClose) {
+          setSheetY(snapHeight);
+          onSnapDown?.();
+        } else {
+          setSheetY(FULL_HEIGHT);
+          onSnapUp?.();
+        }
+        break;
+      }
+
+      case "hybrid": {
+        if (shouldClose) {
+          setSheetY(screenHeight);
+          onClose?.();
+        } else if (shouldOpenFull) {
+          setSheetY(FULL_HEIGHT);
+          onSnapUp?.();
+        } else {
+          setSheetY(snapHeight);
+          onSnapDown?.();
+        }
+        break;
+      }
+
+      default:
+        break;
     }
   };
+
 
   return (
     <>
