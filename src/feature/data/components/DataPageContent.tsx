@@ -11,16 +11,21 @@ import { DataType } from "../types/dataType";
 import DataItemCard from "./sections/product/DataItemCard";
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 import { useHeaderStore } from "@stores/useHeaderStore";
+import { useRouter } from "next/navigation";
 
 export default function DataPageContent() {
+  const router = useRouter();
+  const handleCardClick = (id: string) => {
+    router.push(`/data/${id}`);
+  };
+
   const [sheetOpen, setSheetOpen] = useState(false);
   const [tab, setTab] = useState("normal");
+  const setIsVisible = useHeaderStore((state) => state.setIsVisible);
 
-  const setIsVisible = useHeaderStore((state)=>state.setIsVisible);
-
-  useEffect(()=>{
+  useEffect(() => {
     setIsVisible(sheetOpen);
-  },[sheetOpen, setIsVisible])
+  }, [sheetOpen, setIsVisible]);
 
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<DataType>({
@@ -35,11 +40,11 @@ export default function DataPageContent() {
     <div className="relative h-[100dvh] w-full bg-primary2">
       {/* 왼쪽 상단 로고 */}
       <div className="absolute top-[-150] left-[-44] z-20">
-        <img src="/dpd-logo.svg" alt="logo" className="w-[237px]"/>
+        <img src="/dpd-logo.svg" alt="logo" className="w-[237px]" />
       </div>
       {/* 오른쪽 상단 로고 */}
       <div className="absolute top-[-100] right-0 z-20">
-        <img src="/dpd-main-logo.svg" alt="logo" className="w-96"/>
+        <img src="/dpd-main-logo.svg" alt="logo" className="w-96" />
       </div>
       {/* 상단 필터 영역 */}
       <div className="sticky top-0 z-10 bg-primary2 p-4 mt-44">

@@ -1,21 +1,5 @@
-import { DataType } from "../types/dataType";
-
-const mockDataList = (num: number): Promise<DataType[]> =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(
-        Array.from({ length: 20 }, (_, i) => ({
-          id: num + i,
-          date: "3시간전",
-          title: `2GB ${num + i}`,
-          price: "8,000원",
-          pricePer: "400원/100MB",
-          userId: 123,
-          userName: "김데이터",
-        }))
-      );
-    }, 100);
-  });
+import axios from "axios";
+import { DataType, RawDataItem, mapRawToDataType } from "../types/dataType";
 
 function isNumber(value: unknown): value is number {
   return typeof value === "number";
@@ -27,10 +11,30 @@ export async function getDataList({ pageParam = 0 }: { pageParam?: number | unkn
 }> {
   console.log("GET API DATA LIST", pageParam);
   if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
-  const start = pageParam;
-  const end = pageParam + 20;
-  const hasMore = end < 200;
-  const data = await mockDataList(start);
 
-  return { items: data, nextCursor: hasMore ? end : undefined };
+  try {
+    const response = await axios.get<{
+      data: {
+        data: RawDataItem[];
+        pageInfo: {
+          nextCursorId: number | null;
+          hasNext: boolean;
+          size: number;
+        };
+      };
+    }>(`/api/data/list?page=${pageParam}`);
+
+    const rawList = response.data.data.data;
+    const items = rawList.map(mapRawToDataType);
+
+    const nextCursor = response.data.data.pageInfo.nextCursorId ?? undefined;
+
+    return {
+      items,
+      nextCursor, // undefined이면 자동으로 무한스크롤 멈춤
+    };
+  } catch (error) {
+    console.error("데이터 목록 가져오기 실패:", error);
+    return { items: [], nextCursor: undefined };
+  }
 }
