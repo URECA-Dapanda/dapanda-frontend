@@ -11,16 +11,21 @@ import { DataType } from "../types/dataType";
 import DataItemCard from "./sections/product/DataItemCard";
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 import { useHeaderStore } from "@stores/useHeaderStore";
+import { ButtonComponent } from "@/components/common/button";
+import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
+import { dataSortOptions } from "@components/common/dropdown/dropdownConfig";
+import { PlusIcon, ChevronDown, SlidersHorizontal } from "lucide-react";
+import Image from "next/image";
 
 export default function DataPageContent() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [tab, setTab] = useState("normal");
+  const setIsVisible = useHeaderStore((state) => state.setIsVisible);
+  const [sortLabel, setSortLabel] = useState("최신순");
 
-  const setIsVisible = useHeaderStore((state)=>state.setIsVisible);
-
-  useEffect(()=>{
+  useEffect(() => {
     setIsVisible(sheetOpen);
-  },[sheetOpen, setIsVisible])
+  }, [sheetOpen, setIsVisible]);
 
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<DataType>({
@@ -35,17 +40,29 @@ export default function DataPageContent() {
     <div className="relative h-[100dvh] w-full bg-primary2">
       {/* 왼쪽 상단 로고 */}
       <div className="absolute top-[-150] left-[-44] z-20">
-        <img src="/dpd-logo.svg" alt="logo" className="w-[237px]"/>
+        <Image src="/dpd-logo.svg" alt="logo" width={237} height={0}/>
       </div>
       {/* 오른쪽 상단 로고 */}
       <div className="absolute top-[-100] right-0 z-20">
-        <img src="/dpd-main-logo.svg" alt="logo" className="w-96"/>
+        <Image src="/dpd-main-logo.svg" alt="logo" width={96} height={0}/>
       </div>
       {/* 상단 필터 영역 */}
       <div className="sticky top-0 z-10 bg-primary2 p-4 mt-44">
         <FilterCard />
       </div>
-
+      {/* 플로팅 버튼 */}
+      <div className="absolute bottom-180 right-24 z-50">
+        <ButtonComponent
+          variant="floatingPrimary"
+          size="xl"
+          onClick={() => {
+            // 등록 모달 열기 또는 페이지 이동 로직
+            console.log("글 등록 버튼 클릭");
+          }}
+        >
+          <PlusIcon className="w-20 h-20" />글 쓰기
+        </ButtonComponent>
+      </div>
       {/* 바텀시트 */}
       <BaseBottomSheet
         isOpen={sheetOpen}
@@ -60,12 +77,40 @@ export default function DataPageContent() {
           <div className="flex justify-center mt-24">
             <PurchaseModeTabs value={tab} onChange={setTab} />
           </div>
+          {/* 정렬 드롭다운, search 버튼 */}
+          {sheetOpen && (
+            <div className="flex justify-end items-center gap-8 px-24 mb-12">
+              <UserDropdownMenu
+                options={dataSortOptions}
+                selectedLabel={sortLabel}
+                onSelectLabel={setSortLabel}
+              >
+                <ButtonComponent variant="withIcon" size="sm" className="p-6 body-xs">
+                  {sortLabel}
+                  <ChevronDown className="w-20 h-20" />
+                </ButtonComponent>
+              </UserDropdownMenu>
+
+              <ButtonComponent
+                variant="withIcon"
+                size="sm"
+                className="p-6 body-xs"
+                onClick={() => {
+                  setSheetOpen(false);
+                }}
+              >
+                SEARCH
+                <SlidersHorizontal className="w-20 h-20" />
+              </ButtonComponent>
+            </div>
+          )}
 
           {/* 리스트 */}
           <VirtualizedInfiniteList
             mode="scroll"
             parentRef={parentRef}
             rowVirtualizer={rowVirtualizer}
+            height="700px"
             items={flatItems}
             isFetchingNextPage={isFetchingNextPage}
             hasNextPage={hasNextPage}
