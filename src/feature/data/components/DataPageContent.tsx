@@ -28,7 +28,7 @@ export default function DataPageContent() {
     queryKey: ["dataItems"],
     queryFn: ({ pageParam = 0 }: QueryFunctionContext) => getDataList({ pageParam }),
     getNextPageParam: (lastPage) => lastPage.nextCursor,
-    estimateSize: () => 200,
+    estimateSize: () => 100,
     mode: "scroll",
   });
 
@@ -43,7 +43,7 @@ export default function DataPageContent() {
     queryKey: ["mapItems"],
     queryFn: ({ pageParam = 0 }: QueryFunctionContext) => getMapList({ pageParam }),
     getNextPageParam: (lastPage) => lastPage.nextCursor,
-    estimateSize: () => 200,
+    estimateSize: () => 150,
     mode: "button",
   });
 
@@ -69,7 +69,7 @@ export default function DataPageContent() {
         renderItem={(item: DataType) => <DataItemCard data={item} />}
       />
 
-      <VirtualizedInfiniteList
+      {/* <VirtualizedInfiniteList
         mode="scroll"
         parentRef={parentRefForData}
         rowVirtualizer={rowVirtualizerForData}
@@ -78,7 +78,7 @@ export default function DataPageContent() {
         hasNextPage={hasNextPageForData}
         fetchNextPage={fetchNextPageForData}
         renderItem={(item: DataType) => <DataItemCard data={item} />}
-      />
+      /> */}
 
       <VirtualizedInfiniteList
         mode="button"
