@@ -12,7 +12,7 @@ export default function FlatCard({ size, children }: PropsWithChildren<FlatCardP
       variant="flat"
       size={size}
       color={`${
-        size !== "xl" ? "bg-gradient-to-r from-primary-100 to-[#DCE6FF]" : "bg-primary-50"
+        size !== "xl" ? "bg-gradient-to-r from-primary-100 to-[#DCE6FF]" : "bg-primary2"
       }`}
     >
       <CardContentComponent size={"sm"}>{children}</CardContentComponent>
