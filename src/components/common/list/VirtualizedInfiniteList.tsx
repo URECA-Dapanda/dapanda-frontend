@@ -3,6 +3,7 @@ import React, { Fragment, memo } from "react";
 
 interface VirtualizedListProps<T> {
   mode?: "scroll" | "button";
+  height?: string;
   parentRef: React.RefObject<HTMLDivElement | null>;
   rowVirtualizer: Virtualizer<HTMLDivElement, Element>;
   items: T[];
@@ -60,6 +61,7 @@ function VirtualizedList<T>({
   parentRef,
   rowVirtualizer,
   items,
+  height = "600px",
   mode = "scroll",
   hasNextPage,
   isFetchingNextPage,
@@ -75,7 +77,7 @@ function VirtualizedList<T>({
       <div
         ref={parentRef}
         style={{
-          height: "600px",
+          height: height,
           overflow: "auto",
         }}
       >

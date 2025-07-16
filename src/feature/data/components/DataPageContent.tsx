@@ -109,6 +109,7 @@ export default function DataPageContent() {
             mode="scroll"
             parentRef={parentRef}
             rowVirtualizer={rowVirtualizer}
+            height="700px"
             items={flatItems}
             isFetchingNextPage={isFetchingNextPage}
             hasNextPage={hasNextPage}
