@@ -11,6 +11,8 @@ import { DataType } from "../types/dataType";
 import DataItemCard from "./sections/product/DataItemCard";
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 import { useHeaderStore } from "@stores/useHeaderStore";
+import { ButtonComponent } from "@/components/common/button";
+import { PlusIcon } from "lucide-react";
 
 export default function DataPageContent() {
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -44,6 +46,20 @@ export default function DataPageContent() {
       {/* 상단 필터 영역 */}
       <div className="sticky top-0 z-10 bg-primary2 p-4 mt-44">
         <FilterCard />
+      </div>
+      {/* 플로팅 버튼 */}
+      <div className="absolute bottom-180 right-24 z-50">
+        <ButtonComponent
+          variant="floatingPrimary"
+          size="xl"
+          onClick={() => {
+            // 등록 모달 열기 또는 페이지 이동 로직
+            console.log("글 등록 버튼 클릭");
+          }}
+        >
+          <PlusIcon className="w-20 h-20" />
+          글 쓰기
+        </ButtonComponent>
       </div>
 
       {/* 바텀시트 */}
