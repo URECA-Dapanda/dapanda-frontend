@@ -12,35 +12,16 @@ import {
 
 import FullScreenModal from "@/components/common/modal/FullScreenModal";
 import type { TopSheetProps } from "@/components/common/topsheet/topSheet.types";
-import { PostTopSheetContent } from "@/components/common/topsheet/PostTopSheetContent";
-import { WifiTopSheetContent } from "@/components/common/topsheet/WifiTopSheetContent";
+import { PostTopSheetContent } from "./PostTopSheetContent";
+import { WifiTopSheetContent } from "./WifiTopSheetContent";
+import { useTopSheetExpanded } from "./useTopSheetExpanded";
+import { useTopSheetImageStyle } from "./useTopSheetImageStyle";
 
 export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
-  const [expanded, setExpanded] = useState(false);
+  const { expanded, setExpanded, handleDragEnd } = useTopSheetExpanded();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const imageUrls: string[] = Array.isArray(data.imageUrl) ? data.imageUrl : [data.imageUrl];
-  const getImageStyle = (expanded: boolean, type: "post" | "wifi") => {
-    if (type === "post") {
-      return expanded
-        ? {
-            top: 51,
-            left: "50%",
-            x: "-50%",
-            width: 200,
-            height: 200,
-            rotate: 0,
-          }
-        : {
-            top: 56,
-            right: -37,
-            width: 240,
-            height: 240,
-            rotate: 19.66,
-            x: 0,
-          };
-    }
-    return {};
-  };
+  const imageStyle = useTopSheetImageStyle(expanded, type);
 
   return (
     <motion.div
@@ -49,17 +30,11 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
       dragConstraints={{ top: 0, bottom: 0 }}
     >
       <motion.div
-        className="w-full h-full pt-52"
+        className="w-full h-full pt-20"
         drag="y"
         transition={{ type: "decay", damping: 20, stiffness: 200 }}
         dragConstraints={{ top: 0, bottom: 0 }}
-        onDragEnd={(event, info) => {
-          if (info.offset.y > 56 || info.velocity.y > 500) {
-            setExpanded(true);
-          } else {
-            setExpanded(false);
-          }
-        }}
+        onDragEnd={(event, info) => handleDragEnd(info)}
       >
         {type === "post" && (
           <motion.img
@@ -67,7 +42,7 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
             alt="대표 이미지"
             onClick={onImageClick}
             className="cursor-zoom-in absolute rounded-12 z-30"
-            animate={getImageStyle(expanded, type)}
+            animate={imageStyle}
             transition={{ type: "spring", damping: 20, stiffness: 200 }}
           />
         )}
@@ -112,7 +87,7 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
                 alt="와이파이 대표 이미지"
                 className="cursor-zoom-in absolute rounded-12 z-30"
                 style={{
-                  top: 75,
+                  top: 44,
                   right: 30,
                   width: 140,
                   height: 140,
@@ -127,20 +102,12 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
         <motion.div
           className="relative z-10 pl-30 px-4 space-y-1"
           animate={{
-            paddingTop: type === "wifi" ? (expanded ? 20 : 20) : expanded ? 200 : 60,
+            paddingTop: type === "wifi" ? 20 : expanded ? 200 : 60,
           }}
           transition={{ type: "spring", damping: 20, stiffness: 200 }}
         >
-          {type === "post" && (
-            <>
-              <PostTopSheetContent data={data} expanded={expanded} />
-            </>
-          )}
-          {type === "wifi" && (
-            <>
-              <WifiTopSheetContent data={data} expanded={expanded} />
-            </>
-          )}
+          {type === "post" && <PostTopSheetContent data={data} expanded={expanded} />}
+          {type === "wifi" && <WifiTopSheetContent data={data} expanded={expanded} />}
         </motion.div>
       </motion.div>
 
