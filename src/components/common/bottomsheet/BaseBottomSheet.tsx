@@ -72,7 +72,9 @@ export default function BaseBottomSheet({
       }}
       drag="y">
         <motion.div
-          className="bg-white rounded-t-50 pointer-events-auto"
+          className={`bg-white pointer-events-auto ${
+            variant === "snap" && sheetY === 0 ? "rounded-t-0" : "rounded-t-50"
+          }`}
           style={{
             width: "375px",
             height:
