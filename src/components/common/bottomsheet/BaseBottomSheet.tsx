@@ -6,6 +6,8 @@ import { ReactNode, useEffect, useState } from "react";
 interface BaseBottomSheetProps {
   isOpen: boolean;
   onClose?: () => void;
+  onSnapUp?: () => void;
+  onSnapDown?: () => void; 
   children: ReactNode;
   variant?: "snap" | "modal";
   snapHeight?: number;
@@ -14,6 +16,8 @@ interface BaseBottomSheetProps {
 export default function BaseBottomSheet({
   isOpen,
   onClose,
+  onSnapUp,
+  onSnapDown,
   children,
   variant = "modal",
   snapHeight = 300,
@@ -43,9 +47,32 @@ export default function BaseBottomSheet({
         />
       )}
 
-      <div className="fixed inset-0 flex items-end justify-center z-30 pointer-events-none">
+      <motion.div className="fixed inset-0 flex items-end justify-center z-30 pointer-events-none"   
+      dragConstraints={{ top: 0, bottom: 0 }}
+      style={
+        {
+          WebkitOverflowScrolling: "touch",
+            touchAction: "pan-y",
+        }
+      }
+      onDragEnd={(event, info) => {
+        if (info.offset.y > 100 || info.velocity.y > 500) {
+          if (variant === "modal") {
+            onClose?.();
+          } else if (variant === "snap") {
+            setSheetY(snapHeight);
+            onSnapDown?.();
+          }
+        } else {
+          setSheetY(0);
+          if (variant === "snap") {
+            onSnapUp?.();
+          }
+        }
+      }}
+      drag="y">
         <motion.div
-          className="bg-white rounded-t-20 pointer-events-auto p-24"
+          className="bg-white rounded-t-50 pointer-events-auto"
           style={{
             width: "375px",
             height:
@@ -54,25 +81,13 @@ export default function BaseBottomSheet({
                 : `${MODAL_MAX_HEIGHT}px`,
             marginBottom: variant === "snap" ? `${BOTTOM_OFFSET}px` : "0px",
             overflowY: "auto",
-            WebkitOverflowScrolling: "touch",
-            touchAction: "pan-y",
           }}
           animate={{ y: sheetY }}
           transition={{ type: "spring", damping: 30, stiffness: 300 }}
-          drag="y"
-          dragConstraints={{ top: 0, bottom: 0 }}
-          onDragEnd={(event, info) => {
-            if (info.offset.y > 100 || info.velocity.y > 500) {
-              if (variant === "modal") onClose?.();
-              if (variant === "snap") setSheetY(snapHeight);
-            } else {
-              setSheetY(0);
-            }
-          }}
         >
           {children}
         </motion.div>
-      </div>
+      </motion.div>
     </>
   );
 }
