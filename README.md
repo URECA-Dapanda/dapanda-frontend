@@ -233,9 +233,9 @@ npm start
 - 판매자가 등록한 데이터 상품을 원하는 단위로 직접 선택하여 구매 가능  
 - 거래 전 판매자 정보, 가격 등을 확인할 수 있음  
 - 캐시 결제를 통해 안전하게 거래 가능
-<img width="275" alt="main1" src="https://github.com/user-attachments/assets/b8c69a0e-55b7-4266-a9fe-10ecd852a93b" />
-<img width="275" alt="게시글 상세" src="https://github.com/user-attachments/assets/6d7180ad-b820-40a0-8ce0-d95f598bd999" />
-&nbsp;&nbsp;&nbsp;<img width="275" alt="캐시로 결제" src="https://github.com/user-attachments/assets/c1e0d959-24e1-49bd-afa7-c1d7ae1c3a80" />
+<img width="250" alt="main1" src="https://github.com/user-attachments/assets/b8c69a0e-55b7-4266-a9fe-10ecd852a93b" />
+&nbsp;&nbsp;&nbsp;<img width="250" alt="게시글 상세" src="https://github.com/user-attachments/assets/6d7180ad-b820-40a0-8ce0-d95f598bd999" />
+&nbsp;&nbsp;&nbsp;<img width="250" alt="캐시로 결제" src="https://github.com/user-attachments/assets/c1e0d959-24e1-49bd-afa7-c1d7ae1c3a80" />
 <br/>
 <br/>
 
@@ -244,9 +244,9 @@ npm start
 - 원하는 데이터 용량(예: 1.5GB 등)을 입력하여 구매 가능  
 - 여러 판매자의 자투리 데이터를 조합해 최저가로 자동 구성된 조합을 제공받을 수 있음  
 - 추천 조합을 확인한 뒤 승인만 하면 자동으로 결제 처리됨  
-<img width="275" alt="최적조합 탐색중" src="https://github.com/user-attachments/assets/21a95e4c-fc24-4089-9487-ee18f3c33a35" />
-&nbsp;&nbsp;&nbsp;<img width="275" alt="최적조합 제시" src="https://github.com/user-attachments/assets/0d25300e-cff9-4aa2-a357-317b4346e167" />
-&nbsp;&nbsp;&nbsp;<img width="275" alt="최적조합 확정" src="https://github.com/user-attachments/assets/07602810-89f1-4347-b725-016bb3ab94a8" />
+<img width="250" alt="최적조합 탐색중" src="https://github.com/user-attachments/assets/21a95e4c-fc24-4089-9487-ee18f3c33a35" />
+&nbsp;&nbsp;&nbsp;<img width="250" alt="최적조합 제시" src="https://github.com/user-attachments/assets/0d25300e-cff9-4aa2-a357-317b4346e167" />
+&nbsp;&nbsp;&nbsp;<img width="250" alt="최적조합 확정" src="https://github.com/user-attachments/assets/07602810-89f1-4347-b725-016bb3ab94a8" />
 <br/>
 <br/>
 
@@ -254,9 +254,9 @@ npm start
 
 - 구매자의 경우 지도 기반 주변 판매처 확인 및 구매 가능
 - 구매 이후 이용시간이 시작되면 남은 시간을 타이머로 보여줌
-<img width="275" alt="위치기반검색" src="https://github.com/user-attachments/assets/d95c731c-4ca2-4acb-bb93-26a44d4f8065" />
-&nbsp;&nbsp;&nbsp;<img width="275" alt="와이파이 상세정보" src="https://github.com/user-attachments/assets/966615f6-7822-4f57-a0c2-b748a56d5199" />
-&nbsp;&nbsp;&nbsp;<img width="275" alt="타이머" src="https://github.com/user-attachments/assets/196d8ed9-1c69-4cd6-8447-6036ca5c6c74" />
+<img width="250" alt="위치기반검색" src="https://github.com/user-attachments/assets/d95c731c-4ca2-4acb-bb93-26a44d4f8065" />
+&nbsp;&nbsp;&nbsp;<img width="250" alt="와이파이 상세정보" src="https://github.com/user-attachments/assets/966615f6-7822-4f57-a0c2-b748a56d5199" />
+&nbsp;&nbsp;&nbsp;<img width="250" alt="타이머" src="https://github.com/user-attachments/assets/196d8ed9-1c69-4cd6-8447-6036ca5c6c74" />
 <br/>
 <br/>
 
@@ -269,8 +269,8 @@ npm start
 - 거래 중 이상 행위나 부적절한 언행 발생 시 신고 가능  
 - 신고 내용은 관리자에게 전달되어 제재 절차가 진행됨  
 
-<img width="275" alt="리뷰 남기기 페이지" src="https://github.com/user-attachments/assets/35fe5f54-5690-4a48-a189-539140733f2c" />
-&nbsp;&nbsp;&nbsp;<img width="275" alt="신고페이지" src="https://github.com/user-attachments/assets/37c74266-3702-4dad-83df-b2100d675313" />
+<img width="250" alt="리뷰 남기기 페이지" src="https://github.com/user-attachments/assets/35fe5f54-5690-4a48-a189-539140733f2c" />
+&nbsp;&nbsp;&nbsp;<img width="250" alt="신고페이지" src="https://github.com/user-attachments/assets/37c74266-3702-4dad-83df-b2100d675313" />
 
 <br/>
 <br/>
@@ -284,9 +284,9 @@ npm start
 - 매장의 경우 와이파이 시간제 판매 가능
 - 개인의 경우 핫스팟 시간제 판매 가능
 - 상품 설명, 이용 조건 등 상세 정보 입력 가능  
-<img width="275" alt="데이터 판매글 등록" src="https://github.com/user-attachments/assets/e7767314-ec55-429e-b522-abb8a74e87f7" />
-&nbsp;&nbsp;&nbsp;<img width="275" alt="4-3  등록유형 선택" src="https://github.com/user-attachments/assets/d4b3e162-6d8c-4fb4-8108-b7ccf5f2ba8a" />
-&nbsp;&nbsp;&nbsp;<img width="275" alt="핫스팟 판매" src="https://github.com/user-attachments/assets/082d1339-3d2e-4080-bdcd-c0d8855b0b15" />
+<img width="250" alt="데이터 판매글 등록" src="https://github.com/user-attachments/assets/e7767314-ec55-429e-b522-abb8a74e87f7" />
+&nbsp;&nbsp;&nbsp;<img width="250" alt="4-3  등록유형 선택" src="https://github.com/user-attachments/assets/d4b3e162-6d8c-4fb4-8108-b7ccf5f2ba8a" />
+&nbsp;&nbsp;&nbsp;<img width="250" alt="핫스팟 판매" src="https://github.com/user-attachments/assets/082d1339-3d2e-4080-bdcd-c0d8855b0b15" />
 <br/>
 <br/>
 
@@ -295,8 +295,8 @@ npm start
 - 대용량 데이터를 등록하면 시스템이 자동으로 소단위로 분할하여 판매  
 - 구매자가 원하는 단위만큼 차감되며, 남은 용량은 자동 유지  
 - 별도 조작 없이 여러 사용자에게 수익 분산 가능  
-<img width="275" alt="데이터 판매글 등록" src="https://github.com/user-attachments/assets/b9daf824-3359-4b24-bb79-3c9516d22f0a" />
-&nbsp;&nbsp;&nbsp;<img width="275" alt="분할판매글 - 상세" src="https://github.com/user-attachments/assets/d56bb456-bb9b-4599-87f1-605717e96e0e" />
+<img width="250" alt="데이터 판매글 등록" src="https://github.com/user-attachments/assets/b9daf824-3359-4b24-bb79-3c9516d22f0a" />
+&nbsp;&nbsp;&nbsp;<img width="250" alt="분할판매글 - 상세" src="https://github.com/user-attachments/assets/d56bb456-bb9b-4599-87f1-605717e96e0e" />
 <br/>
 <br/>
 
@@ -311,8 +311,8 @@ npm start
 #### 💬 채팅 기능
 
 - 채팅 기능은 거래 전·후로 사용자 간 실시간 소통을 지원
-<img width="275" alt="프로필정보페이지" src="https://github.com/user-attachments/assets/e9592bd7-923f-4b70-91a4-c9217aa308fc" />
-&nbsp;&nbsp;&nbsp;<img width="275" alt="채팅상세페이지" src="https://github.com/user-attachments/assets/2e2bb2af-60da-4116-8f80-e9897519feba" />
+<img width="250" alt="프로필정보페이지" src="https://github.com/user-attachments/assets/e9592bd7-923f-4b70-91a4-c9217aa308fc" />
+&nbsp;&nbsp;&nbsp;<img width="250" alt="채팅상세페이지" src="https://github.com/user-attachments/assets/2e2bb2af-60da-4116-8f80-e9897519feba" />
 
 <br/>
 <br/>
@@ -325,9 +325,9 @@ npm start
 - 잔여 캐시, 캐시 사용 내역을 조회하고, 현금 전환 및 캐시 충전을 할 수 있다.
 - 이벤트로 획득한 판다도감을 열람할 수 있다.
 - 로그아웃을 할 수 있다.
-<img width="275" alt="마이페이지" src="https://github.com/user-attachments/assets/ef609ef0-04e9-4e28-86dc-0ae015e220f5" />
-&nbsp;&nbsp;&nbsp;<img width="275" alt="판매내역 페이지 _ 판매중" src="https://github.com/user-attachments/assets/0e84fe5e-35a2-489d-9196-89f25545183f" />
-&nbsp;&nbsp;&nbsp;<img width="275" alt="충전내역" src="https://github.com/user-attachments/assets/b57d4799-48cd-4e5b-895d-02c50abb5a48" />
+<img width="250" alt="마이페이지" src="https://github.com/user-attachments/assets/ef609ef0-04e9-4e28-86dc-0ae015e220f5" />
+&nbsp;&nbsp;&nbsp;<img width="250" alt="판매내역 페이지 _ 판매중" src="https://github.com/user-attachments/assets/0e84fe5e-35a2-489d-9196-89f25545183f" />
+&nbsp;&nbsp;&nbsp;<img width="250" alt="충전내역" src="https://github.com/user-attachments/assets/b57d4799-48cd-4e5b-895d-02c50abb5a48" />
 
 <br/>
 <br/>
