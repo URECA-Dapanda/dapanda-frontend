@@ -15,6 +15,7 @@ import { ButtonComponent } from "@/components/common/button";
 import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
 import { dataSortOptions } from "@components/common/dropdown/dropdownConfig";
 import { PlusIcon, ChevronDown, SlidersHorizontal } from "lucide-react";
+import Image from "next/image";
 
 export default function DataPageContent() {
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -39,11 +40,11 @@ export default function DataPageContent() {
     <div className="relative h-[100dvh] w-full bg-primary2">
       {/* 왼쪽 상단 로고 */}
       <div className="absolute top-[-150] left-[-44] z-20">
-        <img src="/dpd-logo.svg" alt="logo" className="w-[237px]" />
+        <Image src="/dpd-logo.svg" alt="logo" width={237} height={0}/>
       </div>
       {/* 오른쪽 상단 로고 */}
       <div className="absolute top-[-100] right-0 z-20">
-        <img src="/dpd-main-logo.svg" alt="logo" className="w-96" />
+        <Image src="/dpd-main-logo.svg" alt="logo" width={96} height={0}/>
       </div>
       {/* 상단 필터 영역 */}
       <div className="sticky top-0 z-10 bg-primary2 p-4 mt-44">
