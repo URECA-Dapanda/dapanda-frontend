@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import ProviderWrapper from "@components/common/ProviderWrapper";
-import SharedHeader from "@components/common/header/SharedHeader";
 import BottomNavigation from "@components/common/navigation/BottomNavigation";
 import "./globals.css";
 import Script from "next/script";
@@ -25,7 +24,6 @@ export default function RootLayout({
               strategy="beforeInteractive"
               src={`https://openapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID}&submodules=geocoder`}
             />
-            <SharedHeader />
             {children}
             <BottomNavigation />
           </ProviderWrapper>
