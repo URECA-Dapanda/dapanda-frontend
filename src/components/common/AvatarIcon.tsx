@@ -13,7 +13,7 @@ interface AvatarProps {
  * @param size 아이콘 사이즈: small: w-4 h-4 // medium: w-8 h-8 // large: w-16 h-16
  * @returns 아바타 아이콘
  */
-function AvatarIcon({ size = "small", avatar }: Partial<AvatarProps>) {
+function AvatarIcon({ size = "small", avatar = "c" }: Partial<AvatarProps>) {
   const showAvatar = useProfileStore((state) => state.avatar);
   const avatarImage = avatar ? avatar : showAvatar;
   const iconSize = useMemo(() => {
@@ -31,8 +31,8 @@ function AvatarIcon({ size = "small", avatar }: Partial<AvatarProps>) {
 
   return avatarImage ? (
     <Avatar className={iconSize}>
-      <AvatarImage src="/placeholder.svg" />
-      <AvatarFallback className="primary-gradient text-black">{avatarImage}</AvatarFallback>
+      <AvatarImage />
+      <AvatarFallback className="bg-gray-500 text-white">{avatarImage}</AvatarFallback>
     </Avatar>
   ) : null;
 }

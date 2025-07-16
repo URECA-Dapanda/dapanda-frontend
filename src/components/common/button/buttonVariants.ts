@@ -12,7 +12,7 @@ export const buttonVariants = cva(
         nonoutline: "bg-white text-black title-xs",
         loading: "bg-gray-300 text-white",
         card: "bg-white text-color-text-black border border-gray-300",
-
+        text: "shadow-none border-none text-gray-600 bg-transparent body-sm",
         floatingOutline: "bg-white text-black border border-gray-400 rounded-20",
         floatingPrimary: "bg-primary text-white rounded-20",
         floatingPill:
