@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import FilterCard from "./sections/filter/FilterCard";
 import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
 import { PurchaseModeTabs } from "@/components/common/tabs";
@@ -12,13 +12,16 @@ import DataItemCard from "./sections/product/DataItemCard";
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 import { useHeaderStore } from "@stores/useHeaderStore";
 import { ButtonComponent } from "@/components/common/button";
-import { PlusIcon } from "lucide-react";
+import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
+import { dataSortOptions } from "@components/common/dropdown/dropdownConfig";
+import { PlusIcon, ChevronDown, SlidersHorizontal } from "lucide-react";
 
 export default function DataPageContent() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [tab, setTab] = useState("normal");
-
   const setIsVisible = useHeaderStore((state)=>state.setIsVisible);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [sortLabel, setSortLabel] = useState("최신순");
 
   useEffect(()=>{
     setIsVisible(sheetOpen);
@@ -61,7 +64,6 @@ export default function DataPageContent() {
           글 쓰기
         </ButtonComponent>
       </div>
-
       {/* 바텀시트 */}
       <BaseBottomSheet
         isOpen={sheetOpen}
@@ -76,6 +78,28 @@ export default function DataPageContent() {
           <div className="flex justify-center mt-24">
             <PurchaseModeTabs value={tab} onChange={setTab} />
           </div>
+          {/* 정렬 드롭다운, search 버튼 */}
+          {sheetOpen && (
+            <div className="flex justify-end items-center gap-8 px-24 mb-12">
+              <UserDropdownMenu
+                options={dataSortOptions}
+                selectedLabel={sortLabel}
+                onSelectLabel={setSortLabel}
+              >
+                <button className="flex items-center p-6 bg-white rounded-6 shadow">
+                  {sortLabel}
+                  <ChevronDown className="w-20 h-20" />
+                </button>
+              </UserDropdownMenu>
+              <button
+                onClick={() => {setSheetOpen(false);}}
+                className="flex items-center p-6 bg-white rounded-6 shadow"
+              >
+                SEARCH
+                <SlidersHorizontal className="w-20 h-20" />
+              </button>
+            </div>
+          )}
 
           {/* 리스트 */}
           <VirtualizedInfiniteList
