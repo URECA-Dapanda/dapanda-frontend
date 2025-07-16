@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, PanInfo } from "framer-motion";
 import { ReactNode, useEffect, useState } from "react";
 
 interface BaseBottomSheetProps {
@@ -42,7 +42,7 @@ export default function BaseBottomSheet({
     }
   }, [isOpen, variant, snapHeight]);
 
-  const handleDragEnd = (event: any, info: any) => {
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const offset = info.offset.y;
     const velocity = info.velocity.y;
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import FilterCard from "./sections/filter/FilterCard";
 import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
 import { PurchaseModeTabs } from "@/components/common/tabs";
@@ -19,13 +19,12 @@ import { PlusIcon, ChevronDown, SlidersHorizontal } from "lucide-react";
 export default function DataPageContent() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [tab, setTab] = useState("normal");
-  const setIsVisible = useHeaderStore((state)=>state.setIsVisible);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const setIsVisible = useHeaderStore((state) => state.setIsVisible);
   const [sortLabel, setSortLabel] = useState("최신순");
 
-  useEffect(()=>{
+  useEffect(() => {
     setIsVisible(sheetOpen);
-  },[sheetOpen, setIsVisible])
+  }, [sheetOpen, setIsVisible]);
 
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<DataType>({
@@ -40,11 +39,11 @@ export default function DataPageContent() {
     <div className="relative h-[100dvh] w-full bg-primary2">
       {/* 왼쪽 상단 로고 */}
       <div className="absolute top-[-150] left-[-44] z-20">
-        <img src="/dpd-logo.svg" alt="logo" className="w-[237px]"/>
+        <img src="/dpd-logo.svg" alt="logo" className="w-[237px]" />
       </div>
       {/* 오른쪽 상단 로고 */}
       <div className="absolute top-[-100] right-0 z-20">
-        <img src="/dpd-main-logo.svg" alt="logo" className="w-96"/>
+        <img src="/dpd-main-logo.svg" alt="logo" className="w-96" />
       </div>
       {/* 상단 필터 영역 */}
       <div className="sticky top-0 z-10 bg-primary2 p-4 mt-44">
@@ -60,8 +59,7 @@ export default function DataPageContent() {
             console.log("글 등록 버튼 클릭");
           }}
         >
-          <PlusIcon className="w-20 h-20" />
-          글 쓰기
+          <PlusIcon className="w-20 h-20" />글 쓰기
         </ButtonComponent>
       </div>
       {/* 바텀시트 */}
@@ -86,22 +84,21 @@ export default function DataPageContent() {
                 selectedLabel={sortLabel}
                 onSelectLabel={setSortLabel}
               >
-                <ButtonComponent
-                  variant="withIcon"
-                  size="sm"
-                  className="p-6 body-xs"
-                >
+                <ButtonComponent variant="withIcon" size="sm" className="p-6 body-xs">
                   {sortLabel}
                   <ChevronDown className="w-20 h-20" />
                 </ButtonComponent>
               </UserDropdownMenu>
-              
-              <ButtonComponent 
+
+              <ButtonComponent
                 variant="withIcon"
                 size="sm"
                 className="p-6 body-xs"
-                onClick={() => {setSheetOpen(false);}}
-              >SEARCH
+                onClick={() => {
+                  setSheetOpen(false);
+                }}
+              >
+                SEARCH
                 <SlidersHorizontal className="w-20 h-20" />
               </ButtonComponent>
             </div>
