@@ -1,50 +1,59 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import FilterCard from "./sections/filter/FilterCard";
-import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
-import { PurchaseModeTabs } from "@/components/common/tabs";
-
-import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
-import { getDataList } from "../api/dataRequest";
-import { DataType } from "../types/dataType";
-import DataItemCard from "./sections/product/DataItemCard";
-import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
-import { useHeaderStore } from "@stores/useHeaderStore";
-import { ButtonComponent } from "@/components/common/button";
-import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
-import { dataSortOptions } from "@components/common/dropdown/dropdownConfig";
-import { PlusIcon, ChevronDown, SlidersHorizontal } from "lucide-react";
 import Image from "next/image";
+import { useSearchParams, useRouter } from "next/navigation";
+import { ButtonComponent } from "@/components/common/button";
+import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
+import FilterCard from "./sections/filter/FilterCard";
+import DefaultTabBody from "./sections/DefaultTabContent";
+import ScrapTabBody from "./sections/ScrapTabContent";
+import { PurchaseModeTabs } from "@/components/common/tabs";
+import { useHeaderStore } from "@stores/useHeaderStore";
+import { PlusIcon } from "lucide-react";
 
 export default function DataPageContent() {
-  const [sheetOpen, setSheetOpen] = useState(false);
-  const [tab, setTab] = useState("normal");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const tab = searchParams.get("tab") || "default";
+  const [sheetOpen, setSheetOpen] = useState(tab === "scrap");
   const setIsVisible = useHeaderStore((state) => state.setIsVisible);
-  const [sortLabel, setSortLabel] = useState("최신순");
 
   useEffect(() => {
     setIsVisible(sheetOpen);
-  }, [sheetOpen, setIsVisible]);
+  }, [sheetOpen]);
 
-  const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
-    useVirtualizedInfiniteQuery<DataType>({
-      queryKey: ["dataItems", tab],
-      queryFn: ({ pageParam = 0 }) => getDataList({ pageParam }),
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-      estimateSize: () => 160,
-      mode: "scroll",
-    });
+  const handleTabChange = (newTab: string) => {
+    if (newTab === tab) return;
+
+    if (!sheetOpen && newTab === "scrap") {
+      setSheetOpen(true);
+    }
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", newTab);
+    router.replace(`?${params.toString()}`);
+  };
+
+  const handleSnapDown = () => {
+    setSheetOpen(false);
+
+    if (tab === "scrap") {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("tab", "default");
+      router.replace(`?${params.toString()}`);
+    }
+  };
 
   return (
     <div className="relative h-[100dvh] w-full bg-primary2">
       {/* 왼쪽 상단 로고 */}
       <div className="absolute top-[-150] left-[-44] z-20">
-        <Image src="/dpd-logo.svg" alt="logo" width={237} height={0}/>
+        <Image src="/dpd-logo.svg" alt="logo" width={237} height={0} />
       </div>
       {/* 오른쪽 상단 로고 */}
       <div className="absolute top-[-100] right-0 z-20">
-        <Image src="/dpd-main-logo.svg" alt="logo" width={96} height={0}/>
+        <Image src="/dpd-main-logo.svg" alt="logo" width={96} height={0} />
       </div>
       {/* 상단 필터 영역 */}
       <div className="sticky top-0 z-10 bg-primary2 p-4 mt-44">
@@ -56,68 +65,34 @@ export default function DataPageContent() {
           variant="floatingPrimary"
           size="xl"
           onClick={() => {
-            // 등록 모달 열기 또는 페이지 이동 로직
             console.log("글 등록 버튼 클릭");
           }}
         >
-          <PlusIcon className="w-20 h-20" />글 쓰기
+          <PlusIcon className="w-20 h-20" />
+          글 쓰기
         </ButtonComponent>
       </div>
-      {/* 바텀시트 */}
+
+      {/* 바텀시트 (공통) */}
       <BaseBottomSheet
         isOpen={sheetOpen}
         onClose={() => setSheetOpen(false)}
         onSnapUp={() => setSheetOpen(true)}
-        onSnapDown={() => setSheetOpen(false)}
+        onSnapDown={handleSnapDown}
         variant="snap"
         snapHeight={260}
       >
-        <div className="space-y-4">
-          {/* 탭 */}
-          <div className="flex justify-center mt-24">
-            <PurchaseModeTabs value={tab} onChange={setTab} />
-          </div>
-          {/* 정렬 드롭다운, search 버튼 */}
-          {sheetOpen && (
-            <div className="flex justify-end items-center gap-8 px-24 mb-12">
-              <UserDropdownMenu
-                options={dataSortOptions}
-                selectedLabel={sortLabel}
-                onSelectLabel={setSortLabel}
-              >
-                <ButtonComponent variant="withIcon" size="sm" className="p-6 body-xs">
-                  {sortLabel}
-                  <ChevronDown className="w-20 h-20" />
-                </ButtonComponent>
-              </UserDropdownMenu>
-
-              <ButtonComponent
-                variant="withIcon"
-                size="sm"
-                className="p-6 body-xs"
-                onClick={() => {
-                  setSheetOpen(false);
-                }}
-              >
-                SEARCH
-                <SlidersHorizontal className="w-20 h-20" />
-              </ButtonComponent>
-            </div>
-          )}
-
-          {/* 리스트 */}
-          <VirtualizedInfiniteList
-            mode="scroll"
-            parentRef={parentRef}
-            rowVirtualizer={rowVirtualizer}
-            height="700px"
-            items={flatItems}
-            isFetchingNextPage={isFetchingNextPage}
-            hasNextPage={hasNextPage}
-            fetchNextPage={fetchNextPage}
-            renderItem={(item: DataType) => <DataItemCard data={item} />}
-          />
+        {/* 탭 공통 영역 */}
+        <div className="flex justify-center mt-24">
+          <PurchaseModeTabs value={tab} onChange={handleTabChange} />
         </div>
+
+        {/* 탭에 따른 내용만 분기 */}
+        {tab === "scrap" ? (
+          <ScrapTabBody />
+        ) : (
+          <DefaultTabBody isSheetOpen={sheetOpen}/>
+        )}
       </BaseBottomSheet>
     </div>
   );
