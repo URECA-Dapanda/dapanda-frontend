@@ -1,7 +1,8 @@
 "use client";
 
 import TopSheet from "@/components/common/topsheet/TopSheet";
-import { Button } from "@/components/ui/button";
+import { ButtonComponent } from "@components/common/button";
+import ProfileCard from "@feature/mypage/components/sections/ProfileCard";
 
 interface DataDetailContentProps {
   postId: string;
@@ -10,7 +11,7 @@ interface DataDetailContentProps {
 export default function DataDetailContent({ postId }: DataDetailContentProps) {
   // 임시 mock 데이터
   const mockData = {
-    imageUrl: "/images/2gb.png",
+    imageUrl: "/public/2gb.png",
     title: "2GB 데이터 팝니다",
     price: 8000,
     unitPrice: 400,
@@ -36,21 +37,17 @@ export default function DataDetailContent({ postId }: DataDetailContentProps) {
         }}
       />
 
-      <div className="px-4 pt-[360px] pb-8 space-y-8">
+      <div className="px-4 pt-[360px] space-y-20">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gray-300 rounded-full" />
-            <div>
-              <p className="font-semibold">{seller.name}</p>
-              <p className="text-sm text-gray-500">
-                ⭐ {seller.rating} ({seller.reviewCount}개의 리뷰)
-              </p>
-            </div>
-          </div>
-          <button className="text-sm text-gray-500 border px-2 py-1 rounded">글 수정하기</button>
+          <div className="title-md">판매자</div>
+          <ButtonComponent variant={"outlineGray"} size="xs">
+            글 수정하기
+          </ButtonComponent>
         </div>
-
-        <Button className="w-full bg-primary text-white text-lg py-3">구매하기</Button>
+        <ProfileCard />
+        <ButtonComponent variant={"primary"} className="w-full px-60">
+          구매하기
+        </ButtonComponent>
 
         <section>
           <h2 className="text-lg font-bold mb-2">{seller.name} 님의 다른 물품</h2>
