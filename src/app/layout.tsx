@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import ProviderWrapper from "@components/common/ProviderWrapper";
-import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
