@@ -1,6 +1,10 @@
 export default function SocialButton({ provider }: { provider: "kakao" | "naver" | "google" }) {
   const handleLogin = () => {
-    const kakaoAuthUrl = `${process.env.NEXT_PUBLIC_API_BASE}/oauth2/authorization/${provider}`;
+    const kakaoAuthUrl = `${
+      provider === "google"
+        ? process.env.NEXT_PUBLIC_API_BASE
+        : process.env.NEXT_PUBLIC_API_BASE_SSL
+    }/oauth2/authorization/${provider}`;
     window.location.href = kakaoAuthUrl;
   };
 
