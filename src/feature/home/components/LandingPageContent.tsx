@@ -25,7 +25,7 @@ export default function LandingPageContent() {
           />
         </div>
         <p className="body-sm mb-28 text-center">데이터를 자유롭게 거래하는 플랫폼</p>
-        <ContainerBox direction="colomn" gap="12">
+        <ContainerBox direction="column" gap="12">
           <SocialButton provider="kakao" />
           <SocialButton provider="naver" />
           <SocialButton provider="google" />
