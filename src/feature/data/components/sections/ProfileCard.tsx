@@ -6,11 +6,11 @@ import { Star } from "lucide-react";
 interface ProfileCardProps {
   name: string;
   joinDate: string;
-  rating: number;
+  //rating: number;
   reviewCount: number;
 }
 
-export default function ProfileCard({ name, joinDate, rating, reviewCount }: ProfileCardProps) {
+export default function ProfileCard({ name, joinDate, reviewCount }: ProfileCardProps) {
   return (
     <div className="flex items-center justify-between w-full p-16">
       <div className="w-48 h-48 rounded-full bg-gray-300 overflow-hidden">

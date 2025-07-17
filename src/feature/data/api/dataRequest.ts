@@ -31,8 +31,9 @@ export async function getDataList({
     const nextCursor = response.data.data.pageInfo.nextCursorId ?? undefined;
 
     return { items, nextCursor };
-  } catch (err: any) {
-    console.error("상품 목록 조회 실패:", err.response?.data || err.message);
+  } catch {
+    console.error("상품 목록 조회 실패:");
+
     return { items: [], nextCursor: undefined };
   }
 }

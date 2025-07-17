@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { AxiosError } from "axios";
 import TopSheet from "@/components/common/topsheet/TopSheet";
 import { ButtonComponent } from "@components/common/button";
 import ProfileCard from "@feature/data/components/sections/ProfileCard";
@@ -24,8 +25,9 @@ export default function DataDetailContent({ postId }: DataDetailContentProps) {
       try {
         const res = await getDataDetail(postId);
         setData(res);
-      } catch (err: any) {
-        const code = err?.response?.data?.code;
+      } catch (err: unknown) {
+        const error = err as AxiosError<{ code: number }>;
+        const code = error.response?.data?.code;
         if (code === 3002) {
           setError("존재하지 않는 상품입니다.");
         } else if (code === 3003) {
@@ -70,12 +72,7 @@ export default function DataDetailContent({ postId }: DataDetailContentProps) {
             글 수정하기
           </ButtonComponent>
         </div>
-        <ProfileCard
-          name={seller.name}
-          joinDate="2024.01.15"
-          rating={seller.rating}
-          reviewCount={seller.reviewCount}
-        />
+        <ProfileCard name={seller.name} joinDate="2024.01.15" reviewCount={seller.reviewCount} />
         <ButtonComponent variant={"primary"} className="w-full px-60">
           구매하기
         </ButtonComponent>
