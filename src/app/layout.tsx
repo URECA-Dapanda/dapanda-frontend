@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import ProviderWrapper from "@components/common/ProviderWrapper";
-import BottomNavigation from "@components/common/navigation/BottomNavigation";
 import "./globals.css";
 import Script from "next/script";
+import BottomNavigation from "@components/common/navigation/BottomNavigation";
 
 export const metadata: Metadata = {
   title: "DaPanDa",
