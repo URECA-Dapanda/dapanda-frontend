@@ -61,6 +61,36 @@ export default function MapContainer({ onStoreListUpdate }: MapContainerProps) {
               score: 4.2,
               price: "무료",
             },
+            {
+              id: 3,
+              title: "와이파이 C",
+              type: "와이파이",
+              address: "서울시 서초구",
+              location: `${latitude - 0.003},${longitude - 0.004}`,
+              isOpen: true,
+              score: 4.2,
+              price: "무료",
+            },
+            {
+              id: 4,
+              title: "와이파이 D",
+              type: "와이파이",
+              address: "서울시 서초구",
+              location: `${latitude - 0.001},${longitude - 0.009}`,
+              isOpen: true,
+              score: 4.2,
+              price: "무료",
+            },
+            {
+              id: 5,
+              title: "와이파이 E",
+              type: "와이파이",
+              address: "서울시 서초구",
+              location: `${latitude - 0.009},${longitude - 0.001}`,
+              isOpen: true,
+              score: 4.2,
+              price: "무료",
+            },
           ];
 
           setStoreList(dummy);
