@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { MapType } from "@feature/map/types/mapType";
 
 interface MapContainerProps {
-  onStoreListUpdate?: (stores: MapType[]) => void;
+  onStoreListUpdate?: (list: MapType[]) => void;
 }
 
 export default function MapContainer({ onStoreListUpdate }: MapContainerProps) {

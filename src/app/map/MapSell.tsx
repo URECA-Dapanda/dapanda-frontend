@@ -3,7 +3,7 @@ import { useState } from "react";
 import InputComponent from "@/components/common/input/InputComponent";
 import { BottomSheetHeader, BaseBottomSheet } from "@components/common/bottomsheet";
 // import HotspotRegistForm from "@/feature/map/components/sections/regist/HotspotRegisterForm";
-export default function MapDetail() {
+export default function MapSell() {
   const [textValue, setTextValue] = useState("");
   const [numberValue, setNumberValue] = useState("123");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,7 +62,12 @@ export default function MapDetail() {
       >
         모달 바텀시트 열기
       </button>
-      <BaseBottomSheet isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} variant="modal">
+      <BaseBottomSheet
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        variant="modal"
+        snapHeight={800}
+      >
         <BottomSheetHeader title="모달 바텀시트" />
         <p>모달 바텀시트의 내용입니다.</p>
       </BaseBottomSheet>

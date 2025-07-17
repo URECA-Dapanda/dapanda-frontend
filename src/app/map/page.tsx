@@ -36,8 +36,8 @@ export default function MapPage() {
       <BaseBottomSheet
         isOpen={isSnapOpen}
         onClose={() => setIsSnapOpen(false)} // 닫기 동작 시 상태 업데이트
-        variant="snap"
-        snapHeight={360}
+        variant="hybrid"
+        snapHeight={300}
       >
         <BottomSheetHeader title="주변 매장 목록" />
         <div className="p-4 space-y-12 mt-12">
