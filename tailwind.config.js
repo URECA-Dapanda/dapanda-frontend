@@ -68,6 +68,7 @@ module.exports = {
         12: "12px",
         20: "20px",
         30: "30px",
+        50: "50px",
         circle: "999px",
       },
       borderWidth: {
@@ -106,6 +107,7 @@ module.exports = {
         120: "120px",
         144: "144px",
         152: "152px",
+        180: "180px",
         200: "200px",
       },
       boxShadow: {

@@ -3,7 +3,15 @@ import { ButtonComponent } from "@/components/common/button";
 import Slider from "@components/common/slider/SliderComponent";
 import { formatDataSize } from "@lib/formatters";
 
-export default function FilterCardContent() {
+interface FilterCardContentProps {
+  buttonText: string;
+  onButtonClick?: ()=> void;
+}
+
+export default function FilterCardContent({
+  buttonText,
+  onButtonClick,
+}: FilterCardContentProps) {
   const [value, setValue] = useState<number[]>([1]);
   return (
     <div className="flex flex-col items-center text-center gap-12">
@@ -13,11 +21,15 @@ export default function FilterCardContent() {
       <Slider
         value={value}
         onValueChange={setValue}
-        max={5}
+        max={2}
       />
 
-      <ButtonComponent variant="nonoutline" className="w-[280px]">
-        확정
+      <ButtonComponent 
+        variant="nonoutline" 
+        className="w-[280px]"
+        onClick={onButtonClick}
+      >
+        {buttonText}
       </ButtonComponent>
     </div>
   );

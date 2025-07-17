@@ -1,95 +1,124 @@
 "use client";
 
-import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
-import MapItemCard from "@feature/map/components/sections/product/MapItemCard";
-import { getMapList } from "@feature/map/api/mapRequest";
-import SelectTypeCard from "@feature/map/components/sections/regist/SelectTypeCard";
-import { getChatContentInfo } from "@feature/chat/api/chatRequest";
-import ContentInfoCard from "@feature/chat/components/sections/ContentInfoCard";
-import CurrentCashCard from "@feature/mypage/components/sections/CurrentCashCard";
+import { useEffect, useState } from "react";
 import FilterCard from "./sections/filter/FilterCard";
-import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
+import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
+import { PurchaseModeTabs } from "@/components/common/tabs";
+
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import { getDataList } from "../api/dataRequest";
-import DataItemCard from "./sections/product/DataItemCard";
 import { DataType } from "../types/dataType";
-import { MapType } from "@feature/map/types/mapType";
-import CollapseVirtualizedList from "@components/common/list/CollapseVirtualizedList";
+import DataItemCard from "./sections/product/DataItemCard";
+import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
+import { useHeaderStore } from "@stores/useHeaderStore";
+import { ButtonComponent } from "@/components/common/button";
+import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
+import { dataSortOptions } from "@components/common/dropdown/dropdownConfig";
+import { PlusIcon, ChevronDown, SlidersHorizontal } from "lucide-react";
+import Image from "next/image";
 
 export default function DataPageContent() {
-  const {
-    parentRef: parentRefForData,
-    rowVirtualizer: rowVirtualizerForData,
-    flatItems: flatItemsForData,
-    isFetchingNextPage: isFetchingNextPageForData,
-    hasNextPage: hasNextPageForData,
-    fetchNextPage: fetchNextPageForData,
-  } = useVirtualizedInfiniteQuery<DataType>({
-    queryKey: ["dataItems"],
-    queryFn: ({ pageParam = 0 }: QueryFunctionContext) => getDataList({ pageParam }),
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-    estimateSize: () => 100,
-    mode: "scroll",
-  });
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [tab, setTab] = useState("normal");
+  const setIsVisible = useHeaderStore((state) => state.setIsVisible);
+  const [sortLabel, setSortLabel] = useState("최신순");
 
-  const {
-    parentRef: parentRefForMap,
-    rowVirtualizer: rowVirtualizerForMap,
-    flatItems: flatItemsForMap,
-    isFetchingNextPage: isFetchingNextPageForMap,
-    hasNextPage: hasNextPageForMap,
-    fetchNextPage: fetchNextPageForMap,
-  } = useVirtualizedInfiniteQuery<MapType>({
-    queryKey: ["mapItems"],
-    queryFn: ({ pageParam = 0 }: QueryFunctionContext) => getMapList({ pageParam }),
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-    estimateSize: () => 150,
-    mode: "button",
-  });
+  useEffect(() => {
+    setIsVisible(sheetOpen);
+  }, [sheetOpen, setIsVisible]);
 
-  const { data: chatInfoData } = useQuery({
-    queryKey: ["chat/info"],
-    queryFn: getChatContentInfo,
-  });
+  const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
+    useVirtualizedInfiniteQuery<DataType>({
+      queryKey: ["dataItems", tab],
+      queryFn: ({ pageParam = 0 }) => getDataList({ pageParam }),
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      estimateSize: () => 160,
+      mode: "scroll",
+    });
+
   return (
-    <div className="overflow-y-auto max-h-[calc(100vh-112px)] sticky top-56 left-0 space-y-10 p-16">
-      <FilterCard />
-      <CurrentCashCard isInterection={true} />
-      <CurrentCashCard />
-      <SelectTypeCard />
-      {chatInfoData && <ContentInfoCard data={chatInfoData} />}
+    <div className="relative h-[100dvh] w-full bg-primary2">
+      {/* 왼쪽 상단 로고 */}
+      <div className="absolute top-[-150] left-[-44] z-20">
+        <Image src="/dpd-logo.svg" alt="logo" width={237} height={0}/>
+      </div>
+      {/* 오른쪽 상단 로고 */}
+      <div className="absolute top-[-100] right-0 z-20">
+        <Image src="/dpd-main-logo.svg" alt="logo" width={96} height={0}/>
+      </div>
+      {/* 상단 필터 영역 */}
+      <div className="sticky top-0 z-10 bg-primary2 p-4 mt-44">
+        <FilterCard />
+      </div>
+      {/* 플로팅 버튼 */}
+      <div className="absolute bottom-180 right-24 z-50">
+        <ButtonComponent
+          variant="floatingPrimary"
+          size="xl"
+          onClick={() => {
+            // 등록 모달 열기 또는 페이지 이동 로직
+            console.log("글 등록 버튼 클릭");
+          }}
+        >
+          <PlusIcon className="w-20 h-20" />글 쓰기
+        </ButtonComponent>
+      </div>
+      {/* 바텀시트 */}
+      <BaseBottomSheet
+        isOpen={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        onSnapUp={() => setSheetOpen(true)}
+        onSnapDown={() => setSheetOpen(false)}
+        variant="snap"
+        snapHeight={260}
+      >
+        <div className="space-y-4">
+          {/* 탭 */}
+          <div className="flex justify-center mt-24">
+            <PurchaseModeTabs value={tab} onChange={setTab} />
+          </div>
+          {/* 정렬 드롭다운, search 버튼 */}
+          {sheetOpen && (
+            <div className="flex justify-end items-center gap-8 px-24 mb-12">
+              <UserDropdownMenu
+                options={dataSortOptions}
+                selectedLabel={sortLabel}
+                onSelectLabel={setSortLabel}
+              >
+                <ButtonComponent variant="withIcon" size="sm" className="p-6 body-xs">
+                  {sortLabel}
+                  <ChevronDown className="w-20 h-20" />
+                </ButtonComponent>
+              </UserDropdownMenu>
 
-      <CollapseVirtualizedList
-        parentRef={parentRefForData}
-        rowVirtualizer={rowVirtualizerForData}
-        items={flatItemsForData}
-        isFetchingNextPage={isFetchingNextPageForData}
-        hasNextPage={hasNextPageForData}
-        fetchNextPage={fetchNextPageForData}
-        renderItem={(item: DataType) => <DataItemCard data={item} />}
-      />
+              <ButtonComponent
+                variant="withIcon"
+                size="sm"
+                className="p-6 body-xs"
+                onClick={() => {
+                  setSheetOpen(false);
+                }}
+              >
+                SEARCH
+                <SlidersHorizontal className="w-20 h-20" />
+              </ButtonComponent>
+            </div>
+          )}
 
-      {/* <VirtualizedInfiniteList
-        mode="scroll"
-        parentRef={parentRefForData}
-        rowVirtualizer={rowVirtualizerForData}
-        items={flatItemsForData}
-        isFetchingNextPage={isFetchingNextPageForData}
-        hasNextPage={hasNextPageForData}
-        fetchNextPage={fetchNextPageForData}
-        renderItem={(item: DataType) => <DataItemCard data={item} />}
-      /> */}
-
-      <VirtualizedInfiniteList
-        mode="button"
-        parentRef={parentRefForMap}
-        rowVirtualizer={rowVirtualizerForMap}
-        items={flatItemsForMap}
-        isFetchingNextPage={isFetchingNextPageForMap}
-        hasNextPage={hasNextPageForMap}
-        fetchNextPage={fetchNextPageForMap}
-        renderItem={(item: MapType) => <MapItemCard data={item} />}
-      />
+          {/* 리스트 */}
+          <VirtualizedInfiniteList
+            mode="scroll"
+            parentRef={parentRef}
+            rowVirtualizer={rowVirtualizer}
+            height="700px"
+            items={flatItems}
+            isFetchingNextPage={isFetchingNextPage}
+            hasNextPage={hasNextPage}
+            fetchNextPage={fetchNextPage}
+            renderItem={(item: DataType) => <DataItemCard data={item} />}
+          />
+        </div>
+      </BaseBottomSheet>
     </div>
   );
 }

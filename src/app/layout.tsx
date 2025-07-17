@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import ProviderWrapper from "@components/common/ProviderWrapper";
-import SharedHeader from "@components/common/header/SharedHeader";
 import BottomNavigation from "@components/common/navigation/BottomNavigation";
 import "./globals.css";
 import Script from "next/script";
@@ -28,7 +27,7 @@ export default function RootLayout({
       <body className="flex flex-col min-h-screen w-full">
         <main className="antialiased flex-1 w-[375px] h-[812px] mx-auto overflow-hidden relative">
           <ProviderWrapper>
-            <SharedHeader />
+
             {children}
             <BottomNavigation />
           </ProviderWrapper>
