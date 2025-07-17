@@ -10,7 +10,7 @@ import DefaultTabBody from "./sections/DefaultTabContent";
 import ScrapTabBody from "./sections/ScrapTabContent";
 import { PurchaseModeTabs } from "@/components/common/tabs";
 import { useHeaderStore } from "@stores/useHeaderStore";
-import { PlusIcon, ChevronDown, SlidersHorizontal } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 
 export default function DataPageContent() {
   const searchParams = useSearchParams();
