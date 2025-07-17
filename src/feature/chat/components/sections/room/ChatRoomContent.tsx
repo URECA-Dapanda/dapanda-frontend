@@ -1,7 +1,9 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
 import type { ChatMessage } from "@/feature/chat/types/message";
+import { useChatStream } from "@/feature/chat/hooks/useChatStream";
 //import { useProfileStore } from "@stores/useProfileStore";
 
 interface ChatRoomContentProps {
@@ -10,6 +12,8 @@ interface ChatRoomContentProps {
 }
 export default function ChatRoomContent({ title, price }: ChatRoomContentProps) {
   const currentUserId = "123";
+  const searchParams = useSearchParams();
+  const chatId = searchParams.get("chatId") || "1"; // 예시
   //const currentUserAvatar = useProfileStore((state) => state.avatar);
 
   const messages: ChatMessage[] = [
