@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
-import { getDataList } from "../../api/dataRequest";
-import { DataType } from "../../types/dataType";
+import { getDataList } from "@feature/data/api/dataRequest";
+import { DataType } from "@feature/data/types/dataType";
 import DataItemCard from "./product/DataItemCard";
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
