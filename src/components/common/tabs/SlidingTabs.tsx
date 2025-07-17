@@ -41,7 +41,7 @@ SlidingTabsProps) {
 
   const styles = {
     pill: {
-      tabList: "w-[327px] h-44 bg-secondary rounded-full mb-24 flex items-center p-1",
+      tabList: "w-[327px] h-44 bg-secondary rounded-full mb-12 flex items-center p-1",
       highlight: "inset-y-1 rounded-full bg-secondary2 z-0",
       trigger: cn(
         "relative z-10 flex-1 h-full rounded-full text-center body-sm font-medium transition-colors",

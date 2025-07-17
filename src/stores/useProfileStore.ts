@@ -15,7 +15,7 @@ interface ProfileStoreProps extends Partial<UserType> {
  */
 export const useProfileStore = create<ProfileStoreProps>((set) => ({
   balance: "12,500",
-  avatar: "🐼",
+  avatar: "",
   setUserName: (newName) => {
     set({ userName: newName });
   },
