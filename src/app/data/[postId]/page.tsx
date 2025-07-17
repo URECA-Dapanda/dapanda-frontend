@@ -1,5 +1,11 @@
 import DataDetailContent from "@feature/data/components/DataDetailContent";
 
-export default function Page({ params }: { params: { postId: string } }) {
+interface PageProps {
+  params: {
+    postId: string;
+  };
+}
+
+export default function Page({ params }: PageProps) {
   return <DataDetailContent postId={params.postId} />;
 }
