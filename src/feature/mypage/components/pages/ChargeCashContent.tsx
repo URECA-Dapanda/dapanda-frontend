@@ -1,3 +1,4 @@
+"use client";
 import { ButtonComponent } from "@components/common/button";
 import ChargeInfoCard from "../sections/ChargeInfoCard";
 import CurrentCashCard from "../sections/CurrentCashCard";
