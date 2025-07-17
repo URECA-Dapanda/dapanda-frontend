@@ -6,6 +6,6 @@ interface PageProps {
   };
 }
 
-export default function Page({ params }: PageProps) {
+export default function Page({ params }: { params: { postId: string } }) {
   return <DataDetailContent postId={params.postId} />;
 }
