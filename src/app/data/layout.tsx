@@ -1,17 +1,13 @@
 import SharedHeader from "@components/common/header/SharedHeader";
 import BottomNavigation from "@components/common/navigation/BottomNavigation";
-import { Fragment } from "react";
+import { ReactNode } from "react";
 
-export default function NavLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function DataLayout({ children }: { children: ReactNode }) {
   return (
-    <Fragment>
+    <div className="relative h-[100dvh] w-full bg-primary2">
       <SharedHeader />
       {children}
       <BottomNavigation />
-    </Fragment>
+    </div>
   );
 }

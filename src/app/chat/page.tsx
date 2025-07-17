@@ -1,6 +1,5 @@
 "use client";
 
-import LogoHeader from "@components/common/header/LogoHeader";
 import ChatList from "@feature/chat/components/sections/list/ChatList";
 
 export default function ChatListPage() {
@@ -31,10 +30,5 @@ export default function ChatListPage() {
     },
   ];
 
-  return (
-    <div className="bg-white min-h-screen">
-      <LogoHeader />
-      <ChatList chats={dummyChats} />
-    </div>
-  );
+  return <ChatList chats={dummyChats} />;
 }
