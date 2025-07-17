@@ -8,7 +8,7 @@ export default function ChatRoomHeader({ title }: { title: string }) {
 
   return (
     <div className="sticky top-0 z-50 bg-white shadow px-4 py-3 flex items-center justify-between">
-      <div className="flex item-venter gap-2">
+      <div className="flex item-center gap-2">
         <button onClick={() => router.back()}>
           <ChevronLeft className="w-5 h-5" />
         </button>
