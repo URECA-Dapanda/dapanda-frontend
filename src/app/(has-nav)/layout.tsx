@@ -7,7 +7,7 @@ export default function NavLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="relative h-[100dvh] w-full bg-primary2">
+    <div className="relative h-[100dvh] w-full bg-primary">
       <SharedHeader />
       {children}
       <BottomNavigation />
