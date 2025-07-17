@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import CurrentCashCard from "./sections/CurrentCashCard";
-import TransactionHistory from "./sections/TransactionHistory";
-import { DataUsageDonut } from "./sections/CicularProgressBar";
+import CurrentCashCard from "../sections/CurrentCashCard";
+import TransactionHistory from "../sections/TransactionHistory";
+import { DataUsageDonut } from "../sections/CicularProgressBar";
 import { ButtonComponent } from "@components/common/button";
-import ProfileCard from "./sections/ProfileCard";
+import ProfileCard from "../sections/ProfileCard";
 
 export default function MyPageContent() {
   return (
