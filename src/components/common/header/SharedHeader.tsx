@@ -18,7 +18,8 @@ export default function SharedHeader() {
     <div
       className={clsx(
         "bg-white border-none overflow-x-clip sticky top-0 z-50 transition-opacity duration-300",
-        isDataPage && !isVisible && "opacity-0 pointer-events-none"
+        isDataPage && !isVisible && "opacity-0 pointer-events-none",
+        "w-[375px] mx-auto"
       )}
     >
       <div className="shadow-header">

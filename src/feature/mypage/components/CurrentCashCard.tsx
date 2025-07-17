@@ -1,3 +1,4 @@
+import Image from "next/image";
 import FlatCard from "@components/common/card/FlatCard";
 
 interface CurrentCashCardProps {
@@ -23,7 +24,7 @@ export default function CurrentCashCard({ isInterection }: CurrentCashCardProps)
             </div>
           </div>
 
-          <img src="/creditIcon.png" alt="₩" className="w-48 h-48" />
+          <Image src="/creditIcon.png" alt="₩" className="w-48 h-48" />
         </div>
 
         {isInterection && (
