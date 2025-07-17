@@ -1,5 +1,6 @@
 import DataPageContent from "@feature/data/components/DataPageContent";
+import { Suspense } from "react";
 
 export default function DataPage() {
-  return <DataPageContent />;
+  return <Suspense><DataPageContent /></Suspense>; 
 }
