@@ -1,23 +1,20 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import FilterCard from "./sections/filter/FilterCard";
+import { PlusIcon, ChevronDown, SlidersHorizontal } from "lucide-react";
+import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
+import FilterCard from "@/feature/data/components/sections/filter/FilterCard";
 import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
 import { PurchaseModeTabs } from "@/components/common/tabs";
-
-import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
-import { getDataList } from "../api/dataRequest";
-import { DataType } from "../types/dataType";
-import DataItemCard from "./sections/product/DataItemCard";
+import { getDataList } from "@/feature/data/api/dataRequest";
+import { DataType } from "@/feature/data/types/dataType";
+import DataItemCard from "@/feature/data/components/sections/product/DataItemCard";
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 import { useHeaderStore } from "@stores/useHeaderStore";
-import { useRouter } from "next/navigation";
-
 import { ButtonComponent } from "@/components/common/button";
 import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
 import { dataSortOptions } from "@components/common/dropdown/dropdownConfig";
-import { PlusIcon, ChevronDown, SlidersHorizontal } from "lucide-react";
-import Image from "next/image";
 
 export default function DataPageContent() {
   const router = useRouter();
@@ -33,32 +30,45 @@ export default function DataPageContent() {
   useEffect(() => {
     setIsVisible(sheetOpen);
   }, [sheetOpen, setIsVisible]);
-
+  const convertSortLabelToEnum = (
+    label: string
+  ): "RECENT" | "PRICE_ASC" | "AMOUNT_ASC" | "AMOUNT_DESC" => {
+    switch (label) {
+      case "가격 낮은순":
+        return "PRICE_ASC";
+      case "데이터 적은순":
+        return "AMOUNT_ASC";
+      case "데이터 많은순":
+        return "AMOUNT_DESC";
+      case "최신순":
+      default:
+        return "RECENT";
+    }
+  };
+  const convertTabToDataAmount = (tab: string): number | undefined => {
+    if (tab === "split") return 0.5; // 예: 0.5GB 이하 = 분할 판매
+    return undefined; // normal일 경우 필터 없음
+  };
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<DataType>({
-      queryKey: ["dataItems", tab],
-      queryFn: ({ pageParam = 0 }) => getDataList({ pageParam }),
+      queryKey: ["dataItems", tab, sortLabel],
+      queryFn: ({ pageParam = 0 }) =>
+        getDataList({
+          pageParam,
+          sort: convertSortLabelToEnum(sortLabel),
+          dataAmount: convertTabToDataAmount(tab),
+        }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       estimateSize: () => 160,
       mode: "scroll",
     });
 
   return (
-    <div className="relative h-[100dvh] w-full bg-primary2">
-      {/* 왼쪽 상단 로고 */}
-      <div className="absolute top-[-150] left-[-44] z-20">
-        <Image src="/dpd-logo.svg" alt="logo" width={237} height={0} />
-      </div>
-      {/* 오른쪽 상단 로고 */}
-      <div className="absolute top-[-100] right-0 z-20">
-        <Image src="/dpd-main-logo.svg" alt="logo" width={96} height={0} />
-      </div>
-      {/* 상단 필터 영역 */}
+    <div className="relative w-full bg-primary2">
       <div className="sticky top-0 z-10 bg-primary2 p-4 mt-44">
         <FilterCard />
       </div>
-      {/* 플로팅 버튼 */}
-      <div className="absolute bottom-180 right-24 z-50">
+      <div className="fixed bottom-120 right-24 z-50">
         <ButtonComponent
           variant="floatingPrimary"
           size="xl"
@@ -70,7 +80,6 @@ export default function DataPageContent() {
           <PlusIcon className="w-20 h-20" />글 쓰기
         </ButtonComponent>
       </div>
-      {/* 바텀시트 */}
       <BaseBottomSheet
         isOpen={sheetOpen}
         onClose={() => setSheetOpen(false)}
@@ -80,11 +89,9 @@ export default function DataPageContent() {
         snapHeight={260}
       >
         <div className="space-y-4">
-          {/* 탭 */}
           <div className="flex justify-center mt-24">
             <PurchaseModeTabs value={tab} onChange={setTab} />
           </div>
-          {/* 정렬 드롭다운, search 버튼 */}
           {sheetOpen && (
             <div className="flex justify-end items-center gap-8 px-24 mb-12">
               <UserDropdownMenu
@@ -112,7 +119,6 @@ export default function DataPageContent() {
             </div>
           )}
 
-          {/* 리스트 */}
           <VirtualizedInfiniteList
             mode="scroll"
             parentRef={parentRef}

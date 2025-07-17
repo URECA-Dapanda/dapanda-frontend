@@ -22,6 +22,19 @@ export interface ProductItemProps<T> {
   data: T;
 }
 
+export interface DataDetailResponse {
+  productId: number;
+  itemId: number;
+  price: number;
+  memberId: number;
+  memberName: string;
+  remainAmount: number;
+  pricePer100MB: number;
+  averageRate: number;
+  reviewCount: number;
+  updatedAt: string;
+}
+
 export function mapRawToDataType(raw: RawDataItem): DataType {
   return {
     id: raw.id,

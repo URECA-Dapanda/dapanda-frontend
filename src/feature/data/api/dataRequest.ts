@@ -1,40 +1,45 @@
-import axios from "axios";
-import { DataType, RawDataItem, mapRawToDataType } from "../types/dataType";
+import axios from "@/lib/axios";
+
+import { DataType, RawDataItem, mapRawToDataType, DataDetailResponse } from "../types/dataType";
 
 function isNumber(value: unknown): value is number {
   return typeof value === "number";
 }
 
-export async function getDataList({ pageParam = 0 }: { pageParam?: number | unknown }): Promise<{
+export async function getDataList({
+  pageParam = 0,
+  sort = "RECENT",
+  dataAmount,
+}: {
+  pageParam?: number | unknown;
+  sort?: "RECENT" | "PRICE_ASC" | "AMOUNT_ASC" | "AMOUNT_DESC";
+  dataAmount?: number;
+}): Promise<{
   items: DataType[];
   nextCursor?: number;
 }> {
-  console.log("GET API DATA LIST", pageParam);
-  if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
-
   try {
-    const response = await axios.get<{
-      data: {
-        data: RawDataItem[];
-        pageInfo: {
-          nextCursorId: number | null;
-          hasNext: boolean;
-          size: number;
-        };
-      };
-    }>(`/api/data/list?page=${pageParam}`);
+    const response = await axios.post("/api/products/mobile-data", {
+      cursorId: isNumber(pageParam) && pageParam > 0 ? pageParam : null,
+      size: 10, // 원하는 페이지 크기
+      productSortOption: sort,
+      ...(dataAmount !== undefined && { dataAmount }), // dataAmount가 있을 때만 추가
+    });
 
-    const rawList = response.data.data.data;
+    const rawList = response.data.data.data as RawDataItem[];
     const items = rawList.map(mapRawToDataType);
-
     const nextCursor = response.data.data.pageInfo.nextCursorId ?? undefined;
 
-    return {
-      items,
-      nextCursor, // undefined이면 자동으로 무한스크롤 멈춤
-    };
-  } catch (error) {
-    console.error("데이터 목록 가져오기 실패:", error);
+    return { items, nextCursor };
+  } catch (err: any) {
+    console.error("상품 목록 조회 실패:", err.response?.data || err.message);
     return { items: [], nextCursor: undefined };
   }
+}
+
+export async function getDataDetail(productId: string): Promise<DataDetailResponse> {
+  const response = await axios.get<{ code: number; message: string; data: DataDetailResponse }>(
+    `/api/products/mobile-data/${productId}`
+  );
+  return response.data.data;
 }
