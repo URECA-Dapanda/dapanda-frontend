@@ -20,12 +20,15 @@ export async function getDataList({
   nextCursor?: number;
 }> {
   try {
-    const response = await axios.post("/api/products/mobile-data", {
-      cursorId: isNumber(pageParam) && pageParam > 0 ? pageParam : null,
-      size: 10, // 원하는 페이지 크기
-      productSortOption: sort,
-      ...(dataAmount !== undefined && { dataAmount }), // dataAmount가 있을 때만 추가
-    });
+    const searchParam = new URLSearchParams();
+    searchParam.set(
+      "cursorId",
+      isNumber(pageParam) && pageParam > 0 ? String(pageParam) : String(0)
+    );
+    searchParam.set("productSortOption", sort);
+    searchParam.set("size", "10");
+    if (dataAmount) searchParam.set("dataAmount", String(dataAmount));
+    const response = await axios.get("/api/products/mobile-data", { params: searchParam });
 
     const rawList = response.data.data.data as RawDataItem[];
     const items = rawList.map(mapRawToDataType);

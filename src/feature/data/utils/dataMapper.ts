@@ -5,7 +5,7 @@ export function mapRawToDataType(raw: RawDataItem): DataType {
   return {
     id: raw.id,
     userId: raw.itemId,
-    title: `${raw.remainAmount}GB 데이터 팝니다`,
+    title: `${raw.remainAmount}GB`,
     userName: raw.memberName,
     price: `${raw.price.toLocaleString()}원`,
     pricePer: `${raw.pricePer100MB}원/100MB`,
