@@ -62,7 +62,7 @@ export default function ScrapTabContent() {
             />
             
             {isExpanded && (
-            <div className="px-8 mt-24 flex justify-between items-center">
+            <div className="px-8 mb-32 flex justify-between items-center">
                 <div>
                     <p className="title-sm">총 용량 {summary.totalAmount}GB</p>
                     <p className="title-sm">총 가격 {summary.totalPrice.toLocaleString()}원</p>
