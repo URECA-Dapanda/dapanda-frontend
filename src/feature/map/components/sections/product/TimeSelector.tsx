@@ -59,19 +59,19 @@ export default function TimeSelector({ label, time, onChange }: TimeSelectorProp
     return (
       <div
         ref={dropdownRef}
-        className="absolute top-full left-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 mt-1 min-w-[120px]"
+        className="absolute top-full left-0 bg-white border border-gray-300 rounded-12 shadow-lg z-50 mt-4 min-w-[120px]"
       >
-        <div className="max-h-48 overflow-y-auto p-1">
+        <div className="max-h-144 overflow-y-auto p-4 space-y-4">
           {items.map((item, idx) => {
             const isSelected = item === selected;
             return (
               <button
                 key={idx}
                 onClick={() => setTemp((prev) => ({ ...prev, [field]: item }))}
-                className={`w-full p-2 text-sm font-medium rounded mb-1 text-left ${
+                className={`w-full px-8 py-6 text-sm rounded-6 text-left body-sm ${
                   isSelected
-                    ? "bg-blue-50 border border-blue-500 text-blue-600"
-                    : "bg-white hover:bg-gray-50 border border-transparent"
+                    ? "bg-primary-50 border border-primary text-primary"
+                    : "bg-white hover:bg-gray-100 border border-transparent text-black"
                 }`}
               >
                 {typeof item === "number" ? item.toString().padStart(2, "0") : item}
@@ -80,17 +80,14 @@ export default function TimeSelector({ label, time, onChange }: TimeSelectorProp
           })}
         </div>
 
-        <div className="flex justify-center gap-4 p-3 border-t border-gray-200">
+        <div className="flex justify-between px-16 py-12 border-t border-gray-300">
           <button
             onClick={() => setActiveField(null)}
-            className="px-4 py-2 body-sm font-medium text-blue-600 hover:text-blue-700"
+            className="body-sm text-primary hover:underline"
           >
             취소
           </button>
-          <button
-            onClick={confirm}
-            className="px-4 py-2 body-sm font-medium text-blue-600 hover:text-blue-700"
-          >
+          <button onClick={confirm} className="body-sm text-primary font-semibold hover:underline">
             확인
           </button>
         </div>
@@ -100,49 +97,43 @@ export default function TimeSelector({ label, time, onChange }: TimeSelectorProp
 
   return (
     <div className="flex flex-col items-center">
-      <div className="text-sm font-medium text-gray-600 mb-2">{label}</div>
-      <div className="flex items-center gap-1">
-        {/* Time Display */}
-        <div className="flex items-center bg-white border border-gray-200 rounded-lg px-3 py-2 relative">
+      <div className="caption-md text-gray-600 mb-4">{label}</div>
+      <div className="flex items-center gap-8">
+        {/* 시간 선택 영역 */}
+        <div className="flex items-center bg-white border border-gray-300 rounded-12 px-12 py-8 relative">
           <button
             onClick={() => openDropdown("hour")}
-            className="text-lg font-medium text-gray-900 hover:text-blue-500 min-w-[24px] text-center"
+            className="text-lg text-black hover:text-primary min-w-[24px]"
           >
             {time.hour}
           </button>
-          <span className="mx-1 text-gray-500">:</span>
+          <span className="mx-4 text-gray-500">:</span>
           <button
             onClick={() => openDropdown("minute")}
-            className="text-lg font-medium text-gray-900 hover:text-blue-500 min-w-[24px] text-center"
+            className="text-lg text-black hover:text-primary min-w-[24px]"
           >
             {time.minute}
           </button>
+
           {renderDropdown("hour", hours)}
           {renderDropdown("minute", minutes)}
         </div>
 
-        {/* AM/PM Buttons */}
-        <div className="flex flex-col gap-1 ml-2">
-          <button
-            onClick={() => onChange({ ...time, period: "AM" })}
-            className={`px-2 py-1 text-xs font-medium rounded ${
-              time.period === "AM"
-                ? "bg-pink-500 text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
-          >
-            AM
-          </button>
-          <button
-            onClick={() => onChange({ ...time, period: "PM" })}
-            className={`px-2 py-1 text-xs font-medium rounded ${
-              time.period === "PM"
-                ? "bg-pink-500 text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
-          >
-            PM
-          </button>
+        {/* AM / PM 선택 */}
+        <div className="flex flex-col gap-4">
+          {(["AM", "PM"] as const).map((p) => (
+            <button
+              key={p}
+              onClick={() => onChange({ ...time, period: p })}
+              className={`px-8 py-4 rounded-6 caption-md ${
+                time.period === p
+                  ? "bg-primary text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              {p}
+            </button>
+          ))}
         </div>
       </div>
     </div>

@@ -6,6 +6,8 @@ import HeaderCash from "./HeaderCash";
 import AvatarIcon from "../AvatarIcon";
 import { usePathname } from "next/navigation";
 import { useHeaderStore } from "@/stores/useHeaderStore";
+import HeaderTimer from "./HeaderTimer";
+import TimerModal from "@/feature/map/components/sections/product/TimerModal";
 import clsx from "clsx";
 
 export default function SharedHeader() {
@@ -35,9 +37,11 @@ export default function SharedHeader() {
               HeaderCash !== null || AvatarIcon !== null ? "" : "hidden"
             }`}
           >
+            <HeaderTimer />
             <HeaderCash />
             <AvatarIcon />
           </div>
+          <TimerModal />
         </div>
       </div>
     </div>

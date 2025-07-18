@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import TopSheet from "@/components/common/topsheet/TopSheet";
 import TimeSelector from "@/feature/map/components/sections/product/TimeSelector";
 import clsx from "clsx";
+import MapProfileCard from "@feature/map/components/sections/product/MapProfileCard";
+import { ButtonComponent } from "@components/common/button";
+import type { SellerProfile } from "@feature/map/types/sellerType";
+import { useTimerStore } from "@/stores/useTimerStore";
 
 export default function MapDetailPage() {
   type Time = {
@@ -33,6 +37,8 @@ export default function MapDetailPage() {
 
   const [startTime, setStartTime] = useState<Time>({ hour: "07", minute: "00", period: "AM" });
   const [endTime, setEndTime] = useState<Time>({ hour: "09", minute: "00", period: "PM" });
+
+  const router = useRouter();
 
   const dummyList: Record<string, DummyDataType> = {
     "1": {
@@ -63,6 +69,13 @@ export default function MapDetailPage() {
     },
   };
 
+  const dummySeller: SellerProfile = {
+    id: "1",
+    name: "김판다",
+    rating: 4.5,
+    reviewCount: 3,
+  };
+
   const data = dummyList[id ?? "1"];
 
   return (
@@ -78,17 +91,34 @@ export default function MapDetailPage() {
       {/* TimeSelector 영역 */}
       <div
         className={clsx(
-          "transition-all duration-300",
-          topSheetExpanded ? "pt-[480px]" : "pt-[260px]"
+          "transition-all duration-300 px-24 py-24",
+          topSheetExpanded ? "pt-[500px]" : "pt-[280px]"
         )}
       >
         <div className="px-6 py-6 rounded-lg">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">이용할 시간</h3>
-          <div className="flex items-center justify-center gap-8">
+          <h3 className="title-md mb-4">이용할 시간</h3>
+          <div className="flex items-center justify-center gap-8 mt-12 rounded-12 shadow-material px-24 py-20">
             <TimeSelector label="Start" time={startTime} onChange={setStartTime} type="start" />
             <div className="text-2xl text-gray-400 mt-6">→</div>
             <TimeSelector label="End" time={endTime} onChange={setEndTime} type="end" />
           </div>
+        </div>
+        <div className="px-6 py-6 rounded-lg">
+          <h3 className="title-md mb-4 mt-12">판매자</h3>
+          <MapProfileCard seller={dummySeller} />
+        </div>
+        <div className="px-6 mt-12">
+          <ButtonComponent
+            className="w-full"
+            variant="primary"
+            size="xl"
+            onClick={() => {
+              useTimerStore.getState().startTimer(600);
+              router.push("/data");
+            }}
+          >
+            구매하기
+          </ButtonComponent>
         </div>
       </div>
     </div>
