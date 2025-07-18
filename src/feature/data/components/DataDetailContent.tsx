@@ -1,7 +1,7 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import type { AxiosError } from "axios";
 import TopSheet from "@/components/common/topsheet/TopSheet";
 import { ButtonComponent } from "@components/common/button";
 import ProfileCard from "@feature/data/components/sections/ProfileCard";
@@ -10,18 +10,12 @@ import { DataDetailResponse } from "@/feature/data/types/dataType";
 import { formatRelativeTime } from "@lib/time";
 import ItemCard from "@components/common/card/ItemCard";
 
-interface DataDetailContentProps {
-  postId: string;
-}
-
-export default function DataDetailContent({ postId }: DataDetailContentProps) {
+export default function DataDetailContent() {
+  const params = useParams();
   const [data, setData] = useState<DataDetailResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const postId = String(params.postId);
 
   useEffect(() => {
-    console.log("postId: ", postId);
-    console.log("요청한 postId = productId:", postId);
-
     const fetchDetail = async () => {
       const res = await getDataDetail(postId);
       setData(res);
@@ -29,7 +23,6 @@ export default function DataDetailContent({ postId }: DataDetailContentProps) {
     fetchDetail();
   }, [postId]);
 
-  if (error) return <div className="text-red-500 text-center mt-20">{error}</div>;
   if (!data) return <div className="text-center mt-20">로딩 중...</div>;
 
   const topSheetData = {
