@@ -9,7 +9,6 @@ import { useHeaderStore } from "@stores/useHeaderStore";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import { getDataList } from "@/feature/data/api/dataRequest";
 import { DataType } from "@/feature/data/types/dataType";
-
 import FilterCard from "@/feature/data/components/sections/filter/FilterCard";
 import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
 import { PurchaseModeTabs } from "@/components/common/tabs";
@@ -85,21 +84,15 @@ export default function DataPageContent() {
     });
 
   return (
-    <div className="relative h-[100dvh] w-full bg-primary2">
-      {/* 로고 영역 */}
+    <div className="relative h-[100dvh] w-full">
       <div className="absolute top-[-80px] left-[-44px] z-20">
         <Image src="/dpd-logo.svg" alt="logo" width={237} height={0} />
       </div>
-      <div className="absolute top-0 right-0 z-20">
-        <Image src="/dpd-main-logo.svg" alt="logo" width={96} height={0} />
-      </div>
 
-      {/* 상단 필터 */}
       <div className="sticky top-0 z-10 bg-primary2 p-4 pt-80">
         <FilterCard />
       </div>
 
-      {/* 플로팅 버튼 */}
       <div className="absolute bottom-[76px] right-24 z-50">
         <ButtonComponent
           variant="floatingPrimary"
@@ -110,7 +103,6 @@ export default function DataPageContent() {
         </ButtonComponent>
       </div>
 
-      {/* 바텀시트 */}
       <BaseBottomSheet
         isOpen={sheetOpen}
         onClose={() => setSheetOpen(false)}
@@ -157,7 +149,7 @@ export default function DataPageContent() {
             isFetchingNextPage={isFetchingNextPage}
             hasNextPage={hasNextPage}
             fetchNextPage={fetchNextPage}
-            renderItem={(item: DataType) => <DataItemCard data={item} />}
+            renderItem={(item: DataType) => <DataItemCard data={item} type={"default"} />}
           />
         </div>
       </BaseBottomSheet>

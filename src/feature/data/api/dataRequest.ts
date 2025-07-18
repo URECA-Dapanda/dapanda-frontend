@@ -1,6 +1,7 @@
 import axios from "@/lib/axios";
 
-import { DataType, RawDataItem, mapRawToDataType, DataDetailResponse } from "../types/dataType";
+import { DataType, RawDataItem, DataDetailResponse } from "../types/dataType";
+import { mapRawToDataType } from "@/feature/data/utils/dataMapper";
 
 function isNumber(value: unknown): value is number {
   return typeof value === "number";
@@ -38,9 +39,9 @@ export async function getDataList({
   }
 }
 
-export async function getDataDetail(productId: string): Promise<DataDetailResponse> {
+export async function getDataDetail(postId: string): Promise<DataDetailResponse> {
   const response = await axios.get<{ code: number; message: string; data: DataDetailResponse }>(
-    `/api/products/mobile-data/${productId}`
+    `/api/products/mobile-data/${postId}`
   );
   return response.data.data;
 }

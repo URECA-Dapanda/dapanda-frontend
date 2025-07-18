@@ -6,6 +6,7 @@ export interface RawDataItem {
   remainAmount: number;
   pricePer100MB: number;
   splitType: boolean;
+  updatedAt?: string;
 }
 
 export interface DataType {
@@ -33,16 +34,4 @@ export interface DataDetailResponse {
   averageRate: number;
   reviewCount: number;
   updatedAt: string;
-}
-
-export function mapRawToDataType(raw: RawDataItem): DataType {
-  return {
-    id: raw.id,
-    userId: raw.itemId,
-    title: `${raw.remainAmount}GB 데이터 팝니다`,
-    userName: raw.memberName,
-    price: `${raw.price.toLocaleString()}원`,
-    pricePer: `${raw.pricePer100MB}원/100MB`,
-    date: "3시간 전",
-  };
 }
