@@ -19,7 +19,7 @@ function DataItemCard({ data, type }: DataItemCardProps) {
   }, [data, type]);
 
   return (
-    <ItemCard handleClick={handleClick}>
+    <ItemCard handleClick={handleClick} size="md">
       <DataItemContent data={data} />
     </ItemCard>
   );

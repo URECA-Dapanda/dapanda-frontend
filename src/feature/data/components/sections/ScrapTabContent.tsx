@@ -22,6 +22,7 @@ export default function ScrapTabContent() {
     search,
   } = useScrapRecommendation();
   const [hasSearched, setHasSearched] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleSearch = async () => {
     setHasSearched(true);
@@ -52,17 +53,28 @@ export default function ScrapTabContent() {
 
       {!loading && hasSearched && result.length === 0 && <ScrapEmptyState />}
 
-      {!loading && result.length > 0 && (
+        {!loading && result.length > 0 && (
         <>
-          <CollapsibleDataList items={result} />
-          <div className="mt-12 px-8 text-center">
-            <p className="text-xl font-semibold">
-              총 {summary.totalAmount}GB / {summary.totalPrice.toLocaleString()}원
-            </p>
-          </div>
-        </>
-      )}
+            <CollapsibleDataList
+            items={result}
+            isExpanded={isExpanded}
+            onToggle={() => setIsExpanded((prev) => !prev)}
+            />
+            
+            {isExpanded && (
+            <div className="px-8 mt-24 flex justify-between items-center">
+                <div>
+                    <p className="title-sm">총 용량 {summary.totalAmount}GB</p>
+                    <p className="title-sm">총 가격 {summary.totalPrice.toLocaleString()}원</p>
+                </div>
+            <ButtonComponent variant="secondary" size="3xl" className="w-152">
+            확정하고 결제하기
+            </ButtonComponent>
+    </div>
+)}
 
+    </>
+    )}
       {!hasSearched && !loading && result.length === 0 && (
         <div className="flex flex-col items-center justify-center text-center mt-32">
           <Search className="w-64 h-64 mb-16" />
