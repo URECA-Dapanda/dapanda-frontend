@@ -6,11 +6,12 @@ import { HistoryType } from "@feature/mypage/types/mypageTypes";
 
 interface HistoryCardProps {
   data: HistoryType;
+  size?: "sm" | "lg";
 }
 
-export function HistoryCard({ data }: HistoryCardProps) {
+export function HistoryCard({ data, size = "sm" }: HistoryCardProps) {
   return (
-    <ItemCard>
+    <ItemCard size={size}>
       <LayoutBox layout="flex" direction="row" gap={19}>
         <AvatarIcon size="small" />
         <LayoutBox layout="flex" direction="column" gap={0}>

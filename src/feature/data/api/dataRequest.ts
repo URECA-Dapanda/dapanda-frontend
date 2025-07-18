@@ -14,7 +14,7 @@ const mockDataList = (num: number): Promise<DataType[]> =>
           userName: "김데이터",
         }))
       );
-    }, 100);
+    }, 0);
   });
 
 function isNumber(value: unknown): value is number {

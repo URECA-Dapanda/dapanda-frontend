@@ -12,7 +12,7 @@ const mockDataList = (isSold: boolean): Promise<HistoryType[]> =>
           registDate: Date.now().toString(),
         }))
       );
-    }, 100);
+    }, 0);
   });
 
 function isNumber(value: unknown): value is number {
