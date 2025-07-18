@@ -9,11 +9,13 @@ import { useHeaderStore } from "@/stores/useHeaderStore";
 import HeaderTimer from "./HeaderTimer";
 import TimerModal from "@/feature/map/components/sections/product/TimerModal";
 import clsx from "clsx";
+import EndOfUseModal from "@feature/map/components/sections/product/EndOfUseModal";
+import { useTimerStore } from "@/stores/useTimerStore";
 
 export default function SharedHeader() {
   const pathname = usePathname();
   const isVisible = useHeaderStore((state) => state.isVisible);
-
+  const { hasEnded, reset } = useTimerStore();
   const isDataPage = pathname.startsWith("/data");
 
   return (
@@ -41,9 +43,9 @@ export default function SharedHeader() {
             <HeaderCash />
             <AvatarIcon />
           </div>
-          <TimerModal />
         </div>
       </div>
+      {hasEnded ? <EndOfUseModal open={hasEnded} onClose={reset} /> : <TimerModal />}
     </div>
   );
 }

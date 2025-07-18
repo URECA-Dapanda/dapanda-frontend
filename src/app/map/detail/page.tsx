@@ -113,7 +113,7 @@ export default function MapDetailPage() {
             variant="primary"
             size="xl"
             onClick={() => {
-              useTimerStore.getState().startTimer(600);
+              useTimerStore.getState().startTimer(120);
               router.push("/data");
             }}
           >
