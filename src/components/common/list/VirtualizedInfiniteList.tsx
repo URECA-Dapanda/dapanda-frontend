@@ -102,7 +102,7 @@ function VirtualizedList<T>({
                   left: 0,
                   width: "100%",
                   transform: `translateY(${virtualRow.start}px)`,
-                  padding: "0px 24px",
+                  padding: "0px",
                 }}
               >
                 {mode === "scroll" && isLoaderRow
