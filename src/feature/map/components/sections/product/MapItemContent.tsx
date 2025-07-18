@@ -2,10 +2,12 @@ import { ProductItemProps } from "@feature/data/types/dataType";
 import { MapType } from "@feature/map/types/mapType";
 import { ImageIcon, Star } from "lucide-react";
 import { Fragment } from "react";
+import { useRouter } from "next/navigation";
 
 export default function MapItemCardContent({
-  data: { address, price, score, title, type },
+  data: { address, price, score, title, type, updatedAt },
 }: ProductItemProps<MapType>) {
+  const router = useRouter();
   return (
     <Fragment>
       <div className="grid grid-cols-[auto_1fr_auto] gap-16 items-center">
@@ -16,7 +18,10 @@ export default function MapItemCardContent({
 
         {/* 가운데 텍스트 */}
         <div className="flex flex-col justify-center">
-          <span className="body-md">{title}</span>
+          <div className="flex items-center gap-8">
+            <span className="body-md">{title}</span>
+            <span className="caption-md">{updatedAt}</span>
+          </div>
           <div className="flex items-center text-yellow-400">
             {Array.from({ length: 5 }, (_, i) => (
               <Star key={i} />
@@ -45,7 +50,13 @@ export default function MapItemCardContent({
         <button className="bg-primary text-white body-xs rounded-6 px-16 py-8 flex-6">
           이용하기
         </button>
-        <button className="border border-gray-300 text-gray-700 body-xs rounded-6 px-16 py-8 flex-2">
+        <button
+          className="border border-gray-300 text-gray-700 body-xs rounded-6 px-16 py-8 flex-2"
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push("/chat");
+          }}
+        >
           채팅하기
         </button>
       </div>

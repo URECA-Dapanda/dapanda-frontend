@@ -5,9 +5,10 @@ import { MapType } from "@feature/map/types/mapType";
 
 interface MapContainerProps {
   onStoreListUpdate?: (list: MapType[]) => void;
+  onMapInit?: (map: naver.maps.Map) => void;
 }
 
-export default function MapContainer({ onStoreListUpdate }: MapContainerProps) {
+export default function MapContainer({ onStoreListUpdate, onMapInit }: MapContainerProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<naver.maps.Map | null>(null);
   const [storeList, setStoreList] = useState<MapType[]>([]);
@@ -23,6 +24,7 @@ export default function MapContainer({ onStoreListUpdate }: MapContainerProps) {
     });
 
     setMap(initMap);
+    onMapInit?.(initMap);
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -46,6 +48,7 @@ export default function MapContainer({ onStoreListUpdate }: MapContainerProps) {
               title: "핫스팟 A",
               type: "핫스팟",
               address: "서울시 강남구",
+              updatedAt: "3시간 전",
               location: `${latitude + 0.001},${longitude + 0.001}`,
               isOpen: true,
               score: 4.5,
@@ -56,6 +59,7 @@ export default function MapContainer({ onStoreListUpdate }: MapContainerProps) {
               title: "와이파이 B",
               type: "와이파이",
               address: "서울시 서초구",
+              updatedAt: "3시간 전",
               location: `${latitude - 0.001},${longitude - 0.001}`,
               isOpen: true,
               score: 4.2,
@@ -66,6 +70,7 @@ export default function MapContainer({ onStoreListUpdate }: MapContainerProps) {
               title: "와이파이 C",
               type: "와이파이",
               address: "서울시 서초구",
+              updatedAt: "3시간 전",
               location: `${latitude - 0.003},${longitude - 0.004}`,
               isOpen: true,
               score: 4.2,
@@ -76,6 +81,7 @@ export default function MapContainer({ onStoreListUpdate }: MapContainerProps) {
               title: "와이파이 D",
               type: "와이파이",
               address: "서울시 서초구",
+              updatedAt: "3시간 전",
               location: `${latitude - 0.001},${longitude - 0.009}`,
               isOpen: true,
               score: 4.2,
@@ -86,6 +92,7 @@ export default function MapContainer({ onStoreListUpdate }: MapContainerProps) {
               title: "와이파이 E",
               type: "와이파이",
               address: "서울시 서초구",
+              updatedAt: "3시간 전",
               location: `${latitude - 0.009},${longitude - 0.001}`,
               isOpen: true,
               score: 4.2,

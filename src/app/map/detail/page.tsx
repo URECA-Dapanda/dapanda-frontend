@@ -82,7 +82,7 @@ export default function MapDetailPage() {
           topSheetExpanded ? "pt-[480px]" : "pt-[260px]"
         )}
       >
-        <div className="px-6 py-6 bg-gray-50 rounded-lg">
+        <div className="px-6 py-6 rounded-lg">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">이용할 시간</h3>
           <div className="flex items-center justify-center gap-8">
             <TimeSelector label="Start" time={startTime} onChange={setStartTime} type="start" />
