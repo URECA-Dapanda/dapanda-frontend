@@ -1,6 +1,6 @@
 import CardComponent from "@components/common/card/CardComponent";
 import CardContentComponent from "@components/common/card/CardContentComponent";
-import LayoutBox from "@components/common/container/ContainerBox";
+import LayoutBox from "@components/common/container/LayoutBox";
 import { useChargeStore } from "@feature/mypage/stores/useChargeStore";
 import { formatPriceString } from "@lib/formatters";
 

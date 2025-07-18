@@ -68,8 +68,7 @@ export default function DataPageContent() {
             console.log("글 등록 버튼 클릭");
           }}
         >
-          <PlusIcon className="w-20 h-20" />
-          글 쓰기
+          <PlusIcon className="w-20 h-20" />글 쓰기
         </ButtonComponent>
       </div>
 
@@ -84,15 +83,11 @@ export default function DataPageContent() {
       >
         {/* 탭 공통 영역 */}
         <div className="flex justify-center mt-24">
-          <PurchaseModeTabs value={tab} onChange={handleTabChange} />
+          <PurchaseModeTabs value={tab} onChange={handleTabChange}>
+            <DefaultTabBody isSheetOpen={sheetOpen} />
+            <ScrapTabBody />
+          </PurchaseModeTabs>
         </div>
-
-        {/* 탭에 따른 내용만 분기 */}
-        {tab === "scrap" ? (
-          <ScrapTabBody />
-        ) : (
-          <DefaultTabBody isSheetOpen={sheetOpen}/>
-        )}
       </BaseBottomSheet>
     </div>
   );

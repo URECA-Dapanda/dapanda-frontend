@@ -6,6 +6,7 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary: "bg-primary text-white",
+        primary2: "bg-primary2 text-primary",
         secondary: "bg-secondary text-color-text-black",
         outlinePrimary: "border border-primary text-primary bg-white",
         outlineGray: "border border-gray-300 text-color-text-black bg-white",
@@ -18,9 +19,10 @@ export const buttonVariants = cva(
         floatingPill:
           "!w-[48px] !h-[48px] !rounded-circle bg-white border border-gray-200 rounded-circle",
         toggle: "border border-black text-black rounded-20 bg-white",
-        withIcon: "flex items-center gap-2 bg-white text-black shadow rounded-6 "
+        withIcon: "flex items-center gap-2 bg-white text-black shadow rounded-6 ",
       },
       size: {
+        xxs: "h-[24px]",
         xs: "h-[29px]",
         sm: "h-[30px]",
         md: "h-[33px]",

@@ -1,5 +1,6 @@
 import { VirtualItem, Virtualizer } from "@tanstack/react-virtual";
 import React, { Fragment, memo } from "react";
+import { ButtonComponent } from "../button";
 
 interface VirtualizedListProps<T> {
   mode?: "scroll" | "button";
@@ -117,20 +118,15 @@ function VirtualizedList<T>({
         </div>
         {mode === "button" && hasNextPage && (
           <div style={{ textAlign: "center" }} className={`${mode === "button" ? "" : "hidden"}`}>
-            <button
+            <ButtonComponent
               onClick={fetchNextPage}
               disabled={isFetchingNextPage}
-              style={{
-                padding: "8px 16px",
-                background: "#333",
-                color: "#fff",
-                borderRadius: "4px",
-                border: "none",
-                cursor: isFetchingNextPage ? "not-allowed" : "pointer",
-              }}
+              variant={"nonoutline"}
+              className="text-gray-600 w-full shadow-none"
+              size={"sm"}
             >
               {isFetchingNextPage ? "로딩 중..." : "더보기"}
-            </button>
+            </ButtonComponent>
           </div>
         )}
       </div>
