@@ -5,12 +5,12 @@ import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ButtonComponent } from "@/components/common/button";
 import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
-import FilterCard from "./sections/filter/FilterCard";
 import DefaultTabBody from "./sections/DefaultTabContent";
 import ScrapTabBody from "./sections/ScrapTabContent";
 import { PurchaseModeTabs } from "@/components/common/tabs";
 import { useHeaderStore } from "@stores/useHeaderStore";
 import { PlusIcon } from "lucide-react";
+import DefaultFilterCard from "./sections/filter/DefaultFilterCard";
 
 export default function DataPageContent() {
   const searchParams = useSearchParams();
@@ -57,7 +57,7 @@ export default function DataPageContent() {
       </div>
       {/* 상단 필터 영역 */}
       <div className="sticky top-0 z-10 bg-primary2 p-4 mt-44">
-        <FilterCard />
+        <DefaultFilterCard />
       </div>
       {/* 플로팅 버튼 */}
       <div className="absolute bottom-180 right-24 z-50">
