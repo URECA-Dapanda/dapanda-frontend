@@ -1,36 +1,47 @@
-import { DataType } from "../types/dataType";
+import axios from "@/lib/axios";
 
-const mockDataList = (num: number): Promise<DataType[]> =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(
-        Array.from({ length: 20 }, (_, i) => ({
-          id: num + i,
-          date: "3시간전",
-          title: `2GB ${num + i}`,
-          price: "8,000원",
-          pricePer: "400원/100MB",
-          userId: 123,
-          userName: "김데이터",
-        }))
-      );
-    }, 100);
-  });
+import { DataType, RawDataItem, DataDetailResponse } from "../types/dataType";
+import { mapRawToDataType } from "@/feature/data/utils/dataMapper";
 
 function isNumber(value: unknown): value is number {
   return typeof value === "number";
 }
 
-export async function getDataList({ pageParam = 0 }: { pageParam?: number | unknown }): Promise<{
+export async function getDataList({
+  pageParam = 0,
+  sort = "RECENT",
+  dataAmount,
+}: {
+  pageParam?: number | unknown;
+  sort?: "RECENT" | "PRICE_ASC" | "AMOUNT_ASC" | "AMOUNT_DESC";
+  dataAmount?: number;
+}): Promise<{
   items: DataType[];
   nextCursor?: number;
 }> {
-  console.log("GET API DATA LIST", pageParam);
-  if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
-  const start = pageParam;
-  const end = pageParam + 20;
-  const hasMore = end < 200;
-  const data = await mockDataList(start);
+  try {
+    const response = await axios.post("/api/products/mobile-data", {
+      cursorId: isNumber(pageParam) && pageParam > 0 ? pageParam : null,
+      size: 10, // 원하는 페이지 크기
+      productSortOption: sort,
+      ...(dataAmount !== undefined && { dataAmount }), // dataAmount가 있을 때만 추가
+    });
 
-  return { items: data, nextCursor: hasMore ? end : undefined };
+    const rawList = response.data.data.data as RawDataItem[];
+    const items = rawList.map(mapRawToDataType);
+    const nextCursor = response.data.data.pageInfo.nextCursorId ?? undefined;
+
+    return { items, nextCursor };
+  } catch {
+    console.error("상품 목록 조회 실패:");
+
+    return { items: [], nextCursor: undefined };
+  }
+}
+
+export async function getDataDetail(postId: string): Promise<DataDetailResponse> {
+  const response = await axios.get<{ code: number; message: string; data: DataDetailResponse }>(
+    `/api/products/mobile-data/${postId}`
+  );
+  return response.data.data;
 }

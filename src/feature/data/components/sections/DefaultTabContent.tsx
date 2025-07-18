@@ -18,20 +18,14 @@ interface DefaultTabContentProps {
 export default function DefaultTabContent({ isSheetOpen }: DefaultTabContentProps) {
   const [sortLabel, setSortLabel] = useState("최신순");
 
-  const {
-    parentRef,
-    rowVirtualizer,
-    flatItems,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-  } = useVirtualizedInfiniteQuery<DataType>({
-    queryKey: ["dataItems", "default"],
-    queryFn: ({ pageParam = 0 }) => getDataList({ pageParam }),
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-    estimateSize: () => 160,
-    mode: "scroll",
-  });
+  const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
+    useVirtualizedInfiniteQuery<DataType>({
+      queryKey: ["dataItems", "default"],
+      queryFn: ({ pageParam = 0 }) => getDataList({ pageParam }),
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      estimateSize: () => 160,
+      mode: "scroll",
+    });
 
   return (
     <div className="space-y-4">
@@ -72,7 +66,7 @@ export default function DefaultTabContent({ isSheetOpen }: DefaultTabContentProp
         isFetchingNextPage={isFetchingNextPage}
         hasNextPage={hasNextPage}
         fetchNextPage={fetchNextPage}
-        renderItem={(item: DataType) => <DataItemCard data={item} />}
+        renderItem={(item: DataType) => <DataItemCard data={item} type="default" />}
       />
     </div>
   );

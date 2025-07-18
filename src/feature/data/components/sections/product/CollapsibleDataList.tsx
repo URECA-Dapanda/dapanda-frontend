@@ -29,7 +29,7 @@ export default function CollapsibleDataList() {
       isFetchingNextPage={isFetchingNextPageForData}
       hasNextPage={hasNextPageForData}
       fetchNextPage={fetchNextPageForData}
-      renderItem={(item: DataType) => <DataItemCard data={item} />}
+      renderItem={(item: DataType) => <DataItemCard data={item} type="scrap" />}
     />
   );
 }
