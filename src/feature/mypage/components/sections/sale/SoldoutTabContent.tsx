@@ -1,15 +1,15 @@
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 import TabTitle from "../TabTitle";
-import { HistoryCard } from "../HistoryCard";
+import { HistoryCard } from "./HistoryCard";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import { HistoryType } from "@feature/mypage/types/mypageTypes";
-import { getDataList } from "@feature/mypage/apis/mypageRequest";
+import { getSaleHistoryList } from "@feature/mypage/apis/mypageRequest";
 
 export default function SoldoutTabContent() {
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<HistoryType>({
       queryKey: ["dataItems", "default"],
-      queryFn: ({ pageParam = 0 }) => getDataList({ pageParam, isSold: true }),
+      queryFn: ({ pageParam = 0 }) => getSaleHistoryList({ pageParam, isSold: true }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       estimateSize: () => 192,
       mode: "button",

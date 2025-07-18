@@ -2,10 +2,10 @@ import AvatarIcon from "@components/common/AvatarIcon";
 import { ButtonComponent } from "@components/common/button";
 import ItemCard from "@components/common/card/ItemCard";
 import LayoutBox from "@components/common/container/LayoutBox";
-import { HistoryType } from "@feature/mypage/types/mypageTypes";
+import { SaleHistoryType } from "@feature/mypage/types/mypageTypes";
 
 interface HistoryCardProps {
-  data: HistoryType;
+  data: SaleHistoryType;
   size?: "sm" | "lg";
 }
 
