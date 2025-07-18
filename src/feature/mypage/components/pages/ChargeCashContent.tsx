@@ -1,8 +1,8 @@
 "use client";
 import { ButtonComponent } from "@components/common/button";
-import ChargeInfoCard from "../sections/ChargeInfoCard";
-import CurrentCashCard from "../sections/CurrentCashCard";
-import SelectCharge from "../sections/SelectCharge";
+import ChargeInfoCard from "../sections/profile/ChargeInfoCard";
+import CurrentCashCard from "../sections/profile/CurrentCashCard";
+import SelectCharge from "../sections/profile/SelectCharge";
 
 export default function ChargeCashContent() {
   return (

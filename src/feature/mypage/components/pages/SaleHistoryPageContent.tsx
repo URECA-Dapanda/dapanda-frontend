@@ -1,5 +1,5 @@
-import ProfileWithHistoryCard from "../sections/ProfileWithHistoryCard";
-import SaleStateTab from "../sections/SaleStateTab";
+import ProfileWithHistoryCard from "../sections/profile/ProfileWithHistoryCard";
+import SaleStateTab from "../sections/sale/SaleStateTab";
 
 export default function SaleHistoryPageContent() {
   return (
