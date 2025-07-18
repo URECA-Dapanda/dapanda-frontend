@@ -1,4 +1,4 @@
-import { RawDataItem } from "./dataType";
+import { RawDataItem } from "@feature/data/types/dataType";
 
 export interface ScrapRecommendationSummary {
 totalAmount: number;

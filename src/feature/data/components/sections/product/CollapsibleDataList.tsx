@@ -1,6 +1,6 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { DataType } from "@feature/data/types/dataType";
-import DataItemCard from "./DataItemCard";
+import DataItemCard from "@feature/data/components/sections/product/DataItemCard";
 
 interface CollapsibleDataListProps {
   items: DataType[];

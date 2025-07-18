@@ -5,12 +5,12 @@ import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ButtonComponent } from "@/components/common/button";
 import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
-import DefaultTabBody from "./sections/DefaultTabContent";
-import ScrapTabBody from "./sections/ScrapTabContent";
+import DefaultTabBody from "@feature/data/components/sections/DefaultTabContent";
+import ScrapTabBody from "@feature/data/components/sections/ScrapTabContent";
 import { PurchaseModeTabs } from "@/components/common/tabs";
 import { useHeaderStore } from "@stores/useHeaderStore";
 import { PlusIcon } from "lucide-react";
-import DefaultFilterCard from "./sections/filter/DefaultFilterCard";
+import DefaultFilterCard from "@feature/data/components/sections/filter/DefaultFilterCard";
 
 export default function DataPageContent() {
   const searchParams = useSearchParams();
