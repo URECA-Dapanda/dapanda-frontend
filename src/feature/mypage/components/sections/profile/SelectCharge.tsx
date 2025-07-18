@@ -4,7 +4,7 @@ import { ButtonComponent } from "@components/common/button";
 import CardComponent from "@components/common/card/CardComponent";
 import CardContentComponent from "@components/common/card/CardContentComponent";
 import CardHeaderComponent from "@components/common/card/CardHeaderComponent";
-import LayoutBox from "@components/common/container/ContainerBox";
+import LayoutBox from "@components/common/container/LayoutBox";
 import InputComponent from "@components/common/input/InputComponent";
 import { formatPriceString } from "@lib/formatters";
 import { useChargeStore } from "@feature/mypage/stores/useChargeStore";

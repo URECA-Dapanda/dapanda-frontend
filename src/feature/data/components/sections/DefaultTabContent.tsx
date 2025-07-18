@@ -18,25 +18,44 @@ interface DefaultTabContentProps {
 export default function DefaultTabContent({ isSheetOpen }: DefaultTabContentProps) {
   const [sortLabel, setSortLabel] = useState("최신순");
 
-  const {
-    parentRef,
-    rowVirtualizer,
-    flatItems,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-  } = useVirtualizedInfiniteQuery<DataType>({
-    queryKey: ["dataItems", "default"],
-    queryFn: ({ pageParam = 0 }) => getDataList({ pageParam }),
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-    estimateSize: () => 160,
-    mode: "scroll",
-  });
+  const convertSortLabelToEnum = (
+    label: string
+  ): "RECENT" | "PRICE_ASC" | "AMOUNT_ASC" | "AMOUNT_DESC" => {
+    switch (label) {
+      case "가격 낮은순":
+        return "PRICE_ASC";
+      case "데이터 적은순":
+        return "AMOUNT_ASC";
+      case "데이터 많은순":
+        return "AMOUNT_DESC";
+      default:
+        return "RECENT";
+    }
+  };
+
+  const convertTabToDataAmount = (tab: string): number | undefined => {
+    if (tab === "split") return 0.5;
+    return undefined;
+  };
+
+  const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
+    useVirtualizedInfiniteQuery<DataType>({
+      queryKey: ["dataItems", sortLabel],
+      queryFn: ({ pageParam = 0 }) =>
+        getDataList({
+          pageParam,
+          sort: convertSortLabelToEnum(sortLabel),
+          dataAmount: convertTabToDataAmount("default"),
+        }),
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      estimateSize: () => 160,
+      mode: "scroll",
+    });
 
   return (
     <div className="space-y-4">
       {isSheetOpen && (
-        <div className="flex justify-end items-center gap-8 px-24 mb-12">
+        <div className="flex justify-end items-center gap-8 mb-12">
           <UserDropdownMenu
             options={dataSortOptions}
             selectedLabel={sortLabel}
@@ -72,7 +91,7 @@ export default function DefaultTabContent({ isSheetOpen }: DefaultTabContentProp
         isFetchingNextPage={isFetchingNextPage}
         hasNextPage={hasNextPage}
         fetchNextPage={fetchNextPage}
-        renderItem={(item: DataType) => <DataItemCard data={item} />}
+        renderItem={(item: DataType) => <DataItemCard data={item} type="default" />}
       />
     </div>
   );

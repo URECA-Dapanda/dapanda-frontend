@@ -6,12 +6,17 @@ import { DataType, ProductItemProps } from "@feature/data/types/dataType";
 import { useRouter } from "next/navigation";
 import ItemCard from "@components/common/card/ItemCard";
 
-function DataItemCard({ data }: ProductItemProps<DataType>) {
+interface DataItemCardProps extends ProductItemProps<DataType> {
+  type: "default" | "scrap";
+}
+
+function DataItemCard({ data, type }: DataItemCardProps) {
   const router = useRouter();
 
   const handleClick = useCallback(() => {
+    console.log(type, data.id);
     router.push(`/data/${data.id}`);
-  }, [data]);
+  }, [data, type]);
 
   return (
     <ItemCard handleClick={handleClick}>
