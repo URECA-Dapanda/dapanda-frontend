@@ -1,18 +1,20 @@
-import { useState } from "react";
 import { ButtonComponent } from "@/components/common/button";
 import Slider from "@components/common/slider/SliderComponent";
 import { formatDataSize } from "@lib/formatters";
 
 interface FilterCardContentProps {
   buttonText: string;
+  value: number[];
+  onValueChange: (val: number[]) => void;
   onButtonClick?: ()=> void;
 }
 
 export default function FilterCardContent({
   buttonText,
   onButtonClick,
+  value,
+  onValueChange
 }: FilterCardContentProps) {
-  const [value, setValue] = useState<number[]>([1]);
   return (
     <div className="flex flex-col items-center text-center gap-12">
       <h2 className="h1 text-black">{formatDataSize(value[0])}</h2>
@@ -20,7 +22,7 @@ export default function FilterCardContent({
 
       <Slider
         value={value}
-        onValueChange={setValue}
+        onValueChange={onValueChange}
         max={2}
       />
 
