@@ -32,3 +32,11 @@ export function formatRelativeTime(iso: string, withSuffix = false): string {
 
   return withSuffix && result !== "방금" ? `${result} 전` : result;
 }
+
+export function formatDateDivider(isoOrDateString: string): string {
+  const date = new Date(isoOrDateString);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${year}년 ${month}월 ${day}일`;
+}

@@ -12,7 +12,7 @@ export default function ChatListPage() {
       unreadCount: 2,
       avatarUrl: "/images/default-avatar.png",
       post: {
-        title: "2GB 데이터 판매",
+        title: "2GB",
         price: "2,000원",
       },
     },
@@ -24,7 +24,7 @@ export default function ChatListPage() {
       unreadCount: 0,
       avatarUrl: "/images/default-avatar.png",
       post: {
-        title: "6GB 데이터 판매",
+        title: "6GB",
         price: "3,000원",
       },
     },
