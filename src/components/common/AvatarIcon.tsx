@@ -1,7 +1,8 @@
 "use client";
-import { memo, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useProfileStore } from "@/stores/useProfileStore";
+import { useRouter } from "next/navigation";
 
 interface AvatarProps {
   size: "small" | "medium" | "large" | string;
@@ -14,6 +15,7 @@ interface AvatarProps {
  * @returns 아바타 아이콘
  */
 function AvatarIcon({ size = "small", avatar = "c" }: Partial<AvatarProps>) {
+  const router = useRouter();
   const showAvatar = useProfileStore((state) => state.avatar);
   const avatarImage = avatar ? avatar : showAvatar;
   const iconSize = useMemo(() => {
