@@ -29,14 +29,14 @@ export default function CollapsibleDataList({ items }: CollapsibleDataListProps)
                   transform: `translateY(${index * 10}px)`,
                 }}
               >
-                <DataItemCard data={item} />
+                <DataItemCard data={item} type="scrap" />
               </div>
             ))}
           </div>
         ) : (
           <div className="space-y-12">
             {items.map((item) => (
-              <DataItemCard key={item.id} data={item} />
+              <DataItemCard key={item.id} data={item} type="scrap" />
             ))}
           </div>
         )}

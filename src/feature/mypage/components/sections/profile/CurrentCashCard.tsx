@@ -1,4 +1,6 @@
+import { ButtonComponent } from "@components/common/button";
 import FlatCard from "@components/common/card/FlatCard";
+import Link from "next/link";
 
 interface CurrentCashCardProps {
   isInterection?: boolean;
@@ -31,9 +33,11 @@ export default function CurrentCashCard({ isInterection }: CurrentCashCardProps)
             <button className="flex-4 border border-primary text-primary body-sm rounded-6 py-4">
               현금 전환
             </button>
-            <button className="flex-4 bg-primary text-white body-sm rounded-6 py-4">
-              충전하기
-            </button>
+            <Link href="/mypage/charge" className="flex-4">
+              <ButtonComponent variant={"primary"} className="w-full">
+                충전하기
+              </ButtonComponent>
+            </Link>
           </div>
         )}
       </div>

@@ -1,5 +1,5 @@
 import SocialButton from "@components/common/button/SocialButton";
-import ContainerBox from "@components/common/container/ContainerBox";
+import ContainerBox from "@components/common/container/LayoutBox";
 import { useAuth } from "@hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

@@ -1,6 +1,6 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
-import { memo, MouseEvent, PropsWithChildren, useCallback } from "react";
+import { memo, MouseEvent, PropsWithChildren, useCallback, useMemo } from "react";
 
 interface NavigationButtonProps {
   target: string;
@@ -10,6 +10,8 @@ function NavigationButton({ target, children }: PropsWithChildren<NavigationButt
   const router = useRouter();
   const pathname = usePathname();
 
+  const currentPath = useMemo(() => `/${pathname.split("/").at(1)}`, [pathname]);
+
   const handleButtonClick = useCallback((e: MouseEvent<HTMLButtonElement>) => {
     router.push(`${e.currentTarget.value}`);
   }, []);
@@ -17,7 +19,7 @@ function NavigationButton({ target, children }: PropsWithChildren<NavigationButt
   return (
     <button
       className={`flex flex-col items-center hover:cursor-pointer py-8 ${
-        target === pathname ? "text-primary" : "text-gray-400"
+        target === currentPath ? "text-primary" : "text-gray-400"
       }`}
       value={target}
       onClick={handleButtonClick}

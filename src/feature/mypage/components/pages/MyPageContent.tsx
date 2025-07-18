@@ -2,15 +2,15 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import CurrentCashCard from "./sections/CurrentCashCard";
-import TransactionHistory from "./sections/TransactionHistory";
-import { DataUsageDonut } from "./sections/CicularProgressBar";
+import CurrentCashCard from "../sections/profile/CurrentCashCard";
+import TransactionHistory from "../sections/TransactionHistory";
+import { DataUsageDonut } from "../sections/profile/CicularProgressBar";
 import { ButtonComponent } from "@components/common/button";
-import ProfileCard from "./sections/ProfileCard";
+import ProfileCard from "../sections/profile/ProfileCard";
 
 export default function MyPageContent() {
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full p-24 gap-12">
+    <div className="flex flex-col items-center justify-center w-full h-full p-24 pt-8 gap-12">
       <ProfileCard />
       <DataUsageDonut current={5.6} total={10} unit="GB" />
       <ButtonComponent variant={"text"} size={"sm"}>
