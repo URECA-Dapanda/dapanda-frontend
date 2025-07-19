@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 interface ChatPostCardProps {
   title: string;
   price: string;
@@ -11,10 +13,12 @@ export default function ChatPostCard({ title, price }: ChatPostCardProps) {
 
   return (
     <div className="flex border border-primary-200 rounded-20 h-64 px-16 py-8 bg-white">
-      <img
+      <Image
         src={imageFile}
         alt={`${match?.[1]}GB 이미지`}
-        className="w-40 h-40 object-contain mr-12 shrink-0"
+        width={40}
+        height={40}
+        className="object-contain mr-12 shrink-0"
       />
       <div className="flex flex-col justify-center">
         <div className="body-sm text-gray-800">{title}</div>

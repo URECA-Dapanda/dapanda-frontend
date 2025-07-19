@@ -58,13 +58,13 @@ export default function ChatRoomContent({ title, price }: ChatRoomContentProps) 
       {groupMessagesByDate(messages).map(({ date }) => (
         <div key={date} className="space-y-6">
           <div className="text-center text-gray-500 body-xs py-6">{formatDateDivider(date)}</div>
+          <div className="flex flex-col gap-24">
+            {messages.map((msg) => (
+              <ChatBubble key={msg.id} message={msg} currentUserId={currentUserId} />
+            ))}
+          </div>
         </div>
       ))}
-      <div className="flex flex-col gap-24">
-        {messages.map((msg) => (
-          <ChatBubble key={msg.id} message={msg} currentUserId={currentUserId} />
-        ))}
-      </div>
     </main>
   );
 }
