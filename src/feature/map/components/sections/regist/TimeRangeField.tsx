@@ -11,7 +11,7 @@ interface Props {
 
 export default function TimeRangeField({ form, updateForm, errors }: Props) {
   return (
-    <>
+    <section className="mb-16">
       <label className="title-sm mb-12 block">이용 시간</label>
       <div className="flex gap-8 items-center mb-4">
         <InputComponent
@@ -37,6 +37,6 @@ export default function TimeRangeField({ form, updateForm, errors }: Props) {
       {errors.timeOrderInvalid && (
         <p className="text-primary text-sm mb-6">시작 시간은 종료 시간보다 빨라야 합니다.</p>
       )}
-    </>
+    </section>
   );
 }

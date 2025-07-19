@@ -36,8 +36,8 @@ export default function RegisterForm({ type, onSubmit }: RegisterFormProps) {
   };
 
   return (
-    <div className="mx-auto py-6">
-      <div className="title-md mb-16">{type === "hotspot" ? "핫스팟 판매" : "와이파이 판매"}</div>
+    <div className="mx-auto py-6 space-y-4">
+      <div className="title-md mb-16 ">{type === "hotspot" ? "핫스팟 판매" : "와이파이 판매"}</div>
 
       <BasicInfoFields form={form} updateForm={updateForm} errors={errors} type={type} />
       <TimeRangeField form={form} updateForm={updateForm} errors={errors} />

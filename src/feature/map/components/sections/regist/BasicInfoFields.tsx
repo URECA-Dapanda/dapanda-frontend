@@ -15,25 +15,25 @@ export default function BasicInfoFields({ form, updateForm, errors, type }: Prop
   return (
     <>
       {/* 제목 */}
-      <label className="title-sm mb-12 block">제목</label>
+      <label className="title-sm mb-8 block">제목</label>
       <InputComponent
         placeholder="예: 강남역 2번 출구 앞"
         value={form.title}
         onChange={(e) => updateForm("title", e.target.value)}
-        className={cn("w-full mb-4 px-3", errors.title && "border-primary border-[2px]")}
+        className={cn("w-full mb-12 px-3", errors.title && "border-primary border-[2px]")}
         radius="md"
         size="md"
       />
       {errors.title && <p className="text-primary text-sm mb-8">제목을 입력해주세요.</p>}
 
       {/* 설명 */}
-      <label className="title-sm mb-12 block">설명</label>
+      <label className="title-sm mb-8 block">설명</label>
       <InputComponent
         as="textarea"
         placeholder="위치 설명, 이용 조건 등을 입력해주세요"
         value={form.description}
         onChange={(e) => updateForm("description", e.target.value)}
-        className={cn("mb-4", errors.description && "border-primary border-[2px]")}
+        className={cn("mb-12", errors.description && "border-primary border-[2px]")}
         radius="md"
         size="md"
         rows={3}
@@ -41,7 +41,7 @@ export default function BasicInfoFields({ form, updateForm, errors, type }: Prop
       {errors.description && <p className="text-primary text-sm mb-8">설명을 입력해주세요.</p>}
 
       {/* 가격 */}
-      <div className="flex items-center mb-12 gap-8">
+      <div className="flex items-center mb-8 gap-8">
         <label className="title-sm block">가격 ({type === "hotspot" ? "15분" : "10분"})</label>
         <div className="flex gap-8">
           <span className={badgeVariants({ variant: "outlined", size: "md" })}>
@@ -56,7 +56,7 @@ export default function BasicInfoFields({ form, updateForm, errors, type }: Prop
         placeholder="예: 300"
         value={form.price}
         onChange={(e) => updateForm("price", e.target.value)}
-        className={cn("w-full mb-4 px-3", errors.price && "border-primary border-[2px]")}
+        className={cn("w-full mb-8 px-3", errors.price && "border-primary border-[2px]")}
         radius="md"
         size="md"
         type="number"
