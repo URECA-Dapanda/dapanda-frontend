@@ -1,16 +1,16 @@
 "use client";
 
-import { Wifi } from "lucide-react";
-import HeaderTitle from "./HeaderTitle";
-import HeaderCash from "./HeaderCash";
-import AvatarIcon from "../AvatarIcon";
 import { usePathname } from "next/navigation";
+import AvatarIcon from "@/components/common/AvatarIcon";
+import HeaderTitle from "@/components/common/header/HeaderTitle";
+import HeaderCash from "@/components/common/header/HeaderCash";
+import HeaderTimer from "@/components/common/header/HeaderTimer";
+import TimerModal from "@/feature/map/components/sections/timer/TimerModal";
+import EndOfUseModal from "@/feature/map/components/sections/timer/TimerEndModal";
+import { useTimerStore } from "@/feature/map/stores/useTimerStore";
 import { useHeaderStore } from "@/stores/useHeaderStore";
-import HeaderTimer from "./HeaderTimer";
-import TimerModal from "@/feature/map/components/sections/product/TimerModal";
+import { Wifi } from "lucide-react";
 import clsx from "clsx";
-import EndOfUseModal from "@feature/map/components/sections/product/EndOfUseModal";
-import { useTimerStore } from "@/stores/useTimerStore";
 
 export default function SharedHeader() {
   const pathname = usePathname();

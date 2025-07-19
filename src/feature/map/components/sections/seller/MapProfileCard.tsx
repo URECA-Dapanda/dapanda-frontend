@@ -1,8 +1,8 @@
+import { useRouter } from "next/navigation";
+import { StarIcon } from "lucide-react";
 import AvatarIcon from "@components/common/AvatarIcon";
 import { ButtonComponent } from "@components/common/button";
-import { StarIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import type { SellerProfile } from "@feature/map/types/sellerType";
+import type { SellerProfile } from "@/feature/map/types/sellerType";
 
 interface MapProfileCardProps {
   seller: SellerProfile;
@@ -36,6 +36,7 @@ export default function MapProfileCard({ seller }: MapProfileCardProps) {
           e.stopPropagation();
           router.push("/chat");
           // router.push(`/chat?sellerId=${seller.id}`);
+          // 추후 seller id 채팅방으로 연결 필요
         }}
       >
         채팅하기

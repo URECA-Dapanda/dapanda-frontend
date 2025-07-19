@@ -1,21 +1,27 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { compareTimes } from "@/lib/time";
+import type { Time } from "@type/Time";
 
-interface Time {
-  hour: string;
-  minute: string;
-  period: "AM" | "PM";
-}
+import { cn } from "@lib/utils";
 
 interface TimeSelectorProps {
   label: string;
   time: Time;
   onChange: (newTime: Time) => void;
   type: "start" | "end";
+  minTime?: Time;
+  maxTime?: Time;
 }
 
-export default function TimeSelector({ label, time, onChange }: TimeSelectorProps) {
+export default function TimeSelector({
+  label,
+  time,
+  onChange,
+  minTime,
+  maxTime,
+}: TimeSelectorProps) {
   const [activeField, setActiveField] = useState<"hour" | "minute" | "period" | null>(null);
   const [temp, setTemp] = useState({ hour: 0, minute: 0, period: "AM" as "AM" | "PM" });
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -54,7 +60,13 @@ export default function TimeSelector({ label, time, onChange }: TimeSelectorProp
 
   const renderDropdown = (field: "hour" | "minute" | "period", items: (number | string)[]) => {
     if (activeField !== field) return null;
-    const selected = temp[field];
+
+    const selectedValue = (() => {
+      if (field === "hour" || field === "minute") {
+        return String(temp[field]).padStart(2, "0");
+      }
+      return temp[field];
+    })();
 
     return (
       <div
@@ -63,18 +75,46 @@ export default function TimeSelector({ label, time, onChange }: TimeSelectorProp
       >
         <div className="max-h-144 overflow-y-auto p-4 space-y-4">
           {items.map((item, idx) => {
-            const isSelected = item === selected;
+            const itemStr = typeof item === "number" ? String(item).padStart(2, "0") : item;
+
+            const rawTemp = {
+              ...temp,
+              [field]: typeof item === "number" ? item : parseInt(item, 10),
+            };
+
+            const tempTime: Time = {
+              hour: String(rawTemp.hour).padStart(2, "0"),
+              minute: String(rawTemp.minute).padStart(2, "0"),
+              period: rawTemp.period,
+            };
+
+            const inMinRange = !minTime || compareTimes(tempTime, minTime) >= 0;
+            const inMaxRange = !maxTime || compareTimes(tempTime, maxTime) <= 0;
+            const disabled = !inMinRange || !inMaxRange;
+
+            const isSelected = itemStr === selectedValue;
+
             return (
               <button
                 key={idx}
-                onClick={() => setTemp((prev) => ({ ...prev, [field]: item }))}
-                className={`w-full px-8 py-6 text-sm rounded-6 text-left body-sm ${
-                  isSelected
+                onClick={() => {
+                  if (disabled) return;
+                  setTemp((prev) => ({
+                    ...prev,
+                    [field]: typeof item === "number" ? item : parseInt(item, 10),
+                  }));
+                }}
+                disabled={disabled}
+                className={cn(
+                  "w-full px-8 py-6 text-sm rounded-6 text-left body-sm",
+                  disabled
+                    ? "text-gray-300 bg-gray-50 cursor-not-allowed"
+                    : isSelected
                     ? "bg-primary-50 border border-primary text-primary"
-                    : "bg-white hover:bg-gray-100 border border-transparent text-black"
-                }`}
+                    : "hover:bg-gray-100 border border-transparent text-black"
+                )}
               >
-                {typeof item === "number" ? item.toString().padStart(2, "0") : item}
+                {itemStr}
               </button>
             );
           })}

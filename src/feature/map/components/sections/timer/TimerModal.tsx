@@ -1,30 +1,26 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { useTimerStore } from "@/stores/useTimerStore";
 import { X } from "lucide-react";
+import { useTimerStore } from "@/feature/map/stores/useTimerStore";
+import { useTimerDisplay } from "@/feature/map/hooks/useTimerDisplay";
 
 export default function TimerModal() {
-  const { openModal, setOpenModal, remainingTime, hasEnded } = useTimerStore();
+  const { openModal, setOpenModal, remainingTime, duration } = useTimerStore();
+  const { minutes, seconds, percentage } = useTimerDisplay(remainingTime, duration);
 
-  const minutes = String(Math.floor(remainingTime / 60)).padStart(2, "0");
-  const seconds = String(remainingTime % 60).padStart(2, "0");
-  const percentage = (remainingTime / 600) * 100;
-  if (hasEnded || !openModal) return null;
+  if (!openModal) return null;
 
   return (
     <Dialog.Root open={openModal} onOpenChange={setOpenModal}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed left-0 right-0 top-0 bottom-[56px] bg-black-60 z-[9998]" />
-
+        <Dialog.Overlay className="fixed inset-0 bg-black-60 z-[9998]" />
         <Dialog.Content
           className="fixed z-[9999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-  bg-white rounded-2xl shadow-default w-[327px] h-[327px] p-24 flex flex-col justify-between"
+          bg-white rounded-2xl shadow-default w-[327px] h-[327px] p-24 flex flex-col justify-between"
         >
           <Dialog.Title className="sr-only">타이머 모달</Dialog.Title>
-          <Dialog.Description className="sr-only">
-            남은 이용시간을 확인할 수 있습니다.
-          </Dialog.Description>
+
           <div className="flex items-center justify-between">
             <div className="text-lg font-bold">
               {new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}
@@ -36,7 +32,6 @@ export default function TimerModal() {
             </Dialog.Close>
           </div>
 
-          {/* 가운데: 타이머를 flex center로 배치 */}
           <div className="flex flex-1 items-center justify-center">
             <div className="relative w-[160px] h-[160px]">
               <svg className="absolute top-0 left-0 w-full h-full -rotate-90" viewBox="0 0 36 36">

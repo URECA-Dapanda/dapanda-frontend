@@ -1,10 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import InfoCard from "@components/common/card/InfoCard";
-import SelectTypeContent from "./SelectTypeContent";
-import { WifiIcon, RouterIcon } from "lucide-react";
 import { useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { WifiIcon, RouterIcon } from "lucide-react";
+import InfoCard from "@components/common/card/InfoCard";
+import SelectTypeContent from "@/feature/map/components/sections/regist/SelectTypeContent";
 
 export default function SelectTypeCard() {
   const router = useRouter();

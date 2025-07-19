@@ -1,8 +1,8 @@
-import { ProductItemProps } from "@feature/data/types/dataType";
-import { MapType } from "@feature/map/types/mapType";
-import { ImageIcon, Star } from "lucide-react";
 import { Fragment } from "react";
 import { useRouter } from "next/navigation";
+import { ImageIcon, Star } from "lucide-react";
+import type { ProductItemProps } from "@/feature/data/types/dataType";
+import type { MapType } from "@/feature/map/types/mapType";
 
 export default function MapItemCardContent({
   data: { address, price, score, title, type, updatedAt },

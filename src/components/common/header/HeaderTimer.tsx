@@ -1,21 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
-import { useTimerStore } from "@/stores/useTimerStore";
-import EndOfUseModal from "@/feature/map/components/sections/product/EndOfUseModal";
+import EndOfUseModal from "@/feature/map/components/sections/timer/TimerEndModal";
+import { useTimerStore } from "@/feature/map/stores/useTimerStore";
 
 export default function HeaderTimer() {
-  const {
-    remainingTime,
-    isActive,
-    decrement,
-    setOpenModal,
-    hasEnded,
-    reset, // 상태 초기화용
-    endTimer,
-  } = useTimerStore();
+  const { remainingTime, isActive, decrement, setOpenModal, hasEnded, reset, endTimer } =
+    useTimerStore();
 
-  // 타이머 1초씩 감소
   useEffect(() => {
     if (!isActive) return;
     const interval = setInterval(() => decrement(), 1000);
@@ -24,11 +16,10 @@ export default function HeaderTimer() {
 
   useEffect(() => {
     if (remainingTime === 0 && isActive) {
-      endTimer(); // ✅ 타이머 종료 및 모달 닫기
+      endTimer();
     }
   }, [remainingTime, isActive, endTimer]);
 
-  // 종료되었으면 모달 띄우고 타이머 표시 안함
   if (hasEnded) {
     return <EndOfUseModal open={true} onClose={reset} />;
   }

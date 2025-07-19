@@ -1,8 +1,8 @@
 import { useRouter } from "next/navigation";
-import { ProductItemProps } from "@feature/data/types/dataType";
-import MapItemCardContent from "./MapItemContent";
 import ItemCard from "@components/common/card/ItemCard";
-import { MapType } from "@feature/map/types/mapType";
+import MapItemCardContent from "@/feature/map/components/sections/product/MapItemContent";
+import type { ProductItemProps } from "@/feature/data/types/dataType";
+import type { MapType } from "@/feature/map/types/mapType";
 
 export default function MapItemCard({ data }: ProductItemProps<MapType>) {
   const router = useRouter();
@@ -13,7 +13,7 @@ export default function MapItemCard({ data }: ProductItemProps<MapType>) {
 
   return (
     <div onClick={handleClick}>
-      <ItemCard>
+      <ItemCard size="md">
         <MapItemCardContent data={data} />
       </ItemCard>
     </div>

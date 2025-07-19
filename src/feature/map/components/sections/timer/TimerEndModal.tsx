@@ -5,12 +5,12 @@ import { TimerIcon } from "lucide-react";
 import BaseModal from "@/components/common/modal/BaseModal";
 import ModalHeader from "@/components/common/modal/ModalHeader";
 
-interface EndOfUseModalProps {
+interface Props {
   open: boolean;
   onClose: () => void;
 }
 
-export default function EndOfUseModal({ open, onClose }: EndOfUseModalProps) {
+export default function TimerEndModal({ open, onClose }: Props) {
   const router = useRouter();
 
   return (
@@ -23,7 +23,7 @@ export default function EndOfUseModal({ open, onClose }: EndOfUseModalProps) {
         </div>
 
         <h2 className="text-lg font-bold mb-4">이용이 종료되었어요!</h2>
-        <p className="text-gray-400 text-sm leading-relaxed">
+        <p className="text-gray-400 text-sm leading-relaxed text-center">
           이용이 종료되었습니다.
           <br />
           소중한 후기를 남겨주세요!
@@ -38,10 +38,7 @@ export default function EndOfUseModal({ open, onClose }: EndOfUseModalProps) {
           홈으로 돌아가기
         </button>
         <button
-          onClick={() => {
-            // 후기 작성 경로로 이동
-            router.push("/review/write");
-          }}
+          onClick={() => router.push("/review/write")}
           className="bg-primary text-white font-semibold rounded-lg py-12"
         >
           후기 작성하기
