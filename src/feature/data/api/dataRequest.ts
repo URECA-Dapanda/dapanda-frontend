@@ -10,10 +10,12 @@ function isNumber(value: unknown): value is number {
 export async function getDataList({
   pageParam = 0,
   sort = "RECENT",
+  size = 10,
   dataAmount,
 }: {
   pageParam?: number | unknown;
   sort?: "RECENT" | "PRICE_ASC" | "AMOUNT_ASC" | "AMOUNT_DESC";
+  size?: number;
   dataAmount?: number;
 }): Promise<{
   items: DataType[];
@@ -26,7 +28,7 @@ export async function getDataList({
       isNumber(pageParam) && pageParam > 0 ? String(pageParam) : String(0)
     );
     searchParam.set("productSortOption", sort);
-    searchParam.set("size", "10");
+    searchParam.set("size", String(size));
     if (dataAmount) searchParam.set("dataAmount", String(dataAmount));
     const response = await axios.get("/api/products/mobile-data", { params: searchParam });
 
