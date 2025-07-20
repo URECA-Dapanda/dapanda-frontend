@@ -48,7 +48,7 @@ export default function ChatRoomContent({ title, price }: ChatRoomContentProps) 
   ];
 
   return (
-    <main className="p-4 space-y-6 pb-24">
+    <main className="p-24 space-y-6 pb-24">
       <div className="text-sm text-gray-500">
         {title} · {price}
       </div>
