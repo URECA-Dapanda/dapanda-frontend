@@ -5,12 +5,16 @@ import { Plus } from "lucide-react";
 import InputComponent from "@/components/common/input/InputComponent";
 import { ButtonComponent } from "@/components/common/button";
 
-export default function ChatInputBar() {
+interface ChatInputBarProps {
+  onSend: (message: string) => void;
+}
+
+export default function ChatInputBar({ onSend }: ChatInputBarProps) {
   const [message, setMessage] = useState("");
 
   const handleSend = () => {
     if (!message.trim()) return;
-    // 메시지 전송 로직
+    onSend(message);
     setMessage("");
   };
 

@@ -1,11 +1,14 @@
 "use client";
 
 //import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
 import type { ChatMessage } from "@/feature/chat/types/message";
 import ChatPostCard from "./ChatPostCard";
 import { groupMessagesByDate } from "@feature/chat/utils/groupMessagesByDate";
 import { formatDateDivider } from "@lib/time";
+import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
+
 //import { useChatStream } from "@/feature/chat/hooks/useChatStream";
 //import { useProfileStore } from "@stores/useProfileStore";
 
@@ -19,7 +22,7 @@ export default function ChatRoomContent({ title, price }: ChatRoomContentProps) 
   //const chatId = searchParams.get("chatId") || "1"; // 예시
   //const currentUserAvatar = useProfileStore((state) => state.avatar);
 
-  const messages: ChatMessage[] = [
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "1",
       senderId: "456",
@@ -33,21 +36,17 @@ export default function ChatRoomContent({ title, price }: ChatRoomContentProps) 
       text: "네 말씀하세요",
       createdAt: "2024-02-19T09:57:00",
     },
-    {
-      id: "3",
-      senderId: "456",
-      senderAvatar: "/creditIcon.png",
-      text: "잠시만 기다려주세요",
-      createdAt: "2024-02-19T13:56:00",
-    },
-    {
-      id: "4",
-      senderId: "456",
-      senderAvatar: "/creditIcon.png",
-      text: "그게 말이죠이이이이 제가 궁금한건 말이죠이이이이 그건 바로",
-      createdAt: "2024-02-19T13:58:00",
-    },
-  ];
+  ]);
+
+  const addMessage = (text: string) => {
+    const newMessage: ChatMessage = {
+      id: (messages.length + 1).toString(),
+      senderId: currentUserId,
+      text,
+      createdAt: new Date().toISOString(),
+    };
+    setMessages([...messages, newMessage]);
+  };
 
   return (
     <main className="px-24 space-y-6 pt-24">
@@ -65,6 +64,7 @@ export default function ChatRoomContent({ title, price }: ChatRoomContentProps) 
           </div>
         </div>
       ))}
+      <ChatInputBar onSend={addMessage} />
     </main>
   );
 }

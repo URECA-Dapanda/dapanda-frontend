@@ -18,7 +18,6 @@ export default function ChatRoomPage() {
       <div className="pb-36">
         <ChatRoomContent title={title} price={price} />
       </div>
-      <ChatInputBar />
     </>
   );
 }
