@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@lib/utils";
 
 type CardVariant = "material" | "flat" | "outlined";
-type CardSize = "xxl" | "xl" | "lg" | "md" | "sm" | "xs" | "xxs" | number;
+type CardSize = "xxl" | "xl" | "lg" | "md" | "sm" | "xs" | "xxs" | "fit" | number;
 type CardColor =
   | {
       from: string;
@@ -34,6 +34,7 @@ const cardVariant = cva("inline-flex gap-2 whitespace-nowrap transition-all roun
       sm: "h-120 w-full",
       xs: "h-76 w-full",
       xxs: "h-56 w-full",
+      fit: "h-fit w-full",
     },
   },
   defaultVariants: {

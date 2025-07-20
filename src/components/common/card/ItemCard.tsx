@@ -4,7 +4,7 @@ import { MouseEventHandler, PropsWithChildren } from "react";
 
 interface ItemCardProps {
   handleClick?: MouseEventHandler;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "fit";
 }
 
 export default function ItemCard({

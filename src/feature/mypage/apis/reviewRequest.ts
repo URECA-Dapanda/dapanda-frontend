@@ -1,0 +1,25 @@
+import { ReviewType } from "../types/reviewType";
+import axios from "@/lib/axios";
+
+export async function getReviewList({
+  pageParam = 0,
+  memberId,
+}: {
+  pageParam?: number | unknown;
+  memberId: string;
+}): Promise<{ items: ReviewType[]; nextCursor?: number }> {
+  try {
+    const response = await axios.get(`api/members/${memberId}/reviews/received`, {
+      params: { cursorId: pageParam },
+    });
+
+    const rawList = response.data.data.data as ReviewType[];
+    const nextCursor = response.data.data.pageInfo.nextCursorId ?? undefined;
+
+    return { items: rawList, nextCursor };
+  } catch {
+    console.error("상품 목록 조회 실패:");
+
+    return { items: [], nextCursor: undefined };
+  }
+}
