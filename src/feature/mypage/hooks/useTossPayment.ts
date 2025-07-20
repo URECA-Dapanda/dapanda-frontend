@@ -18,22 +18,33 @@ export const useTossPayment = () => {
       alert("유효한 결제 금액을 입력해주세요.");
       return;
     }
-
+  
+    console.log("renderTossPayment 시작됨");
+  
     const orderId = `order-${uuidv4()}`;
     const widget = await loadPaymentWidget(clientKey, customerKey);
-    await savePaymentAmount(orderId, amount);
-
+  
+    console.log("savePaymentAmount 요청 전:", orderId, amount);
+  
+    try {
+      await savePaymentAmount(orderId, amount);
+      console.log("savePaymentAmount 성공");
+    } catch (e) {
+      console.error("savePaymentAmount 실패", e);
+    }
+  
     await widget.renderPaymentMethods("#payment-method", {
       value: amount,
       currency: "KRW",
     });
-
+  
     await widget.renderAgreement("#agreement");
-
+  
     widgetRef.current = widget;
     orderIdRef.current = orderId;
     amountRef.current = amount;
   };
+  
 
   // 결제 실행
   const requestTossPayment = async () => {
