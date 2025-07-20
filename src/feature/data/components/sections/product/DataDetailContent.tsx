@@ -95,9 +95,11 @@ export default function DataDetailContent() {
             reviewCount={seller.reviewCount}
           />
 
-          <ButtonComponent variant={"primary"} className="w-full">
-            구매하기
-          </ButtonComponent>
+          <div className="flex justify-center px-36">
+            <ButtonComponent variant={"primary"} className="w-full">
+              구매하기
+            </ButtonComponent>
+          </div>
           <section>
             <div
               className="flex items-center mb-16 cursor-pointer" /*onClick={handleGoToSellerItems}*/
