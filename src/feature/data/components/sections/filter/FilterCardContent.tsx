@@ -5,12 +5,14 @@ import { formatDataSize } from "@lib/formatters";
 
 interface FilterCardContentProps {
   buttonText: string;
-  onButtonClick?: ()=> void;
+  max: number;
+  onButtonClick?: (selectedAmount: number) => void;
 }
 
 export default function FilterCardContent({
   buttonText,
   onButtonClick,
+  max,
 }: FilterCardContentProps) {
   const [value, setValue] = useState<number[]>([1]);
   return (
@@ -18,16 +20,12 @@ export default function FilterCardContent({
       <h2 className="h1 text-black">{formatDataSize(value[0])}</h2>
       <p className="body-sm text-gray-600">원하는 용량을 선택하세요</p>
 
-      <Slider
-        value={value}
-        onValueChange={setValue}
-        max={2}
-      />
+      <Slider value={value} onValueChange={setValue} max={max} />
 
-      <ButtonComponent 
-        variant="nonoutline" 
+      <ButtonComponent
+        variant="nonoutline"
         className="w-[280px]"
-        onClick={onButtonClick}
+        onClick={() => onButtonClick?.(value[0])}
       >
         {buttonText}
       </ButtonComponent>

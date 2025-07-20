@@ -6,13 +6,13 @@ import { Star } from "lucide-react";
 interface ProfileCardProps {
   name: string;
   joinDate: string;
-  //rating: number;
+  rating: number;
   reviewCount: number;
 }
 
-export default function ProfileCard({ name, joinDate, reviewCount }: ProfileCardProps) {
+export default function ProfileCard({ name, joinDate, rating, reviewCount }: ProfileCardProps) {
   return (
-    <div className="flex items-center justify-between w-full p-16">
+    <div className="flex items-center justify-between w-full">
       <div className="w-48 h-48 rounded-full bg-gray-300 overflow-hidden">
         <AvatarIcon size="medium" />
       </div>
@@ -22,9 +22,12 @@ export default function ProfileCard({ name, joinDate, reviewCount }: ProfileCard
         <p className="body-sm text-gray-500">가입일: {joinDate}</p>
       </div>
 
-      <div className="flex flex-col items-end justify-center">
-        <Star className="w-20 h-20 text-primary" />
-        <span className="text-gray-500 body-xs mt-2">({reviewCount}개의 리뷰)</span>
+      <div className="flex flex-col items-end justify-center gap-2">
+        <div className="flex items-center gap-4">
+          <Star className="w-20 h-20 fill-primary text-primary" />
+          <span className="title-sm text-black">{rating.toFixed(1)}</span>
+        </div>
+        <span className="text-gray-500 body-xs">({reviewCount}개의 리뷰)</span>
       </div>
     </div>
   );

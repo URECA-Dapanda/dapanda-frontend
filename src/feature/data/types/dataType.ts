@@ -34,4 +34,5 @@ export interface DataDetailResponse {
   averageRate: number;
   reviewCount: number;
   updatedAt: string;
+  splitType: boolean;
 }
