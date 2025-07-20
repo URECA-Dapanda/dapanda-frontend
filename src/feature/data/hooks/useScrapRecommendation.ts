@@ -12,13 +12,17 @@ export function useScrapRecommendation() {
         totalPrice: 0,
     });
 
-    const search = async () => {
+    const fetchRecommendation = async (amount: number) => {
+        return await getScrapRecommendation(amount);
+      };
+    
+      const search = async () => {
         setLoading(true);
-        const { items, summary } = await getScrapRecommendation(value[0]);
+        const { items, summary } = await fetchRecommendation(value[0]);
         setResult(items);
         setSummary(summary);
         setLoading(false);
-    };
+      };
 
     return {
         value,
