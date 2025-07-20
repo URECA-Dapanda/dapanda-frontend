@@ -3,7 +3,6 @@
 import { useSearchParams } from "next/navigation";
 import ChatRoomContent from "@/feature/chat/components/sections/room/ChatRoomContent";
 import ChatRoomHeader from "@/feature/chat/components/sections/room/ChatRoomHeader";
-import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
 
 export default function ChatRoomPage() {
   const searchParams = useSearchParams();
