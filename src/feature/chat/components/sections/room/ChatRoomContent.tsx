@@ -55,7 +55,7 @@ export default function ChatRoomContent({ title, price }: ChatRoomContentProps) 
         <ChatPostCard title={title} price={price} />
       </div>
 
-      {groupMessagesByDate(messages).map(({ date }) => (
+      {groupMessagesByDate(messages).map(({ date, messages }) => (
         <div key={date} className="space-y-6">
           <div className="text-center text-gray-500 body-xs py-6">{formatDateDivider(date)}</div>
           <div className="flex flex-col gap-24">
