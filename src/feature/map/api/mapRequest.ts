@@ -6,8 +6,9 @@ const mockDataList = (startId = 0) =>
       resolve(
         Array.from({ length: 20 }, (_, i) => ({
           id: startId + i + 1,
+          productId: startId + i + 1,
           title: `스타벅스 강남역 ${i + 1}`,
-          price: "300원",
+          price: 300,
           address: "서울시 강남구 강남대로 456",
           isOpen: true,
           location: "41.40338, 2.17403",
