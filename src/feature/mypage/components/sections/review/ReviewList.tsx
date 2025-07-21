@@ -1,10 +1,12 @@
 "use client";
 
+import { Fragment } from "react";
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 import { getReviewList } from "@feature/mypage/apis/reviewRequest";
 import { ReviewType } from "@feature/mypage/types/reviewType";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import ReviewItem from "./ReviewItem";
+import TabTitle from "../TabTitle";
 
 export default function ReviewList() {
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
@@ -22,7 +24,8 @@ export default function ReviewList() {
     });
 
   return (
-    <div className="mt-24">
+    <Fragment>
+      <TabTitle listLength={13} />
       <VirtualizedInfiniteList
         parentRef={parentRef}
         rowVirtualizer={rowVirtualizer}
@@ -34,6 +37,6 @@ export default function ReviewList() {
         renderItem={(item) => <ReviewItem data={item} key={item.reviewId} />}
         mode="button"
       />
-    </div>
+    </Fragment>
   );
 }

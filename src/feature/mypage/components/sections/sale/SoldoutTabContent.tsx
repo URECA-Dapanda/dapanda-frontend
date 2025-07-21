@@ -11,7 +11,7 @@ export default function SoldoutTabContent() {
       queryKey: ["dataItems", "default"],
       queryFn: ({ pageParam = 0 }) => getSaleHistoryList({ pageParam, isSold: true }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
-      estimateSize: () => 192,
+      estimateSize: () => 162,
       mode: "button",
     });
 
@@ -28,7 +28,7 @@ export default function SoldoutTabContent() {
         items={flatItems}
         renderItem={(item) => <HistoryCard data={item} key={item.id} size="lg" />}
         mode="button"
-        height="400px"
+        height="350px"
       />
     </div>
   );

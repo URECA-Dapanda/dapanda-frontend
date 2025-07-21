@@ -4,7 +4,7 @@ import ReviewCard from "../sections/review/ReviewCard";
 
 export default function ReviewPageContent() {
   return (
-    <div className="reviewPageContainer w-full h-full flex flex-col gap-24 pt-12">
+    <div className="reviewPageContainer w-full h-full flex flex-col gap-12 pt-12">
       <div className="px-24">
         <ItemCard size="lg">
           <div className="flex w-full h-full flex-col items-center justify-center">

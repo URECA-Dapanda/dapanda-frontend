@@ -11,7 +11,7 @@ export default function OnSaleTabContent() {
       queryKey: ["dataItems", "default"],
       queryFn: ({ pageParam = 0 }) => getSaleHistoryList({ pageParam, isSold: false }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
-      estimateSize: () => 160,
+      estimateSize: () => 130,
       mode: "button",
     });
 
@@ -28,7 +28,7 @@ export default function OnSaleTabContent() {
         items={flatItems}
         renderItem={(item) => <HistoryCard data={item} key={item.id} />}
         mode="button"
-        height="400px"
+        height="350px"
       />
     </div>
   );
