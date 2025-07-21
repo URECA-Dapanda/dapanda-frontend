@@ -16,8 +16,14 @@ export default function MapPageContent() {
     hasNextPage: hasNextPageForMap,
     fetchNextPage: fetchNextPageForMap,
   } = useVirtualizedInfiniteQuery<MapType>({
-    queryKey: ["mapItems"],
-    queryFn: ({ pageParam = 0 }: QueryFunctionContext) => getMapList({ pageParam }),
+    queryKey: ["mapItems", "lat:37.5", "lng:127.0"],
+    queryFn: ({ pageParam = 0 }: QueryFunctionContext) =>
+      getMapList({
+        cursorId: typeof pageParam === "number" ? pageParam : undefined,
+        size: 100,
+        latitude: 37.5,
+        longitude: 127.0,
+      }),
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     estimateSize: () => 200,
     mode: "button",
