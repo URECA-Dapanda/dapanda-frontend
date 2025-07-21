@@ -1,4 +1,4 @@
-import DataDetailContent from "@feature/data/components/sections/product/DataDetailContent";
+import DataDetailContent from "@feature/data/components/pages/DataDetailContent";
 
 export default async function Page() {
   return (
