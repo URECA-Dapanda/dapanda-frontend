@@ -3,14 +3,16 @@ import axios from "@/lib/axios";
 
 export async function getReviewList({
   pageParam = 0,
+  size = 2,
   memberId,
 }: {
   pageParam?: number | unknown;
   memberId: string;
+  size: number;
 }): Promise<{ items: ReviewType[]; nextCursor?: number }> {
   try {
     const response = await axios.get(`api/members/${memberId}/reviews/received`, {
-      params: { cursorId: pageParam },
+      params: { cursorId: pageParam, size: size },
     });
 
     const rawList = response.data.data.data as ReviewType[];

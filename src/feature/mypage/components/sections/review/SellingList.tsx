@@ -24,12 +24,16 @@ export default function SellingList() {
       mode="button"
       parentRef={parentRef}
       rowVirtualizer={rowVirtualizer}
-      height="400px"
+      height="350px"
       items={flatItems}
       isFetchingNextPage={isFetchingNextPage}
       hasNextPage={hasNextPage}
       fetchNextPage={fetchNextPage}
-      renderItem={(item: DataType) => <DataItemCard data={item} type="default" />}
+      renderItem={(item: DataType) => (
+        <div className="px-24">
+          <DataItemCard data={item} type="default" />
+        </div>
+      )}
     />
   );
 }

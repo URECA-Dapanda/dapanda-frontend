@@ -84,7 +84,7 @@ function VirtualizedList<T>({
       >
         <div
           style={{
-            height: `${totalHeight - 100}px`,
+            height: `${totalHeight - 120}px`,
             position: "relative",
             width: "100%",
           }}
@@ -122,7 +122,7 @@ function VirtualizedList<T>({
               onClick={fetchNextPage}
               disabled={isFetchingNextPage}
               variant={"nonoutline"}
-              className="text-gray-600 w-full shadow-none"
+              className="text-gray-600 w-full shadow-none mb-[50px]"
               size={"sm"}
             >
               {isFetchingNextPage ? "로딩 중..." : "더보기"}

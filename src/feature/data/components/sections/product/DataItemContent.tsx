@@ -1,11 +1,12 @@
 import AvatarIcon from "@components/common/AvatarIcon";
+import LayoutBox from "@components/common/container/LayoutBox";
 import { DataType, ProductItemProps } from "@feature/data/types/dataType";
 
 export default function DataItemContent({
   data: { date, price, pricePer, title, userName },
 }: ProductItemProps<DataType>) {
   return (
-    <div className="grid grid-cols-[auto_1fr_auto] items-center justify-center gap-x-32 self-center h-full">
+    <LayoutBox layout="grid" autoFit gap={32} direction="row">
       <AvatarIcon size="large" />
       <div className="flex flex-col justify-center h-full">
         <span className="body-lg">{title}</span>
@@ -16,6 +17,6 @@ export default function DataItemContent({
         <span className="body-xs text-gray-500">{date}</span>
         <span className="body-xs">{pricePer}</span>
       </div>
-    </div>
+    </LayoutBox>
   );
 }

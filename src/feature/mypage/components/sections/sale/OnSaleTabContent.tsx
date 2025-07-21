@@ -17,7 +17,7 @@ export default function OnSaleTabContent() {
 
   return (
     <div className="mt-12">
-      <TabTitle listLength={13}>판매 중</TabTitle>
+      <TabTitle listLength={13}></TabTitle>
 
       <VirtualizedInfiniteList
         parentRef={parentRef}

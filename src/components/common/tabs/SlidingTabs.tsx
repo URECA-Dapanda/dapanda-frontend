@@ -61,7 +61,7 @@ PropsWithChildren<SlidingTabsProps>) {
       ),
     },
     outline: {
-      tabList: "bg-white flex gap-8 px-24 py-16",
+      tabList: "bg-white flex gap-8 py-16",
       highlight: "bottom-0 h-[2px] bg-primary",
       trigger: cn(
         "!shadow-none w-[140px] h-[30px] title-sm text-gray-400 text-center relative  hover:cursor-pointer",
@@ -72,7 +72,12 @@ PropsWithChildren<SlidingTabsProps>) {
   }[variant];
 
   return (
-    <Tabs value={currentTab} onValueChange={handleChange} defaultValue={defaultValue}>
+    <Tabs
+      value={currentTab}
+      onValueChange={handleChange}
+      defaultValue={defaultValue}
+      className="overflow-x-visible whitespace-nowrap transition-all "
+    >
       <TabsList className={cn("relative mx-auto", styles.tabList)}>
         <motion.div
           layout

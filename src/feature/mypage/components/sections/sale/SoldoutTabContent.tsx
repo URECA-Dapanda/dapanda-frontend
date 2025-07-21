@@ -17,7 +17,7 @@ export default function SoldoutTabContent() {
 
   return (
     <div className="mt-12">
-      <TabTitle listLength={13}>판매 완료</TabTitle>
+      <TabTitle listLength={13}></TabTitle>
 
       <VirtualizedInfiniteList
         parentRef={parentRef}

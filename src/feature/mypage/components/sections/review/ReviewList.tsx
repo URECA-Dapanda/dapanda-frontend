@@ -13,23 +13,27 @@ export default function ReviewList() {
       queryFn: ({ pageParam = 0 }) =>
         getReviewList({
           pageParam,
+          size: 2,
           memberId: "3",
         }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
-      estimateSize: () => 160,
+      estimateSize: () => 130,
       mode: "scroll",
     });
 
   return (
-    <VirtualizedInfiniteList
-      parentRef={parentRef}
-      rowVirtualizer={rowVirtualizer}
-      items={flatItems}
-      isFetchingNextPage={isFetchingNextPage}
-      hasNextPage={hasNextPage}
-      fetchNextPage={fetchNextPage}
-      renderItem={(item) => <ReviewItem data={item} key={item.reviewId} />}
-      mode="button"
-    />
+    <div className="mt-24">
+      <VirtualizedInfiniteList
+        parentRef={parentRef}
+        rowVirtualizer={rowVirtualizer}
+        items={flatItems}
+        height="350px"
+        isFetchingNextPage={isFetchingNextPage}
+        hasNextPage={hasNextPage}
+        fetchNextPage={fetchNextPage}
+        renderItem={(item) => <ReviewItem data={item} key={item.reviewId} />}
+        mode="button"
+      />
+    </div>
   );
 }
