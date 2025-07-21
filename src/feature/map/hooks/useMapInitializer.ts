@@ -13,39 +13,47 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
   const { setMap, setStoreList } = useMapStore();
 
   useEffect(() => {
-    if (!window.naver) return;
-    const mapContainer = document.getElementById(MAP_CONTAINER_ID);
-    if (!mapContainer) return;
+    const tryInitMap = () => {
+      if (!window.naver || !window.naver.maps) {
+        setTimeout(tryInitMap, 100);
+        return;
+      }
 
-    const center = new window.naver.maps.LatLng(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng);
-    const map = new window.naver.maps.Map(mapContainer, {
-      center,
-      zoom: 15,
-    });
+      const mapContainer = document.getElementById(MAP_CONTAINER_ID);
+      if (!mapContainer) return;
 
-    setMap(map);
-    options?.onMapInit?.(map);
+      const center = new window.naver.maps.LatLng(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng);
+      const map = new window.naver.maps.Map(mapContainer, {
+        center,
+        zoom: 15,
+      });
 
-    navigator.geolocation?.getCurrentPosition(
-      ({ coords }) => {
-        const current = new window.naver.maps.LatLng(coords.latitude, coords.longitude);
-        map.setCenter(current);
+      setMap(map);
+      options?.onMapInit?.(map);
 
-        new window.naver.maps.Marker({
-          position: current,
-          map,
-          icon: {
-            content:
-              '<div style="background:#e6007e;width:12px;height:12px;border-radius:9999px;"></div>',
-          },
-        });
+      navigator.geolocation?.getCurrentPosition(
+        ({ coords }) => {
+          const current = new window.naver.maps.LatLng(coords.latitude, coords.longitude);
+          map.setCenter(current);
 
-        const dummyList = mockMapList({ lat: coords.latitude, lng: coords.longitude });
-        setStoreList(dummyList);
-        options?.onStoreListUpdate?.(dummyList);
-      },
-      () => alert("위치 정보를 가져올 수 없습니다."),
-      { enableHighAccuracy: true }
-    );
+          new window.naver.maps.Marker({
+            position: current,
+            map,
+            icon: {
+              content:
+                '<div style="background:#e6007e;width:12px;height:12px;border-radius:9999px;"></div>',
+            },
+          });
+
+          const dummyList = mockMapList({ lat: coords.latitude, lng: coords.longitude });
+          setStoreList(dummyList);
+          options?.onStoreListUpdate?.(dummyList);
+        },
+        () => alert("위치 정보를 가져올 수 없습니다."),
+        { enableHighAccuracy: true }
+      );
+    };
+
+    tryInitMap();
   }, [options]);
 };
