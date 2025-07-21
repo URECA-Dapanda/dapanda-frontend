@@ -3,6 +3,9 @@
 //import { useSearchParams } from "next/navigation";
 import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
 import type { ChatMessage } from "@/feature/chat/types/message";
+import ChatPostCard from "./ChatPostCard";
+import { groupMessagesByDate } from "@feature/chat/utils/groupMessagesByDate";
+import { formatDateDivider } from "@lib/time";
 //import { useChatStream } from "@/feature/chat/hooks/useChatStream";
 //import { useProfileStore } from "@stores/useProfileStore";
 
@@ -14,7 +17,6 @@ export default function ChatRoomContent({ title, price }: ChatRoomContentProps) 
   const currentUserId = "123";
   //const searchParams = useSearchParams();
   //const chatId = searchParams.get("chatId") || "1"; // 예시
-
   //const currentUserAvatar = useProfileStore((state) => state.avatar);
 
   const messages: ChatMessage[] = [
@@ -48,13 +50,20 @@ export default function ChatRoomContent({ title, price }: ChatRoomContentProps) 
   ];
 
   return (
-    <main className="p-4 space-y-6 pb-24">
-      <div className="text-sm text-gray-500">
-        {title} · {price}
+    <main className="px-24 space-y-6 pt-24">
+      <div className="pb-48">
+        <ChatPostCard title={title} price={price} />
       </div>
 
-      {messages.map((msg) => (
-        <ChatBubble key={msg.id} message={msg} currentUserId={currentUserId} />
+      {groupMessagesByDate(messages).map(({ date, messages }) => (
+        <div key={date} className="space-y-6">
+          <div className="text-center text-gray-500 body-xs py-6">{formatDateDivider(date)}</div>
+          <div className="flex flex-col gap-24">
+            {messages.map((msg) => (
+              <ChatBubble key={msg.id} message={msg} currentUserId={currentUserId} />
+            ))}
+          </div>
+        </div>
       ))}
     </main>
   );

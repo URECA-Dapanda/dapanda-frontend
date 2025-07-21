@@ -2,13 +2,17 @@
 
 import { useRouter } from "next/navigation";
 import { MoreVertical, ChevronLeft } from "lucide-react";
+import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
+import { chatMenuOptions } from "@/components/common/dropdown/dropdownConfig";
 
 export default function ChatRoomHeader({ title }: { title: string }) {
   const router = useRouter();
-
+  const handleReport = () => {
+    alert("신고되었습니다.");
+  };
   return (
-    <div className="sticky top-0 z-50 bg-white shadow px-4 py-3 flex items-center justify-between">
-      <div className="flex items-center gap-2">
+    <div className="sticky top-0 z-50 bg-white shadow px-20 py-12 flex items-center justify-between">
+      <div className="flex items-center gap-8">
         <button onClick={() => router.back()}>
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -16,9 +20,11 @@ export default function ChatRoomHeader({ title }: { title: string }) {
         <h1 className="title-sm font-semibold text-gray-900">{title}</h1>
       </div>
 
-      <button className="p-1">
-        <MoreVertical className="w-5 h-5" />
-      </button>
+      <UserDropdownMenu options={chatMenuOptions(handleReport)}>
+        <button className="p-1">
+          <MoreVertical className="w-5 h-5" />
+        </button>
+      </UserDropdownMenu>
     </div>
   );
 }
