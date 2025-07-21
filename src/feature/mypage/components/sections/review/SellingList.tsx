@@ -1,6 +1,6 @@
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 import { getDataList } from "@feature/data/api/dataRequest";
-import DataItemCard from "@feature/data/components/sections/product/DataItemCard";
+import DataItemCard from "@feature/data/components/sections/default/DataItemCard";
 import { DataType } from "@feature/data/types/dataType";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import { Fragment } from "react";
