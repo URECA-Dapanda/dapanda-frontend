@@ -17,6 +17,12 @@ export default function ChatInputBar({ onSend }: ChatInputBarProps) {
     onSend(message);
     setMessage("");
   };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50">
@@ -28,6 +34,7 @@ export default function ChatInputBar({ onSend }: ChatInputBarProps) {
         <InputComponent
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="메시지를 입력하세요"
           radius="lg"
           required
