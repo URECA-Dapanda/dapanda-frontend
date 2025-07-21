@@ -4,6 +4,7 @@ export interface MapType {
   title: string;
   address: string;
   location: string;
+  updatedAt: string;
   isOpen: boolean;
   score: number;
   price: string;

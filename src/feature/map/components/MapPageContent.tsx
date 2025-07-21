@@ -1,11 +1,11 @@
-import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
-import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
-import { MapType } from "../types/mapType";
-import { QueryFunctionContext } from "@tanstack/react-query";
-import { getMapList } from "../api/mapRequest";
-import MapItemCard from "./sections/product/MapItemCard";
 import { Fragment } from "react";
-import SelectTypeCard from "./sections/regist/SelectTypeCard";
+import { QueryFunctionContext } from "@tanstack/react-query";
+import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
+import { getMapList } from "@/feature/map/api/mapRequest";
+import MapItemCard from "@/feature/map/components/sections/product/MapItemCard";
+import SelectTypeCard from "@/feature/map/components/sections/regist/SelectTypeCard";
+import type { MapType } from "@/feature/map/types/mapType";
+import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 
 export default function MapPageContent() {
   const {

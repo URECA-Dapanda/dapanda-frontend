@@ -1,5 +1,9 @@
-import DataDetailContent from "@/feature/data/components/DataDetailContent";
+import DataDetailContent from "@feature/data/components/pages/DataDetailContent";
 
 export default async function Page() {
-  return <DataDetailContent />;
+  return (
+    <div className="min-h-screen overflow-y-auto">
+      <DataDetailContent />
+    </div>
+  );
 }
