@@ -34,6 +34,7 @@ export interface DataDetailResponse {
   averageRate: number;
   reviewCount: number;
   updatedAt: string;
+  splitType: boolean;
 }
 
 export function mapRawToDataType(raw: RawDataItem): DataType {

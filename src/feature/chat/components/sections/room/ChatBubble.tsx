@@ -14,7 +14,7 @@ export default function ChatBubble({ message, currentUserId }: ChatBubbleProps) 
   const timeText = formatTimeToAmPm(message.createdAt);
 
   const baseClasses =
-    "w-fit max-w-[70%] px-3 py-3 rounded-2xl whitespace-pre-wrap ml-4 body-sm border border-primary-200 text-black";
+    "w-fit max-w-[80%] px-3 py-3 rounded-2xl whitespace-pre-wrap ml-4 body-sm border border-primary-200 text-black";
   const bubbleClasses = isMine ? "bg-primary2 rounded-br-none" : "bg-white rounded-bl-none";
 
   const bubble = <div className={cn(baseClasses, bubbleClasses)}>{message.text}</div>;

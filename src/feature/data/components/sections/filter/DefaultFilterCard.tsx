@@ -18,6 +18,7 @@ export default function DefaultFilterCard() {
         value={value}
         onValueChange={setValue}
         onButtonClick={handleSearch}
+        max={2}
       />
     </FlatCard>
   );
