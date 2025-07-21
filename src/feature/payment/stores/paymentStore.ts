@@ -6,7 +6,7 @@ interface PaymentInfo {
   title: string;
   price: string;
   unitPrice?: string;
-  badge?: "일반 구매" | "분할 구매";
+  badge?: "일반 구매" | "자투리 구매";
   seller?: string;
   cash: string;
   remainingData?: string;
