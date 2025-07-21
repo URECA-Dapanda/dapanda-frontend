@@ -7,14 +7,13 @@ import BottomNavigation from "@components/common/navigation/BottomNavigation";
 
 export default function ChatLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-
   const isChatRoom = /^\/chat\/[^/]+$/.test(pathname);
 
   return (
     <Fragment>
       {!isChatRoom && <LogoHeader />}
       {children}
-      <BottomNavigation />
+      {!isChatRoom && <BottomNavigation />}
     </Fragment>
   );
 }
