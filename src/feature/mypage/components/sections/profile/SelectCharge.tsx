@@ -45,11 +45,12 @@ export default function SelectCharge() {
           </ButtonComponent>
         </LayoutBox>
         <p className="body-sm mb-8 mt-8">직접 입력</p>
-        <LayoutBox layout="flex" direction="row" gap={"8px"}>
+        <LayoutBox layout="flex" direction="row" height="fit" gap={"8px"}>
           <InputComponent
             placeholder="금액을 입력하세요"
             value={selectValue}
             onChange={handleChange}
+            size="md"
           />{" "}
           원
         </LayoutBox>

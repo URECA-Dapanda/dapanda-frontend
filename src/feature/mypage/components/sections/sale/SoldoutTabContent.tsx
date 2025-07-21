@@ -1,6 +1,6 @@
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
-import TabTitle from "../TabTitle";
-import { HistoryCard } from "./HistoryCard";
+import TabTitle from "@feature/mypage/components/sections/TabTitle";
+import { HistoryCard } from "@feature/mypage/components/sections/sale/HistoryCard";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import { SaleHistoryType } from "@feature/mypage/types/mypageTypes";
 import { getSaleHistoryList } from "@feature/mypage/apis/mypageRequest";
@@ -11,13 +11,13 @@ export default function SoldoutTabContent() {
       queryKey: ["dataItems", "default"],
       queryFn: ({ pageParam = 0 }) => getSaleHistoryList({ pageParam, isSold: true }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
-      estimateSize: () => 192,
+      estimateSize: () => 162,
       mode: "button",
     });
 
   return (
     <div className="mt-12">
-      <TabTitle listLength={13}>판매 완료</TabTitle>
+      <TabTitle listLength={13}></TabTitle>
 
       <VirtualizedInfiniteList
         parentRef={parentRef}
@@ -28,7 +28,7 @@ export default function SoldoutTabContent() {
         items={flatItems}
         renderItem={(item) => <HistoryCard data={item} key={item.id} size="lg" />}
         mode="button"
-        height="400px"
+        height="350px"
       />
     </div>
   );

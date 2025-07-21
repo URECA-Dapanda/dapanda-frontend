@@ -1,8 +1,8 @@
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
-import TabTitle from "../TabTitle";
+import TabTitle from "@feature/mypage/components/sections/TabTitle";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import { getSaleHistoryList } from "@feature/mypage/apis/mypageRequest";
-import { HistoryCard } from "./HistoryCard";
+import { HistoryCard } from "@feature/mypage/components/sections/sale/HistoryCard";
 import { SaleHistoryType } from "@feature/mypage/types/mypageTypes";
 
 export default function OnSaleTabContent() {
@@ -11,13 +11,13 @@ export default function OnSaleTabContent() {
       queryKey: ["dataItems", "default"],
       queryFn: ({ pageParam = 0 }) => getSaleHistoryList({ pageParam, isSold: false }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
-      estimateSize: () => 160,
+      estimateSize: () => 130,
       mode: "button",
     });
 
   return (
     <div className="mt-12">
-      <TabTitle listLength={13}>판매 중</TabTitle>
+      <TabTitle listLength={13}></TabTitle>
 
       <VirtualizedInfiniteList
         parentRef={parentRef}
@@ -28,7 +28,7 @@ export default function OnSaleTabContent() {
         items={flatItems}
         renderItem={(item) => <HistoryCard data={item} key={item.id} />}
         mode="button"
-        height="400px"
+        height="350px"
       />
     </div>
   );

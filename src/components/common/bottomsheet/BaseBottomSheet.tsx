@@ -45,10 +45,7 @@ export default function BaseBottomSheet({
   const threshold = 100;
   const screenHeight = typeof window !== "undefined" ? window.innerHeight : 1000;
 
-  const handleDragEnd = (
-    event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
-  ) => {
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const offset = info.offset.y;
     const velocity = info.velocity.y;
 
@@ -93,7 +90,6 @@ export default function BaseBottomSheet({
         break;
     }
   };
-
 
   return (
     <>
