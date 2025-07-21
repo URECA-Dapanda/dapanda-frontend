@@ -75,7 +75,13 @@ export default function DataDetailContent() {
       <div className="pt-[280px] space-y-12 px-24">
         {data.splitType && (
           <div className="bg-primary2 px-12 py-36 rounded-2xl">
-            <FilterCardContent buttonText="구매하기" max={data.remainAmount} />
+            <FilterCardContent
+              buttonText="구매하기"
+              max={data.remainAmount}
+              onValueChange={() => {}}
+              onButtonClick={() => {}}
+              value={[]}
+            />
           </div>
         )}
 

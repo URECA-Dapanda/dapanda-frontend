@@ -6,6 +6,7 @@ interface FilterCardContentProps {
   buttonText: string;
   onButtonClick?: (selectedAmount: number) => void;
   value: number[];
+  max: number;
   onValueChange: (val: number[]) => void;
 }
 
@@ -13,6 +14,7 @@ export default function FilterCardContent({
   buttonText,
   onButtonClick,
   value,
+  max,
   onValueChange,
 }: FilterCardContentProps) {
   return (
@@ -20,7 +22,7 @@ export default function FilterCardContent({
       <h2 className="h1 text-black">{formatDataSize(value[0])}</h2>
       <p className="body-sm text-gray-600">원하는 용량을 선택하세요</p>
 
-      <Slider value={value} onValueChange={onValueChange} max={2} />
+      <Slider value={value} onValueChange={onValueChange} max={max} />
 
       <ButtonComponent
         variant="nonoutline"
