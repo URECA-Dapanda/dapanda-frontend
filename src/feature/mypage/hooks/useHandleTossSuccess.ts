@@ -36,7 +36,7 @@ export const useHandleTossSuccess = () => {
         }
 
         router.replace("/mypage?payment=success");
-      } catch (e) {
+      } catch {
         alert("결제 처리 중 오류 발생");
         router.replace("/mypage?error=unknown");
       }
