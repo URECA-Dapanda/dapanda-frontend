@@ -14,6 +14,7 @@ export default function LandingPageContent() {
       router.push("/data");
     }
   }, [isLogin]);
+
   return (
     <div className="w-full max-w-sm mx-auto min-h-screen bg-gradient-to-b from-[#f5e6f3] via-[#f0e1f1] to-[#ede0f0] flex flex-col items-center justify-center p-32 relative overflow-hidden">
       <div className="flex-1 flex flex-col items-center justify-center h-full">

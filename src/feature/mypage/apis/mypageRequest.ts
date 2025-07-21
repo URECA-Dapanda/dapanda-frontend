@@ -1,4 +1,5 @@
 import { PurchaseHistoryType, SaleHistoryType } from "../types/mypageTypes";
+import axios from "@lib/axios";
 
 const mockDataList = (isSold: boolean): Promise<SaleHistoryType[]> =>
   new Promise((resolve) => {
@@ -38,32 +39,19 @@ export async function getSaleHistoryList({
   return { items: data, nextCursor: hasMore ? end : undefined };
 }
 
-const mockPurchaseList = (): Promise<PurchaseHistoryType[]> =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(
-        Array.from({ length: 20 }, (_, i) => ({
-          id: i,
-          title: i + "GB 데이터",
-          type: "데이터",
-          isSold: true,
-          soldDate: Date.now().toString(),
-          registDate: Date.now().toString(),
-          isScrap: true,
-        }))
-      );
-    }, 0);
-  });
-
 export async function getPurchaseHistoryList({
   pageParam = 0,
+  size = 2,
+  cursorId = 0,
 }: {
   pageParam?: number | unknown;
+  size?: number;
+  cursorId?: number;
 }): Promise<{ items: PurchaseHistoryType[]; nextCursor?: number }> {
   if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
-  const end = pageParam + 20;
-  const hasMore = end < 200;
-  const data = await mockPurchaseList();
+  const { data } = await axios.get("/api/trades", { params: { size, cursorId } });
+  const items = data.trades.data;
+  const nextCursor = data.trades.pageInfo.nextCursorId;
 
-  return { items: data, nextCursor: hasMore ? end : undefined };
+  return { items, nextCursor };
 }

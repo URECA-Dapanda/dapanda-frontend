@@ -7,6 +7,7 @@ import TransactionHistory from "../sections/TransactionHistory";
 import { DataUsageDonut } from "../sections/profile/CicularProgressBar";
 import { ButtonComponent } from "@components/common/button";
 import ProfileCard from "../sections/profile/ProfileCard";
+import LogOutButton from "../sections/LogOutButton";
 
 export default function MyPageContent() {
   return (
@@ -21,9 +22,7 @@ export default function MyPageContent() {
       <Link href={"/"}>
         <Image src={"/pandaDic.svg"} alt="PandaDic" width={327} height={170} />
       </Link>
-      <ButtonComponent variant={"outlinePrimary"} className="w-full">
-        로그아웃
-      </ButtonComponent>
+      <LogOutButton />
     </div>
   );
 }
