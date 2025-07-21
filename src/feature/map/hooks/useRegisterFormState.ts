@@ -8,6 +8,7 @@ export const useRegisterFormState = () => {
     title: "",
     description: "",
     price: "",
+    address: "",
     startTime: "",
     endTime: "",
   });
