@@ -134,6 +134,9 @@ export default function DataDetailContent() {
                   seller: data.memberName,
                   cash: formatPriceString(12500),
                   remainingData: "5.98GB",
+                  productId: data.productId,
+                  mobileDataId: data.itemId,
+                  dataAmount: data.remainAmount,
                 })
               }
             >
