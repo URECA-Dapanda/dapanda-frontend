@@ -6,7 +6,7 @@ export interface RawDataItem {
   remainAmount: number;
   pricePer100MB: number;
   splitType: boolean;
-  updatedAt?: string;
+  updatedAt: string;
 }
 
 export interface DataType {
@@ -34,4 +34,16 @@ export interface DataDetailResponse {
   averageRate: number;
   reviewCount: number;
   updatedAt: string;
+}
+
+export function mapRawToDataType(raw: RawDataItem): DataType {
+  return {
+    id: raw.id,
+    userId: raw.itemId,
+    title: `${raw.remainAmount}GB`,
+    userName: raw.memberName,
+    price: `${raw.price.toLocaleString()}원`,
+    pricePer: `${raw.pricePer100MB}원/100MB`,
+    date: raw.updatedAt,
+  };
 }

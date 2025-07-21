@@ -6,7 +6,7 @@ export default function DataItemContent({
   data: { date, price, pricePer, title, userName },
 }: ProductItemProps<DataType>) {
   return (
-    <LayoutBox layout="grid" autoFit gap={32} direction="row">
+    <LayoutBox layout="grid" autoFit gap={32} direction="row" height="full">
       <AvatarIcon size="large" />
       <div className="flex flex-col justify-center h-full">
         <span className="body-lg">{title}</span>

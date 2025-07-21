@@ -19,29 +19,32 @@ interface CardComponentProps {
   color: CardColor;
 }
 
-const cardVariant = cva("inline-flex gap-2 whitespace-nowrap transition-all rounded-20 py-0 ", {
-  variants: {
-    variant: {
-      material: "border-none shadow-material",
-      flat: "border-none shadow-none",
-      outlined: "border",
+const cardVariant = cva(
+  "relative inline-flex gap-2 whitespace-nowrap transition-all rounded-20 py-0 ",
+  {
+    variants: {
+      variant: {
+        material: "border-none shadow-material",
+        flat: "border-none shadow-none",
+        outlined: "border",
+      },
+      size: {
+        md: "h-144 w-full",
+        lg: "h-152 w-full",
+        xl: "h-200 w-full",
+        xxl: "h-[240px] w-full",
+        sm: "h-120 w-full",
+        xs: "h-76 w-full",
+        xxs: "h-56 w-full",
+        fit: "h-fit w-full",
+      },
     },
-    size: {
-      md: "h-144 w-full",
-      lg: "h-152 w-full",
-      xl: "h-200 w-full",
-      xxl: "h-[240px] w-full",
-      sm: "h-120 w-full",
-      xs: "h-76 w-full",
-      xxs: "h-56 w-full",
-      fit: "h-fit w-full",
+    defaultVariants: {
+      variant: "material",
+      size: "md",
     },
-  },
-  defaultVariants: {
-    variant: "material",
-    size: "md",
-  },
-});
+  }
+);
 
 /**
  * `CardComponent`는 다양한 스타일, 크기, 색상 옵션을 가진 재사용 가능한 카드 컴포넌트입니다.

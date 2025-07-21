@@ -2,7 +2,7 @@ import { MapPin, MessageCircle, User, Wifi } from "lucide-react";
 import { Fragment } from "react";
 import NavigationButton from "./NavigationButton";
 
-export default async function BottomNavigation() {
+export default function BottomNavigation() {
   return (
     <div
       className="absolute bottom-0 z-50 bg-white border-none overflow-x-clip"

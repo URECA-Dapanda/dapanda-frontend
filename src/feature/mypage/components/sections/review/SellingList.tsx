@@ -17,7 +17,7 @@ export default function SellingList() {
           sort: "RECENT",
         }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
-      estimateSize: () => 130,
+      estimateSize: () => 150,
       mode: "button",
     });
 
