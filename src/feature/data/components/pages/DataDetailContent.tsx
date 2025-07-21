@@ -14,6 +14,7 @@ import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 import FilterCardContent from "@feature/data/components/sections/filter/FilterCardContent";
 import { useProfileStore } from "@stores/useProfileStore";
 import { ChevronRight } from "lucide-react";
+import { formatDataSize, formatPriceString } from "@lib/formatters";
 
 export default function DataDetailContent() {
   const params = useParams();
@@ -99,8 +100,8 @@ export default function DataDetailContent() {
                   unitPrice: `${data.pricePer100MB.toLocaleString()}원`,
                   badge: "자투리 구매",
                   seller: data.memberName,
-                  cash: "12,500원", // TODO: API 연동
-                  remainingData: `${(data.remainAmount - selectedAmount).toFixed(2)}GB`,
+                  cash: formatPriceString(12500), // TODO: API 연동
+                  remainingData: formatDataSize(data.remainAmount - selectedAmount),
                 })
               }
               value={[selectedAmount]}
@@ -126,12 +127,12 @@ export default function DataDetailContent() {
               onClick={() =>
                 setInfo({
                   type: "data",
-                  title: `${data.remainAmount}GB`,
-                  price: `${data.price.toLocaleString()}원`,
-                  unitPrice: `${data.pricePer100MB.toLocaleString()}원`,
+                  title: formatDataSize(data.remainAmount),
+                  price: formatPriceString(data.price),
+                  unitPrice: formatPriceString(data.pricePer100MB),
                   badge: "일반 구매",
                   seller: data.memberName,
-                  cash: "12,500원",
+                  cash: formatPriceString(12500),
                   remainingData: "5.98GB",
                 })
               }
