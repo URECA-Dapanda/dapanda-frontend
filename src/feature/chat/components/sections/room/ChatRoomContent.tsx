@@ -4,7 +4,7 @@
 import { useState } from "react";
 import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
 import type { ChatMessage } from "@/feature/chat/types/message";
-import ChatPostCard from "./ChatPostCard";
+import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
 import { groupMessagesByDate } from "@feature/chat/utils/groupMessagesByDate";
 import { formatDateDivider } from "@lib/time";
 import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
