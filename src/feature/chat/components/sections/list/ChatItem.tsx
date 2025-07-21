@@ -1,7 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useCallback } from "react";
 import AvatarIcon from "@/components/common/AvatarIcon";
 
 export interface ChatItemProps {
@@ -18,7 +16,6 @@ export interface ChatItemProps {
 }
 
 export default function ChatItem({
-  chatId,
   name,
   lastMessage,
   timeAgo,
@@ -26,18 +23,8 @@ export default function ChatItem({
   avatarUrl,
   post,
 }: ChatItemProps) {
-  const router = useRouter();
-
-  const handleClick = useCallback(() => {
-    router.push(
-      `/chat/${chatId}?title=${encodeURIComponent(post.title)}&price=${encodeURIComponent(
-        post.price
-      )}&name=${encodeURIComponent(name)}`
-    );
-  }, [chatId, post.title, post.price, name]);
-
   return (
-    <div onClick={handleClick} className="cursor-pointer flex justify-between items-center gap-12">
+    <div className="cursor-pointer flex justify-between items-center gap-12">
       <div className="flex items-center gap-12">
         <AvatarIcon avatar={avatarUrl} size="medium" />
         <div className="flex flex-col gap-2">

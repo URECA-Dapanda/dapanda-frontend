@@ -1,6 +1,5 @@
 "use client";
 
-//import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
 import type { ChatMessage } from "@/feature/chat/types/message";
@@ -8,35 +7,16 @@ import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
 import { groupMessagesByDate } from "@feature/chat/utils/groupMessagesByDate";
 import { formatDateDivider } from "@lib/time";
 import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
-
-//import { useChatStream } from "@/feature/chat/hooks/useChatStream";
-//import { useProfileStore } from "@stores/useProfileStore";
-
+import { useChatStore } from "@feature/chat/stores/useChatStore";
 interface ChatRoomContentProps {
+  chatRoomId: number;
   title: string;
   price: string;
 }
-export default function ChatRoomContent({ title, price }: ChatRoomContentProps) {
+export default function ChatRoomContent({ chatRoomId, title, price }: ChatRoomContentProps) {
   const currentUserId = "123";
-  //const searchParams = useSearchParams();
-  //const chatId = searchParams.get("chatId") || "1"; // 예시
-  //const currentUserAvatar = useProfileStore((state) => state.avatar);
 
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: "1",
-      senderId: "456",
-      senderAvatar: "/creditIcon.png",
-      text: "궁금한게 있어요!",
-      createdAt: "2024-02-19T09:56:00",
-    },
-    {
-      id: "2",
-      senderId: "123",
-      text: "네 말씀하세요",
-      createdAt: "2024-02-19T09:57:00",
-    },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   const addMessage = (text: string) => {
     const newMessage: ChatMessage = {
@@ -46,6 +26,15 @@ export default function ChatRoomContent({ title, price }: ChatRoomContentProps) 
       createdAt: new Date().toISOString(),
     };
     setMessages([...messages, newMessage]);
+
+    useChatStore.getState().addChatRoom({
+      chatRoomId,
+      title,
+      price: parseFloat(price),
+      name: currentUserId,
+      lastMessage: text,
+      updatedAt: newMessage.createdAt,
+    });
   };
 
   return (

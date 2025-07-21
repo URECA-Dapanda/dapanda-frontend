@@ -1,5 +1,6 @@
 export interface MapType {
   id: number;
+  productId: number;
   type: "와이파이" | "핫스팟";
   title: string;
   address: string;
@@ -7,5 +8,5 @@ export interface MapType {
   updatedAt: string;
   isOpen: boolean;
   score: number;
-  price: string;
+  price: number;
 }
