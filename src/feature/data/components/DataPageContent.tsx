@@ -10,7 +10,7 @@ import DefaultTabBody from "@feature/data/components/sections/DefaultTabContent"
 import ScrapTabBody from "@feature/data/components/sections/ScrapTabContent";
 import { PurchaseModeTabs } from "@/components/common/tabs";
 import { useHeaderStore } from "@stores/useHeaderStore";
-import FilterCard from "./sections/filter/FilterCard";
+import DefaultFilterCard from "@feature/data/components/sections/filter/DefaultFilterCard";
 
 export default function DataPageContent() {
   const searchParams = useSearchParams();
@@ -47,14 +47,17 @@ export default function DataPageContent() {
 
   return (
     <div className="relative h-[100dvh] w-full bg-primary2 datapagecontent">
-      <div className="absolute top-[-40] left-[-44] z-20">
+      {/* 왼쪽 상단 로고 */}
+      <div className="absolute top-[-90] left-[-35] z-20">
         <Image src="/dpd-logo.svg" alt="logo" width={237} height={0} />
       </div>
-      <div className="absolute top-0 right-0 z-20">
+      {/* 오른쪽 상단 로고 */}
+      <div className="absolute top-[-50] right-0 z-20">
         <Image src="/dpd-main-logo.svg" alt="logo" width={96} height={0} />
       </div>
-      <div className="sticky top-0 z-10 bg-primary2 p-4 pt-120">
-        <FilterCard />
+      {/* 상단 필터 영역 */}
+      <div className="sticky top-0 z-10 bg-primary2 p-4 pt-60">
+        <DefaultFilterCard />
       </div>
       <div className="absolute bottom-76 right-24 z-50">
         <ButtonComponent
