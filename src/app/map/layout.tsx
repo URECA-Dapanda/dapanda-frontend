@@ -12,7 +12,7 @@ export default function MapLayout({ children }: { children: ReactNode }) {
       <main className="pt-[56px] pb-[56px]">
         {" "}
         <Script
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
           src={`https://openapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID}&submodules=geocoder`}
         />
         {children}
