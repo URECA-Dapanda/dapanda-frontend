@@ -1,9 +1,9 @@
-import ProfileWithHistoryCard from "../sections/profile/ProfileWithHistoryCard";
-import SaleStateTab from "../sections/sale/SaleStateTab";
+import ProfileWithHistoryCard from "@feature/mypage/components/sections/profile/ProfileWithHistoryCard";
+import SaleStateTab from "@feature/mypage/components/sections/sale/SaleStateTab";
 
 export default function SaleHistoryPageContent() {
   return (
-    <div className="p-24 w-full h-full flex flex-col gap-8">
+    <div className="w-full h-full flex flex-col gap-8">
       <ProfileWithHistoryCard />
       <SaleStateTab />
     </div>

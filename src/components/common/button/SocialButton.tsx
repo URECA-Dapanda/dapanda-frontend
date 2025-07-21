@@ -9,7 +9,7 @@ export default function SocialButton({ provider }: { provider: "kakao" | "naver"
   };
 
   return (
-    <button onClick={handleLogin}>
+    <button onClick={handleLogin} className="w-fit h-full flex self-center">
       <img src={`/${provider}Button.svg`} alt="카카오 로그인 버튼" width={222} />
     </button>
   );

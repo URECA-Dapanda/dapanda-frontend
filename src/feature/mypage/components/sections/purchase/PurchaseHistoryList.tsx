@@ -4,7 +4,7 @@ import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfinite
 import { getPurchaseHistoryList } from "@feature/mypage/apis/mypageRequest";
 import { PurchaseHistoryType } from "@feature/mypage/types/mypageTypes";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
-import PurchaseHistoryCard from "./PurchaseHistoryCard";
+import PurchaseHistoryCard from "@feature/mypage/components/sections/purchase/PurchaseHistoryCard";
 
 export default function PurchaseHistoryList() {
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
