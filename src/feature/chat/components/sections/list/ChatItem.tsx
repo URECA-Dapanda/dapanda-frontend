@@ -42,6 +42,7 @@ export default function ChatItem({
         <AvatarIcon avatar={avatarUrl} size="medium" />
         <div className="flex flex-col gap-2">
           <span className="body-sm text-black">{name}</span>
+          <span className="body-sm text-gray-800">{post.title}</span>
           <span className="body-xs text-gray-600 truncate max-w-[180px]">{lastMessage}</span>
         </div>
       </div>

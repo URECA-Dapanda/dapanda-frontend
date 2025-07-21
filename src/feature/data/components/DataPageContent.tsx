@@ -82,6 +82,9 @@ export default function DataPageContent() {
             <ScrapTabBody />
           </PurchaseModeTabs>
         </div>
+
+        {/* 탭에 따른 내용만 분기 */}
+        {tab === "scrap" ? <ScrapTabBody /> : <DefaultTabBody isSheetOpen={sheetOpen} />}
       </BaseBottomSheet>
     </div>
   );
