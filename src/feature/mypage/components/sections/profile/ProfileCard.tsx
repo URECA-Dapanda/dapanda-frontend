@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function ProfileCard() {
   return (
-    <Link href={"/mypage/review"} className="p-0 w-full">
+    <Link href={"/mypage/review?id=13"} className="p-0 w-full">
       <div className="flex flex-row gap-24 w-full items-center justify-between p-16">
         <div className="flex-1 items-center justify-center h-full">
           <AvatarIcon size="medium" />

@@ -1,8 +1,16 @@
+"use client";
+
+import { useSearchParams } from "next/navigation";
 import AvatarIcon from "@components/common/AvatarIcon";
 import LayoutBox from "@components/common/container/LayoutBox";
 import { Rating, RatingButton } from "@components/common/rating/RatingScore";
 
 export default function ProfileWithHistoryCard() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+
+  console.log("id : ", id, " 프로필");
+
   return (
     <div className="p-24">
       <LayoutBox layout="flex" direction="row" gap={19}>

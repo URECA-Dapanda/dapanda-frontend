@@ -20,7 +20,7 @@ export async function getReviewList({
 
     return { items: rawList, nextCursor };
   } catch {
-    console.error("상품 목록 조회 실패:");
+    console.error("리뷰 목록 조회 실패:");
 
     return { items: [], nextCursor: undefined };
   }
