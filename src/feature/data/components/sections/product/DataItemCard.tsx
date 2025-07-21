@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useCallback } from "react";
-import DataItemContent from "./DataItemContent";
+import DataItemContent from "@feature/data/components/sections/product/DataItemContent";
 import { DataType, ProductItemProps } from "@feature/data/types/dataType";
 import { useRouter } from "next/navigation";
 import ItemCard from "@components/common/card/ItemCard";
@@ -19,7 +19,7 @@ function DataItemCard({ data, type }: DataItemCardProps) {
   }, [data, type]);
 
   return (
-    <ItemCard handleClick={handleClick}>
+    <ItemCard handleClick={handleClick} size="md">
       <DataItemContent data={data} />
     </ItemCard>
   );

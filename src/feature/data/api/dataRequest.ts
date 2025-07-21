@@ -1,6 +1,6 @@
 import axios from "@/lib/axios";
 
-import { DataType, RawDataItem, DataDetailResponse } from "../types/dataType";
+import { DataType, RawDataItem, DataDetailResponse } from "@feature/data/types/dataType";
 import { mapRawToDataType } from "@/feature/data/utils/dataMapper";
 
 function isNumber(value: unknown): value is number {
