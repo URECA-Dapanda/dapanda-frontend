@@ -9,11 +9,15 @@ import { getDataDetail } from "@/feature/data/api/dataRequest";
 import { DataDetailResponse } from "@/feature/data/types/dataType";
 import { formatRelativeTime } from "@lib/time";
 import ItemCard from "@components/common/card/ItemCard";
+import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
+import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 
 export default function DataDetailContent() {
   const params = useParams();
   const [data, setData] = useState<DataDetailResponse | null>(null);
   const postId = String(params.postId);
+  const renderModals = UsePaymentModals();
+  const { setInfo } = usePaymentStore();
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -43,6 +47,17 @@ export default function DataDetailContent() {
     reviewCount: data.reviewCount,
   };
 
+  // 결제에 사용될 info mock 데이터
+  // const paymentInfo = {
+  //   type: "data" as const,
+  //   title: `${data.remainAmount}GB`,
+  //   price: `${data.price.toLocaleString()}원`,
+  //   unitPrice: `${data.pricePer100MB.toLocaleString()}원`,
+  //   badge: "자투리 구매" as const,
+  //   seller: data.memberName,
+  //   cash: "12,500원", // 추후 API 연동 예정
+  //   remainingData: "5.98GB",
+  // };
   return (
     <div className="relative">
       <TopSheet type="post" data={topSheetData} onImageClick={() => {}} />
@@ -55,7 +70,21 @@ export default function DataDetailContent() {
         </div>
         <ProfileCard name={seller.name} joinDate="2024.01.15" reviewCount={seller.reviewCount} />
 
-        <ButtonComponent variant={"primary"} className="w-full px-60">
+        <ButtonComponent 
+          variant={"primary"} 
+          className="w-full px-60"
+          onClick={() =>
+            setInfo({
+              type: "data",
+              title: `${data.remainAmount}GB`,
+              price: `${data.price.toLocaleString()}원`,
+              unitPrice: `${data.pricePer100MB.toLocaleString()}원`,
+              badge: "자투리 구매",
+              seller: data.memberName,
+              cash: "12,500원",
+              remainingData: "5.98GB",
+            })
+          }        >
           구매하기
         </ButtonComponent>
 
@@ -76,6 +105,7 @@ export default function DataDetailContent() {
           </div>
         </section>
       </div>
+      {renderModals}
     </div>
   );
 }
