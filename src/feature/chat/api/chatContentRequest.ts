@@ -1,4 +1,3 @@
-// 💡 src/feature/chat/api/chatContentRequest.ts
 import { ContentInfoType } from "../types/contentType";
 
 export const getChatContentInfo = async (chatRoomId: string): Promise<ContentInfoType> => {
