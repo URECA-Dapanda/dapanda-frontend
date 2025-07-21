@@ -43,7 +43,7 @@ export default function InteractiveMap({ onLocationSelect }: InteractiveMapProps
       naver.maps.Service.reverseGeocode(
         {
           coords: new naver.maps.LatLng(lat, lng),
-          orders: "roadaddr",
+          orders: "addr,roadaddr",
         },
         (status, response) => {
           console.log("✅ response 상태:", status);
@@ -56,7 +56,9 @@ export default function InteractiveMap({ onLocationSelect }: InteractiveMapProps
             const result = response as NaverReverseGeocodeResponse;
 
             const address =
-              result?.v2?.address?.roadAddress ?? result?.v2?.address?.jibunAddress ?? "주소 없음";
+              result?.v2?.address?.roadAddress ??
+              result?.v2?.address?.jibunAddress ??
+              `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
 
             onLocationSelect(lat, lng, address);
           } catch (err) {
