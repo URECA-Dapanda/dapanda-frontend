@@ -1,5 +1,5 @@
-import { BadgeComponent } from "@components/common/badge";
 import { PropsWithChildren } from "react";
+import { BadgeComponent } from "@components/common/badge";
 
 interface TabTitleProps {
   listLength: number;

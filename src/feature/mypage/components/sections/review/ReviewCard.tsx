@@ -2,21 +2,17 @@
 
 import { useCallback, useState } from "react";
 import ReviewTabs from "@components/common/tabs/ReviewTabs";
-import ReviewList from "./ReviewList";
-import SellingList from "./SellingList";
+import ReviewList from "@feature/mypage/components/sections/review/ReviewList";
+import SellingList from "@feature/mypage/components/sections/review/SellingList";
 
-interface ReviewCardProps {
-  isMine?: boolean;
-}
-
-export default function ReviewCard({ isMine = false }: ReviewCardProps) {
+export default function ReviewCard() {
   const [currentTab, setCurrentTab] = useState<string>("selling");
 
   const handleChangeTab = useCallback((newValue: string) => {
     setCurrentTab(newValue);
   }, []);
   return (
-    <ReviewTabs value={currentTab} onChange={handleChangeTab} isMine={isMine}>
+    <ReviewTabs value={currentTab} onChange={handleChangeTab}>
       <ReviewList />
       <SellingList />
     </ReviewTabs>

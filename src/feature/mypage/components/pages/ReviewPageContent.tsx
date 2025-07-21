@@ -1,5 +1,5 @@
-import ProfileWithHistoryCard from "../sections/profile/ProfileWithHistoryCard";
-import ReviewCard from "../sections/review/ReviewCard";
+import ProfileWithHistoryCard from "@feature/mypage/components/sections/profile/ProfileWithHistoryCard";
+import ReviewCard from "@feature/mypage/components/sections/review/ReviewCard";
 import CardComponent from "@components/common/card/CardComponent";
 
 export default function ReviewPageContent() {

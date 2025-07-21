@@ -5,8 +5,8 @@ import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfinite
 import { getReviewList } from "@feature/mypage/apis/reviewRequest";
 import { ReviewType } from "@feature/mypage/types/reviewType";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
-import ReviewItem from "./ReviewItem";
-import TabTitle from "../TabTitle";
+import ReviewItem from "@feature/mypage/components/sections/review/ReviewItem";
+import TabTitle from "@feature/mypage/components/sections/TabTitle";
 
 export default function ReviewList() {
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =

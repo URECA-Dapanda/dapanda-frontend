@@ -1,6 +1,6 @@
 import { MapPin, MessageCircle, User, Wifi } from "lucide-react";
 import { Fragment } from "react";
-import NavigationButton from "./NavigationButton";
+import NavigationButton from "@components/common/navigation/NavigationButton";
 
 export default function BottomNavigation() {
   return (

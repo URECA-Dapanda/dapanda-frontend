@@ -1,6 +1,6 @@
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
-import TabTitle from "../TabTitle";
-import { HistoryCard } from "./HistoryCard";
+import TabTitle from "@feature/mypage/components/sections/TabTitle";
+import { HistoryCard } from "@feature/mypage/components/sections/sale/HistoryCard";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import { SaleHistoryType } from "@feature/mypage/types/mypageTypes";
 import { getSaleHistoryList } from "@feature/mypage/apis/mypageRequest";

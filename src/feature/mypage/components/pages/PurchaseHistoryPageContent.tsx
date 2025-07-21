@@ -1,5 +1,5 @@
-import PurchaseHistoryList from "../sections/purchase/PurchaseHistoryList";
-import TabTitle from "../sections/TabTitle";
+import PurchaseHistoryList from "@feature/mypage/components/sections/purchase/PurchaseHistoryList";
+import TabTitle from "@feature/mypage/components/sections/TabTitle";
 
 export default function PurchaseHistoryPageContent() {
   return (

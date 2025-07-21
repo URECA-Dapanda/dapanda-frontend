@@ -1,12 +1,12 @@
 "use client";
 
+import { useRouter, useSearchParams } from "next/navigation";
+import { Children, PropsWithChildren } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSlidingHighlight } from "@/components/common/tabs/useSlidingHighlight";
 import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
-import { Children, PropsWithChildren } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 
 interface TabItem {
   label: string;
@@ -96,9 +96,10 @@ PropsWithChildren<SlidingTabsProps>) {
           </TabsTrigger>
         ))}
       </TabsList>
-      {Children.map(children, (child, i) => (
-        <TabsContent value={tabs[i].value}>{child}</TabsContent>
-      ))}
+      {Children.map(
+        children,
+        (child, i) => tabs[i] && <TabsContent value={tabs[i].value}>{child}</TabsContent>
+      )}
     </Tabs>
   );
 }

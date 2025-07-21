@@ -4,7 +4,7 @@ import DataItemCard from "@feature/data/components/sections/product/DataItemCard
 import { DataType } from "@feature/data/types/dataType";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import { Fragment } from "react";
-import TabTitle from "../TabTitle";
+import TabTitle from "@feature/mypage/components/sections/TabTitle";
 
 export default function SellingList() {
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =

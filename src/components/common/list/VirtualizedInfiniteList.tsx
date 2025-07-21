@@ -1,6 +1,6 @@
-import { VirtualItem, Virtualizer } from "@tanstack/react-virtual";
 import React, { Fragment, memo } from "react";
-import { ButtonComponent } from "../button";
+import { VirtualItem, Virtualizer } from "@tanstack/react-virtual";
+import { ButtonComponent } from "@components/common/button";
 
 interface VirtualizedListProps<T> {
   mode?: "scroll" | "button";

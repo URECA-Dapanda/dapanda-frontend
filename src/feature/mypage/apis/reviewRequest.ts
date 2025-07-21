@@ -1,4 +1,4 @@
-import { ReviewType } from "../types/reviewType";
+import { ReviewType } from "@feature/mypage/types/reviewType";
 import axios from "@/lib/axios";
 
 export async function getReviewList({
