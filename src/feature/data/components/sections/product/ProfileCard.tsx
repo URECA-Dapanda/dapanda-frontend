@@ -5,12 +5,11 @@ import { Star } from "lucide-react";
 
 interface ProfileCardProps {
   name: string;
-  joinDate: string;
   rating: number;
   reviewCount: number;
 }
 
-export default function ProfileCard({ name, joinDate, rating, reviewCount }: ProfileCardProps) {
+export default function SellerProfileCard({ name, rating, reviewCount }: ProfileCardProps) {
   return (
     <div className="flex items-center justify-between w-full">
       <div className="w-48 h-48 rounded-full bg-gray-300 overflow-hidden">
@@ -19,7 +18,6 @@ export default function ProfileCard({ name, joinDate, rating, reviewCount }: Pro
 
       <div className="flex flex-col gap-2 flex-1 pl-16">
         <p className="title-sm">{name}</p>
-        <p className="body-sm text-gray-500">가입일: {joinDate}</p>
       </div>
 
       <div className="flex flex-col items-end justify-center gap-2">

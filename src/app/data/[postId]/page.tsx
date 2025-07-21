@@ -3,7 +3,7 @@ import DataDetailContent from "@feature/data/components/sections/product/DataDet
 export default async function Page() {
   return (
     <div className="min-h-screen overflow-y-auto">
-      <DataDetailContent />;
+      <DataDetailContent />
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { ChevronRight } from "lucide-react";
 import { useProfileStore } from "@/stores/useProfileStore";
 import TopSheet from "@/components/common/topsheet/TopSheet";
 import { ButtonComponent } from "@components/common/button";
-import ProfileCard from "@feature/data/components/sections/ProfileCard";
+import ProfileCard from "@feature/data/components/sections/product/ProfileCard";
 import { getDataDetail } from "@/feature/data/api/dataRequest";
 import { DataDetailResponse } from "@/feature/data/types/dataType";
 import { formatRelativeTime } from "@lib/time";
@@ -88,12 +88,7 @@ export default function DataDetailContent() {
               </ButtonComponent>
             )}
           </div>
-          <ProfileCard
-            name={seller.name}
-            joinDate="2024.01.15"
-            rating={4.5}
-            reviewCount={seller.reviewCount}
-          />
+          <ProfileCard name={seller.name} rating={seller.rating} reviewCount={seller.reviewCount} />
 
           <div className="flex justify-center px-36">
             <ButtonComponent variant={"primary"} className="w-full">

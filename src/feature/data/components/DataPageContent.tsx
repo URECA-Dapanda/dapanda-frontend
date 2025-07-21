@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { PlusIcon } from "lucide-react";
 import { ButtonComponent } from "@/components/common/button";
 import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
-import DefaultTabBody from "./sections/DefaultTabContent";
-import ScrapTabBody from "./sections/ScrapTabContent";
+import DefaultTabBody from "@feature/data/components/sections/DefaultTabContent";
+import ScrapTabBody from "@feature/data/components/sections/ScrapTabContent";
 import { PurchaseModeTabs } from "@/components/common/tabs";
 import { useHeaderStore } from "@stores/useHeaderStore";
 import FilterCard from "./sections/filter/FilterCard";
@@ -21,7 +21,7 @@ export default function DataPageContent() {
 
   useEffect(() => {
     setIsVisible(sheetOpen);
-  }, [sheetOpen]);
+  }, [sheetOpen, setIsVisible]);
 
   const handleTabChange = (newTab: string) => {
     if (newTab === tab) return;
