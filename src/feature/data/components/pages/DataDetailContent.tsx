@@ -11,7 +11,7 @@ import { formatRelativeTime } from "@lib/time";
 import ItemCard from "@components/common/card/ItemCard";
 import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
-import FilterCardContent from "../sections/filter/FilterCardContent";
+import FilterCardContent from "@feature/data/components/sections/filter/FilterCardContent";
 import { useProfileStore } from "@stores/useProfileStore";
 import { ChevronRight } from "lucide-react";
 
@@ -23,6 +23,7 @@ export default function DataDetailContent() {
   const { setInfo } = usePaymentStore();
   const currentUserId = useProfileStore((state) => state.id); // 로그인 유저 ID
   const isOwner = data && currentUserId === data.memberId;
+  const [selectedAmount, setSelectedAmount] = useState<number>(0);
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -79,19 +80,32 @@ export default function DataDetailContent() {
   //   cash: "12,500원", // 추후 API 연동 예정
   //   remainingData: "5.98GB",
   // };
+
   return (
     <div className="relative">
       <TopSheet type="post" data={topSheetData} onImageClick={() => {}} />
       <div className="pt-[280px] space-y-12 px-24">
         {data.splitType && (
-          <div className="bg-primary2 px-12 py-36 rounded-2xl">
+          <div className="bg-primary2 w-[327px] p-16 rounded-20">
             <FilterCardContent
               buttonText="구매하기"
               max={data.remainAmount}
-              onValueChange={() => {}}
-              onButtonClick={() => {}}
-              value={[]}
+              onValueChange={(v) => setSelectedAmount(v[0])}
+              onButtonClick={() =>
+                setInfo({
+                  type: "data",
+                  title: `${selectedAmount}GB`,
+                  price: `${Math.floor(selectedAmount * data.pricePer100MB).toLocaleString()}원`,
+                  unitPrice: `${data.pricePer100MB.toLocaleString()}원`,
+                  badge: "자투리 구매",
+                  seller: data.memberName,
+                  cash: "12,500원", // TODO: API 연동
+                  remainingData: `${(data.remainAmount - selectedAmount).toFixed(2)}GB`,
+                })
+              }
+              value={[selectedAmount]}
             />
+
           </div>
         )}
 
@@ -115,7 +129,7 @@ export default function DataDetailContent() {
                   title: `${data.remainAmount}GB`,
                   price: `${data.price.toLocaleString()}원`,
                   unitPrice: `${data.pricePer100MB.toLocaleString()}원`,
-                  badge: "자투리 구매",
+                  badge: "일반 구매",
                   seller: data.memberName,
                   cash: "12,500원",
                   remainingData: "5.98GB",
