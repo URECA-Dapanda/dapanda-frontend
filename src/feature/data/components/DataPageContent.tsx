@@ -52,7 +52,7 @@ export default function DataPageContent() {
         <Image src="/dpd-logo.svg" alt="logo" width={237} height={0} />
       </div>
       {/* 오른쪽 상단 로고 */}
-      <div className="absolute top-0 right-0 z-20">
+      <div className="absolute top-[-100] right-0 z-20">
         <Image src="/dpd-main-logo.svg" alt="logo" width={96} height={0} />
       </div>
       {/* 상단 필터 영역 */}
@@ -88,6 +88,9 @@ export default function DataPageContent() {
             <ScrapTabBody />
           </PurchaseModeTabs>
         </div>
+
+        {/* 탭에 따른 내용만 분기 */}
+        {tab === "scrap" ? <ScrapTabBody /> : <DefaultTabBody isSheetOpen={sheetOpen} />}
       </BaseBottomSheet>
     </div>
   );
