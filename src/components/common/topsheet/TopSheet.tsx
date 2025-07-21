@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Carousel,
@@ -17,11 +17,22 @@ import { WifiTopSheetContent } from "./WifiTopSheetContent";
 import { useTopSheetExpanded } from "./useTopSheetExpanded";
 import { useTopSheetImageStyle } from "./useTopSheetImageStyle";
 
-export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
+export default function TopSheet({
+  type,
+  data,
+  onImageClick,
+  onExpandChange,
+}: TopSheetProps & {
+  onExpandChange?: (expanded: boolean) => void;
+}) {
   const { expanded, setExpanded, handleDragEnd } = useTopSheetExpanded();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const imageUrls: string[] = Array.isArray(data.imageUrl) ? data.imageUrl : [data.imageUrl];
   const imageStyle = useTopSheetImageStyle(expanded, type);
+
+  useEffect(() => {
+    onExpandChange?.(expanded);
+  }, [expanded]);
 
   return (
     <motion.div
@@ -41,7 +52,7 @@ export default function TopSheet({ type, data, onImageClick }: TopSheetProps) {
             src={data.imageUrl}
             alt="대표 이미지"
             onClick={onImageClick}
-            className="cursor-zoom-in absolute rounded-12 z-30"
+            className="top-56 cursor-zoom-in absolute rounded-12 z-30"
             animate={imageStyle}
             transition={{ type: "spring", damping: 20, stiffness: 200 }}
           />
