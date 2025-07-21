@@ -4,6 +4,7 @@ export interface RegisterFormValues {
   price: string;
   startTime: string;
   endTime: string;
+  address: string;
 }
 
 export interface RegisterFormErrors {
@@ -13,4 +14,9 @@ export interface RegisterFormErrors {
   startTime: boolean;
   endTime: boolean;
   timeOrderInvalid: boolean;
+}
+
+export interface RegisterFormData extends RegisterFormValues {
+  lat: number;
+  lng: number;
 }
