@@ -3,10 +3,24 @@ import { useRouter } from "next/navigation";
 import { ImageIcon, Star } from "lucide-react";
 import type { ProductItemProps } from "@/feature/data/types/dataType";
 import type { MapType } from "@/feature/map/types/mapType";
+import axiosInstance from "@/lib/axios";
+
 export default function MapItemCardContent({
   data: { id, address, price, score, title, type, updatedAt },
 }: ProductItemProps<MapType>) {
   const router = useRouter();
+  const handleCreateChatRoom = async () => {
+    try {
+      const response = await axiosInstance.post(`/api/products/${id}/chat-room`);
+      if (response.data.code === 0) {
+        router.push(`/chat/${response.data.data.chatRoomId}`);
+      } else {
+        alert(response.data.message || "채팅방 생성에 실패했습니다.");
+      }
+    } catch (error) {
+      alert("채팅방 생성 중 오류가 발생했습니다.");
+    }
+  };
 
   return (
     <Fragment>
@@ -54,7 +68,7 @@ export default function MapItemCardContent({
           className="border border-gray-300 text-gray-700 body-xs rounded-6 px-16 py-8 flex-2"
           onClick={(e) => {
             e.stopPropagation();
-            router.push(`/chat/${id}`);
+            handleCreateChatRoom();
           }}
         >
           채팅하기
