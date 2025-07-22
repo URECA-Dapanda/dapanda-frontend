@@ -5,7 +5,7 @@ import { ButtonComponent } from "@components/common/button";
 import CurrentCashCard from "@feature/mypage/components/sections/profile/CurrentCashCard";
 import SelectCharge from "@feature/mypage/components/sections/profile/SelectCharge";
 import ChargeInfoCard from "@feature/mypage/components/sections/profile/ChargeInfoCard";
-import TossPaymentModal from "@feature/mypage/components/sections/profile/TossPaymentModal";
+import TossPaymentModal from "@feature/mypage/components/sections/toss/TossPaymentModal";
 
 export default function ChargeCashContent() {
   const chargeAmount = useChargeStore((state) => state.charge);
