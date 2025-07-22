@@ -157,7 +157,7 @@ export default function DataDetailContent() {
               className="flex items-center mb-16 cursor-pointer" /*onClick={handleGoToSellerItems}*/
             >
               <h2 className="text-lg font-bold">{seller.name} 님의 판매 물품</h2>
-              <ChevronRight className="w-24 h-24 pb-40" />
+              <ChevronRight className="w-24 h-24 text-black" />
             </div>
             <div className="grid grid-cols-2 gap-68">
               <ItemCard>1</ItemCard>
