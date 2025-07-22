@@ -31,9 +31,11 @@ export default function CurrentCashCard({ isInterection }: CurrentCashCardProps)
 
         {isInterection && (
           <div className="flex gap-8">
-            <button className="flex-4 border border-primary text-primary body-sm rounded-6 py-4">
-              현금 전환
-            </button>
+            <Link href={"mypage/review"}>
+              <button className="flex-4 border border-primary text-primary body-sm rounded-6 py-4">
+                현금 전환
+              </button>
+            </Link>
             <Link href="/mypage/charge" className="flex-4">
               <ButtonComponent variant={"primary"} className="w-full">
                 충전하기
