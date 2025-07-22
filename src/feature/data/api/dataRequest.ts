@@ -50,3 +50,17 @@ export async function getDataDetail(postId: string): Promise<DataDetailResponse>
   );
   return response.data.data;
 }
+
+export const postMobileDataProduct = async (
+  dataAmount: number,
+  price: number,
+  isSplitType: boolean
+) => {
+  const res = await axios.post("/api/products/mobile-data", {
+    price,
+    dataAmount,
+    isSplitType,
+  });
+
+  return res.data;
+};
