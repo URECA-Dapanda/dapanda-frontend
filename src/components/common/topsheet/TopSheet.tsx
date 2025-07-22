@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   Carousel,
@@ -30,6 +30,10 @@ export default function TopSheet({
   const imageUrls: string[] = Array.isArray(data.imageUrl) ? data.imageUrl : [data.imageUrl];
   const imageStyle = useTopSheetImageStyle(expanded, type);
 
+  const handleToggleExpand = useCallback(() => {
+    setExpanded((prev) => !prev);
+  }, [setExpanded]);
+
   useEffect(() => {
     onExpandChange?.(expanded);
   }, [expanded, onExpandChange]);
@@ -46,7 +50,7 @@ export default function TopSheet({
         transition={{ type: "decay", damping: 20, stiffness: 200 }}
         dragConstraints={{ top: 0, bottom: 0 }}
         onDragEnd={(event, info) => handleDragEnd(info)}
-        onClick={() => setExpanded(!expanded)}
+        onClick={handleToggleExpand}
       >
         {type === "post" && (
           <motion.img
