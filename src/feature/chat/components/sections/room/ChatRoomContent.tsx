@@ -25,7 +25,7 @@ export default function ChatRoomContent({ chatRoomId, title, price }: ChatRoomCo
       text,
       createdAt: new Date().toISOString(),
     };
-    setMessages([...messages, newMessage]);
+    setMessages((prev) => [...prev, newMessage]);
 
     useChatStore.getState().addChatRoom({
       chatRoomId,
