@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import TopSheet from "@/components/common/topsheet/TopSheet";
 import { ButtonComponent } from "@components/common/button";
 import ProfileCard from "@feature/data/components/sections/default/ProfileCard";
@@ -10,9 +10,13 @@ import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 import FilterCardContent from "@feature/data/components/sections/filter/FilterCardContent";
 import { useProfileStore } from "@stores/useProfileStore";
-import { buildDefaultPaymentInfo, buildScrapPaymentInfo } from "@feature/data/hooks/usePurchaseBuilder";
+import {
+  buildDefaultPaymentInfo,
+  buildScrapPaymentInfo,
+} from "@feature/data/hooks/usePurchaseBuilder";
 import { useDataDetail } from "@feature/data/hooks/useDataDetail";
 import clsx from "clsx";
+import DeletePostModal from "../sections/modal/DeletePostModal";
 
 export default function DataDetailContent() {
   const { postId } = useParams<{ postId: string }>();
@@ -24,6 +28,9 @@ export default function DataDetailContent() {
 
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [topSheetExpanded, setTopSheetExpanded] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const handleDeleteModalOpen = useCallback(() => setIsOpen(true), []);
 
   if (loading || !data) return <div className="text-center mt-20">로딩 중...</div>;
 
@@ -52,19 +59,33 @@ export default function DataDetailContent() {
         onExpandChange={setTopSheetExpanded}
       />
 
-      <div className={clsx("space-y-12 px-24 transition-all duration-300", topSheetExpanded ? "pt-[430px]" : "pt-[280px]")} />
+      <div
+        className={clsx(
+          "space-y-12 px-24 transition-all duration-300",
+          topSheetExpanded ? "pt-[430px]" : "pt-[280px]"
+        )}
+      />
 
       <div className="space-y-28">
         <div className="flex items-center justify-between mx-24 mb-16">
           <div className="title-md">판매자</div>
-          {isOwner && (
-            <ButtonComponent variant={"outlineGray"} size="xs">
-              글 수정하기
-            </ButtonComponent>
+          {!isOwner && (
+            <div className="flex flex-row gap-4">
+              <ButtonComponent variant={"outlineGray"} size="xs" onClick={handleDeleteModalOpen}>
+                글 삭제하기
+              </ButtonComponent>
+              <ButtonComponent variant={"outlineGray"} size="xs">
+                글 수정하기
+              </ButtonComponent>
+            </div>
           )}
         </div>
 
-        <ProfileCard name={data.memberName} rating={data.averageRate} reviewCount={data.reviewCount} />
+        <ProfileCard
+          name={data.memberName}
+          rating={data.averageRate}
+          reviewCount={data.reviewCount}
+        />
 
         <div className="space-y-12 px-24 pb-28">
           {data.splitType && (
@@ -94,6 +115,7 @@ export default function DataDetailContent() {
       </div>
 
       {renderModals}
+      <DeletePostModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 }
