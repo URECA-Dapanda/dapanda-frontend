@@ -8,12 +8,10 @@ import ProfileCard from "@feature/data/components/sections/default/ProfileCard";
 import { getDataDetail } from "@/feature/data/api/dataRequest";
 import { DataDetailResponse } from "@/feature/data/types/dataType";
 import { formatRelativeTime } from "@lib/time";
-import ItemCard from "@components/common/card/ItemCard";
 import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 import FilterCardContent from "@feature/data/components/sections/filter/FilterCardContent";
 import { useProfileStore } from "@stores/useProfileStore";
-import { ChevronRight } from "lucide-react";
 import { formatDataSize, formatPriceString } from "@lib/formatters";
 import clsx from "clsx";
 
@@ -23,7 +21,7 @@ export default function DataDetailContent() {
   const postId = String(params.postId);
   const renderModals = UsePaymentModals();
   const { setInfo } = usePaymentStore();
-  const currentUserId = useProfileStore((state) => state.id); // 로그인 유저 ID
+  const currentUserId = useProfileStore((state) => state.id);
   const isOwner = data && currentUserId === data.memberId;
   const [selectedAmount, setSelectedAmount] = useState<number>(0);
   const [topSheetExpanded, setTopSheetExpanded] = useState(false);
@@ -72,24 +70,12 @@ export default function DataDetailContent() {
     reviewCount: data.reviewCount,
   };
 
-  // 결제에 사용될 info mock 데이터
-  // const paymentInfo = {
-  //   type: "data" as const,
-  //   title: `${data.remainAmount}GB`,
-  //   price: `${data.price.toLocaleString()}원`,
-  //   unitPrice: `${data.pricePer100MB.toLocaleString()}원`,
-  //   badge: "자투리 구매" as const,
-  //   seller: data.memberName,
-  //   cash: "12,500원", // 추후 API 연동 예정
-  //   remainingData: "5.98GB",
-  // };
-
   return (
     <div className="relative">
       <TopSheet
         type="post"
         data={topSheetData}
-        onImageClick={() => {}}
+        onImageClick={() => { }}
         onExpandChange={setTopSheetExpanded}
       />
       <div
@@ -98,76 +84,81 @@ export default function DataDetailContent() {
           topSheetExpanded ? "pt-[430px]" : "pt-[280px]"
         )}
       ></div>
-      <div className="space-y-12 px-24 pb-28">
-        {data.splitType && (
-          <div className="bg-primary2 w-[327px] p-16 rounded-20">
-            <FilterCardContent
-              buttonText="구매하기"
-              max={data.remainAmount}
-              onValueChange={(v) => setSelectedAmount(v[0])}
-              onButtonClick={() =>
-                setInfo({
-                  type: "data",
-                  title: `${selectedAmount}GB`,
-                  price: `${Math.floor(selectedAmount * data.pricePer100MB).toLocaleString()}원`,
-                  unitPrice: `${data.pricePer100MB.toLocaleString()}원`,
-                  badge: "자투리 구매",
-                  seller: data.memberName,
-                  cash: formatPriceString(12500), // TODO: API 연동
-                  remainingData: formatDataSize(data.remainAmount - selectedAmount),
-                })
-              }
-              value={[selectedAmount]}
-            />
-          </div>
-        )}
-
-        <div className="space-y-28">
-          <div className="flex items-center justify-between">
-            <div className="title-md">판매자</div>
-            {isOwner && (
-              <ButtonComponent variant={"outlineGray"} size="xs">
-                글 수정하기
-              </ButtonComponent>
-            )}
-          </div>
-          <ProfileCard name={seller.name} rating={seller.rating} reviewCount={seller.reviewCount} />
-          <div className="flex justify-center ">
-            <ButtonComponent
-              variant={"primary"}
-              className="w-full px-60"
-              onClick={() =>
-                setInfo({
-                  type: "data",
-                  title: formatDataSize(data.remainAmount),
-                  price: formatPriceString(data.price),
-                  unitPrice: formatPriceString(data.pricePer100MB),
-                  badge: "일반 구매",
-                  seller: data.memberName,
-                  cash: formatPriceString(12500),
-                  remainingData: "5.98GB",
-                  productId: data.productId,
-                  mobileDataId: data.itemId,
-                  dataAmount: data.remainAmount,
-                })
-              }
-            >
-              구매하기
+      <div className="space-y-28">
+        <div className="flex items-center justify-between mx-24 mb-16">
+          <div className="title-md">판매자</div>
+          {isOwner && (
+            <ButtonComponent variant={"outlineGray"} size="xs">
+              글 수정하기
             </ButtonComponent>
-          </div>
-          <section>
-            <div
-              className="flex items-center mb-16 cursor-pointer" /*onClick={handleGoToSellerItems}*/
-            >
-              <h2 className="text-lg font-bold">{seller.name} 님의 판매 물품</h2>
-              <ChevronRight className="w-24 h-24 text-black" />
+          )}
+        </div>
+        <ProfileCard name={seller.name} rating={seller.rating} reviewCount={seller.reviewCount} />
+        <div className="space-y-12 px-24 pb-28">
+          {data.splitType && (
+            <div className="bg-primary2 w-[327px] p-16 rounded-20">
+              <FilterCardContent
+                buttonText="구매하기"
+                max={data.remainAmount}
+                onValueChange={(v) => setSelectedAmount(v[0])}
+                onButtonClick={() =>
+                  setInfo({
+                    type: "data",
+                    title: `${selectedAmount}GB`,
+                    price: `${Math.floor(selectedAmount * data.pricePer100MB).toLocaleString()}원`,
+                    unitPrice: `${data.pricePer100MB.toLocaleString()}원`,
+                    badge: "자투리 구매",
+                    seller: data.memberName,
+                    cash: formatPriceString(12500), // TODO: API 연동
+                    remainingData: formatDataSize(data.remainAmount - selectedAmount),
+                    totalAmount: selectedAmount,
+                    totalPrice: Math.floor(selectedAmount * data.pricePer100MB),
+                    combinations: [
+                      {
+                        productId: data.productId,
+                        mobileDataId: data.itemId,
+                        memberName: data.memberName,
+                        price: data.price,
+                        purchasePrice: Math.floor(selectedAmount * data.pricePer100MB),
+                        remainAmount: data.remainAmount,
+                        purchaseAmount: selectedAmount,
+                        pricePer100MB: data.pricePer100MB,
+                        splitType: data.splitType,
+                        updatedAt: data.updatedAt,
+                      },
+                    ],
+                  })
+                }
+                value={[selectedAmount]}
+              />
             </div>
-            <div className="grid grid-cols-2 gap-68">
-              <ItemCard>1</ItemCard>
+          )}
 
-              <ItemCard>2</ItemCard>
+          {!data.splitType && (
+            <div className="flex justify-center ">
+              <ButtonComponent
+                variant={"primary"}
+                className="w-full px-60"
+                onClick={() =>
+                  setInfo({
+                    type: "data",
+                    title: formatDataSize(data.remainAmount),
+                    price: formatPriceString(data.price),
+                    unitPrice: formatPriceString(data.pricePer100MB),
+                    badge: "일반 구매",
+                    seller: data.memberName,
+                    cash: formatPriceString(12500),
+                    remainingData: "5.98GB",
+                    productId: data.productId,
+                    mobileDataId: data.itemId,
+                    dataAmount: data.remainAmount,
+                  })
+                }
+              >
+                구매하기
+              </ButtonComponent>
             </div>
-          </section>
+          )}
         </div>
       </div>
       {renderModals}
