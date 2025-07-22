@@ -39,7 +39,6 @@ export interface DataDetailResponse {
 }
 
 export function mapRawToDataType(raw: RawDataItem): DataType {
-  console.log("QQ", raw);
   return {
     id: raw.id,
     userId: raw.itemId,
