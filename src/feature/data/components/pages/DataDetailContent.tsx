@@ -15,6 +15,7 @@ import FilterCardContent from "@feature/data/components/sections/filter/FilterCa
 import { useProfileStore } from "@stores/useProfileStore";
 import { ChevronRight } from "lucide-react";
 import { formatDataSize, formatPriceString } from "@lib/formatters";
+import clsx from "clsx";
 
 export default function DataDetailContent() {
   const params = useParams();
@@ -25,6 +26,7 @@ export default function DataDetailContent() {
   const currentUserId = useProfileStore((state) => state.id); // 로그인 유저 ID
   const isOwner = data && currentUserId === data.memberId;
   const [selectedAmount, setSelectedAmount] = useState<number>(0);
+  const [topSheetExpanded, setTopSheetExpanded] = useState(false);
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -84,8 +86,19 @@ export default function DataDetailContent() {
 
   return (
     <div className="relative">
-      <TopSheet type="post" data={topSheetData} onImageClick={() => {}} />
-      <div className="pt-[280px] space-y-12 px-24">
+      <TopSheet
+        type="post"
+        data={topSheetData}
+        onImageClick={() => {}}
+        onExpandChange={setTopSheetExpanded}
+      />
+      <div
+        className={clsx(
+          "space-y-12 px-24 transition-all duration-300",
+          topSheetExpanded ? "pt-[430px]" : "pt-[280px]"
+        )}
+      ></div>
+      <div className="space-y-12 px-24 pb-28">
         {data.splitType && (
           <div className="bg-primary2 w-[327px] p-16 rounded-20">
             <FilterCardContent
@@ -106,7 +119,6 @@ export default function DataDetailContent() {
               }
               value={[selectedAmount]}
             />
-
           </div>
         )}
 
@@ -120,7 +132,7 @@ export default function DataDetailContent() {
             )}
           </div>
           <ProfileCard name={seller.name} rating={seller.rating} reviewCount={seller.reviewCount} />
-          <div className="flex justify-center px-36">
+          <div className="flex justify-center ">
             <ButtonComponent
               variant={"primary"}
               className="w-full px-60"
