@@ -9,7 +9,7 @@ import { savePaymentAmount } from "@feature/mypage/apis/payment";
 import { v4 as uuidv4 } from "uuid";
 
 export const useTossPayment = () => {
-  const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+  const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY!;
 
   const widgetRef = { current: null as TossPaymentsWidgets | null };
   const orderIdRef = { current: "" };
