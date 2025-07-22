@@ -9,7 +9,7 @@ import PurchaseHistoryCard from "@feature/mypage/components/sections/purchase/Pu
 export default function PurchaseHistoryList() {
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<PurchaseHistoryType>({
-      queryKey: ["dataItems", "default"],
+      queryKey: ["api/trades/purchase-history", "default"],
       queryFn: ({ pageParam = 0 }) => getPurchaseHistoryList({ pageParam }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       estimateSize: () => 160,
