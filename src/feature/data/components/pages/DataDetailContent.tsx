@@ -15,7 +15,7 @@ import { useDataDetail } from "@feature/data/hooks/useDataDetail";
 import clsx from "clsx";
 
 export default function DataDetailContent() {
-  const { postId } = useParams() as { postId: string };
+  const { postId } = useParams<{ postId: string }>();
   const { data, loading } = useDataDetail(postId);
   const { setInfo } = usePaymentStore();
   const currentUserId = useProfileStore((state) => state.id);
@@ -26,6 +26,13 @@ export default function DataDetailContent() {
   const [topSheetExpanded, setTopSheetExpanded] = useState(false);
 
   if (loading || !data) return <div className="text-center mt-20">로딩 중...</div>;
+
+  const handleScrapPurchase = () => {
+    setInfo(buildScrapPaymentInfo(data, selectedAmount));
+  };
+  const handleDefaultPurchase = () => {
+    setInfo(buildDefaultPaymentInfo(data));
+  };
 
   return (
     <div className="relative">
@@ -67,9 +74,7 @@ export default function DataDetailContent() {
                 max={data.remainAmount}
                 value={[selectedAmount]}
                 onValueChange={(v) => setSelectedAmount(v[0])}
-                onButtonClick={() => {
-                  setInfo(buildScrapPaymentInfo(data, selectedAmount));
-                }}
+                onButtonClick={handleScrapPurchase}
               />
             </div>
           )}
@@ -79,7 +84,7 @@ export default function DataDetailContent() {
               <ButtonComponent
                 variant={"primary"}
                 className="w-full px-60"
-                onClick={() => setInfo(buildDefaultPaymentInfo(data))}
+                onClick={handleDefaultPurchase}
               >
                 구매하기
               </ButtonComponent>
