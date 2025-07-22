@@ -9,3 +9,22 @@ export interface MapType {
   score: number;
   price: string;
 }
+
+export type MapDetailItem = {
+  productId: string;
+  type: string;
+  imageUrl: string[];
+  place: string;
+  address: string;
+  openTime: string;
+  closeTime: string;
+  pricePer10min: number;
+  description: string;
+  recentPrice: number;
+  averagePrice: number;
+  memberName: string;
+  memberId: number;
+  reviewCount: number;
+  longitude: number;
+  latitude: number;
+};
