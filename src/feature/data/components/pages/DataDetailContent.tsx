@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TopSheet from "@/components/common/topsheet/TopSheet";
 import { ButtonComponent } from "@components/common/button";
 import ProfileCard from "@feature/data/components/sections/default/ProfileCard";
@@ -16,10 +16,12 @@ import { useProfileStore } from "@stores/useProfileStore";
 import { ChevronRight } from "lucide-react";
 import { formatDataSize, formatPriceString } from "@lib/formatters";
 import clsx from "clsx";
+import DeletePostModal from "../sections/modal/DeletePostModal";
 
 export default function DataDetailContent() {
   const params = useParams();
   const [data, setData] = useState<DataDetailResponse | null>(null);
+
   const postId = String(params.postId);
   const renderModals = UsePaymentModals();
   const { setInfo } = usePaymentStore();
@@ -27,6 +29,7 @@ export default function DataDetailContent() {
   const isOwner = data && currentUserId === data.memberId;
   const [selectedAmount, setSelectedAmount] = useState<number>(0);
   const [topSheetExpanded, setTopSheetExpanded] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -35,6 +38,8 @@ export default function DataDetailContent() {
     };
     fetchDetail();
   }, [postId]);
+
+  const handleDeleteModalOpen = useCallback(() => setIsOpen(true), []);
   // useEffect(() => {
   //   const dummyData: DataDetailResponse = {
   //     productId: 1,
@@ -125,10 +130,15 @@ export default function DataDetailContent() {
         <div className="space-y-28">
           <div className="flex items-center justify-between">
             <div className="title-md">판매자</div>
-            {isOwner && (
-              <ButtonComponent variant={"outlineGray"} size="xs">
-                글 수정하기
-              </ButtonComponent>
+            {!isOwner && (
+              <div className="flex flex-row gap-4">
+                <ButtonComponent variant={"outlineGray"} size="xs" onClick={handleDeleteModalOpen}>
+                  글 삭제하기
+                </ButtonComponent>
+                <ButtonComponent variant={"outlineGray"} size="xs">
+                  글 수정하기
+                </ButtonComponent>
+              </div>
             )}
           </div>
           <ProfileCard name={seller.name} rating={seller.rating} reviewCount={seller.reviewCount} />
@@ -168,6 +178,7 @@ export default function DataDetailContent() {
         </div>
       </div>
       {renderModals}
+      <DeletePostModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 }

@@ -50,3 +50,8 @@ export async function getDataDetail(postId: string): Promise<DataDetailResponse>
   );
   return response.data.data;
 }
+
+export async function deleteDataPost(postId: string) {
+  const response = await axios.delete(`/api/products/${postId}`);
+  return response.data.message;
+}
