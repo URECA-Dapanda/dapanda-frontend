@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   Carousel,
@@ -9,7 +9,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
+import Image from "next/image";
 import FullScreenModal from "@/components/common/modal/FullScreenModal";
 import type { TopSheetProps } from "@/components/common/topsheet/topSheet.types";
 import { PostTopSheetContent } from "./PostTopSheetContent";
@@ -30,9 +30,13 @@ export default function TopSheet({
   const imageUrls: string[] = Array.isArray(data.imageUrl) ? data.imageUrl : [data.imageUrl];
   const imageStyle = useTopSheetImageStyle(expanded, type);
 
+  const handleToggleExpand = useCallback(() => {
+    setExpanded((prev) => !prev);
+  }, [setExpanded]);
+
   useEffect(() => {
     onExpandChange?.(expanded);
-  }, [expanded]);
+  }, [expanded, onExpandChange]);
 
   return (
     <motion.div
@@ -46,13 +50,15 @@ export default function TopSheet({
         transition={{ type: "decay", damping: 20, stiffness: 200 }}
         dragConstraints={{ top: 0, bottom: 0 }}
         onDragEnd={(event, info) => handleDragEnd(info)}
+        onClick={handleToggleExpand}
       >
         {type === "post" && (
           <motion.img
             src={data.imageUrl}
             alt="대표 이미지"
-            onClick={onImageClick}
-            className="top-56 cursor-zoom-in absolute rounded-12 z-30"
+            onClick={undefined}
+            className={`top-56 absolute rounded-12 z-30`}
+            style={{ pointerEvents: "none" }}
             animate={imageStyle}
             transition={{ type: "spring", damping: 20, stiffness: 200 }}
           />
@@ -71,7 +77,7 @@ export default function TopSheet({
                     <CarouselContent>
                       {imageUrls.map((url, idx) => (
                         <CarouselItem key={idx} className="basis-[100%]">
-                          <img
+                          <Image
                             src={url}
                             alt={`와이파이 이미지 ${idx + 1}`}
                             onClick={onImageClick}
@@ -84,7 +90,7 @@ export default function TopSheet({
                     <CarouselNext />
                   </Carousel>
                 ) : (
-                  <img
+                  <Image
                     src={imageUrls[0]}
                     alt="와이파이 이미지"
                     onClick={onImageClick}
@@ -93,7 +99,7 @@ export default function TopSheet({
                 )}
               </div>
             ) : (
-              <img
+              <Image
                 src={imageUrls[0]}
                 alt="와이파이 대표 이미지"
                 className="cursor-zoom-in absolute rounded-12 z-30"
@@ -136,7 +142,7 @@ export default function TopSheet({
       )}
       {isModalOpen && (
         <FullScreenModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <img
+          <Image
             src={Array.isArray(data.imageUrl) ? data.imageUrl[0] : data.imageUrl}
             alt="확대 이미지"
             className="w-auto h-auto max-w-screen max-h-screen object-contain"

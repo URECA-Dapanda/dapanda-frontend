@@ -22,6 +22,7 @@
     "@stomp/stompjs": "^7.1.1",
     "@tanstack/react-query": "^5.81.5",
     "@tanstack/react-virtual": "^3.13.12",
+    "@tosspayments/payment-widget-sdk": "^0.12.0",
     "@tosspayments/tosspayments-sdk": "^2.3.5",
     "@types/js-cookie": "^3.0.6",
     "axios": "^1.10.0",
@@ -38,6 +39,7 @@
     "react-virtualized": "^9.22.6",
     "sockjs-client": "^1.6.1",
     "tailwind-merge": "^3.3.1",
+    "uuid": "^11.1.0",
     "zustand": "^5.0.6"
   },
   "devDependencies": {

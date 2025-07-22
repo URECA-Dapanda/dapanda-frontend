@@ -8,10 +8,16 @@ interface PurchaseHistoryCardProps {
   data: PurchaseHistoryType;
 }
 
+const tradeMapper: { [key: string]: string } = {
+  MOBILE_DATA_SINGLE: "데이터",
+  MOBILE_DATA_COMPOSITE: "자투리 구매",
+  WIFI: "와이파이",
+};
+
 export default function PurchaseHistoryCard({ data }: PurchaseHistoryCardProps) {
   return (
     <ItemCard size="sm">
-      {data.isSold && (
+      {data.tradeType === "MOBILE_DATA_COMPOSITE " && (
         <BadgeComponent variant={"label"} className="absolute top-12 right-36">
           자투리 구매
         </BadgeComponent>
@@ -19,8 +25,8 @@ export default function PurchaseHistoryCard({ data }: PurchaseHistoryCardProps) 
       <LayoutBox layout="flex" direction="row" gap={19} height="full">
         <AvatarIcon size="small" />
         <LayoutBox layout="flex" direction="column" gap={0}>
-          <p className="title-sm">{data.type}</p>
-          <p className="body-sm">거래 일자: {data.registDate}</p>
+          <p className="title-sm">{tradeMapper[data.tradeType]}</p>
+          <p className="body-sm">거래 일자: {data.createdAt}</p>
           <p className="body-sm text-gray-600">거래 상품: {data.title}</p>
         </LayoutBox>
       </LayoutBox>

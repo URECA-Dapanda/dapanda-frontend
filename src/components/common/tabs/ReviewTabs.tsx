@@ -14,7 +14,6 @@ export default function ReviewTabs({ value, onChange, children }: PropsWithChild
   const searchParams = useSearchParams();
   const isMine = searchParams.get("isMine");
   const reviewTabs = isMine === "true" ? REVIEW_TABS.slice(0, 1) : REVIEW_TABS;
-  console.log("qrqr", isMine === "true", reviewTabs);
 
   return (
     <SlidingTabs tabs={reviewTabs} value={value} onChange={onChange} variant="outline">

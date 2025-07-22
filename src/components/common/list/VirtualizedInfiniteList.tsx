@@ -1,4 +1,4 @@
-import React, { Fragment, memo } from "react";
+import React, { memo } from "react";
 import { VirtualItem, Virtualizer } from "@tanstack/react-virtual";
 import { ButtonComponent } from "@components/common/button";
 
@@ -74,7 +74,7 @@ function VirtualizedList<T>({
   const totalHeight = rowVirtualizer.getTotalSize();
 
   return (
-    <Fragment>
+    <div className="flex-1 min-h-0">
       <div
         ref={parentRef}
         style={{
@@ -130,7 +130,7 @@ function VirtualizedList<T>({
           </div>
         )}
       </div>
-    </Fragment>
+    </div>
   );
 }
 

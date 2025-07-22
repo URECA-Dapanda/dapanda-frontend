@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import type { MapType } from "@/feature/map/types/mapType";
 import { MAP_CONTAINER_ID, DEFAULT_LOCATION } from "@/feature/map/constants/map";
-import { mockMapList } from "@/lib/mock/map";
+import { getMapList } from "@/feature/map/api/mapRequest";
 
 interface UseMapInitializerOptions {
   onStoreListUpdate?: (list: MapType[]) => void;
@@ -32,8 +32,9 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
       options?.onMapInit?.(map);
 
       navigator.geolocation?.getCurrentPosition(
-        ({ coords }) => {
-          const current = new window.naver.maps.LatLng(coords.latitude, coords.longitude);
+        async ({ coords }) => {
+          const { latitude, longitude } = coords;
+          const current = new window.naver.maps.LatLng(latitude, longitude);
           map.setCenter(current);
 
           new window.naver.maps.Marker({
@@ -45,15 +46,26 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
             },
           });
 
-          const dummyList = mockMapList({ lat: coords.latitude, lng: coords.longitude });
-          setStoreList(dummyList);
-          options?.onStoreListUpdate?.(dummyList);
+          try {
+            const res = await getMapList({
+              size: 10,
+              latitude,
+              longitude,
+              productSortOption: "PRICE_ASC",
+              open: true,
+            });
+
+            setStoreList(res.items);
+            options?.onStoreListUpdate?.(res.items);
+          } catch (e) {
+            alert("와이파이 목록을 불러오는 데 실패했습니다.");
+            console.error(e);
+          }
         },
         () => alert("위치 정보를 가져올 수 없습니다."),
         { enableHighAccuracy: true }
       );
     };
-
     tryInitMap();
   }, [options]);
 };

@@ -1,58 +1,48 @@
-import type { SellerProfile } from "@/feature/map/types/sellerType";
+import { useQuery } from "@tanstack/react-query";
+import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
+import type { MapDetailItem } from "@/feature/map/types/mapType";
 
-export type MapDetailItem = {
-  id: string;
-  type: string;
-  imageUrl: string[];
-  place: string;
-  address: string;
-  openTime: string;
-  closeTime: string;
-  pricePer10min: number;
-  description: string;
-  recentPrice: number;
-  averagePrice: number;
-};
+interface UseMapDetailDataResult {
+  data?: MapDetailItem;
+  isLoading: boolean;
+  isError: boolean;
+}
 
-const dummyList: Record<string, MapDetailItem> = {
-  "1": {
-    id: "1",
-    type: "와이파이",
-    imageUrl: ["/starbucks.png"],
-    place: "스타벅스 강남",
-    address: "서울시 강남구 테헤란로 123",
-    openTime: "09:00",
-    closeTime: "22:00",
-    pricePer10min: 300,
-    description: "전원이 있고 빠른 와이파이 가능",
-    recentPrice: 250,
-    averagePrice: 280,
-  },
-  "2": {
-    id: "2",
-    type: "와이파이",
-    imageUrl: ["/starbucks.png"],
-    place: "이디야 역삼",
-    address: "서울시 강남구 역삼동 456",
-    openTime: "08:00",
-    closeTime: "21:00",
-    pricePer10min: 200,
-    description: "콘센트 있음, 조용한 분위기",
-    recentPrice: 180,
-    averagePrice: 190,
-  },
-};
+export const useMapDetailData = (id: string): UseMapDetailDataResult => {
+  const {
+    data: detail,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["mapDetail", id],
+    queryFn: () => getMapDetailById(id),
+    enabled: !!id,
+  });
 
-const dummySeller: SellerProfile = {
-  id: "1",
-  name: "김판다",
-  rating: 4.5,
-  reviewCount: 3,
-};
+  const mapDetailItem: MapDetailItem | undefined = detail
+    ? {
+        productId: detail.productId.toString(),
+        type: "와이파이",
+        imageUrl: detail.imageUrls ?? [],
+        place: detail.title,
+        address: "", // reverse geocoding 필요
+        openTime: detail.startTime.slice(11, 16),
+        closeTime: detail.endTime.slice(11, 16),
+        pricePer10min: detail.price,
+        description: detail.content,
+        recentPrice: detail.price,
+        averagePrice: detail.averageRate,
+        memberName: detail.memberName,
+        memberId: detail.memberId,
+        reviewCount: detail.reviewCount,
+        latitude: detail.latitude,
+        longitude: detail.longitude,
+      }
+    : undefined;
 
-export const useMapDetailData = (id: string) => {
   return {
-    data: dummyList[id],
-    seller: dummySeller,
+    data: mapDetailItem,
+    isLoading,
+    isError,
   };
 };
