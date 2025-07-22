@@ -18,7 +18,6 @@ import type { KeyboardEvent, MouseEvent, ReactElement, ReactNode } from "react";
 type RatingContextValue = {
   value: number;
   readOnly: boolean;
-  total: number | undefined;
   hoverValue: number | null;
   focusedStar: number | null;
   handleValueChange: (
@@ -47,7 +46,7 @@ export type RatingButtonProps = LucideProps & {
 
 export const RatingButton = ({
   index: providedIndex,
-  size = 20,
+  size = 15,
   className,
   icon = <StarIcon />,
 }: RatingButtonProps) => {
@@ -81,7 +80,7 @@ export const RatingButton = ({
       disabled={readOnly}
       className={cn(
         "rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        "p-0.5",
+        "pr-0.5",
         readOnly && "cursor-default",
         className
       )}
@@ -109,7 +108,6 @@ export type RatingProps = {
   ) => void;
   onValueChange?: (value: number) => void;
   readOnly?: boolean;
-  total?: number;
   className?: string;
   children?: ReactNode;
 };
@@ -120,7 +118,6 @@ export const Rating = ({
   defaultValue,
   onChange,
   readOnly = false,
-  total: totalNum,
   className,
   children,
   ...props
@@ -189,7 +186,6 @@ export const Rating = ({
   const contextValue: RatingContextValue = {
     value: value ?? 0,
     readOnly,
-    total: totalNum,
     hoverValue,
     focusedStar,
     handleValueChange,
@@ -217,13 +213,12 @@ export const Rating = ({
             index,
           });
         })}
-        {readOnly && totalNum ? (
+        {readOnly ? (
           <div className="flex flex-row gap-8 items-center">
             <p className="pl-8 title-sm">{controlledValue}</p>
-            <p className="body-sm text-gray-600">({totalNum}개의 리뷰)</p>
           </div>
         ) : (
-          <p>( {controlledValue} )</p>
+          <p className="ml-4 title-sm">{controlledValue}</p>
         )}
       </div>
     </RatingContext.Provider>
