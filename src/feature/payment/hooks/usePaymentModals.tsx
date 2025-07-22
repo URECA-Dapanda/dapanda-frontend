@@ -59,9 +59,15 @@ import { postScrapTrade } from "@feature/payment/api/paymentRequest";
                 }
               }
               setStep("complete");
-            } catch (e: any) {
-              alert("결제 실패: " + (e.response?.data?.message ?? e.message ?? "알 수 없는 에러"));
+            } catch (e: unknown) {
+              if (e && typeof e === "object" && "response" in e) {
+                const error = e as { response?: { data?: { message?: string } } };
+                alert("결제 실패: " + (error.response?.data?.message ?? "알 수 없는 에러"));
+              } else {
+                alert("결제 실패: " + (e as Error).message);
+              }
             }
+            
           }}
           type={info.type}
           info={info}
