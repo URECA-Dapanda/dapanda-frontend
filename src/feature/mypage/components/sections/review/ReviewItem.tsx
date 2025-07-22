@@ -17,8 +17,8 @@ export default function ReviewItem({ data }: ReviewItemProps) {
         <CardContentComponent size={"sm"}>
           <LayoutBox layout="flex" direction="row" gap={19}>
             <AvatarIcon size="medium" />
-            <LayoutBox layout="flex" direction="column" gap={2}>
-              <div className="flex flex-row justify-between">
+            <LayoutBox layout="flex" direction="column" gap={2} width="fit">
+              <div className="flex flex-row justify-between w-fit gap-12">
                 <p className="title-sm">{data.reviewerName}</p>
                 <Rating defaultValue={data.rating} readOnly value={data.rating}>
                   {Array.from({ length: 5 }).map((_, index) => (
@@ -26,7 +26,7 @@ export default function ReviewItem({ data }: ReviewItemProps) {
                   ))}
                 </Rating>
               </div>
-              <p className="body-sm text-gray-700">{data.comment}</p>
+              <p className="body-sm text-gray-700 truncate w-[220px]">{data.comment}</p>
               <p className="body-sm text-gray-700">거래상품: {data.itemType}</p>
             </LayoutBox>
           </LayoutBox>

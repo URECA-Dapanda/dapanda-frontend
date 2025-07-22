@@ -18,7 +18,7 @@ export default function ReviewList() {
           size: 2,
         }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
-      estimateSize: () => 130,
+      estimateSize: () => 160,
       mode: "scroll",
     });
 
