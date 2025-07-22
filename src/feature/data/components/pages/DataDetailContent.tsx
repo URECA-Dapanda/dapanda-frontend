@@ -27,6 +27,7 @@ export default function DataDetailContent() {
   const isOwner = data && currentUserId === data.memberId;
   const [selectedAmount, setSelectedAmount] = useState<number>(0);
   const [topSheetExpanded, setTopSheetExpanded] = useState(false);
+  const [reportOpen, setReportOpen] = useState(true);
 
   useEffect(() => {
     const fetchDetail = async () => {
