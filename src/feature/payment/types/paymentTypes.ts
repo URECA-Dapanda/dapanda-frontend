@@ -1,5 +1,17 @@
 export type PaymentStep = "confirm" | "pay" | "complete" | null;
 
+export interface ScrapCombination {
+  productId: number;
+  mobileDataId: number;
+  memberName: string;
+  price: number;
+  purchasePrice: number;
+  remainAmount: number;
+  purchaseAmount: number;
+  pricePer100MB: number;
+  splitType: boolean;
+  updatedAt: string;
+}
 export interface PaymentInfo {
   type: "data" | "wifi" | "hotspot";
   title: string;
@@ -17,16 +29,5 @@ export interface PaymentInfo {
   dataAmount?: number;
   totalAmount?: number;
   totalPrice?: number;
-  combinations?: {
-    productId: number;
-    mobileDataId: number;
-    memberName: string;
-    price: number;
-    purchasePrice: number;
-    remainAmount: number;
-    purchaseAmount: number;
-    pricePer100MB: number;
-    splitType: boolean;
-    updatedAt: string;
-  }[];
+  combinations?: ScrapCombination[];
 }
