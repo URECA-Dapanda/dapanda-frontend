@@ -64,6 +64,7 @@ export default function DataDetailContent() {
     recentPrice: 0,
     averagePrice: data.averageRate,
     hasReported: false,
+    splitType: data.splitType,
   };
 
   const seller = {
@@ -95,7 +96,7 @@ export default function DataDetailContent() {
       <div
         className={clsx(
           "space-y-12 px-24 transition-all duration-300",
-          topSheetExpanded ? "pt-[430px]" : "pt-[280px]"
+          topSheetExpanded ? "pt-[450px]" : "pt-[300px]"
         )}
       ></div>
       <div className="space-y-12 px-24 pb-28">
@@ -152,19 +153,6 @@ export default function DataDetailContent() {
               구매하기
             </ButtonComponent>
           </div>
-          <section>
-            <div
-              className="flex items-center mb-16 cursor-pointer" /*onClick={handleGoToSellerItems}*/
-            >
-              <h2 className="text-lg font-bold">{seller.name} 님의 판매 물품</h2>
-              <ChevronRight className="w-24 h-24 text-black" />
-            </div>
-            <div className="grid grid-cols-2 gap-68">
-              <ItemCard>1</ItemCard>
-
-              <ItemCard>2</ItemCard>
-            </div>
-          </section>
         </div>
       </div>
       {renderModals}
