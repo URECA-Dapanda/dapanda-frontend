@@ -12,6 +12,9 @@ export interface SaleHistoryType extends HistoryType {
 }
 
 export interface PurchaseHistoryType extends HistoryType {
-  soldDate: string;
-  isScrap: boolean;
+  tradeId: number;
+  tradeType: string;
+  dataAmount: number;
+  title: string;
+  createdAt: string;
 }
