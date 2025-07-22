@@ -1,6 +1,6 @@
 import axiosInstance from "@/lib/axios";
 
-export interface WifiDetailResponse {
+interface WifiDetailResponse {
   productId: number;
   itemId: number;
   price: number;
