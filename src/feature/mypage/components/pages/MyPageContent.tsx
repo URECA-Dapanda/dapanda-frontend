@@ -8,10 +8,10 @@ import CurrentCashCard from "@feature/mypage/components/sections/profile/Current
 import TransactionHistory from "@feature/mypage/components/sections/TransactionHistory";
 import { DataUsageDonut } from "@feature/mypage/components/sections/profile/CicularProgressBar";
 import { ButtonComponent } from "@components/common/button";
+import LogOutButton from "../sections/LogOutButton";
 import ProfileCard from "@feature/mypage/components/sections/profile/ProfileCard";
 import { useTossSuccessModalStore } from "@feature/mypage/stores/useTossSuccessModalStore";
 import TossSuccessModal from "@feature/mypage/components/sections/toss/TossSuccessModal";
-
 
 export default function MyPageContent() {
   const searchParams = useSearchParams();
@@ -37,11 +37,8 @@ export default function MyPageContent() {
         <Link href={"/"}>
           <Image src={"/pandaDic.svg"} alt="PandaDic" width={327} height={170} />
         </Link>
-        <ButtonComponent variant={"outlinePrimary"} className="w-full">
-          로그아웃
-        </ButtonComponent>
+        <LogOutButton />
       </div>
     </>
   );
-
 }

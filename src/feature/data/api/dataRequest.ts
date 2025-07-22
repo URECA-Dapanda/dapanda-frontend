@@ -54,3 +54,8 @@ export async function getDataDetail(productId: string): Promise<DataDetailRespon
   );
   return response.data.data;
 }
+
+export async function deleteDataPost(postId: string) {
+  const response = await axios.delete(`/api/products/${postId}`);
+  return response.data.message;
+}

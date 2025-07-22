@@ -13,27 +13,25 @@ interface ReviewItemProps {
 export default function ReviewItem({ data }: ReviewItemProps) {
   return (
     <div className="px-24">
-      <CardComponent variant="flat" size="sm">
+      <CardComponent variant="outlined" color={"border-gray-200"} size="sm">
         <CardContentComponent size={"sm"}>
-          <LayoutBox layout="flex" direction="row" gap={19}>
+          <LayoutBox layout="flex" direction="row" width="fit" gap={8}>
             <AvatarIcon size="medium" />
-            <LayoutBox layout="flex" direction="column" gap={2}>
-              <div className="flex flex-row justify-between">
-                <p className="title-sm">{data.reviewerName}</p>
+            <LayoutBox layout="flex" direction="column" gap={2} width="fit">
+              <div className="flex flex-row justify-between gap-12 w-[220px]">
+                <p className="title-sm truncate">{data.reviewerName}</p>
                 <Rating defaultValue={data.rating} readOnly value={data.rating}>
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <RatingButton key={index} className="text-amber-300" />
-                  ))}
+                  <RatingButton className="text-primary" />
                 </Rating>
               </div>
-              <p className="body-sm text-gray-700">{data.comment}</p>
-              <p className="body-sm text-gray-700">거래상품: {data.itemType}</p>
+              <p className="body-sm text-gray-700 truncate w-[220px]">{data.comment}</p>
+              <p className="body-sm text-gray-700 truncate w-[220px]">거래상품: {data.itemType}</p>
             </LayoutBox>
           </LayoutBox>
           <ButtonComponent
             variant={"primary2"}
             size={"xxs"}
-            className="absolute bottom-12 right-36"
+            className="absolute bottom-12 right-20 caption-md"
           >
             리뷰 신고하기
           </ButtonComponent>

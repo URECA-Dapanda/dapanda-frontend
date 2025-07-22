@@ -18,7 +18,7 @@ export function useSlidingHighlight<T extends HTMLElement>(
     if (el) {
       setHighlightStyle({
         left: hasOwn ? "auto" : el.offsetLeft,
-        width: hasOwn ? el.offsetWidth * 2 : el.offsetWidth,
+        width: hasOwn ? 327 : el.offsetWidth,
       });
     }
   }, [tabValues, activeValue, refs]);
