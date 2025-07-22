@@ -3,8 +3,10 @@ import {
     PaymentModal,
     PaymentCompleteModal,
   } from "@feature/payment/components";
-  import { usePaymentStore } from "@feature/payment/stores/paymentStore";
-  
+import { usePaymentStore } from "@feature/payment/stores/paymentStore";
+import { postDefaultTrade } from "@feature/payment/api/paymentRequest";  
+import { postScrapTrade } from "@feature/payment/api/paymentRequest";
+
   export default function UsePaymentModals() {
     const { step, info, setStep, reset } = usePaymentStore();
     if (!info) return null;
@@ -29,7 +31,44 @@ import {
         <PaymentModal
           isOpen={step === "pay"}
           onClose={reset}
-          onPay={() => setStep("complete")}
+          onPay={async () => {
+            try {
+              if (info.type === "data") {
+                if (info.badge === "일반 구매") {
+                  if (info.productId && info.mobileDataId) {
+                    const tradeId = await postDefaultTrade(
+                      info.productId,
+                      info.mobileDataId,
+                      info.dataAmount // optional
+                    );
+                    console.log("결제 완료", tradeId);
+                  } else {
+                    throw new Error("상품 정보가 누락되었습니다.");
+                  }
+                } else if (info.badge === "자투리 구매") {
+                  if (info.totalAmount && info.totalPrice && info.combinations) {
+                    const tradeId = await postScrapTrade(
+                      info.totalAmount,
+                      info.totalPrice,
+                      info.combinations
+                    );
+                    console.log("자투리 결제 완료", tradeId);
+                  } else {
+                    throw new Error("자투리 구매 정보가 누락되었습니다.");
+                  }
+                }
+              }
+              setStep("complete");
+            } catch (e: unknown) {
+              if (e && typeof e === "object" && "response" in e) {
+                const error = e as { response?: { data?: { message?: string } } };
+                alert("결제 실패: " + (error.response?.data?.message ?? "알 수 없는 에러"));
+              } else {
+                alert("결제 실패: " + (e as Error).message);
+              }
+            }
+            
+          }}
           type={info.type}
           info={info}
         />
