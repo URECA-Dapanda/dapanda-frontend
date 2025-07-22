@@ -16,10 +16,9 @@ export default function MapListVirtual() {
     );
   }, []);
 
-  // 🧠 좌표가 없어도 기본값 넣어서 Hook은 항상 호출
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useMapInfiniteQuery({
-      latitude: coords?.lat ?? 0, // 또는 DEFAULT_LOCATION.lat
+      latitude: coords?.lat ?? 0,
       longitude: coords?.lng ?? 0,
       sortOption: "PRICE_ASC",
       open: true,

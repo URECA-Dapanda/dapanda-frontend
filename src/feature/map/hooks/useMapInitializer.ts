@@ -2,8 +2,7 @@ import { useEffect } from "react";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import type { MapType } from "@/feature/map/types/mapType";
 import { MAP_CONTAINER_ID, DEFAULT_LOCATION } from "@/feature/map/constants/map";
-import { getMapList } from "../api/mapRequest"; // ✅ 실제 API 연동 함수
-
+import { getMapList } from "../api/mapRequest";
 interface UseMapInitializerOptions {
   onStoreListUpdate?: (list: MapType[]) => void;
   onMapInit?: (map: naver.maps.Map) => void;
