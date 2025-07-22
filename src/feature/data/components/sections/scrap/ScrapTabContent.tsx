@@ -6,21 +6,14 @@ import { ButtonComponent } from "@/components/common/button";
 import { dataSortOptions } from "@components/common/dropdown/dropdownConfig";
 import { ChevronDown, Search } from "lucide-react";
 import ScrapFilterCard from "@feature/data/components/sections/filter/ScrapFilterCard";
-import ScrapEmptyState from "@feature/data/components/sections/ScrapEmptyState";
-import ScrapLoadingState from "@feature/data/components/sections/ScrapLoadingState";
+import ScrapEmptyState from "@feature/data/components/sections/scrap/ScrapEmptyState";
+import ScrapLoadingState from "@feature/data/components/sections/scrap/ScrapLoadingState";
 import { useScrapRecommendation } from "@feature/data/hooks/useScrapRecommendation";
-import CollapsibleDataList from "@feature/data/components/sections/product/CollapsibleDataList";
+import CollapsibleDataList from "@feature/data/components/sections/default/CollapsibleDataList";
 
 export default function ScrapTabContent() {
   const [sortLabel, setSortLabel] = useState("최신순");
-  const {
-    value,
-    setValue,
-    loading,
-    result,
-    summary,
-    search,
-  } = useScrapRecommendation();
+  const { value, setValue, loading, result, summary, search } = useScrapRecommendation();
   const [hasSearched, setHasSearched] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -53,28 +46,27 @@ export default function ScrapTabContent() {
 
       {!loading && hasSearched && result.length === 0 && <ScrapEmptyState />}
 
-        {!loading && result.length > 0 && (
+      {!loading && result.length > 0 && (
         <>
-            <CollapsibleDataList
+          <CollapsibleDataList
             items={result}
             isExpanded={isExpanded}
             onToggle={() => setIsExpanded((prev) => !prev)}
-            />
-            
-            {isExpanded && (
-            <div className="px-8 mb-32 flex justify-between items-center">
-                <div>
-                    <p className="title-sm">총 용량 {summary.totalAmount}GB</p>
-                    <p className="title-sm">총 가격 {summary.totalPrice.toLocaleString()}원</p>
-                </div>
-            <ButtonComponent variant="secondary" size="3xl" className="w-152">
-            확정하고 결제하기
-            </ButtonComponent>
-    </div>
-)}
+          />
 
-    </>
-    )}
+          {isExpanded && (
+            <div className="px-8 mb-32 flex justify-between items-center">
+              <div>
+                <p className="title-sm">총 용량 {summary.totalAmount}GB</p>
+                <p className="title-sm">총 가격 {summary.totalPrice.toLocaleString()}원</p>
+              </div>
+              <ButtonComponent variant="secondary" size="3xl" className="w-152">
+                확정하고 결제하기
+              </ButtonComponent>
+            </div>
+          )}
+        </>
+      )}
       {!hasSearched && !loading && result.length === 0 && (
         <div className="flex flex-col items-center justify-center text-center mt-32">
           <Search className="w-64 h-64 mb-16" />

@@ -6,13 +6,20 @@ export function useSlidingHighlight<T extends HTMLElement>(
   activeValue: string
 ) {
   const [refs, getRef] = useMultiRef<T>();
-  const [highlightStyle, setHighlightStyle] = useState({ left: 0, width: 0 });
+  const [highlightStyle, setHighlightStyle] = useState<{ left: number | string; width: number }>({
+    left: 0,
+    width: 0,
+  });
 
   useLayoutEffect(() => {
     const index = tabValues.findIndex((t) => t.value === activeValue);
+    const hasOwn = tabValues.length === 1;
     const el = refs.current[index];
     if (el) {
-      setHighlightStyle({ left: el.offsetLeft, width: el.offsetWidth });
+      setHighlightStyle({
+        left: hasOwn ? "auto" : el.offsetLeft,
+        width: hasOwn ? el.offsetWidth * 2 : el.offsetWidth,
+      });
     }
   }, [tabValues, activeValue, refs]);
 

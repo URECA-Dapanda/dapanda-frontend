@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { PlusIcon } from "lucide-react";
 import { ButtonComponent } from "@/components/common/button";
 import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
-import DefaultTabBody from "@feature/data/components/sections/DefaultTabContent";
-import ScrapTabBody from "@feature/data/components/sections/ScrapTabContent";
+import DefaultTabBody from "@feature/data/components/pages/DefaultTabContent";
+import ScrapTabBody from "@feature/data/components/sections/scrap/ScrapTabContent";
 import { PurchaseModeTabs } from "@/components/common/tabs";
 import { useHeaderStore } from "@stores/useHeaderStore";
-import { PlusIcon } from "lucide-react";
 import DefaultFilterCard from "@feature/data/components/sections/filter/DefaultFilterCard";
 
 export default function DataPageContent() {
@@ -21,7 +21,7 @@ export default function DataPageContent() {
 
   useEffect(() => {
     setIsVisible(sheetOpen);
-  }, [sheetOpen]);
+  }, [sheetOpen, setIsVisible]);
 
   const handleTabChange = (newTab: string) => {
     if (newTab === tab) return;
@@ -59,7 +59,6 @@ export default function DataPageContent() {
       <div className="sticky top-0 z-10 bg-primary2 p-4 pt-60">
         <DefaultFilterCard />
       </div>
-      {/* 플로팅 버튼 */}
       <div className="absolute bottom-76 right-24 z-50">
         <ButtonComponent
           variant="floatingPrimary"
@@ -72,7 +71,6 @@ export default function DataPageContent() {
         </ButtonComponent>
       </div>
 
-      {/* 바텀시트 (공통) */}
       <BaseBottomSheet
         isOpen={sheetOpen}
         onClose={() => setSheetOpen(false)}
@@ -81,7 +79,6 @@ export default function DataPageContent() {
         variant="snap"
         snapHeight={280}
       >
-        {/* 탭 공통 영역 */}
         <div className="flex justify-center mt-24">
           <PurchaseModeTabs value={tab} onChange={handleTabChange}>
             <DefaultTabBody isSheetOpen={sheetOpen} />

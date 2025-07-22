@@ -2,17 +2,29 @@ import { useRouter } from "next/navigation";
 import { StarIcon } from "lucide-react";
 import AvatarIcon from "@components/common/AvatarIcon";
 import { ButtonComponent } from "@components/common/button";
-import type { SellerProfile } from "@/feature/map/types/sellerType";
 
 interface MapProfileCardProps {
-  seller: SellerProfile;
+  productId: string;
+  memberName: string;
+  rating: number;
+  reviewCount: number;
 }
 
-export default function MapProfileCard({ seller }: MapProfileCardProps) {
+export default function MapProfileCard({
+  productId,
+  memberName,
+  rating,
+  reviewCount,
+}: MapProfileCardProps) {
   const router = useRouter();
 
   const goToProfile = () => {
-    router.push(`/profile/${seller.id}`);
+    router.push(`/profile?productId=${productId}`);
+  };
+
+  const goToChat = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    router.push(`/chat/${productId}`);
   };
 
   return (
@@ -20,11 +32,11 @@ export default function MapProfileCard({ seller }: MapProfileCardProps) {
       <AvatarIcon size="medium" />
 
       <div className="flex flex-col gap-4 flex-1 px-16">
-        <span className="title-sm text-black">{seller.name}</span>
+        <span className="title-sm text-black">{memberName}</span>
         <div className="flex items-center gap-4">
           <StarIcon className="w-16 h-16 text-primary fill-current" />
-          <span className="body-sm text-black">{seller.rating.toFixed(1)}</span>
-          <span className="body-xs text-gray-500">({seller.reviewCount}개의 리뷰)</span>
+          <span className="body-sm text-black">{rating.toFixed(1)}</span>
+          <span className="body-xs text-gray-500">({reviewCount}개의 리뷰)</span>
         </div>
       </div>
 
@@ -32,12 +44,7 @@ export default function MapProfileCard({ seller }: MapProfileCardProps) {
         variant="outlineGray"
         size="sm"
         className="px-16 py-8 body-xs whitespace-nowrap"
-        onClick={(e) => {
-          e.stopPropagation();
-          router.push("/chat");
-          // router.push(`/chat?sellerId=${seller.id}`);
-          // 추후 seller id 채팅방으로 연결 필요
-        }}
+        onClick={goToChat}
       >
         채팅하기
       </ButtonComponent>

@@ -5,7 +5,7 @@ import { CardContent } from "@ui/card";
 
 import { cn } from "@lib/utils";
 
-type CardContentSize = "lg" | "md" | "sm" | number;
+type CardContentSize = "lg" | "md" | "sm" | "fit" | number;
 
 interface CardContentProps {
   size: CardContentSize;
@@ -23,6 +23,8 @@ export default function CardContentComponent({
         return "p-24";
       case "sm":
         return "p-16";
+      case "fit":
+        return "p-0 px-0";
       default:
         return `p-${size}`;
     }

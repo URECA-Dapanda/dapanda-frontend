@@ -1,6 +1,6 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { DataType } from "@feature/data/types/dataType";
-import DataItemCard from "@feature/data/components/sections/product/DataItemCard";
+import DataItemCard from "@feature/data/components/sections/default/DataItemCard";
 
 interface CollapsibleDataListProps {
   items: DataType[];
@@ -8,7 +8,11 @@ interface CollapsibleDataListProps {
   onToggle: () => void;
 }
 
-export default function CollapsibleDataList({ items, isExpanded, onToggle }: CollapsibleDataListProps) {
+export default function CollapsibleDataList({
+  items,
+  isExpanded,
+  onToggle,
+}: CollapsibleDataListProps) {
   return (
     <div className="relative w-full space-y-16">
       <div className="relative min-h-[280px]">

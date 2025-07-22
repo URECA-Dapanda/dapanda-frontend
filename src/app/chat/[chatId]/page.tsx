@@ -14,7 +14,9 @@ export default function ChatRoomPage() {
   return (
     <>
       <ChatRoomHeader title={name} />
-      <ChatRoomContent title={title} price={price} />
+      <div className="pb-36">
+        <ChatRoomContent title={title} price={price} />
+      </div>
     </>
   );
 }
