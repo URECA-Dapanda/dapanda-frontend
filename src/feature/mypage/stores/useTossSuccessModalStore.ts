@@ -1,12 +1,7 @@
 import { create } from "zustand";
+import { TossModalState } from "@feature/mypage/types/modalTypes";
 
-interface TossSuccessModalState {
-  isOpen: boolean;
-  open: () => void;
-  close: () => void;
-}
-
-export const useTossSuccessModalStore = create<TossSuccessModalState>((set) => ({
+export const useTossSuccessModalStore = create<TossModalState>((set) => ({
   isOpen: false,
   open: () => set({ isOpen: true }),
   close: () => set({ isOpen: false }),
