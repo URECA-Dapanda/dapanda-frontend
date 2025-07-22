@@ -1,4 +1,5 @@
 import { useChatStore } from "@feature/chat/stores/useChatStore";
+import axiosInstance from "@/lib/axios";
 
 export const createOrGetChatRoom = async (
   productId: number,
@@ -18,24 +19,15 @@ export const createOrGetChatRoom = async (
       updatedAt: new Date().toISOString(),
     });
 
-    return mockId;
+    return 999;
   }
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/${productId}/chat-room`,
-    {
-      method: "POST",
-      credentials: "include",
-    }
-  );
-
-  if (!res.ok) {
-    const text = await res.text();
-    console.error("채팅방 생성 실패", res.status, text);
-    throw new Error(`채팅방 생성 실패 (status ${res.status})`);
+  try {
+    const response = await axiosInstance.post(`/api/products/${productId}/chat-room`);
+    const chatRoomId = response.data.data.chatRoomId;
+    return chatRoomId;
+  } catch (error) {
+    console.error("채팅방 생성 실패 (알 수 없는 에러)", error);
+    throw new Error("알 수 없는 오류로 채팅방 생성에 실패했습니다.");
   }
-  const result = await res.json();
-  const chatRoomId = result.data.chatRoomId;
-
-  return chatRoomId;
 };
