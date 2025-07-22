@@ -11,7 +11,7 @@ export interface MapType {
 }
 
 export type MapDetailItem = {
-  id: string;
+  productId: string;
   type: string;
   imageUrl: string[];
   place: string;
@@ -23,5 +23,8 @@ export type MapDetailItem = {
   recentPrice: number;
   averagePrice: number;
   memberName: string;
+  memberId: number;
   reviewCount: number;
+  longitude: number;
+  latitude: number;
 };

@@ -21,11 +21,11 @@ export const useMapDetailData = (id: string): UseMapDetailDataResult => {
 
   const mapDetailItem: MapDetailItem | undefined = detail
     ? {
-        id: detail.productId.toString(),
+        productId: detail.productId.toString(),
         type: "와이파이",
         imageUrl: detail.imageUrls ?? [],
         place: detail.title,
-        address: "", // 역지오코딩 필요
+        address: "", // reverse geocoding 필요
         openTime: detail.startTime.slice(11, 16),
         closeTime: detail.endTime.slice(11, 16),
         pricePer10min: detail.price,
@@ -33,7 +33,10 @@ export const useMapDetailData = (id: string): UseMapDetailDataResult => {
         recentPrice: detail.price,
         averagePrice: detail.averageRate,
         memberName: detail.memberName,
+        memberId: detail.memberId,
         reviewCount: detail.reviewCount,
+        latitude: detail.latitude,
+        longitude: detail.longitude,
       }
     : undefined;
 

@@ -24,7 +24,7 @@ export default function MapProfileCard({
 
   const goToChat = (e: React.MouseEvent) => {
     e.stopPropagation();
-    router.push(`/chat?productId=${productId}`);
+    router.push(`/chat/${productId}`);
   };
 
   return (
