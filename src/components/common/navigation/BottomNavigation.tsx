@@ -1,10 +1,13 @@
 import { MapPin, MessageCircle, User, Wifi } from "lucide-react";
 import { Fragment } from "react";
-import NavigationButton from "./NavigationButton";
+import NavigationButton from "@components/common/navigation/NavigationButton";
 
-export default async function BottomNavigation() {
+export default function BottomNavigation() {
   return (
-    <div className="fixed bottom-0 z-50 bg-white border-none overflow-x-clip" style={{ width: "375px" }}>
+    <div
+      className="absolute bottom-0 z-50 bg-white border-none overflow-x-clip"
+      style={{ width: "375px" }}
+    >
       <div className="grid grid-cols-4 px-8 shadow-nav">
         <NavigationButton target={"/data"}>
           <Fragment>

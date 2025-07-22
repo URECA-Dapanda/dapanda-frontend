@@ -9,6 +9,8 @@ interface LayoutBoxProps {
   columns?: number; // grid-cols 수
   rows?: number; // grid-rows 수
   autoFit?: boolean; // grid-auto-fit 형태
+  width?: "fit" | "full";
+  height?: "fit" | "full";
 }
 
 const layoutVariant = cva("", {
@@ -20,6 +22,14 @@ const layoutVariant = cva("", {
     direction: {
       row: "flex-row justify-around items-center",
       column: "flex-col",
+    },
+    width: {
+      fit: "w-fit",
+      full: "w-full",
+    },
+    height: {
+      fit: "h-fit",
+      full: "h-full",
     },
   },
   defaultVariants: {
@@ -35,6 +45,8 @@ export default function LayoutBox({
   columns,
   rows,
   autoFit = false,
+  width = "full",
+  height = "fit",
   children,
 }: PropsWithChildren<LayoutBoxProps> & VariantProps<typeof layoutVariant>) {
   const isGrid = layout === "grid";
@@ -49,7 +61,7 @@ export default function LayoutBox({
 
   return (
     <div
-      className={clsx(layoutVariant({ layout, direction }), "w-full h-fit")}
+      className={clsx(layoutVariant({ layout, direction, width, height }), "")}
       style={{
         gap: typeof gap === "number" ? `${gap}px` : gap,
         ...(isGrid

@@ -13,6 +13,7 @@ interface BaseProps {
   placeholder?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   className?: string;
   color?: string;
   radius?: InputRadius;
@@ -40,6 +41,7 @@ export default function InputComponent({
   placeholder = "",
   value = "",
   onChange,
+  onKeyDown,
   className = "",
   color = "",
   radius = "md",
@@ -95,6 +97,7 @@ export default function InputComponent({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        onKeyDown={onKeyDown}
         disabled={disabled}
         required={required}
         rows={rows}
@@ -108,10 +111,10 @@ export default function InputComponent({
       placeholder={placeholder}
       value={value}
       onChange={onChange as React.ChangeEventHandler<HTMLInputElement>}
+      onKeyDown={onKeyDown as React.KeyboardEventHandler<HTMLInputElement>}
       disabled={disabled}
       required={required}
       className={cn(inputRadius, inputSize, color, className)}
     />
   );
 }
-

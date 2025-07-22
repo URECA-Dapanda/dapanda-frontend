@@ -16,7 +16,7 @@ export default function PurchaseHistoryCard({ data }: PurchaseHistoryCardProps) 
           자투리 구매
         </BadgeComponent>
       )}
-      <LayoutBox layout="flex" direction="row" gap={19}>
+      <LayoutBox layout="flex" direction="row" gap={19} height="full">
         <AvatarIcon size="small" />
         <LayoutBox layout="flex" direction="column" gap={0}>
           <p className="title-sm">{data.type}</p>

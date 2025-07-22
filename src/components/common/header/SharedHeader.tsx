@@ -16,7 +16,7 @@ export default function SharedHeader() {
   const pathname = usePathname();
   const isVisible = useHeaderStore((state) => state.isVisible);
   const { hasEnded, reset } = useTimerStore();
-  const isDataPage = pathname.startsWith("/data");
+  const isDataPage = pathname.startsWith("/data") && pathname.split("/").length===2;
 
   return (
     <div

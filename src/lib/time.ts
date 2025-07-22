@@ -35,6 +35,7 @@ export function formatRelativeTime(iso: string, withSuffix = false): string {
   return withSuffix && result !== "방금" ? `${result} 전` : result;
 }
 
+
 export const formatTime = (time: number) => {
   const minutes = String(Math.floor(time / 60)).padStart(2, "0");
   const seconds = String(time % 60).padStart(2, "0");
@@ -96,3 +97,12 @@ export const compareTimes = (a: Time, b: Time): number => {
 export const isTimeInRange = (target: Time, min: Time, max: Time): boolean => {
   return compareTimes(target, min) >= 0 && compareTimes(target, max) <= 0;
 };
+
+export function formatDateDivider(isoOrDateString: string): string {
+  const date = new Date(isoOrDateString);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${year}년 ${month}월 ${day}일`;
+}
+
