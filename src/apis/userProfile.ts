@@ -18,7 +18,7 @@ export const getUserInfo = async () => {
 };
 
 export const logOutRequest = async () => {
-  const response = await axios.post(`/api/auth/logout`);
+  const { data } = await axios.post(`/api/auth/logout`);
 
-  return response;
+  return data;
 };

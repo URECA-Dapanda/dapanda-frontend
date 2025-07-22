@@ -1,8 +1,10 @@
 import { logOutRequest } from "@apis/userProfile";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export function useAuth() {
+  const router = useRouter();
   const token = Cookies.get("accessToken");
   const [isLogin, setIsLogin] = useState<boolean | null>(null);
 
@@ -15,7 +17,8 @@ export function useAuth() {
 
   const logout = async () => {
     const res = await logOutRequest();
-    console.log("ee", res);
+    console.log("ee", res.code);
+    router.replace("/");
   };
 
   return {

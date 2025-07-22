@@ -49,7 +49,7 @@ export async function getPurchaseHistoryList({
   cursorId?: number;
 }): Promise<{ items: PurchaseHistoryType[]; nextCursor?: number }> {
   if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
-  const { data } = await axios.get("/api/trades", { params: { size, cursorId } });
+  const { data } = await axios.get("/api/trades/purchase-history", { params: { size, cursorId } });
   const items = data.trades.data;
   const nextCursor = data.trades.pageInfo.nextCursorId;
 

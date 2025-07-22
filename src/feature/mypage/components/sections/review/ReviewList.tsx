@@ -16,7 +16,6 @@ export default function ReviewList() {
         getReviewList({
           pageParam,
           size: 2,
-          memberId: "3",
         }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       estimateSize: () => 130,
