@@ -1,5 +1,4 @@
 import axios from "@/lib/axios";
-
 import { DataType, RawDataItem, DataDetailResponse } from "@feature/data/types/dataType";
 import { mapRawToDataType } from "@/feature/data/utils/dataMapper";
 
@@ -63,4 +62,11 @@ export const postMobileDataProduct = async (
   });
 
   return res.data;
+};
+
+export const getPriceRecommendation = async () => {
+  const response = await axios.get("/api/products/market-price", {
+    params: { productType: "MOBILE_DATA" },
+  });
+  return response.data.data;
 };
