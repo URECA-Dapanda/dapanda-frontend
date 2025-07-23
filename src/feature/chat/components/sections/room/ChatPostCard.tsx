@@ -9,7 +9,7 @@ interface ChatPostCardProps {
 
 export default function ChatPostCard({ title, price }: ChatPostCardProps) {
   const match = title.match(/(\d+)GB/);
-  const imageFile = match ? `/${match[1]}.png` : "/default.png";
+  const imageFile = match ? `/${match[1]}.png` : "/dpd-main-logo.png";
 
   return (
     <div className="flex border border-primary-200 rounded-20 h-64 px-16 py-8 bg-white">
