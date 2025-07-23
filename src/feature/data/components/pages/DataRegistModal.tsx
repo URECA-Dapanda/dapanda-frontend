@@ -7,6 +7,7 @@ import { badgeVariants } from "@components/common/badge/badgeVariants";
 import InputComponent from "@components/common/input/InputComponent";
 import { buttonVariants } from "@components/common/button/buttonVariants";
 import { usePriceRecommendation } from "@feature/data/hooks/usePriceRecommendation";
+import { useRegisterDataProduct } from "@feature/data/hooks/useRegisterDataProduct";
 import { Switch } from "@ui/switch";
 
 export default function DataRegistModal({ onClose }: { onClose: () => void }) {
@@ -15,24 +16,18 @@ export default function DataRegistModal({ onClose }: { onClose: () => void }) {
     const [isSplit, setIsSplit] = useState(false);
     const dataAmount = Number(value[0].toFixed(1));
     const { recentPrice, avgPrice } = usePriceRecommendation();
+    const { register } = useRegisterDataProduct();
 
-    const handleRegister = async () => {
+    const handleRegister = () => {
         const priceInt = parseInt(price, 10);
-        if (isNaN(priceInt) || priceInt <= 0) {
-            alert("유효한 가격을 입력해주세요.");
-            return;
-        }
-        try {
-            const res = await postMobileDataProduct(dataAmount, priceInt, isSplit);
-            if (res.code === 0) {
-                alert("등록 완료!");
-                onClose();
-            }
-        } catch (e) {
-            console.error(e);
-            alert("등록 중 오류가 발생했습니다.");
-        }
+        register({
+            dataAmount,
+            price: priceInt,
+            isSplitType: isSplit,
+            onSuccess: onClose,
+        });
     };
+
     return (
         <div className="flex flex-col gap-24 p-24 bg-white">
             <BottomSheetHeader title="데이터 판매" />
@@ -47,12 +42,12 @@ export default function DataRegistModal({ onClose }: { onClose: () => void }) {
             <div className="flex gap-6 mt-4">
                 {recentPrice && (
                     <span className={badgeVariants({ variant: "outlined", size: "sm" })}>
-                        최근 거래가: {(dataAmount*10*recentPrice).toLocaleString()}원
+                        최근 거래가: {(dataAmount * 10 * recentPrice).toLocaleString()}원
                     </span>
                 )}
                 {avgPrice && (
                     <span className={badgeVariants({ variant: "outlined", size: "sm" })}>
-                        평균 거래가: {(dataAmount*10*avgPrice).toLocaleString()}원
+                        평균 거래가: {(dataAmount * 10 * avgPrice).toLocaleString()}원
                     </span>
                 )}
             </div>
