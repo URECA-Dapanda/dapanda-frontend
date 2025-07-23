@@ -9,7 +9,7 @@ export default function OnSaleTabContent() {
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<SaleHistoryType>({
       queryKey: ["dataItems", "default"],
-      queryFn: ({ pageParam = 0 }) => getSaleHistoryList({ pageParam, isSold: false }),
+      queryFn: ({ pageParam = 0 }) => getSaleHistoryList({ pageParam, productState: "ACTIVE" }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       estimateSize: () => 130,
       mode: "button",
