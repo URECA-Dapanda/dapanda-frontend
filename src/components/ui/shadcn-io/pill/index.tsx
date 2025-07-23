@@ -4,13 +4,10 @@ import { Button } from '@ui/button';
 
 import { cn } from '@lib/utils';
 
-export type PillProps = ComponentProps<typeof Badge> & {
-  themed?: boolean;
-};
+export type PillProps = ComponentProps<typeof Badge>;
 
 export const Pill = ({
   variant = 'grayline',
-  themed = false,
   className,
   ...props
 }: PillProps) => (
