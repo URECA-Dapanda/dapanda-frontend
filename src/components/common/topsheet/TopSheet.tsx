@@ -17,6 +17,7 @@ import { WifiTopSheetContent } from "./WifiTopSheetContent";
 import { useTopSheetExpanded } from "./useTopSheetExpanded";
 import { useTopSheetImageStyle } from "./useTopSheetImageStyle";
 import ReportTriggerButton from "../button/ReportTriggerButton";
+import ReportCompleteModal from "../modal/ReportCompleteModal";
 
 export default function TopSheet({
   type,
