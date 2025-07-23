@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { postMobileDataProduct } from "@feature/data/api/dataRequest";
+import { toast } from "sonner";
 
 export const useRegisterDataProduct = () => {
   const register = useCallback(
@@ -15,7 +16,7 @@ export const useRegisterDataProduct = () => {
       onSuccess?: () => void;
     }) => {
       if (isNaN(price) || price <= 0) {
-        alert("유효한 가격을 입력해주세요.");
+        toast("유효한 가격을 입력해주세요.", { style: { backgroundColor: "red" } });
         return;
       }
 
