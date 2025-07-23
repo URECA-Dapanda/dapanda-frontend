@@ -16,7 +16,6 @@ import {
 } from "@feature/data/hooks/usePurchaseBuilder";
 import { useDataDetail } from "@feature/data/hooks/useDataDetail";
 import clsx from "clsx";
-import ReportModal from "@components/common/modal/ReportModal";
 
 export default function DataDetailContent() {
   const { postId } = useParams<{ postId: string }>();
@@ -28,7 +27,6 @@ export default function DataDetailContent() {
 
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [topSheetExpanded, setTopSheetExpanded] = useState(false);
-  const [reportOpen, setReportOpen] = useState(true);
 
   if (loading || !data) return <div className="text-center mt-20">로딩 중...</div>;
 
@@ -108,7 +106,6 @@ export default function DataDetailContent() {
       </div>
 
       {renderModals}
-      <ReportModal isOpen={reportOpen} setIsOpen={setReportOpen} />
     </div>
   );
 }

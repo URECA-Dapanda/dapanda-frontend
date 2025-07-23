@@ -1,8 +1,13 @@
-import { Dispatch, SetStateAction, useCallback } from "react";
-import BaseModal from "./BaseModal";
+import { Dispatch, SetStateAction, useCallback, useMemo, useRef } from "react";
 import ModalHeader from "./ModalHeader";
-import { SirenIcon } from "lucide-react";
+import { Siren } from "lucide-react";
 import InputComponent from "../input/InputComponent";
+import { ButtonComponent } from "../button";
+import FullScreenModal from "./FullScreenModal";
+import BaseModal from "./BaseModal";
+import { usePathname, useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { registReport } from "@apis/reportRequest";
 
 interface ReportModalProps {
   isOpen: boolean;
@@ -10,20 +15,62 @@ interface ReportModalProps {
 }
 
 export default function ReportModal({ isOpen, setIsOpen }: ReportModalProps) {
+  const path = usePathname().split("/");
+  const router = useRouter();
+  const ref = useRef<HTMLTextAreaElement>(null);
+  const target = path.at(-1) ?? "";
+  const targetCategory = useMemo(() => {
+    switch (path.at(1)) {
+      case "data":
+      case "map":
+        return "PRODUCT";
+      case "chat":
+        return "MEMBER";
+      case "mypage":
+        return "REVIEW";
+      default:
+        return "PRODUCT";
+    }
+  }, [path]);
+  const reportMutation = useMutation({
+    mutationFn: () => registReport(target, ref.current?.value ?? "", targetCategory),
+    mutationKey: ["/api/report", target],
+    onSuccess: () => {
+      router.refresh();
+    },
+  });
+
   const handleClose = useCallback(() => setIsOpen(false), []);
+  const handleReportClick = useCallback(() => {
+    reportMutation.mutate();
+  }, [reportMutation]);
 
   return (
     <BaseModal isOpen={isOpen} onClose={handleClose}>
       <ModalHeader title="상대방 신고하기" onClose={handleClose} />
-      <div className="flex flex-col justify-center items-center gap-[25px]">
-        <SirenIcon fill="red" size={100} color="white" />
+      <div className="flex flex-col justify-center items-center gap-[25px] w-full">
+        <div className="rounded-full w-60 h-60 bg-error flex justify-center items-center">
+          <Siren className="bg-error" size={30} color="white" />
+        </div>
         <p className="title-sm">
-          {"김데이터"}님을 <i className="text-error">신고</i>하시겠어요?
+          {"김데이터"}님을 <span className="text-error">신고</span>하시겠어요?
         </p>
-        <p className="body-sm text-gray-600 text-center">{`신고 횟수가 누적되면 
-        상대방의 다판다 이용이 제한돼요.`}</p>
-        <p className="w-full text-start body-sm">신고 사유를 남겨주세요!</p>
-        <InputComponent as="textarea" placeholder="신고 사유를 작성해주세요." />
+        <p className="body-sm text-gray-600 text-center">
+          신고 횟수가 누적되면 <br />
+          상대방의 다판다 이용이 제한돼요.
+        </p>
+        <div className="flex flex-col gap-8 w-full">
+          <p className="w-full text-start body-sm mx-8">신고 사유를 남겨주세요!</p>
+          <InputComponent as="textarea" placeholder="신고 사유를 작성해주세요." ref={ref} />
+        </div>
+      </div>
+      <div className="flex flex-row justify-between gap-8 mt-40">
+        <ButtonComponent className="flex-1" variant={"primary"} onClick={handleReportClick}>
+          신고하기
+        </ButtonComponent>
+        <ButtonComponent className="flex-1" variant={"outlinePrimary"} onClick={handleClose}>
+          취소하기
+        </ButtonComponent>
       </div>
     </BaseModal>
   );
