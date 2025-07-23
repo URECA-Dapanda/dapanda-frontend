@@ -1,13 +1,7 @@
-import { ContentInfoType } from "../types/contentType";
+import axiosInstance from "@/lib/axios";
+import { ContentInfoType } from "../types/chatType";
 
 export const getChatContentInfo = async (chatRoomId: string): Promise<ContentInfoType> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        id: Number(chatRoomId),
-        title: `${chatRoomId}`,
-        price: "2,000원",
-      });
-    }, 100);
-  });
+  const res = await axiosInstance.get(`/api/chat/${chatRoomId}`);
+  return res.data.data;
 };

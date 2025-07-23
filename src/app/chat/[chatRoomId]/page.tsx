@@ -1,38 +1,55 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import ChatRoomHeader from "@/feature/chat/components/sections/room/ChatRoomHeader";
 import ChatRoomContent from "@/feature/chat/components/sections/room/ChatRoomContent";
-import type { ContentInfoType } from "@/feature/chat/types/contentType";
-import { getChatContentInfo } from "@feature/chat/api/chatContentRequest";
+// import { useSearchParams } from "next/navigation";
+// import axiosInstance from "@/lib/axios";
 
-export default function ChatRoomPage() {
-  const { chatRoomId } = useParams();
-  const [content, setContent] = useState<ContentInfoType | null>(null);
+interface ProductInfo {
+  productId: number;
+  itemId: number;
+  title: string;
+  price: string;
+}
 
-  console.log("chatId:", chatRoomId);
+export default function ChatRoomPage({ params }: { params: { chatRoomId: string } }) {
+  const { chatRoomId } = params;
+  // const searchParams = useSearchParams();
+  // const productId = searchParams.get("productId");
+  const [product, setProduct] = useState<ProductInfo | null>(null);
 
+  // 임시로 productId가 1일 때 하드코딩
   useEffect(() => {
-    if (!chatRoomId) return;
-
-    getChatContentInfo(chatRoomId as string).then((res) => {
-      console.log("chat content info:", res);
-      setContent(res);
+    setProduct({
+      itemId: 3,
+      productId: 13,
+      title: "임시 상품명",
+      price: "10000",
     });
-  }, [chatRoomId]);
+  }, []);
 
-  if (!content) return <div className="p-20">로딩 중...</div>;
+  /*  useEffect(() => {
+    if (productId) {
+      axiosInstance.get(`/api/products/${productId}`).then((res) => {
+        setProduct({
+          itemId: res.data.data.itemId,
+          title: res.data.data.title,
+          price: res.data.data.price,
+        });
+      });
+    }
+  }, [productId]);
+  */
+
+  // if (!productId) return <div className="p-20">잘못된 접근입니다. (productId 없음)</div>;
+  if (!product) return <div>로딩중...</div>;
+
   return (
-    <>
-      <ChatRoomHeader title={content.title} />
-      <div className="pb-36">
-        <ChatRoomContent
-          chatRoomId={parseInt(chatRoomId as string)}
-          title={content.title}
-          price={content.price}
-        />
-      </div>
-    </>
+    <ChatRoomContent
+      chatRoomId={Number(chatRoomId)}
+      itemId={product.itemId}
+      title={product.title}
+      price={product.price}
+    />
   );
 }

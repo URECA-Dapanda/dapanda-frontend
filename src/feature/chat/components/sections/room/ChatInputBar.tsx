@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { Plus } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import InputComponent from "@/components/common/input/InputComponent";
 import { ButtonComponent } from "@/components/common/button";
+import { createStompClient } from "@feature/chat/utils/chatSocket";
 
 interface ChatInputBarProps {
   onSend: (message: string) => void;

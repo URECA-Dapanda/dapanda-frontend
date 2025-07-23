@@ -1,5 +1,5 @@
 import { formatTimeToAmPm } from "@/lib/time";
-import type { ChatMessage } from "@/feature/chat/types/message";
+import type { ChatMessage } from "@/feature/chat/types/chatType";
 import AvatarIcon from "@/components/common/AvatarIcon";
 
 import { cn } from "@/lib/utils";

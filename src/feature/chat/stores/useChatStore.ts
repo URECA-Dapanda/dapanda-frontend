@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 export interface ChatRoomPreview {
+  itemId: number;
   chatRoomId: number;
   name: string;
   title: string;

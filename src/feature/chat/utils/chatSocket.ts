@@ -7,7 +7,7 @@ export const createStompClient = (chatRoomId: number, onMessage: (message: strin
     throw new Error("NEXT_PUBLIC_API_BASE_URL environment variable is required");
   }
   const client = new Client({
-    webSocketFactory: () => new SockJS(`${apiBaseUrl}/connect`),
+    webSocketFactory: () => new SockJS(`${apiBaseUrl}/conn`),
     reconnectDelay: 5000,
     onConnect: () => {
       console.log(" WebSocket 연결됨");
@@ -29,6 +29,6 @@ export const createStompClient = (chatRoomId: number, onMessage: (message: strin
 export const sendMessage = (client: Client, chatRoomId: number, message: string) => {
   client.publish({
     destination: `/pub/${chatRoomId}`,
-    body: JSON.stringify(message),
+    body: message,
   });
 };

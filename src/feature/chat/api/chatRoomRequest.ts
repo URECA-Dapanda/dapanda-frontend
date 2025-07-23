@@ -17,6 +17,7 @@ export const createOrGetChatRoom = async (
       name: "상대방 이름",
       lastMessage: "",
       updatedAt: new Date().toISOString(),
+      itemId: 0,
     });
 
     return 999;

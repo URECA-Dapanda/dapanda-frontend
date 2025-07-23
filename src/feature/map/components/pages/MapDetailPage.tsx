@@ -11,6 +11,7 @@ import { useMapDetailData } from "@/feature/map/hooks/useMapDetailData";
 import { useTimeState } from "@/feature/map/hooks/useTimeState";
 import { isValidTimeRange, parseHHMMToTime, isTimeInRange } from "@/lib/time";
 import clsx from "clsx";
+import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 
 export default function MapDetailPage() {
   const router = useRouter();
