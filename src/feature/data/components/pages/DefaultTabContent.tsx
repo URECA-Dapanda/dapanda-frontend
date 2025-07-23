@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useDataFilterStore } from "@feature/data/stores/useDataFilterStore";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import { getDataList } from "@feature/data/api/dataRequest";
 import { DataType } from "@feature/data/types/dataType";
@@ -9,14 +10,17 @@ import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfinite
 import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
 import { ButtonComponent } from "@/components/common/button";
 import { dataSortOptions } from "@components/common/dropdown/dropdownConfig";
-import { ChevronDown, SlidersHorizontal } from "lucide-react";
+import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
+import { Pill, PillButton } from "@ui/shadcn-io/pill";
 
 interface DefaultTabContentProps {
   isSheetOpen: boolean;
+  onSearchClick?: () => void;
 }
 
-export default function DefaultTabContent({ isSheetOpen }: DefaultTabContentProps) {
+export default function DefaultTabContent({ isSheetOpen, onSearchClick }: DefaultTabContentProps) {
   const [sortLabel, setSortLabel] = useState("최신순");
+  const { dataAmount, clearDataAmount } = useDataFilterStore();
 
   const convertSortLabelToEnum = (
     label: string
@@ -33,19 +37,18 @@ export default function DefaultTabContent({ isSheetOpen }: DefaultTabContentProp
     }
   };
 
-  const convertTabToDataAmount = (tab: string): number | undefined => {
-    if (tab === "split") return 0.5;
-    return undefined;
-  };
-
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<DataType>({
-      queryKey: ["dataItems", sortLabel],
+      queryKey: [
+        "dataItems",
+        sortLabel,
+        dataAmount !== null ? `${dataAmount}` : "all",
+      ],
       queryFn: ({ pageParam = 0 }) =>
         getDataList({
           pageParam,
           sort: convertSortLabelToEnum(sortLabel),
-          dataAmount: convertTabToDataAmount("default"),
+          dataAmount: dataAmount ?? undefined,
         }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       estimateSize: () => 160,
@@ -55,29 +58,44 @@ export default function DefaultTabContent({ isSheetOpen }: DefaultTabContentProp
   return (
     <div className="space-y-4">
       {isSheetOpen && (
-        <div className="flex justify-end items-center gap-8 mb-12">
-          <UserDropdownMenu
-            options={dataSortOptions}
-            selectedLabel={sortLabel}
-            onSelectLabel={setSortLabel}
-          >
-            <ButtonComponent variant="withIcon" size="sm" className="p-6 body-xs">
-              {sortLabel}
-              <ChevronDown className="w-20 h-20" />
-            </ButtonComponent>
-          </UserDropdownMenu>
+        <div className="flex items-center justify-between gap-8 mb-12">
+          {/* 왼쪽: 뱃지 (조건부) */}
+          <div className="flex items-center gap-4">
+            {dataAmount !== null && (
+              <Pill>
+                {dataAmount}GB
+                <PillButton onClick={clearDataAmount}>
+                  <X size={12} />
+                </PillButton>
+              </Pill>
+            )}
+          </div>
 
-          <ButtonComponent
-            variant="withIcon"
-            size="sm"
-            className="p-6 body-xs"
-            onClick={() => {
-              console.log("검색 클릭");
-            }}
-          >
-            SEARCH
-            <SlidersHorizontal className="w-20 h-20" />
-          </ButtonComponent>
+          {/* 오른쪽: 드롭다운 + 검색 버튼 */}
+          <div className="flex gap-8 ml-auto">
+            <UserDropdownMenu
+              options={dataSortOptions}
+              selectedLabel={sortLabel}
+              onSelectLabel={setSortLabel}
+            >
+              <ButtonComponent variant="withIcon" size="sm" className="p-6 body-xs">
+                {sortLabel}
+                <ChevronDown className="w-20 h-20" />
+              </ButtonComponent>
+            </UserDropdownMenu>
+
+            <ButtonComponent
+              variant="withIcon"
+              size="sm"
+              className="p-6 body-xs"
+              onClick={() => {
+                onSearchClick?.();
+              }}
+            >
+              SEARCH
+              <SlidersHorizontal className="w-20 h-20" />
+            </ButtonComponent>
+          </div>
         </div>
       )}
 
