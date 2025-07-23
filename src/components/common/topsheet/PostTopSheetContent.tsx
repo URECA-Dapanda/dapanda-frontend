@@ -10,8 +10,13 @@ export function PostTopSheetContent({ data, expanded }: { data: PostData; expand
           <Siren className="text-red-500 w-12 h-12" />
         </div>
       )}
-      <div className="space-y-[8px]">
-        <BadgeComponent variant="meta" size="md" className="bg-gray-400">
+      <div className="flex flex-col gap-8">
+        {data.splitType && (
+          <BadgeComponent variant="mapcategory" size="sm" className="bg-primary2 text-black">
+            분할판매중
+          </BadgeComponent>
+        )}
+        <BadgeComponent variant="meta" size="md" className="bg-gray-400 w-[58px] inline-flex">
           {data.uploadTime} 전
         </BadgeComponent>
         <h2 className="h1">{data.title}</h2>

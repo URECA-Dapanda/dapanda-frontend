@@ -7,6 +7,7 @@ export interface PostData {
   recentPrice?: number;
   averagePrice?: number;
   hasReported?: boolean;
+  splitType?: boolean;
 }
 
 export interface WifiData {
