@@ -6,6 +6,7 @@ import CurrentCashCard from "@feature/mypage/components/sections/profile/Current
 import SelectCharge from "@feature/mypage/components/sections/profile/SelectCharge";
 import ChargeInfoCard from "@feature/mypage/components/sections/profile/ChargeInfoCard";
 import TossPaymentModal from "@feature/mypage/components/sections/toss/TossPaymentModal";
+import { toast } from "react-toastify";
 
 export default function ChargeCashContent() {
   const chargeAmount = useChargeStore((state) => state.charge);
@@ -13,7 +14,7 @@ export default function ChargeCashContent() {
 
   const handleClick = () => {
     if (!chargeAmount) {
-      alert("충전 금액을 입력해주세요.");
+      toast.error("충전 금액을 입력해주세요.");
       return;
     }
     open();

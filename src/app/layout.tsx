@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ProviderWrapper from "@components/common/ProviderWrapper";
+import { Slide, ToastContainer } from "react-toastify";
 import "./globals.css";
-import { Toaster } from "@ui/sonner";
 
 export const metadata: Metadata = {
   title: "DaPanDa",
@@ -19,7 +19,24 @@ export default function RootLayout({
         <main className="antialiased flex-1 w-[375px] h-[812px] mx-auto overflow-hidden relative">
           <ProviderWrapper>{children}</ProviderWrapper>
         </main>
-        <Toaster />
+        <ToastContainer
+          position="top-center"
+          autoClose={4000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable={false}
+          pauseOnHover={false}
+          theme="light"
+          transition={Slide}
+          toastStyle={{
+            maxHeight: "10px",
+          }}
+          closeButton={false}
+          stacked
+        />
       </body>
     </html>
   );
