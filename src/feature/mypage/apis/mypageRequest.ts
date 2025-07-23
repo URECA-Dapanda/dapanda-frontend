@@ -40,18 +40,20 @@ export async function getSaleHistoryList({
 }
 
 export async function getPurchaseHistoryList({
-  pageParam = 0,
   size = 2,
-  cursorId = 0,
+  pageParam,
 }: {
   pageParam?: number | unknown;
   size?: number;
   cursorId?: number;
-}): Promise<{ items: PurchaseHistoryType[]; nextCursor?: number }> {
+}): Promise<{ items: PurchaseHistoryType[]; nextCursor?: number; num?: number }> {
   if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
-  const { data } = await axios.get("/api/trades/purchase-history", { params: { size, cursorId } });
-  const items = data.trades.data;
-  const nextCursor = data.trades.pageInfo.nextCursorId;
+  const { data } = await axios.get("/api/trades/purchase-history", {
+    params: { size, cursorId: pageParam === 0 ? undefined : pageParam },
+  });
+  const items = data.data.trades.data;
 
-  return { items, nextCursor };
+  const nextCursor = data.data.trades.pageInfo.nextCursorId;
+
+  return { items, nextCursor, num: data.data.tradeCount };
 }
