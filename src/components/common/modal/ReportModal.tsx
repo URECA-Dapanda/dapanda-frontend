@@ -13,13 +13,15 @@ import { AxiosError } from "axios";
 interface ReportModalProps {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  targetId?: string;
+  targetName: string;
 }
 
-export default function ReportModal({ isOpen, setIsOpen }: ReportModalProps) {
+export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }: ReportModalProps) {
   const path = usePathname().split("/");
   const ref = useRef<HTMLTextAreaElement>(null);
   const [isNext, setIsNext] = useState<boolean>(false);
-  const target = path.at(-1) ?? "";
+  const target = useMemo(() => (targetId ? targetId : path.at(-1) ?? ""), [targetId, path]);
   const targetCategory = useMemo(() => {
     switch (path.at(1)) {
       case "data":
@@ -65,7 +67,7 @@ export default function ReportModal({ isOpen, setIsOpen }: ReportModalProps) {
             <Siren className="bg-error" size={30} color="white" />
           </div>
           <p className="title-sm">
-            {"김데이터"}님을 <span className="text-error">신고</span>하시겠어요?
+            {targetName}님을 <span className="text-error">신고</span>하시겠어요?
           </p>
           <p className="body-sm text-gray-600 text-center">
             신고 횟수가 누적되면 <br />

@@ -6,7 +6,11 @@ import { useCallback, useState } from "react";
 import { cn } from "@lib/utils";
 import ReportModal from "../modal/ReportModal";
 
-export default function ReportTriggerButton() {
+interface ReportTriggerButtonProps {
+  targetName: string;
+}
+
+export default function ReportTriggerButton({ targetName }: ReportTriggerButtonProps) {
   const [reportOpen, setReportOpen] = useState(false);
 
   const handleReportOpen = useCallback(() => setReportOpen(true), []);
@@ -22,7 +26,7 @@ export default function ReportTriggerButton() {
       >
         <Siren size={12} className={cn("bg-white text-error")} />
       </button>
-      <ReportModal isOpen={reportOpen} setIsOpen={setReportOpen} />
+      <ReportModal isOpen={reportOpen} setIsOpen={setReportOpen} targetName={targetName} />
     </>
   );
 }

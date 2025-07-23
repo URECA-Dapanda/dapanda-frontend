@@ -54,6 +54,7 @@ export default function DataDetailContent() {
           recentPrice: 0,
           averagePrice: data.averageRate,
           hasReported: false,
+          memberName: data.memberName,
         }}
         onImageClick={() => {}}
         onExpandChange={setTopSheetExpanded}

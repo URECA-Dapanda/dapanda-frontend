@@ -17,7 +17,6 @@ import { WifiTopSheetContent } from "./WifiTopSheetContent";
 import { useTopSheetExpanded } from "./useTopSheetExpanded";
 import { useTopSheetImageStyle } from "./useTopSheetImageStyle";
 import ReportTriggerButton from "../button/ReportTriggerButton";
-import ReportCompleteModal from "../modal/ReportCompleteModal";
 
 export default function TopSheet({
   type,
@@ -43,7 +42,7 @@ export default function TopSheet({
   return (
     <>
       <div className="absolute top-12 right-12 z-30">
-        <ReportTriggerButton />
+        <ReportTriggerButton targetName={data.memberName} />
       </div>
       <motion.div
         className=" absolute top-0 w-[375px] bg-secondary shadow-default rounded-b-30 overflow-hidden"

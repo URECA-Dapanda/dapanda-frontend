@@ -7,6 +7,7 @@ export interface PostData {
   recentPrice?: number;
   averagePrice?: number;
   hasReported?: boolean;
+  memberName: string;
 }
 
 export interface WifiData {
@@ -19,6 +20,7 @@ export interface WifiData {
   description?: string;
   recentPrice?: number;
   averagePrice?: number;
+  memberName: string;
 }
 
 export type CommonTopSheetProps = {

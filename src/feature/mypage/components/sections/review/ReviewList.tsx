@@ -5,8 +5,12 @@ import { getReviewList } from "@feature/mypage/apis/reviewRequest";
 import { ReviewType } from "@feature/mypage/types/reviewType";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import ReviewItem from "@feature/mypage/components/sections/review/ReviewItem";
+import { MouseEvent, useCallback, useState } from "react";
+import ReportModal from "@components/common/modal/ReportModal";
 
 export default function ReviewList() {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [currentTarget, setCurrentTarget] = useState<string>();
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<ReviewType>({
       queryKey: ["review"],
@@ -20,19 +24,30 @@ export default function ReviewList() {
       mode: "button",
     });
 
+  const handleClick = useCallback((e: MouseEvent<HTMLButtonElement>) => {
+    const target = e.currentTarget.value;
+    setCurrentTarget(target);
+    setIsOpen(true);
+  }, []);
+
   return (
-    <div className="flex flex-col h-full mt-24">
-      <VirtualizedInfiniteList
-        parentRef={parentRef}
-        rowVirtualizer={rowVirtualizer}
-        items={flatItems}
-        height="400px"
-        isFetchingNextPage={isFetchingNextPage}
-        hasNextPage={hasNextPage}
-        fetchNextPage={fetchNextPage}
-        renderItem={(item) => <ReviewItem data={item} key={item.reviewId} />}
-        mode="button"
-      />
-    </div>
+    <>
+      <div className="flex flex-col h-full mt-24">
+        <VirtualizedInfiniteList
+          parentRef={parentRef}
+          rowVirtualizer={rowVirtualizer}
+          items={flatItems}
+          height="400px"
+          isFetchingNextPage={isFetchingNextPage}
+          hasNextPage={hasNextPage}
+          fetchNextPage={fetchNextPage}
+          renderItem={(item) => (
+            <ReviewItem data={item} key={item.reviewId} handleClick={handleClick} />
+          )}
+          mode="button"
+        />
+      </div>
+      <ReportModal targetId={currentTarget} setIsOpen={setIsOpen} isOpen={isOpen} />
+    </>
   );
 }
