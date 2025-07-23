@@ -1,21 +1,8 @@
 import { create } from "zustand";
-import { PaymentStep } from "@feature/payment/types/paymentStep";
-
-interface PaymentInfo {
-  type: "data" | "wifi" | "hotspot";
-  title: string;
-  price: string;
-  unitPrice?: string;
-  badge?: "일반 구매" | "자투리 구매";
-  seller?: string;
-  cash: string;
-  remainingData?: string;
-  location?: string;
-  duration?: string;
-}
+import { PaymentStep, PaymentInfo } from "@feature/payment/types/paymentTypes";
 
 interface PaymentState {
-  step: PaymentStep | null;
+  step: PaymentStep;
   info: PaymentInfo | null;
   setInfo: (info: PaymentInfo) => void;
   setStep: (step: PaymentStep) => void;

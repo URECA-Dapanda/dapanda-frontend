@@ -11,7 +11,7 @@ interface ProfileCardProps {
 
 export default function SellerProfileCard({ name, rating, reviewCount }: ProfileCardProps) {
   return (
-    <div className="flex items-center justify-between w-full">
+    <div className="flex items-center justify-between mx-24">
       <div className="w-48 h-48 rounded-full bg-gray-300 overflow-hidden">
         <AvatarIcon size="medium" />
       </div>

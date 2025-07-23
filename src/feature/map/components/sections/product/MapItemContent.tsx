@@ -1,9 +1,10 @@
-import { Fragment } from "react";
+import { Fragment, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ImageIcon, Star } from "lucide-react";
 import { ButtonComponent } from "@components/common/button";
 import type { ProductItemProps } from "@/feature/data/types/dataType";
 import type { MapType } from "@/feature/map/types/mapType";
+import axiosInstance from "@/lib/axios";
 
 export default function MapItemCardContent({
   data: { id, address, price, score, title, type, updatedAt, open },
@@ -11,6 +12,24 @@ export default function MapItemCardContent({
 }: ProductItemProps<MapType> & { disableUseButton?: boolean }) {
   const router = useRouter();
   const isDisabled = disableUseButton || !open;
+  const handleCreateChatRoom = useCallback(
+    async (e: React.MouseEvent) => {
+      e.stopPropagation();
+      try {
+        const response = await axiosInstance.post(`/api/products/${id}/chat-room`);
+        if (response.data.code === 0) {
+          router.push(`/chat/${response.data.data.chatRoomId}`);
+        } else {
+          alert(response.data.message || "채팅방 생성에 실패했습니다.");
+        }
+      } catch (error) {
+        alert("채팅방 생성 중 오류가 발생했습니다.");
+        console.error(error);
+      }
+    },
+    [id, router]
+  );
+
   return (
     <Fragment>
       <div className="grid grid-cols-[auto_1fr_auto] gap-16 items-center">
@@ -67,10 +86,7 @@ export default function MapItemCardContent({
           size="sm"
           variant="outlineGray"
           className="flex-2"
-          onClick={(e) => {
-            e.stopPropagation();
-            router.push(`/chat/${id}`);
-          }}
+          onClick={handleCreateChatRoom}
         >
           채팅하기
         </ButtonComponent>
