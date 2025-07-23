@@ -39,23 +39,50 @@ export default function ChatRoomContent({
     // 2. 웹소켓 연결
     clientRef.current = createStompClient(chatRoomId, (msg: any) => {
       const data = typeof msg === "string" ? JSON.parse(msg) : msg;
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: String(data.chatMessageId),
-          senderId: String(data.senderId),
-          text: data.message,
-          createdAt: data.createdAt,
-        },
-      ]);
+
+      const incomingMessage: ChatMessage = {
+        id: String(data.chatMessageId),
+        senderId: String(data.senderId),
+        text: data.message,
+        createdAt: data.createdAt,
+      };
+      setMessages((prev) => {
+        const isMine = incomingMessage.senderId === currentUserId?.toString();
+
+        // 내가 방금 보낸 optimistic 메시지 필터링
+        const withoutTemp = isMine
+          ? prev.filter(
+              (m) =>
+                !(
+                  m.id.startsWith("temp-") &&
+                  m.senderId === incomingMessage.senderId &&
+                  m.text === incomingMessage.text
+                )
+            )
+          : prev;
+
+        // 서버 메시지가 이미 있다면 중복 추가하지 않음
+        if (withoutTemp.some((m) => m.id === incomingMessage.id)) return withoutTemp;
+
+        return [...withoutTemp, incomingMessage];
+      });
     });
+
     return () => {
       clientRef.current?.deactivate();
     };
-  }, [chatRoomId]);
+  }, [chatRoomId, currentUserId]);
 
   const addMessage = (text: string) => {
-    // 1. 서버로 메시지 전송 (반드시 JSON.stringify로 감싸기!)
+    const tempId = `temp-${Date.now()}`;
+    const optimisticMessage: ChatMessage = {
+      id: tempId,
+      senderId: currentUserId?.toString() ?? "unknown",
+      text,
+      createdAt: new Date().toISOString(),
+    };
+
+    // 1. 서버로 메시지 전송
     sendMessage(
       clientRef.current,
       chatRoomId,
@@ -66,12 +93,16 @@ export default function ChatRoomContent({
 
     // 2. 내 화면에 바로 메시지 추가
     const newMessage: ChatMessage = {
-      id: (messages.length + 1).toString(),
+      id: tempId,
       senderId: currentUserId?.toString() ?? "unknown",
       text,
       createdAt: new Date().toISOString(),
     };
-    setMessages((prev) => [...prev, newMessage]);
+    setMessages((prev) => {
+      // 새 메시지의 id가 이미 prev에 있으면 추가하지 않음
+      if (prev.some((msg) => msg.id === newMessage.id)) return prev;
+      return [...prev, newMessage];
+    });
 
     useChatStore.getState().addChatRoom({
       chatRoomId,

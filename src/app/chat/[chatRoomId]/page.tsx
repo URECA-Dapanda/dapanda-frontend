@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import ChatRoomContent from "@/feature/chat/components/sections/room/ChatRoomContent";
+import { useParams } from "next/navigation";
+import ChatRoomHeader from "@feature/chat/components/sections/room/ChatRoomHeader";
 // import { useSearchParams } from "next/navigation";
 // import axiosInstance from "@/lib/axios";
 
@@ -12,13 +14,14 @@ interface ProductInfo {
   price: string;
 }
 
-export default function ChatRoomPage({ params }: { params: { chatRoomId: string } }) {
-  const { chatRoomId } = params;
+export default function ChatRoomPage() {
+  const params = useParams();
+  const chatRoomId = params?.chatRoomId as string;
   // const searchParams = useSearchParams();
   // const productId = searchParams.get("productId");
   const [product, setProduct] = useState<ProductInfo | null>(null);
 
-  // 임시로 productId가 1일 때 하드코딩
+  // 임시로 productId가 13일 때 하드코딩
   useEffect(() => {
     setProduct({
       itemId: 3,
@@ -45,11 +48,14 @@ export default function ChatRoomPage({ params }: { params: { chatRoomId: string 
   if (!product) return <div>로딩중...</div>;
 
   return (
-    <ChatRoomContent
-      chatRoomId={Number(chatRoomId)}
-      itemId={product.itemId}
-      title={product.title}
-      price={product.price}
-    />
+    <>
+      <ChatRoomHeader title={product.title} />
+      <ChatRoomContent
+        chatRoomId={Number(chatRoomId)}
+        itemId={product.itemId}
+        title={product.title}
+        price={product.price}
+      />
+    </>
   );
 }
