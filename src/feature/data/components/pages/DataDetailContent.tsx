@@ -10,9 +10,13 @@ import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 import FilterCardContent from "@feature/data/components/sections/filter/FilterCardContent";
 import { useProfileStore } from "@stores/useProfileStore";
-import { buildDefaultPaymentInfo, buildScrapPaymentInfo } from "@feature/data/hooks/usePurchaseBuilder";
+import {
+  buildDefaultPaymentInfo,
+  buildScrapPaymentInfo,
+} from "@feature/data/hooks/usePurchaseBuilder";
 import { useDataDetail } from "@feature/data/hooks/useDataDetail";
 import clsx from "clsx";
+import ReportModal from "@components/common/modal/ReportModal";
 
 export default function DataDetailContent() {
   const { postId } = useParams<{ postId: string }>();
@@ -53,7 +57,12 @@ export default function DataDetailContent() {
         onExpandChange={setTopSheetExpanded}
       />
 
-      <div className={clsx("space-y-12 px-24 transition-all duration-300", topSheetExpanded ? "pt-[430px]" : "pt-[280px]")} />
+      <div
+        className={clsx(
+          "space-y-12 px-24 transition-all duration-300",
+          topSheetExpanded ? "pt-[430px]" : "pt-[280px]"
+        )}
+      />
 
       <div className="space-y-28">
         <div className="flex items-center justify-between mx-24 mb-16">
@@ -65,7 +74,11 @@ export default function DataDetailContent() {
           )}
         </div>
 
-        <ProfileCard name={data.memberName} rating={data.averageRate} reviewCount={data.reviewCount} />
+        <ProfileCard
+          name={data.memberName}
+          rating={data.averageRate}
+          reviewCount={data.reviewCount}
+        />
 
         <div className="space-y-12 px-24 pb-28">
           {data.splitType && (
@@ -95,6 +108,7 @@ export default function DataDetailContent() {
       </div>
 
       {renderModals}
+      <ReportModal isOpen={reportOpen} setIsOpen={setReportOpen} />
     </div>
   );
 }
