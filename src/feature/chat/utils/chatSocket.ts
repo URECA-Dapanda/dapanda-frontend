@@ -12,7 +12,7 @@ export const createStompClient = (chatRoomId: number, onMessage: (message: strin
     onConnect: () => {
       console.log(" WebSocket 연결됨");
 
-      client.subscribe(`/topic/${chatRoomId}`, (message) => {
+      client.subscribe(`/sub/${chatRoomId}`, (message) => {
         const payload = JSON.parse(message.body);
         onMessage(payload);
       });
@@ -24,4 +24,11 @@ export const createStompClient = (chatRoomId: number, onMessage: (message: strin
 
   client.activate();
   return client;
+};
+
+export const sendMessage = (client: Client, chatRoomId: number, message: string) => {
+  client.publish({
+    destination: `/pub/${chatRoomId}`,
+    body: JSON.stringify(message),
+  });
 };

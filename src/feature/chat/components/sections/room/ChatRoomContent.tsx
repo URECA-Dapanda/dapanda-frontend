@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
 import type { ChatMessage } from "@/feature/chat/types/message";
 import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
@@ -15,8 +15,8 @@ interface ChatRoomContentProps {
 }
 export default function ChatRoomContent({ chatRoomId, title, price }: ChatRoomContentProps) {
   const currentUserId = "123";
-
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const clientRef = useRef<any>(null);
 
   const addMessage = (text: string) => {
     const newMessage: ChatMessage = {
