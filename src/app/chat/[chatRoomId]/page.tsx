@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import ChatRoomContent from "@/feature/chat/components/sections/room/ChatRoomContent";
 import { useParams } from "next/navigation";
-import ChatRoomHeader from "@feature/chat/components/sections/room/ChatRoomHeader";
 // import { useSearchParams } from "next/navigation";
 // import axiosInstance from "@/lib/axios";
 
@@ -49,7 +48,6 @@ export default function ChatRoomPage() {
 
   return (
     <>
-      <ChatRoomHeader title={product.title} />
       <ChatRoomContent
         chatRoomId={Number(chatRoomId)}
         itemId={product.itemId}

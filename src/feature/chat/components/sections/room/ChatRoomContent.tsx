@@ -13,6 +13,7 @@ import { useProfileStore } from "@stores/useProfileStore";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 import { getChatHistory } from "@feature/chat/api/getChatHistory";
 import { useSearchParams } from "next/navigation";
+import ChatRoomHeader from "./ChatRoomHeader";
 
 interface ChatRoomContentProps {
   chatRoomId: number;
@@ -47,24 +48,18 @@ export default function ChatRoomContent({
         createdAt: data.createdAt,
       };
       setMessages((prev) => {
-        const isMine = incomingMessage.senderId === currentUserId?.toString();
-
-        // 내가 방금 보낸 optimistic 메시지 필터링
-        const withoutTemp = isMine
-          ? prev.filter(
-              (m) =>
-                !(
-                  m.id.startsWith("temp-") &&
-                  m.senderId === incomingMessage.senderId &&
-                  m.text === incomingMessage.text
-                )
-            )
-          : prev;
-
-        // 서버 메시지가 이미 있다면 중복 추가하지 않음
-        if (withoutTemp.some((m) => m.id === incomingMessage.id)) return withoutTemp;
-
-        return [...withoutTemp, incomingMessage];
+        // 같은 내용, 같은 시간, 같은 사람이면 중복으로 간주
+        if (
+          prev.some(
+            (m) =>
+              m.text === incomingMessage.text &&
+              m.createdAt === incomingMessage.createdAt &&
+              m.senderId === incomingMessage.senderId
+          )
+        ) {
+          return prev;
+        }
+        return [...prev, incomingMessage];
       });
     });
 
@@ -88,6 +83,7 @@ export default function ChatRoomContent({
       chatRoomId,
       JSON.stringify({
         message: text,
+        clientTempId: tempId,
       })
     );
 
@@ -99,8 +95,17 @@ export default function ChatRoomContent({
       createdAt: new Date().toISOString(),
     };
     setMessages((prev) => {
-      // 새 메시지의 id가 이미 prev에 있으면 추가하지 않음
-      if (prev.some((msg) => msg.id === newMessage.id)) return prev;
+      // 같은 내용, 같은 시간, 같은 사람이면 중복으로 간주
+      if (
+        prev.some(
+          (m) =>
+            m.text === newMessage.text &&
+            m.createdAt === newMessage.createdAt &&
+            m.senderId === newMessage.senderId
+        )
+      ) {
+        return prev;
+      }
       return [...prev, newMessage];
     });
 
@@ -118,22 +123,31 @@ export default function ChatRoomContent({
   };
 
   return (
-    <main className="px-24 space-y-6 pt-24">
-      <div className="pb-48">
+    <div className="flex flex-col h-screen">
+      <div className="shrink-0">
+        <ChatRoomHeader title={title} />
+      </div>
+      <div className="px-24 pt-24 pb-12">
         <ChatPostCard title={title} price={price} />
       </div>
-
-      {groupMessagesByDate(messages).map(({ date, messages }) => (
-        <div key={date} className="space-y-6">
-          <div className="text-center text-gray-500 body-xs py-6">{formatDateDivider(date)}</div>
-          <div className="flex flex-col gap-24">
-            {messages.map((msg) => (
-              <ChatBubble key={msg.id} message={msg} currentUserId={String(currentUserId ?? "")} />
-            ))}
+      <div className="flex-1 overflow-y-auto px-24 space-y-6">
+        {groupMessagesByDate(messages).map(({ date, messages }) => (
+          <div key={date} className="space-y-6">
+            <div className="text-center text-gray-500 body-xs py-6">{formatDateDivider(date)}</div>
+            <div className="flex flex-col gap-24">
+              {messages.map((msg) => (
+                <ChatBubble
+                  key={msg.id}
+                  message={msg}
+                  currentUserId={String(currentUserId ?? "")}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+        <div className="pb-44" />
+      </div>
       <ChatInputBar onSend={addMessage} />
-    </main>
+    </div>
   );
 }
