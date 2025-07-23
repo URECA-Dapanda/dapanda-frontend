@@ -1,9 +1,13 @@
+"use client";
+
 import AvatarIcon from "@components/common/AvatarIcon";
 import { ButtonComponent } from "@components/common/button";
 import ItemCard from "@components/common/card/ItemCard";
 import LayoutBox from "@components/common/container/LayoutBox";
 import { SaleHistoryType } from "@feature/mypage/types/mypageTypes";
 import { formatDateDivider } from "@lib/time";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 interface HistoryCardProps {
   data: SaleHistoryType;
@@ -11,9 +15,14 @@ interface HistoryCardProps {
 }
 
 export function HistoryCard({ data, size = "sm" }: HistoryCardProps) {
+  const router = useRouter();
+  const handleCardClick = useCallback(() => {
+    router.push(`/data/${data.productId}`, { scroll: true });
+  }, [router]);
+
   return (
     <div className="px-24">
-      <ItemCard size={size}>
+      <ItemCard size={size} handleClick={handleCardClick}>
         <LayoutBox layout="flex" direction="row" gap={19}>
           <AvatarIcon size="small" />
           <LayoutBox layout="flex" direction="column" gap={0}>
