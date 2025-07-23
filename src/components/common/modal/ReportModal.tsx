@@ -47,7 +47,7 @@ export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }:
         case 409:
           return alert("이미 신고 처리중입니다.");
         default:
-          console.error(e);
+          console.error(e.status);
           return alert("신고 처리중 오류가 발생했습니다.");
       }
     },
@@ -55,7 +55,13 @@ export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }:
 
   const handleClose = useCallback(() => setIsOpen(false), []);
   const handleReportClick = useCallback(() => {
-    reportMutation.mutate();
+    const comment = ref.current?.value;
+    if (!comment || comment === "") {
+      alert("신고 사유를 작성해 주세요.");
+      ref.current?.focus();
+    } else {
+      reportMutation.mutate();
+    }
   }, [reportMutation]);
 
   return (
@@ -75,7 +81,12 @@ export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }:
           </p>
           <div className="flex flex-col gap-8 w-full">
             <p className="w-full text-start body-sm mx-8">신고 사유를 남겨주세요!</p>
-            <InputComponent as="textarea" placeholder="신고 사유를 작성해주세요." ref={ref} />
+            <InputComponent
+              as="textarea"
+              placeholder="신고 사유를 작성해주세요."
+              ref={ref}
+              required={true}
+            />
           </div>
         </div>
         <div className="flex flex-row justify-between gap-8 mt-40">
