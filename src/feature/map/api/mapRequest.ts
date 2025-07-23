@@ -22,6 +22,17 @@ interface WifiItemResponse {
   averageRate: number;
   distanceKm: number;
   updatedAt: string;
+  open: boolean;
+}
+
+interface WifiRegisterRequest {
+  price: number;
+  title: string;
+  content: string;
+  latitude: number;
+  longitude: number;
+  startTime: string;
+  endTime: string;
 }
 
 interface ApiResponse {
@@ -41,7 +52,6 @@ export async function getMapList({
   cursorId,
   size,
   productSortOption,
-  open,
   latitude,
   longitude,
 }: FetchMapListParams): Promise<{ items: MapType[]; nextCursor?: number }> {
@@ -51,7 +61,6 @@ export async function getMapList({
     longitude,
     ...(cursorId !== undefined && { cursorId }),
     ...(productSortOption && { productSortOption }),
-    ...(open !== undefined && { open }),
   };
 
   try {
@@ -63,7 +72,7 @@ export async function getMapList({
       title: item.title,
       price: `${item.price}원`,
       address: "", // 추후 reverse geocode 필요
-      isOpen: open ?? true,
+      open: item.open,
       location: `${item.latitude},${item.longitude}`,
       score: item.averageRate,
       type: "와이파이",
@@ -77,5 +86,17 @@ export async function getMapList({
   } catch (e) {
     console.error("getMapList error:", e);
     throw new Error("와이파이 목록 조회에 실패했습니다");
+  }
+}
+
+export async function postWifiRegister(data: WifiRegisterRequest): Promise<void> {
+  try {
+    const res = await axiosInstance.post("/api/products/wifi", data);
+    if (res.data.code !== 0) {
+      throw new Error(res.data.message || "등록 실패");
+    }
+  } catch (error) {
+    console.error("postWifiRegister error:", error);
+    throw new Error("와이파이 등록에 실패했습니다.");
   }
 }

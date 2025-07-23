@@ -91,7 +91,13 @@ export default function MapDetailPage() {
         />
 
         <div className="px-6 mt-12">
-          <ButtonComponent className="w-full" variant="primary" size="xl" onClick={onBuy}>
+          <ButtonComponent
+            className="w-full"
+            variant="primary"
+            size="xl"
+            onClick={onBuy}
+            disabled={!data.open}
+          >
             구매하기
           </ButtonComponent>
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}

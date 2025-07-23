@@ -1,21 +1,15 @@
-import { useRouter } from "next/navigation";
 import ItemCard from "@components/common/card/ItemCard";
-import MapItemCardContent from "@/feature/map/components/sections/product/MapItemContent";
+import MapItemCardContent from "./MapItemContent";
 import type { ProductItemProps } from "@/feature/data/types/dataType";
 import type { MapType } from "@/feature/map/types/mapType";
 
-export default function MapItemCard({ data }: ProductItemProps<MapType>) {
-  const router = useRouter();
-
-  const handleClick = () => {
-    router.push(`/map/detail?id=${data.id}`);
-  };
-
+export default function MapItemCard({
+  data,
+  disableUseButton = false,
+}: ProductItemProps<MapType> & { disableUseButton?: boolean }) {
   return (
-    <div onClick={handleClick}>
-      <ItemCard size="md">
-        <MapItemCardContent data={data} />
-      </ItemCard>
-    </div>
+    <ItemCard size="md">
+      <MapItemCardContent data={data} disableUseButton={disableUseButton} />
+    </ItemCard>
   );
 }

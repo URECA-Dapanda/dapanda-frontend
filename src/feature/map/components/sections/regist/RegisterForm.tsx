@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ButtonComponent } from "@components/common/button";
 import BasicInfoFields from "@/feature/map/components/sections/regist/BasicInfoFields";
 import TimeRangeField from "@/feature/map/components/sections/regist/TimeRangeField";
@@ -10,9 +10,11 @@ import RegisterSuccessModal from "@/feature/map/components/sections/regist/Regis
 import { useRegisterFormState, SaleType } from "@/feature/map/hooks/useRegisterFormState";
 import { useRegisterFormValidation } from "@feature/map/hooks/useRegisterFormValidation";
 import type { RegisterFormData } from "@/feature/map/types/registerForm";
+import { usePostWifiRegister } from "@feature/map/hooks/usePostWifiRegister";
 
 interface RegisterFormProps {
   type: SaleType;
+  onSuccess?: () => void;
   onSubmit?: (data: RegisterFormData) => void;
 }
 
@@ -22,29 +24,18 @@ export default function RegisterForm({ type, onSubmit }: RegisterFormProps) {
   const { form, updateForm } = useRegisterFormState();
   const { errors, validate } = useRegisterFormValidation(form);
 
-  const searchParams = useSearchParams();
-  const lat = searchParams.get("lat");
-  const lng = searchParams.get("lng");
-  const address = searchParams.get("address");
+  // ✅ 등록 훅 연결
+  const { submit } = usePostWifiRegister({
+    form,
+    onSuccess: () => setIsCompleteModalOpen(true),
+    onSubmit,
+  });
 
   const handleSubmit = () => {
     const isValid = validate();
     if (!isValid) return;
 
-    if (!lat || !lng) {
-      alert("위치를 먼저 선택해주세요.");
-      router.replace("/map/regist/location?type=" + type);
-      return;
-    }
-
-    onSubmit?.({
-      ...form,
-      lat: parseFloat(lat),
-      lng: parseFloat(lng),
-      address: address ?? "",
-    });
-
-    setIsCompleteModalOpen(true);
+    submit(); // ✅ 내부에서 lat/lng + API 호출까지 다 처리됨
   };
 
   return (

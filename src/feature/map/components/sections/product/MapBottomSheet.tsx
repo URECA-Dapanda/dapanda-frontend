@@ -29,6 +29,23 @@ export default function MapBottomSheet({
 }: Props) {
   const { storeList } = useMapStore();
 
+  // ✅ 정렬
+  const sortedList = [...storeList].sort((a, b) => {
+    if (sortLabel === "최신순") {
+      return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+    }
+    if (sortLabel === "가격 낮은 순") {
+      return parseInt(a.price) - parseInt(b.price);
+    }
+    if (sortLabel === "가격 높은 순") {
+      return parseInt(b.price) - parseInt(a.price);
+    }
+    return 0;
+  });
+
+  // ✅ 필터
+  const filteredList = availableOnly ? sortedList.filter((store) => store.open) : sortedList;
+
   return (
     <BaseBottomSheet isOpen={open} onClose={onClose} variant="hybrid" snapHeight={300}>
       <BottomSheetHeader />
@@ -58,8 +75,12 @@ export default function MapBottomSheet({
       </div>
 
       <div className="px-24 space-y-24 mt-12">
-        {storeList.map((store) => (
-          <MapItemCard key={store.id} data={store} />
+        {filteredList.map((store) => (
+          <MapItemCard
+            key={store.id}
+            data={store}
+            disableUseButton={!store.open && !availableOnly}
+          />
         ))}
       </div>
     </BaseBottomSheet>

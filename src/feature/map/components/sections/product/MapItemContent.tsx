@@ -1,13 +1,16 @@
 import { Fragment } from "react";
 import { useRouter } from "next/navigation";
 import { ImageIcon, Star } from "lucide-react";
+import { ButtonComponent } from "@components/common/button";
 import type { ProductItemProps } from "@/feature/data/types/dataType";
 import type { MapType } from "@/feature/map/types/mapType";
 
 export default function MapItemCardContent({
-  data: { id, address, price, score, title, type, updatedAt },
-}: ProductItemProps<MapType>) {
+  data: { id, address, price, score, title, type, updatedAt, open },
+  disableUseButton = false,
+}: ProductItemProps<MapType> & { disableUseButton?: boolean }) {
   const router = useRouter();
+  const isDisabled = disableUseButton || !open;
   return (
     <Fragment>
       <div className="grid grid-cols-[auto_1fr_auto] gap-16 items-center">
@@ -20,13 +23,13 @@ export default function MapItemCardContent({
         <div className="flex flex-col justify-center">
           <div className="flex flex-col">
             <span className="body-md">{title}</span>
-            <span className="caption-md text-gray-500">{updatedAt}</span>
-          </div>
-          <div className="flex items-center text-yellow-400">
-            {Array.from({ length: 5 }, (_, i) => (
-              <Star key={i} />
-            ))}{" "}
-            <span className="body-xs text-black ml-4">({score})</span>
+            <div className="flex items-center gap-8 mt-4">
+              <div className="flex items-center text-yellow-400">
+                <Star className="fill-current" />
+                <span className="body-xs text-black ml-4">({score})</span>
+              </div>
+              <span className="caption-lg text-gray-500">{updatedAt}</span>
+            </div>
           </div>
           <span className="body-xs text-gray-400">{address}</span>
         </div>
@@ -47,18 +50,30 @@ export default function MapItemCardContent({
 
       {/* 버튼 영역 */}
       <div className="flex gap-8 mt-8">
-        <button className="bg-primary text-white body-xs rounded-6 px-16 py-8 flex-6">
+        <ButtonComponent
+          size="sm"
+          variant="primary"
+          className="flex-6"
+          disabled={isDisabled}
+          onClick={() => {
+            if (!isDisabled) {
+              router.push(`/map/detail?id=${id}`);
+            }
+          }}
+        >
           이용하기
-        </button>
-        <button
-          className="border border-gray-300 text-gray-700 body-xs rounded-6 px-16 py-8 flex-2"
+        </ButtonComponent>
+        <ButtonComponent
+          size="sm"
+          variant="outlineGray"
+          className="flex-2"
           onClick={(e) => {
             e.stopPropagation();
             router.push(`/chat/${id}`);
           }}
         >
           채팅하기
-        </button>
+        </ButtonComponent>
       </div>
     </Fragment>
   );

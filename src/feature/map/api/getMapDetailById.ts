@@ -16,6 +16,7 @@ interface WifiDetailResponse {
   startTime: string;
   endTime: string;
   updatedAt: string;
+  open: boolean;
 }
 
 export async function getMapDetailById(id: string): Promise<WifiDetailResponse> {
