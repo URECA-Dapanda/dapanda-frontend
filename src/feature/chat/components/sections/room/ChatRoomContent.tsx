@@ -20,12 +20,14 @@ interface ChatRoomContentProps {
   itemId: number;
   title: string;
   price: string;
+  senderName: string;
 }
 export default function ChatRoomContent({
   chatRoomId,
   itemId,
   title,
   price,
+  senderName,
 }: ChatRoomContentProps) {
   const currentUserId = useProfileStore((state) => state.id);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -47,27 +49,43 @@ export default function ChatRoomContent({
         text: data.message,
         createdAt: data.createdAt,
       };
-      setMessages((prev) => {
-        // 같은 내용, 같은 시간, 같은 사람이면 중복으로 간주
-        if (
-          prev.some(
+      if (incomingMessage.senderId === String(currentUserId)) {
+        setMessages((prev) => {
+          // temp 메시지 제거
+          const filtered = prev.filter(
             (m) =>
-              m.text === incomingMessage.text &&
-              m.createdAt === incomingMessage.createdAt &&
-              m.senderId === incomingMessage.senderId
-          )
-        ) {
+              !(
+                m.id.startsWith("temp-") &&
+                m.text === incomingMessage.text &&
+                m.senderId === incomingMessage.senderId
+              )
+          );
+          // 중복 방지
+          if (filtered.some((m) => m.id === incomingMessage.id)) {
+            return filtered;
+          }
+          return [...filtered, incomingMessage].sort(
+            (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
+        });
+        return; // 추가 종료 (내가 보낸 거면 여기서 끝)
+      }
+
+      // 상대방 메시지라면 그대로 추가
+      setMessages((prev) => {
+        if (prev.some((m) => m.id === incomingMessage.id)) {
           return prev;
         }
-        return [...prev, incomingMessage];
+        return [...prev, incomingMessage].sort(
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
       });
     });
 
     return () => {
       clientRef.current?.deactivate();
     };
-  }, [chatRoomId, currentUserId]);
-
+  }, [chatRoomId]);
   const addMessage = (text: string) => {
     const tempId = `temp-${Date.now()}`;
     const optimisticMessage: ChatMessage = {
@@ -95,43 +113,40 @@ export default function ChatRoomContent({
       createdAt: new Date().toISOString(),
     };
     setMessages((prev) => {
-      // 같은 내용, 같은 시간, 같은 사람이면 중복으로 간주
-      if (
-        prev.some(
-          (m) =>
+      // 서버 메시지와 같은 텍스트, 같은 보낸 사람, 같은 시간(혹은 tempId)인 optimistic 메시지 제거
+      const filtered = prev.filter(
+        (m) =>
+          !(
+            m.id.startsWith("temp-") &&
             m.text === newMessage.text &&
-            m.createdAt === newMessage.createdAt &&
             m.senderId === newMessage.senderId
-        )
-      ) {
-        return prev;
+          )
+      );
+      // 중복 방지
+      if (filtered.some((m) => m.id === newMessage.id)) {
+        return filtered;
       }
-      return [...prev, newMessage];
+      return [...filtered, newMessage];
     });
 
-    useChatStore.getState().addChatRoom({
-      chatRoomId,
-      name: currentUserId?.toString() ?? "unknown",
-      title,
-      price: Number(price),
-      itemId: Number(itemId),
-      lastMessage: text,
-      updatedAt: newMessage.createdAt,
-    });
     console.log("현재 유저 ID:", currentUserId);
     console.log("sendMessage 호출", clientRef.current, chatRoomId, text);
   };
 
+  const sortedMessages = [...messages].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  );
+
   return (
     <div className="flex flex-col h-screen">
       <div className="shrink-0">
-        <ChatRoomHeader title={title} />
+        <ChatRoomHeader senderName={senderName} />
       </div>
       <div className="px-24 pt-24 pb-12">
         <ChatPostCard title={title} price={price} />
       </div>
       <div className="flex-1 overflow-y-auto px-24 space-y-6">
-        {groupMessagesByDate(messages).map(({ date, messages }) => (
+        {groupMessagesByDate(sortedMessages).map(({ date, messages }) => (
           <div key={date} className="space-y-6">
             <div className="text-center text-gray-500 body-xs py-6">{formatDateDivider(date)}</div>
             <div className="flex flex-col gap-24">

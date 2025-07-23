@@ -8,6 +8,8 @@ export interface ChatRoomPreview {
   price: number;
   lastMessage: string;
   updatedAt: string;
+  productId: number;
+  senderName: string;
 }
 
 interface ChatStore {

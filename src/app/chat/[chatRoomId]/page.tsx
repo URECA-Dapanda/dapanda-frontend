@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import ChatRoomContent from "@/feature/chat/components/sections/room/ChatRoomContent";
 import { useParams } from "next/navigation";
-// import { useSearchParams } from "next/navigation";
-// import axiosInstance from "@/lib/axios";
+import { useSearchParams } from "next/navigation";
+import axiosInstance from "@/lib/axios";
+import { useChatStore } from "@feature/chat/stores/useChatStore";
 
 interface ProductInfo {
   productId: number;
@@ -16,24 +17,18 @@ interface ProductInfo {
 export default function ChatRoomPage() {
   const params = useParams();
   const chatRoomId = params?.chatRoomId as string;
-  // const searchParams = useSearchParams();
-  // const productId = searchParams.get("productId");
+  const searchParams = useSearchParams();
+  const productId = searchParams.get("productId");
   const [product, setProduct] = useState<ProductInfo | null>(null);
+  const chatList = useChatStore((state) => state.chatList);
+  const chatRoom = chatList.find((c) => String(c.chatRoomId) === String(chatRoomId));
+  const senderName = chatRoom?.senderName ?? "상대방";
 
-  // 임시로 productId가 13일 때 하드코딩
   useEffect(() => {
-    setProduct({
-      itemId: 3,
-      productId: 13,
-      title: "임시 상품명",
-      price: "10000",
-    });
-  }, []);
-
-  /*  useEffect(() => {
     if (productId) {
-      axiosInstance.get(`/api/products/${productId}`).then((res) => {
+      axiosInstance.get(`/api/products/wifi/${productId}`).then((res) => {
         setProduct({
+          productId: res.data.data.productId,
           itemId: res.data.data.itemId,
           title: res.data.data.title,
           price: res.data.data.price,
@@ -41,10 +36,15 @@ export default function ChatRoomPage() {
       });
     }
   }, [productId]);
-  */
+  console.log("chatList:", chatList);
+  console.log("chatRoomId:", chatRoomId);
+  console.log("chatRoom:", chatRoom);
+  console.log("productId:", productId);
+  console.log("senderName:", senderName);
 
   // if (!productId) return <div className="p-20">잘못된 접근입니다. (productId 없음)</div>;
   if (!product) return <div>로딩중...</div>;
+  if (!chatRoom) return <div>채팅방 정보를 불러오는 중...</div>;
 
   return (
     <>
@@ -53,6 +53,7 @@ export default function ChatRoomPage() {
         itemId={product.itemId}
         title={product.title}
         price={product.price}
+        senderName={senderName}
       />
     </>
   );

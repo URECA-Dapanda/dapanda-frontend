@@ -11,6 +11,7 @@ export interface ChatItemProps {
   timeAgo: string;
   unreadCount?: number;
   avatarUrl?: string;
+  productId: number;
   post: {
     title: string;
     price: string;
@@ -24,12 +25,13 @@ export default function ChatItem({
   timeAgo,
   unreadCount = 0,
   avatarUrl,
+  productId,
   post,
 }: ChatItemProps) {
   const router = useRouter();
 
   return (
-    <Link href={`/chat/${chatRoomId}`} className="block">
+    <Link href={`/chat/${chatRoomId}?productId=${productId}`} className="block">
       <div className="cursor-pointer flex justify-between items-center gap-12">
         <div className="flex items-center gap-12">
           <AvatarIcon avatar={avatarUrl} size="medium" />
