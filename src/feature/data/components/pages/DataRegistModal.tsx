@@ -2,7 +2,6 @@ import { useState } from "react";
 import BottomSheetHeader from "@/components/common/bottomsheet/BottomSheetHeader";
 import FilterCardContent from "@/feature/data/components/sections/filter/FilterCardContent";
 import FlatCard from "@components/common/card/FlatCard";
-import { postMobileDataProduct } from "@/feature/data/api/dataRequest";
 import { badgeVariants } from "@components/common/badge/badgeVariants";
 import InputComponent from "@components/common/input/InputComponent";
 import { buttonVariants } from "@components/common/button/buttonVariants";
