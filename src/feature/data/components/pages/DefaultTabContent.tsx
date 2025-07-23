@@ -12,6 +12,7 @@ import { ButtonComponent } from "@/components/common/button";
 import { dataSortOptions } from "@components/common/dropdown/dropdownConfig";
 import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
 import { Pill, PillButton } from "@ui/shadcn-io/pill";
+import EmptyState from "@components/common/empty/EmptyState";
 
 interface DefaultTabContentProps {
   isSheetOpen: boolean;
@@ -99,18 +100,27 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
         </div>
       )}
 
-      {/* 리스트 */}
-      <VirtualizedInfiniteList
-        mode="scroll"
-        parentRef={parentRef}
-        rowVirtualizer={rowVirtualizer}
-        height="700px"
-        items={flatItems}
-        isFetchingNextPage={isFetchingNextPage}
-        hasNextPage={hasNextPage}
-        fetchNextPage={fetchNextPage}
-        renderItem={(item: DataType) => <DataItemCard data={item} type="default" />}
-      />
+      {/* 검색 결과 없을 때 EmptyState, 있으면 list 렌더링 */}
+      {flatItems.length === 0 && !isFetchingNextPage ? (
+        <EmptyState
+          message="검색 결과가 없어요."
+          subMessage="조건을 다시 설정해 보시겠어요?"
+          className="mt-144"
+        />
+      ) : (
+        <VirtualizedInfiniteList
+          mode="scroll"
+          parentRef={parentRef}
+          rowVirtualizer={rowVirtualizer}
+          height="700px"
+          items={flatItems}
+          isFetchingNextPage={isFetchingNextPage}
+          hasNextPage={hasNextPage}
+          fetchNextPage={fetchNextPage}
+          renderItem={(item: DataType) => <DataItemCard data={item} type="default" />}
+        />
+      )}
+
     </div>
   );
 }
