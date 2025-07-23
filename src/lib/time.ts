@@ -74,7 +74,7 @@ export function formatToIsoDate(time: string): string {
   now.setMinutes(Number(minute));
   now.setSeconds(0);
   now.setMilliseconds(0);
-  return now.toISOString();
+  return now.toLocaleString("sv-SE").replace(" ", "T");
 }
 
 export const parseHHMMToTime = (hhmm: string): Time => {

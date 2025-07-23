@@ -31,7 +31,9 @@ export const usePostWifiRegister = ({ form, onSuccess, onSubmit }: UsePostWifiRe
         longitude: parseFloat(lng),
         startTime: formatToIsoDate(form.startTime),
         endTime: formatToIsoDate(form.endTime),
+        address,
       });
+      console.log(postWifiRegister);
     },
     onSuccess: () => {
       onSubmit?.({

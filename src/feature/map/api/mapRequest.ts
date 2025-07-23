@@ -33,6 +33,7 @@ interface WifiRegisterRequest {
   longitude: number;
   startTime: string;
   endTime: string;
+  address: string;
 }
 
 interface ApiResponse {

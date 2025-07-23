@@ -24,12 +24,19 @@ export const useMapMarkers = (
 
       const position = new window.naver.maps.LatLng(lat, lng);
 
+      let iconUrl = "";
+      if (store.type === "핫스팟") {
+        iconUrl = "/hotspot-pin.svg";
+      } else if (store.type === "와이파이") {
+        iconUrl = store.open ? "/wifi-pin.svg" : "/wifi-dis-pin.svg";
+      }
+
       const marker = new window.naver.maps.Marker({
         position,
         map,
         title: store.title,
         icon: {
-          url: store.type === "핫스팟" ? "/hotspot-pin.svg" : "/wifi-pin.svg",
+          url: iconUrl,
           size: new naver.maps.Size(50, 52),
           origin: new naver.maps.Point(0, 0),
           anchor: new naver.maps.Point(25, 26),
