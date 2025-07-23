@@ -37,6 +37,7 @@ export default function ReportModal({ isOpen, setIsOpen }: ReportModalProps) {
     mutationKey: ["/api/report", target],
     onSuccess: () => {
       router.refresh();
+      setIsOpen(false);
     },
   });
 
