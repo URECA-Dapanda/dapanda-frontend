@@ -7,6 +7,7 @@ import {
 } from "@tosspayments/tosspayments-sdk";
 import { savePaymentAmount } from "@feature/mypage/apis/payment";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
 
 export const useTossPayment = () => {
   const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY!;
@@ -18,7 +19,7 @@ export const useTossPayment = () => {
   const renderTossPayment = async (chargeStr: string) => {
     const amount = Number(chargeStr);
     if (!amount || isNaN(amount) || amount <= 0) {
-      alert("유효한 결제 금액을 입력해주세요.");
+      toast.error("유효한 결제 금액을 입력해주세요.");
       return;
     }
 
@@ -39,7 +40,7 @@ export const useTossPayment = () => {
 
   const requestTossPayment = async () => {
     if (!widgetRef.current) {
-      alert("결제 위젯이 초기화되지 않았습니다.");
+      toast.error("결제 위젯이 초기화되지 않았습니다.");
       return;
     }
 
