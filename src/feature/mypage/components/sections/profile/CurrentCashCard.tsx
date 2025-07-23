@@ -1,13 +1,23 @@
+"use client";
+
 import Image from "next/image";
 import { ButtonComponent } from "@components/common/button";
 import FlatCard from "@components/common/card/FlatCard";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { getUserCash } from "@feature/mypage/apis/mypageRequest";
+import { formatPriceString } from "@lib/formatters";
 
 interface CurrentCashCardProps {
   isInterection?: boolean;
 }
 
 export default function CurrentCashCard({ isInterection }: CurrentCashCardProps) {
+  const { data } = useQuery({
+    queryFn: getUserCash,
+    queryKey: ["/api/members/cash"],
+  });
+
   return (
     <FlatCard size={isInterection ? "md" : "xs"}>
       <div className="flex flex-col justify-center h-full gap-y-24">
@@ -15,7 +25,9 @@ export default function CurrentCashCard({ isInterection }: CurrentCashCardProps)
           <div className="flex flex-col">
             <span className="body-sm text-gray-500">보유 캐시</span>
             <div className="flex items-end gap-4">
-              <span className="title-lg text-gray-900">12,500원</span>
+              <span className="title-lg text-gray-900">
+                {data ? formatPriceString(data.cash) : "-원"}
+              </span>
               <button
                 className={`body-xs text-gray-500 hover:underline hover:cursor-pointer ${
                   isInterection ? "" : "hidden"

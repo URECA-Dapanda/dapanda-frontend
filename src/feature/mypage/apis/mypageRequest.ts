@@ -55,3 +55,14 @@ export async function getPurchaseHistoryList({
 
   return { items, nextCursor };
 }
+
+export async function getUserData() {
+  const { data } = await axios.get("");
+  return data;
+}
+
+export async function getUserCash() {
+  const { data } = await axios.get("/api/members/cash");
+
+  return data.data;
+}
