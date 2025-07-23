@@ -32,6 +32,7 @@ export default function ChatList() {
         }
       } catch (e) {
         alert("채팅방 조회 중 오류가 발생했습니다.");
+        console.error(e);
       }
     }
     fetchChatRooms();
