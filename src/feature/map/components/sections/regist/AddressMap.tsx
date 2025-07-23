@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { toast } from "react-toastify";
 
 const AddressMap = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -15,7 +16,7 @@ const AddressMap = () => {
       },
       function (status, response) {
         if (status !== naver.maps.Service.Status.OK) {
-          alert("Geocode failed");
+          toast.error("Geocode failed");
           return;
         }
 

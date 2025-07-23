@@ -8,7 +8,7 @@ export default function MapItemCard({ data }: ProductItemProps<MapType>) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/map/detail?id=${data.id}`);
+    router.push(`/map/${data.id}`);
   };
 
   return (

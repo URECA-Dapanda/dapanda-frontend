@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import TopSheet from "@/components/common/topsheet/TopSheet";
 import { ButtonComponent } from "@components/common/button";
 import TimeSelectorSection from "@/feature/map/components/sections/product/TimeSelectorSection";
@@ -15,12 +15,11 @@ import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 
 export default function MapDetailPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id") ?? "1";
+  const { postId } = useParams<{ postId: string }>();
 
   const [topSheetExpanded, setTopSheetExpanded] = useState(false);
   const { handlePurchase } = usePurchaseTimer();
-  const { data, isLoading, isError } = useMapDetailData(id);
+  const { data, isLoading, isError } = useMapDetailData(postId);
   const [error, setError] = useState<string | null>(null);
 
   const { startTime, endTime, setStartTime, setEndTime } = useTimeState("09:00", "22:00");

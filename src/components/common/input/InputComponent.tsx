@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useMemo, forwardRef } from "react";
+import React, { useMemo, forwardRef, Ref } from "react";
+
 import { Input } from "@/components/ui/input";
 
 import { cn } from "@/lib/utils";
@@ -26,12 +27,14 @@ interface BaseProps {
 interface InputProps extends BaseProps {
   type?: "text" | "number" | "email" | "password";
   rows?: never;
+  ref?: Ref<HTMLInputElement>;
 }
 
 // textarea 전용 props
 interface TextareaProps extends BaseProps {
   type?: never;
   rows?: number;
+  ref?: Ref<HTMLTextAreaElement>;
 }
 
 type InputComponentProps = InputProps | TextareaProps;

@@ -11,6 +11,7 @@ interface BaseBottomSheetProps {
   children: ReactNode;
   variant?: "snap" | "modal" | "hybrid";
   snapHeight?: number;
+  zIndex?: number;
 }
 
 export default function BaseBottomSheet({
@@ -21,6 +22,7 @@ export default function BaseBottomSheet({
   children,
   variant = "modal",
   snapHeight = 300,
+  zIndex,
 }: BaseBottomSheetProps) {
   const BOTTOM_OFFSET = 54;
   const HEADER_OFFSET = 54;
@@ -103,6 +105,7 @@ export default function BaseBottomSheet({
         style={{
           WebkitOverflowScrolling: "touch",
           touchAction: "none",
+          zIndex: zIndex ?? (variant === "modal" ? 99 : 30),
         }}
         onDragEnd={handleDragEnd}
         drag="y"

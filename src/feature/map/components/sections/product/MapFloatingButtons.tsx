@@ -2,6 +2,7 @@ import { PlusIcon, ListIcon, LocateFixed } from "lucide-react";
 import { ButtonComponent } from "@components/common/button";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "react-toastify";
 
 interface Props {
   onOpenModal: () => void;
@@ -20,7 +21,7 @@ export default function MapFloatingButtons({ onOpenModal, onOpenSheet, isSnapOpe
         map.setCenter(location);
         map.setZoom(15);
       },
-      () => alert("위치 정보를 가져올 수 없습니다."),
+      () => toast.error("위치 정보를 가져올 수 없습니다."),
       { enableHighAccuracy: true }
     );
   };
