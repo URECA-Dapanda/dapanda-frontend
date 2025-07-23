@@ -3,6 +3,7 @@ import { ButtonComponent } from "@components/common/button";
 import ItemCard from "@components/common/card/ItemCard";
 import LayoutBox from "@components/common/container/LayoutBox";
 import { SaleHistoryType } from "@feature/mypage/types/mypageTypes";
+import { formatDateDivider } from "@lib/time";
 
 interface HistoryCardProps {
   data: SaleHistoryType;
@@ -17,14 +18,16 @@ export function HistoryCard({ data, size = "sm" }: HistoryCardProps) {
           <AvatarIcon size="small" />
           <LayoutBox layout="flex" direction="column" gap={0}>
             <p className="title-sm">{data.type}</p>
-            <p className="body-sm">등록 일자: {data.registDate}</p>
-            {data.isSold && (
-              <p className="body-sm">거래 일자: {data.soldDate ? data.soldDate : "--"}</p>
+            <p className="body-sm">등록 일자: {formatDateDivider(data.createdAt)}</p>
+            {data.state !== "ACTIVE" && (
+              <p className="body-sm">
+                거래 일자: {data.updatedAt ? formatDateDivider(data.updatedAt) : "--"}
+              </p>
             )}
-            <p className="body-sm text-gray-600">거래 상품: {data.title}</p>
+            <p className="body-sm text-gray-600">거래 상품: {data.type}</p>
           </LayoutBox>
         </LayoutBox>
-        {data.isSold && (
+        {data.state !== "ACTIVE" && (
           <ButtonComponent
             variant={"primary2"}
             size={"xxs"}
