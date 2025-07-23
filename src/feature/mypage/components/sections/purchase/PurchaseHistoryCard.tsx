@@ -5,8 +5,6 @@ import LayoutBox from "@components/common/container/LayoutBox";
 import { PurchaseHistoryType } from "@feature/mypage/types/mypageTypes";
 import { formatDataSize } from "@lib/formatters";
 import { formatDateDivider } from "@lib/time";
-import { useRouter } from "next/navigation";
-import { useCallback } from "react";
 
 interface PurchaseHistoryCardProps {
   data: PurchaseHistoryType;
