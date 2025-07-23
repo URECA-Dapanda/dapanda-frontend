@@ -11,6 +11,7 @@ import ScrapTabBody from "@feature/data/components/sections/scrap/ScrapTabConten
 import { PurchaseModeTabs } from "@/components/common/tabs";
 import { useHeaderStore } from "@stores/useHeaderStore";
 import DefaultFilterCard from "@feature/data/components/sections/filter/DefaultFilterCard";
+import DataRegistModal from "@feature/data/components/pages/DataRegistModal";
 
 export default function DataPageContent() {
   const searchParams = useSearchParams();
@@ -18,6 +19,8 @@ export default function DataPageContent() {
   const tab = searchParams.get("tab") || "default";
   const [sheetOpen, setSheetOpen] = useState(tab === "scrap");
   const setIsVisible = useHeaderStore((state) => state.setIsVisible);
+  const [registModalOpen, setRegistModalOpen] = useState(false);
+
 
   useEffect(() => {
     setIsVisible(sheetOpen);
@@ -59,17 +62,26 @@ export default function DataPageContent() {
       <div className="sticky top-0 z-10 bg-primary2 p-4 pt-60">
         <DefaultFilterCard />
       </div>
-      <div className="absolute bottom-76 right-24 z-50">
+      <div className="absolute bottom-144 right-24 z-60">
         <ButtonComponent
           variant="floatingPrimary"
           size="xl"
           onClick={() => {
             console.log("글 등록 버튼 클릭");
+            setRegistModalOpen(true);
           }}
         >
           <PlusIcon className="w-20 h-20" />글 쓰기
         </ButtonComponent>
       </div>
+      <BaseBottomSheet
+        isOpen={registModalOpen}
+        onClose={() => setRegistModalOpen(false)}
+        variant="modal"
+        zIndex={100}
+      >
+        <DataRegistModal onClose={() => setRegistModalOpen(false)} />
+      </BaseBottomSheet>
 
       <BaseBottomSheet
         isOpen={sheetOpen}

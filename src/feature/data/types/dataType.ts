@@ -17,6 +17,7 @@ export interface DataType {
   price: string;
   pricePer: string;
   date: string;
+  splitType: boolean;
 }
 
 export interface ProductItemProps<T> {
@@ -46,5 +47,6 @@ export function mapRawToDataType(raw: RawDataItem): DataType {
     price: `${raw.price.toLocaleString()}원`,
     pricePer: `${raw.pricePer100MB}원/100MB`,
     date: raw.updatedAt,
+    splitType: raw.splitType,
   };
 }

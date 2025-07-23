@@ -8,6 +8,7 @@ export interface PostData {
   averagePrice?: number;
   hasReported?: boolean;
   memberName: string;
+  splitType?: boolean;
 }
 
 export interface WifiData {

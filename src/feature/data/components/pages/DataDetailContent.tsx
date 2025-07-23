@@ -63,7 +63,7 @@ export default function DataDetailContent() {
       <div
         className={clsx(
           "space-y-12 px-24 transition-all duration-300",
-          topSheetExpanded ? "pt-[430px]" : "pt-[280px]"
+          topSheetExpanded ? "pt-[450px]" : "pt-[300px]"
         )}
       />
 
