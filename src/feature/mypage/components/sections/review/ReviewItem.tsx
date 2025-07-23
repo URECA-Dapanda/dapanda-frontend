@@ -5,12 +5,14 @@ import CardContentComponent from "@components/common/card/CardContentComponent";
 import LayoutBox from "@components/common/container/LayoutBox";
 import { Rating, RatingButton } from "@components/common/rating/RatingScore";
 import { ReviewType } from "@feature/mypage/types/reviewType";
+import { MouseEventHandler } from "react";
 
 interface ReviewItemProps {
   data: ReviewType;
+  handleClick: MouseEventHandler;
 }
 
-export default function ReviewItem({ data }: ReviewItemProps) {
+export default function ReviewItem({ data, handleClick }: ReviewItemProps) {
   return (
     <div className="px-24">
       <CardComponent variant="outlined" color={"border-gray-200"} size="sm">
@@ -32,6 +34,9 @@ export default function ReviewItem({ data }: ReviewItemProps) {
             variant={"primary2"}
             size={"xxs"}
             className="absolute bottom-12 right-20 caption-md"
+            onClick={handleClick}
+            value={data.reviewId}
+            data-name={data.reviewerName}
           >
             리뷰 신고하기
           </ButtonComponent>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { Ref, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 
 import { cn } from "@/lib/utils";
@@ -26,12 +26,14 @@ interface BaseProps {
 interface InputProps extends BaseProps {
   type?: "text" | "number" | "email" | "password";
   rows?: never;
+  ref?: Ref<HTMLInputElement>;
 }
 
 // textarea 전용 props
 interface TextareaProps extends BaseProps {
   type?: never;
   rows?: number;
+  ref?: Ref<HTMLTextAreaElement>;
 }
 
 type InputComponentProps = InputProps | TextareaProps;
@@ -39,7 +41,7 @@ type InputComponentProps = InputProps | TextareaProps;
 export default function InputComponent({
   as = "input",
   placeholder = "",
-  value = "",
+  value,
   onChange,
   onKeyDown,
   className = "",
@@ -50,6 +52,7 @@ export default function InputComponent({
   required = false,
   type = "text",
   rows = 3,
+  ref,
 }: InputComponentProps) {
   const inputRadius = useMemo(() => {
     switch (radius) {
@@ -101,6 +104,7 @@ export default function InputComponent({
         disabled={disabled}
         required={required}
         rows={rows}
+        ref={ref as Ref<HTMLTextAreaElement>}
       />
     );
   }
@@ -115,6 +119,7 @@ export default function InputComponent({
       disabled={disabled}
       required={required}
       className={cn(inputRadius, inputSize, color, className)}
+      ref={ref as Ref<HTMLInputElement>}
     />
   );
 }
