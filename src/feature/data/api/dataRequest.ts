@@ -1,7 +1,11 @@
 import axios from "@/lib/axios";
 
-import { DataType, RawDataItem, DataDetailResponse } from "@feature/data/types/dataType";
-import { mapRawToDataType } from "@/feature/data/utils/dataMapper";
+import {
+  DataType,
+  RawDataItem,
+  DataDetailResponse,
+  mapRawToDataType,
+} from "@feature/data/types/dataType";
 
 function isNumber(value: unknown): value is number {
   return typeof value === "number";
@@ -44,12 +48,33 @@ export async function getDataList({
   }
 }
 
-export async function getDataDetail(postId: string): Promise<DataDetailResponse> {
+export async function getDataDetail(productId: string): Promise<DataDetailResponse> {
   const response = await axios.get<{ code: number; message: string; data: DataDetailResponse }>(
-    `/api/products/mobile-data/${postId}`
+    `/api/products/mobile-data/${productId}`
   );
   return response.data.data;
 }
+
+export const postMobileDataProduct = async (
+  dataAmount: number,
+  price: number,
+  isSplitType: boolean
+) => {
+  const res = await axios.post("/api/products/mobile-data", {
+    price,
+    dataAmount,
+    isSplitType,
+  });
+
+  return res.data;
+};
+
+export const getPriceRecommendation = async () => {
+  const response = await axios.get("/api/products/market-price", {
+    params: { productType: "MOBILE_DATA" },
+  });
+  return response.data.data;
+};
 
 export async function deleteDataPost(postId: string) {
   const response = await axios.delete(`/api/products/${postId}`);
