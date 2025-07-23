@@ -1,5 +1,4 @@
 import axios from "@/lib/axios";
-import { mapRawToDataType } from "@/feature/data/utils/dataMapper";
 
 import {
   DataType,
