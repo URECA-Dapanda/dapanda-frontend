@@ -6,10 +6,10 @@ import { ButtonComponent } from "@/components/common/button";
 import { dataSortOptions } from "@components/common/dropdown/dropdownConfig";
 import { ChevronDown, Search } from "lucide-react";
 import ScrapFilterCard from "@feature/data/components/sections/filter/ScrapFilterCard";
-import ScrapEmptyState from "@feature/data/components/sections/scrap/ScrapEmptyState";
 import ScrapLoadingState from "@feature/data/components/sections/scrap/ScrapLoadingState";
 import { useScrapRecommendation } from "@feature/data/hooks/useScrapRecommendation";
 import CollapsibleDataList from "@feature/data/components/sections/default/CollapsibleDataList";
+import EmptyState from "@components/common/empty/EmptyState";
 
 export default function ScrapTabContent() {
   const [sortLabel, setSortLabel] = useState("최신순");
@@ -44,7 +44,7 @@ export default function ScrapTabContent() {
       {/* 상태별 렌더링 */}
       {loading && <ScrapLoadingState />}
 
-      {!loading && hasSearched && result.length === 0 && <ScrapEmptyState />}
+      {!loading && hasSearched && result.length === 0 && <EmptyState />}
 
       {!loading && result.length > 0 && (
         <>
