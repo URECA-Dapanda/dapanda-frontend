@@ -66,8 +66,7 @@ export default function ChatRoomPage() {
   console.log("productId:", productId);
   console.log("senderName:", chatRoom?.senderName ?? "상대방");
 
-  // if (!productId) return <div className="p-20">잘못된 접근입니다. (productId 없음)</div>;
-  if (!product) return <div>로딩중...</div>;
+  if (!product) return null;
 
   return (
     <>
