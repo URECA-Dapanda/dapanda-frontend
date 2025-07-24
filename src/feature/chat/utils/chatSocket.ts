@@ -2,9 +2,9 @@ import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
 export const createStompClient = (chatRoomId: number, onMessage: (message: string) => void) => {
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_SSL;
   if (!apiBaseUrl) {
-    throw new Error("NEXT_PUBLIC_API_BASE_URL environment variable is required");
+    throw new Error("NEXT_PUBLIC_API_BASE_SSL environment variable is required");
   }
   const client = new Client({
     webSocketFactory: () => new SockJS(`${apiBaseUrl}/conn`),

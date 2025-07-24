@@ -25,4 +25,12 @@ export interface ChatMessage {
   senderAvatar?: string;
   text: string;
   createdAt: string;
+  productId: number;
+}
+
+export interface CursorPageResponse<T> {
+  content: T[];
+  nextCursorId?: number;
+  hasNext?: boolean;
+  size?: number;
 }

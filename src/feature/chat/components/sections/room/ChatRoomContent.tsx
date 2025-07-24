@@ -1,19 +1,17 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { formatDateDivider } from "@lib/time";
+import { useProfileStore } from "@stores/useProfileStore";
 import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
 import type { ChatMessage } from "@/feature/chat/types/chatType";
 import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
 import { groupMessagesByDate } from "@feature/chat/utils/groupMessagesByDate";
-import { formatDateDivider } from "@lib/time";
 import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
-import { useChatStore } from "@feature/chat/stores/useChatStore";
 import { createStompClient, sendMessage } from "@feature/chat/utils/chatSocket";
-import { useProfileStore } from "@stores/useProfileStore";
-import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 import { getChatHistory } from "@feature/chat/api/getChatHistory";
-import { useSearchParams } from "next/navigation";
-import ChatRoomHeader from "./ChatRoomHeader";
+import ChatRoomHeader from "@feature/chat/components/sections/room/ChatRoomHeader";
+// import { useChatStore } from "@feature/chat/stores/useChatStore";
 
 interface ChatRoomContentProps {
   chatRoomId: number;
@@ -32,60 +30,42 @@ export default function ChatRoomContent({
   const currentUserId = useProfileStore((state) => state.id);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const clientRef = useRef<any>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // 1. 과거 메시지 불러오기
-    getChatHistory(chatRoomId).then((history) => {
-      setMessages(history);
-    });
+    if (!chatRoomId) return;
+    getChatHistory(chatRoomId)
+      .then((messages) => {
+        setMessages(messages); // 그냥 그대로!
+      })
+      .catch((err) => {
+        console.error("채팅 기록 불러오기 실패:", err);
+      });
 
     // 2. 웹소켓 연결
     clientRef.current = createStompClient(chatRoomId, (msg: any) => {
       const data = typeof msg === "string" ? JSON.parse(msg) : msg;
-
       const incomingMessage: ChatMessage = {
         id: String(data.chatMessageId),
         senderId: String(data.senderId),
         text: data.message,
         createdAt: data.createdAt,
+        productId: data.productId,
       };
-      if (incomingMessage.senderId === String(currentUserId)) {
-        setMessages((prev) => {
-          // temp 메시지 제거
-          const filtered = prev.filter(
-            (m) =>
-              !(
-                m.id.startsWith("temp-") &&
-                m.text === incomingMessage.text &&
-                m.senderId === incomingMessage.senderId
-              )
-          );
-          // 중복 방지
-          if (filtered.some((m) => m.id === incomingMessage.id)) {
-            return filtered;
-          }
-          return [...filtered, incomingMessage].sort(
-            (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-          );
-        });
-        return; // 추가 종료 (내가 보낸 거면 여기서 끝)
-      }
-
-      // 상대방 메시지라면 그대로 추가
-      setMessages((prev) => {
-        if (prev.some((m) => m.id === incomingMessage.id)) {
-          return prev;
-        }
-        return [...prev, incomingMessage].sort(
-          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
-      });
+      setMessages((prev) => [...prev, incomingMessage]);
     });
 
     return () => {
       clientRef.current?.deactivate();
     };
   }, [chatRoomId]);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "auto" });
+    }
+  }, [messages.length]); // 메시지 개수가 바뀔 때마다
+
   const addMessage = (text: string) => {
     const tempId = `temp-${Date.now()}`;
     const optimisticMessage: ChatMessage = {
@@ -93,6 +73,7 @@ export default function ChatRoomContent({
       senderId: currentUserId?.toString() ?? "unknown",
       text,
       createdAt: new Date().toISOString(),
+      productId: itemId,
     };
 
     // 1. 서버로 메시지 전송
@@ -111,6 +92,7 @@ export default function ChatRoomContent({
       senderId: currentUserId?.toString() ?? "unknown",
       text,
       createdAt: new Date().toISOString(),
+      productId: itemId,
     };
     setMessages((prev) => {
       // 서버 메시지와 같은 텍스트, 같은 보낸 사람, 같은 시간(혹은 tempId)인 optimistic 메시지 제거
@@ -138,7 +120,7 @@ export default function ChatRoomContent({
   );
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen mb-20">
       <div className="shrink-0">
         <ChatRoomHeader senderName={senderName} />
       </div>
@@ -160,6 +142,7 @@ export default function ChatRoomContent({
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
         <div className="pb-44" />
       </div>
       <ChatInputBar onSend={addMessage} />
