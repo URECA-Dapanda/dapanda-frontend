@@ -35,7 +35,7 @@ export default function ChatList() {
           const chatList = apiList.map((item: ApiChatRoom) => ({
             chatRoomId: item.chatRoomId,
             name: item.senderName,
-            title: item.title || item.itemType || "상품",
+            title: item.title,
             price: item.price,
             lastMessage: "",
             updatedAt: item.createdAt,
@@ -80,13 +80,12 @@ export default function ChatList() {
 
   useEffect(() => {
     if (chatRoomId) {
-      getChatContentInfo(chatRoomId)
+      getChatContentInfo(Number(chatRoomId))
         .then((data) => {
           console.log("chat content info:", data);
-          // setState 등
         })
         .catch((err) => {
-          console.error("chat content info fetch error:", err);
+          console.error("chat content fetch error:", err);
         });
     }
   }, [chatRoomId]);

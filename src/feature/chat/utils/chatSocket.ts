@@ -1,7 +1,11 @@
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
+import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
 
-export const createStompClient = (chatRoomId: number, onMessage: (message: string) => void) => {
+export const createStompClient = (
+  chatRoomId: number,
+  onMessage: (message: ChatSocketMessage) => void
+) => {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_SSL;
   if (!apiBaseUrl) {
     throw new Error("NEXT_PUBLIC_API_BASE_SSL environment variable is required");
@@ -13,7 +17,7 @@ export const createStompClient = (chatRoomId: number, onMessage: (message: strin
       console.log(" WebSocket 연결됨");
 
       client.subscribe(`/sub/${chatRoomId}`, (message) => {
-        const payload = JSON.parse(message.body);
+        const payload: ChatSocketMessage = JSON.parse(message.body);
         onMessage(payload);
       });
     },

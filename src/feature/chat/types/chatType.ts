@@ -27,6 +27,12 @@ export interface ChatMessage {
   createdAt: string;
   productId: number;
 }
+export interface ChatSocketMessage {
+  chatMessageId: number;
+  senderId: number;
+  message: string;
+  createdAt: string;
+}
 
 export interface CursorPageResponse<T> {
   content: T[];

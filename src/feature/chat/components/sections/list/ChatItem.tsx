@@ -1,8 +1,7 @@
 "use client";
 
-import AvatarIcon from "@/components/common/AvatarIcon";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import AvatarIcon from "@/components/common/AvatarIcon";
 
 export interface ChatItemProps {
   chatRoomId: string;
@@ -32,7 +31,6 @@ export default function ChatItem({
   place,
   pricePer10min,
 }: ChatItemProps) {
-  const router = useRouter();
   console.log("ChatItem props:", { chatRoomId, name, productId, post, place, pricePer10min });
 
   return (

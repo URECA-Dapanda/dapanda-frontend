@@ -1,7 +1,12 @@
 import type { ChatMessage } from "@/feature/chat/types/chatType";
 
+interface GroupedMessages {
+  date: string;
+  messages: ChatMessage[];
+}
+
 //채팅 메시지를 날짜별로 그룹화
-export function groupMessagesByDate(messages: ChatMessage[]) {
+export function groupMessagesByDate(messages: ChatMessage[]): GroupedMessages[] {
   const groups: { [date: string]: ChatMessage[] } = {};
 
   messages.forEach((msg) => {
