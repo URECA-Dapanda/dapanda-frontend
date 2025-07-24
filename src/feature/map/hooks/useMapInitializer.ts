@@ -5,6 +5,7 @@ import { useMapStore } from "@/feature/map/stores/useMapStore";
 import type { MapType } from "@/feature/map/types/mapType";
 import { MAP_CONTAINER_ID, DEFAULT_LOCATION } from "@/feature/map/constants/map";
 import { getMapList } from "@/feature/map/api/mapRequest";
+import { toast } from "react-toastify";
 
 interface UseMapInitializerOptions {
   onStoreListUpdate?: (list: MapType[]) => void;
@@ -53,11 +54,11 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
             setStoreList(res.items);
             options?.onStoreListUpdate?.(res.items);
           } catch (e) {
-            alert("와이파이 목록을 불러오는 데 실패했습니다.");
+            toast.error("와이파이 목록을 불러오는 데 실패했습니다.");
             console.error(e);
           }
         },
-        () => alert("위치 정보를 가져올 수 없습니다."),
+        () => toast.error("위치 정보를 가져올 수 없습니다."),
         { enableHighAccuracy: true }
       );
     };

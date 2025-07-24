@@ -5,6 +5,7 @@ import { ButtonComponent } from "@components/common/button";
 import type { ProductItemProps } from "@/feature/data/types/dataType";
 import type { MapType } from "@/feature/map/types/mapType";
 import axiosInstance from "@/lib/axios";
+import { toast } from "react-toastify";
 
 export default function MapItemCardContent({
   data: { id, address, price, score, title, type, updatedAt, open },
@@ -20,10 +21,10 @@ export default function MapItemCardContent({
         if (response.data.code === 0) {
           router.push(`/chat/${response.data.data.chatRoomId}`);
         } else {
-          alert(response.data.message || "채팅방 생성에 실패했습니다.");
+          toast.error(response.data.message || "채팅방 생성에 실패했습니다.");
         }
       } catch (error) {
-        alert("채팅방 생성 중 오류가 발생했습니다.");
+        toast.error("채팅방 생성 중 오류가 발생했습니다.");
         console.error(error);
       }
     },

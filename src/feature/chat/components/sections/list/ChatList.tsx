@@ -6,6 +6,7 @@ import { useChatStore } from "@feature/chat/stores/useChatStore";
 import { formatRelativeTime } from "@/lib/time";
 import axiosInstance from "@/lib/axios";
 import { ApiChatRoom } from "@feature/chat/types/chatType";
+import { toast } from "react-toastify";
 
 export default function ChatList() {
   const chatList = useChatStore((state) => state.chatList);
@@ -28,10 +29,10 @@ export default function ChatList() {
           setChatList(chatList);
           console.log("chatList:", chatList);
         } else {
-          alert(response.data.message || "채팅방 조회 실패");
+          toast.error(response.data.message || "채팅방 조회 실패");
         }
       } catch (e) {
-        alert("채팅방 조회 중 오류가 발생했습니다.");
+        toast.error("채팅방 조회 중 오류가 발생했습니다.");
         console.error(e);
       }
     }

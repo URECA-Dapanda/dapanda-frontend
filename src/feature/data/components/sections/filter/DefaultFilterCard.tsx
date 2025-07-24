@@ -1,14 +1,20 @@
 import { useState } from "react";
 import FlatCard from "@components/common/card/FlatCard";
 import FilterCardContent from "@feature/data/components/sections/filter/FilterCardContent";
+import { useDataFilterStore } from "@feature/data/stores/useDataFilterStore";
 
-export default function DefaultFilterCard() {
+interface DefaultFilterCardProps {
+  onSearch?: () => void;
+}
+
+export default function DefaultFilterCard({ onSearch }: DefaultFilterCardProps) {
   const [value, setValue] = useState<number[]>([1]);
+  const setDataAmount = useDataFilterStore((state) => state.setDataAmount);
 
   const handleSearch = () => {
-    // 일반 구매에서 이 value로 데이터 필터링 수행
     console.log("일반 구매 검색:", value[0]);
-    // ex) setFilterValue(value[0]); queryClient.invalidate...
+    setDataAmount(value[0]);
+    onSearch?.();
   };
 
   return (
