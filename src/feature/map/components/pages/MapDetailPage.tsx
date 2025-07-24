@@ -9,7 +9,9 @@ import SellerSection from "@/feature/map/components/sections/seller/SellerSectio
 import { usePurchaseTimer } from "@/feature/map/hooks/usePurchaseTimer";
 import { useMapDetailData } from "@/feature/map/hooks/useMapDetailData";
 import { useTimeState } from "@/feature/map/hooks/useTimeState";
+import DeletePostModal from "@/feature/data/components/sections/modal/DeletePostModal";
 import { isValidTimeRange, parseHHMMToTime, isTimeInRange } from "@/lib/time";
+import { useProfileStore } from "@stores/useProfileStore";
 import clsx from "clsx";
 
 export default function MapDetailPage() {
@@ -20,6 +22,11 @@ export default function MapDetailPage() {
   const { handlePurchase } = usePurchaseTimer();
   const { data, isLoading, isError } = useMapDetailData(postId);
   const [error, setError] = useState<string | null>(null);
+
+  const currentUserId = useProfileStore((state) => state.id);
+  const isOwner = data && currentUserId === data.memberId;
+
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const { startTime, endTime, setStartTime, setEndTime } = useTimeState("09:00", "22:00");
 
@@ -80,6 +87,15 @@ export default function MapDetailPage() {
           setEndTime={setEndTime}
           minTime={minTime}
           maxTime={maxTime}
+          showEditButton={isOwner}
+          onEditClick={() =>
+            router.push(
+              `/map/regist/wifi?edit=true&id=${data.productId}&lat=${data.latitude}&lng=${
+                data.longitude
+              }&address=${encodeURIComponent(data.address)}`
+            )
+          }
+          onDeleteClick={() => setDeleteModalOpen(true)}
         />
 
         <SellerSection
@@ -90,12 +106,19 @@ export default function MapDetailPage() {
         />
 
         <div className="px-6 mt-12">
-          <ButtonComponent className="w-full" variant="primary" size="xl" onClick={onBuy}>
+          <ButtonComponent
+            className="w-full"
+            variant="primary"
+            size="xl"
+            onClick={onBuy}
+            disabled={!data.open}
+          >
             구매하기
           </ButtonComponent>
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}
         </div>
       </div>
+      <DeletePostModal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} />
     </div>
   );
 }

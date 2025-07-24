@@ -2,7 +2,7 @@
 
 import BaseModal from "@components/common/modal/BaseModal";
 import ModalHeader from "@components/common/modal/ModalHeader";
-import SelectTypeCard from "./SelectTypeCard";
+import SelectTypeCard from "@feature/map/components/sections/regist/SelectTypeCard";
 
 interface Props {
   open: boolean;

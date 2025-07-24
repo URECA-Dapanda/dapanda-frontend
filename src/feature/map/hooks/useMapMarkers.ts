@@ -18,15 +18,29 @@ export const useMapMarkers = (
     const newMarkerMap = new Map<number, naver.maps.Marker>();
 
     storeList.forEach((store) => {
+      if (store.title === "내 위치") return;
       const [lat, lng] = store.location.split(",").map(Number);
       if (isNaN(lat) || isNaN(lng)) return;
 
       const position = new window.naver.maps.LatLng(lat, lng);
 
+      let iconUrl = "";
+      if (store.type === "핫스팟") {
+        iconUrl = "/hotspot-pin.svg";
+      } else if (store.type === "와이파이") {
+        iconUrl = store.open ? "/wifi-pin.svg" : "/wifi-dis-pin.svg";
+      }
+
       const marker = new window.naver.maps.Marker({
         position,
         map,
         title: store.title,
+        icon: {
+          url: iconUrl,
+          size: new naver.maps.Size(50, 52),
+          origin: new naver.maps.Point(0, 0),
+          anchor: new naver.maps.Point(25, 26),
+        },
       });
 
       if (options?.onMarkerClick) {
