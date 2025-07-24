@@ -1,7 +1,8 @@
 import { formatPriceString, formatDataSize } from "@lib/formatters";
 import { DataDetailResponse } from "@feature/data/types/dataType";
 
-export const buildScrapPaymentInfo = (
+// 분할 결제 builder
+export const buildSplitPaymentInfo = (
   data: DataDetailResponse,
   selectedAmount: number
 ) => {
@@ -12,29 +13,15 @@ export const buildScrapPaymentInfo = (
     title: `${selectedAmount}GB`,
     price: `${purchasePrice.toLocaleString()}원`,
     unitPrice: `${data.pricePer100MB.toLocaleString()}원`,
-    badge: "자투리 구매" as const,
+    badge: "분할 구매" as const,
     seller: data.memberName,
-    cash: formatPriceString(12500), // TODO: 연동
     remainingData: formatDataSize(data.remainAmount - selectedAmount),
-    totalAmount: selectedAmount,
-    totalPrice: purchasePrice,
-    combinations: [
-      {
-        productId: data.productId,
-        mobileDataId: data.itemId,
-        memberName: data.memberName,
-        price: data.price,
-        purchasePrice,
-        remainAmount: data.remainAmount,
-        purchaseAmount: selectedAmount,
-        pricePer100MB: data.pricePer100MB,
-        splitType: data.splitType,
-        updatedAt: data.updatedAt,
-      },
-    ],
+    productId: data.productId,
+    mobileDataId: data.mobileDataId,
+    dataAmount: selectedAmount,
   };
 };
-
+// 일반 결제 builder
 export const buildDefaultPaymentInfo = (data: DataDetailResponse) => {
   return {
     type: "data" as const,
@@ -43,10 +30,9 @@ export const buildDefaultPaymentInfo = (data: DataDetailResponse) => {
     unitPrice: formatPriceString(data.pricePer100MB),
     badge: "일반 구매" as const,
     seller: data.memberName,
-    cash: formatPriceString(12500),
     remainingData: formatDataSize(data.remainAmount),
     productId: data.productId,
-    mobileDataId: data.itemId,
+    mobileDataId: data.mobileDataId,
     dataAmount: data.remainAmount,
   };
 };

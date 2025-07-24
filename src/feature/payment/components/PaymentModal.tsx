@@ -18,7 +18,7 @@ interface PaymentModalProps {
     price: string;
     unitPrice?: string;
     seller?: string;
-    badge?: "일반 구매" | "자투리 구매";
+    badge?: "일반 구매" | "분할 구매" | "자투리 구매";
     location?: string;
     duration?: string;
   };

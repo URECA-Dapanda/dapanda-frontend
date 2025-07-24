@@ -12,6 +12,7 @@ import CollapsibleDataList from "@feature/data/components/sections/default/Colla
 import EmptyState from "@components/common/empty/EmptyState";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
+import { formatPriceString } from "@lib/formatters";
 
 export default function ScrapTabContent() {
   const [sortLabel, setSortLabel] = useState("최신순");
@@ -19,26 +20,28 @@ export default function ScrapTabContent() {
   const [hasSearched, setHasSearched] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const setPayment = usePaymentStore((state) => state.setInfo);
+  const renderModals = UsePaymentModals();
+
   const handleSearch = async () => {
     setHasSearched(true);
     await search();
   };
 
   const transformedCombinations = result.map((item) => ({
-    productId: item.id,
-    mobileDataId: item.userId,
+    productId: item.productId,
+    mobileDataId: item.mobileDataId,
     memberName: item.userName,
     price: Number(item.price.replace(/[^0-9]/g, "")),
     purchasePrice: Number(item.price.replace(/[^0-9]/g, "")),
     remainAmount: parseFloat(item.title),
-    purchaseAmount: parseFloat(item.title),
+    purchaseAmount: item.purchaseAmount,
     pricePer100MB: Number(item.pricePer.replace(/[^0-9]/g, "")),
     splitType: item.splitType,
     updatedAt: item.date,
   }));
-
-  const setPayment = usePaymentStore((state) => state.setInfo);
-  const renderModals = UsePaymentModals();
+  
+  console.log("transformedCombinations", transformedCombinations);
 
   return (
     <div className="px-24 space-y-24">
@@ -76,7 +79,7 @@ export default function ScrapTabContent() {
             <div className="px-8 mb-64 flex justify-between items-center">
               <div>
                 <p className="title-sm">총 용량 {summary.totalAmount}GB</p>
-                <p className="title-sm">총 가격 {summary.totalPrice.toLocaleString()}원</p>
+                <p className="title-sm">총 가격 {formatPriceString(summary.totalPrice)}</p>
               </div>
               <ButtonComponent 
                 variant="secondary" 
@@ -85,9 +88,9 @@ export default function ScrapTabContent() {
                 onClick={() =>
                   setPayment({
                     type: "data",
-                    title: `${summary.totalAmount}GB`,
-                    price: `${summary.totalPrice.toLocaleString()}원`,
                     badge: "자투리 구매",
+                    title: `${summary.totalAmount}GB`,
+                    price: formatPriceString(summary.totalPrice),
                     totalAmount: summary.totalAmount,
                     totalPrice: summary.totalPrice,
                     combinations: transformedCombinations,
@@ -99,12 +102,14 @@ export default function ScrapTabContent() {
           )}
         </>
       )}
+
       {!hasSearched && !loading && result.length === 0 && (
         <div className="flex flex-col items-center justify-center text-center mt-32">
           <Search className="w-64 h-64 mb-16" />
           <p className="body-md">가장 저렴한 자투리 조합을 찾아드릴게요!</p>
         </div>
       )}
+
       {renderModals}
     </div>
   );

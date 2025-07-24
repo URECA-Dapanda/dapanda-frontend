@@ -20,7 +20,7 @@ export default function CollapsibleDataList({
           <div className="relative h-[240px]">
             {items.slice(0, 3).map((item, index) => (
               <div
-              key={`${item.id}-${index}`}
+              key={`${item.productId}-${index}`}
               className="absolute left-0 right-0"
                 style={{
                   top: index * 12,
@@ -35,7 +35,7 @@ export default function CollapsibleDataList({
         ) : (
           <div className="space-y-12">
             {items.map((item) => (
-              <DataItemCard key={item.id} data={item} type="scrap" />
+              <DataItemCard key={item.productId} data={item} type="scrap" />
             ))}
           </div>
         )}
