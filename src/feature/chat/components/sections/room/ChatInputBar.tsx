@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import InputComponent from "@/components/common/input/InputComponent";
 import { ButtonComponent } from "@/components/common/button";
-import { createStompClient } from "@feature/chat/utils/chatSocket";
 
 interface ChatInputBarProps {
   onSend: (message: string) => void;

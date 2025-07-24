@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { formatDateDivider } from "@lib/time";
 import { useProfileStore } from "@stores/useProfileStore";
+import { Client } from "@stomp/stompjs";
 import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
 import type { ChatMessage } from "@/feature/chat/types/chatType";
 import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
@@ -11,6 +12,7 @@ import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
 import { createStompClient, sendMessage } from "@feature/chat/utils/chatSocket";
 import { getChatHistory } from "@feature/chat/api/getChatHistory";
 import ChatRoomHeader from "@feature/chat/components/sections/room/ChatRoomHeader";
+import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
 
 interface ChatRoomContentProps {
   chatRoomId: number;
@@ -30,7 +32,7 @@ export default function ChatRoomContent({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const clientRef = useRef<any>(null);
+  const clientRef = useRef<Client | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fetchMoreMessages = async () => {
     if (!hasMore || loadingMore) return;
@@ -54,7 +56,7 @@ export default function ChatRoomContent({
       });
 
     // 웹소켓 연결
-    clientRef.current = createStompClient(chatRoomId, (msg: any) => {
+    clientRef.current = createStompClient(chatRoomId, (msg: ChatSocketMessage) => {
       const data = typeof msg === "string" ? JSON.parse(msg) : msg;
       const incomingMessage: ChatMessage = {
         id: String(data.chatMessageId),
@@ -96,7 +98,7 @@ export default function ChatRoomContent({
 
     // 2. 서버로 메시지 전송
     sendMessage(
-      clientRef.current,
+      clientRef.current as Client,
       chatRoomId,
       JSON.stringify({
         message: text,

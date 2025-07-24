@@ -1,5 +1,5 @@
 import axios from "@/lib/axios";
-import { ChatMessage } from "@/feature/chat/types/chatType";
+import { ChatMessage, ChatSocketMessage } from "@/feature/chat/types/chatType";
 
 export async function getChatHistory(
   chatRoomId: number,
@@ -9,7 +9,7 @@ export async function getChatHistory(
   const res = await axios.get(`/api/chat-room/${chatRoomId}/history`, {
     params: { size, cursorId },
   });
-  return res.data.data.content.map((msg: any) => ({
+  return res.data.data.content.map((msg: ChatSocketMessage) => ({
     id: String(msg.chatMessageId),
     senderId: String(msg.senderId),
     text: msg.message,

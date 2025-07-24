@@ -5,7 +5,7 @@ import ChatRoomContent from "@/feature/chat/components/sections/room/ChatRoomCon
 import { useParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import axiosInstance from "@/lib/axios";
-import { useChatStore } from "@feature/chat/stores/useChatStore";
+import { ChatRoomPreview, useChatStore } from "@feature/chat/stores/useChatStore";
 
 interface ProductInfo {
   productId: number;
@@ -21,7 +21,7 @@ export default function ChatRoomPage() {
   const productId = searchParams.get("productId");
   const [product, setProduct] = useState<ProductInfo | null>(null);
   const chatList = useChatStore((state) => state.chatList);
-  const [chatRoom, setChatRoom] = useState<any>(null);
+  const [chatRoom, setChatRoom] = useState<ChatRoomPreview | null>(null);
 
   useEffect(() => {
     if (!chatRoomId) return;
@@ -40,6 +40,10 @@ export default function ChatRoomPage() {
             title: res.data.data.title,
             price: res.data.data.price,
             senderName: res.data.data.senderName,
+            name: res.data.data.senderName,
+            lastMessage: res.data.data.lastMessage ?? "",
+            updatedAt: res.data.data.updatedAt ?? "",
+            itemId: res.data.data.itemId,
           });
         })
         .catch((err) => {

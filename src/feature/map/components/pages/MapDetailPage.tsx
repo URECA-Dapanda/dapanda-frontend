@@ -13,7 +13,6 @@ import DeletePostModal from "@/feature/data/components/sections/modal/DeletePost
 import { isValidTimeRange, parseHHMMToTime, isTimeInRange } from "@/lib/time";
 import { useProfileStore } from "@stores/useProfileStore";
 import clsx from "clsx";
-import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 
 export default function MapDetailPage() {
   const router = useRouter();
