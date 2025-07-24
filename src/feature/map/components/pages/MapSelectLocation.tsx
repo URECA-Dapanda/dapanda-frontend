@@ -1,26 +1,63 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import InteractiveMap from "../sections/regist/InteractiveMap";
 import { ButtonComponent } from "@components/common/button";
+import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 
 export default function MapSelectLocationPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const type = (searchParams.get("type") as "wifi" | "hotspot") ?? "wifi"; // ✅ type 쿼리에서 가져옴
+  const type = (searchParams.get("type") as "wifi" | "hotspot") ?? "wifi"; // type 쿼리에서 가져옴
 
   const [selected, setSelected] = useState<{ lat: number; lng: number; address: string } | null>(
     null
   );
 
+  useEffect(() => {
+    const lat = searchParams.get("lat");
+    const lng = searchParams.get("lng");
+    const address = searchParams.get("address");
+
+    const isEdit = searchParams.get("edit") === "true";
+    const productId = searchParams.get("id");
+
+    // 쿼리로 넘어온 lat/lng/address가 있으면 그대로 사용
+    if (lat && lng && address) {
+      setSelected({
+        lat: parseFloat(lat),
+        lng: parseFloat(lng),
+        address: decodeURIComponent(address),
+      });
+    }
+
+    //수정 모드일 경우 productId로 기존 상품 정보 불러오기
+    else if (isEdit && productId) {
+      getMapDetailById(productId).then((data) => {
+        setSelected({
+          lat: data.latitude,
+          lng: data.longitude,
+          address: data.address,
+        });
+      });
+    }
+  }, [searchParams]);
+
   const handleNext = () => {
     console.log("선택된 위치", selected);
     if (!selected) return alert("위치를 선택해주세요");
     const { lat, lng, address } = selected;
-    router.push(
-      `/map/regist/${type}/form?lat=${lat}&lng=${lng}&address=${encodeURIComponent(address)}`
-    );
+
+    const edit = searchParams.get("edit");
+    const id = searchParams.get("id");
+
+    const baseUrl = `/map/regist/${type}/form`;
+    const query = `lat=${lat}&lng=${lng}&address=${encodeURIComponent(address)}`;
+
+    const editParams = edit === "true" && id ? `&edit=true&id=${id}` : "";
+
+    router.push(`${baseUrl}?${query}${editParams}`);
   };
 
   const goToSearch = () => {

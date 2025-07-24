@@ -77,6 +77,21 @@ export function formatToIsoDate(time: string): string {
   return now.toLocaleString("sv-SE").replace(" ", "T");
 }
 
+// 1년 추가 -> 백엔드 처리 후 삭제
+export function formatToIsoDatePlusOneYear(time: string): string {
+  const now = new Date();
+  const [hour, minute] = time.split(":");
+
+  now.setHours(Number(hour));
+  now.setMinutes(Number(minute));
+  now.setSeconds(0);
+  now.setMilliseconds(0);
+
+  now.setFullYear(now.getFullYear() + 1);
+
+  return now.toLocaleString("sv-SE").replace(" ", "T"); // YYYY-MM-DDTHH:mm:ss
+}
+
 export const parseHHMMToTime = (hhmm: string): Time => {
   const [hourStr, minute] = hhmm.split(":");
   let hour = parseInt(hourStr, 10);

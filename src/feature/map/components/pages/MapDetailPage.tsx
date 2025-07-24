@@ -10,7 +10,9 @@ import { usePurchaseTimer } from "@/feature/map/hooks/usePurchaseTimer";
 import { useMapDetailData } from "@/feature/map/hooks/useMapDetailData";
 import { useTimeState } from "@/feature/map/hooks/useTimeState";
 import { isValidTimeRange, parseHHMMToTime, isTimeInRange } from "@/lib/time";
+import DeletePostModal from "@/feature/data/components/sections/modal/DeletePostModal";
 import clsx from "clsx";
+import { useProfileStore } from "@stores/useProfileStore";
 
 export default function MapDetailPage() {
   const router = useRouter();
@@ -21,6 +23,11 @@ export default function MapDetailPage() {
   const { handlePurchase } = usePurchaseTimer();
   const { data, isLoading, isError } = useMapDetailData(id);
   const [error, setError] = useState<string | null>(null);
+
+  const currentUserId = useProfileStore((state) => state.id);
+  const isOwner = data && currentUserId === data.memberId;
+
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const { startTime, endTime, setStartTime, setEndTime } = useTimeState("09:00", "22:00");
 
@@ -81,6 +88,15 @@ export default function MapDetailPage() {
           setEndTime={setEndTime}
           minTime={minTime}
           maxTime={maxTime}
+          showEditButton={isOwner}
+          onEditClick={() =>
+            router.push(
+              `/map/regist/wifi?edit=true&id=${data.productId}&lat=${data.latitude}&lng=${
+                data.longitude
+              }&address=${encodeURIComponent(data.address)}`
+            )
+          }
+          onDeleteClick={() => setDeleteModalOpen(true)}
         />
 
         <SellerSection
@@ -103,6 +119,7 @@ export default function MapDetailPage() {
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}
         </div>
       </div>
+      <DeletePostModal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} />
     </div>
   );
 }

@@ -1,8 +1,10 @@
+"use client";
+
 import { useSearchParams, useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { postWifiRegister } from "@/feature/map/api/mapRequest";
+import { postWifiRegister, putWifiUpdate } from "@/feature/map/api/mapRequest";
 import type { RegisterFormValues, RegisterFormData } from "@/feature/map/types/registerForm";
-import { formatToIsoDate } from "@lib/time";
+import { formatToIsoDate, formatToIsoDatePlusOneYear } from "@lib/time";
 
 interface UsePostWifiRegisterOptions {
   form: RegisterFormValues;
@@ -13,6 +15,10 @@ interface UsePostWifiRegisterOptions {
 export const usePostWifiRegister = ({ form, onSuccess, onSubmit }: UsePostWifiRegisterOptions) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const isEditMode = searchParams.get("edit") === "true";
+  const productId = searchParams.get("id");
+
   const lat = searchParams.get("lat");
   const lng = searchParams.get("lng");
   const address = searchParams.get("address") ?? "";
@@ -23,17 +29,23 @@ export const usePostWifiRegister = ({ form, onSuccess, onSubmit }: UsePostWifiRe
         throw new Error("위치를 먼저 선택해주세요.");
       }
 
-      await postWifiRegister({
+      const payload = {
         title: form.title,
         content: form.description,
         price: parseInt(form.price, 10),
         latitude: parseFloat(lat),
         longitude: parseFloat(lng),
         startTime: formatToIsoDate(form.startTime),
-        endTime: formatToIsoDate(form.endTime),
+        endTime: formatToIsoDatePlusOneYear(form.endTime),
         address,
-      });
-      console.log(postWifiRegister);
+      };
+
+      if (isEditMode) {
+        if (!productId) throw new Error("수정할 상품 ID가 없습니다.");
+        await putWifiUpdate({ productId: Number(productId), ...payload });
+      } else {
+        await postWifiRegister(payload);
+      }
     },
     onSuccess: () => {
       onSubmit?.({

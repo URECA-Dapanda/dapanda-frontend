@@ -2,9 +2,11 @@ export interface RegisterFormValues {
   title: string;
   description: string;
   price: string;
+  address: string;
   startTime: string;
   endTime: string;
-  address: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface RegisterFormErrors {
