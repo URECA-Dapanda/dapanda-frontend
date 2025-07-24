@@ -39,12 +39,12 @@ export default function DataRegistModal({ onClose }: { onClose: () => void }) {
                 />
             </FlatCard>
             <div className="flex gap-6 mt-4">
-                {recentPrice && (
+                {recentPrice !== null && (
                     <span className={badgeVariants({ variant: "outlined", size: "sm" })}>
                         최근 거래가: {(dataAmount * 10 * recentPrice).toLocaleString()}원
                     </span>
                 )}
-                {avgPrice && (
+                {avgPrice !== null && (
                     <span className={badgeVariants({ variant: "outlined", size: "sm" })}>
                         평균 거래가: {(dataAmount * 10 * avgPrice).toLocaleString()}원
                     </span>
