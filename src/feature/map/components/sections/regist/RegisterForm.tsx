@@ -12,6 +12,7 @@ import { useRegisterFormValidation } from "@feature/map/hooks/useRegisterFormVal
 import type { RegisterFormData } from "@/feature/map/types/registerForm";
 import { usePostWifiRegister } from "@feature/map/hooks/usePostWifiRegister";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
+import { usePresignedUpload } from "@/hooks/usePresignedUpload";
 
 export default function RegisterForm({
   type,
@@ -26,17 +27,33 @@ export default function RegisterForm({
   const productId = searchParams.get("id");
 
   const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+
   const { form, updateForm, setAllForm } = useRegisterFormState();
   const { errors, validate } = useRegisterFormValidation(form);
+  const { uploadFiles } = usePresignedUpload();
 
-  // 등록 or 수정 API 연결
-  const { submit } = usePostWifiRegister({
-    form,
-    onSuccess: () => setIsCompleteModalOpen(true),
-    onSubmit,
-  });
+  const readFilesAsDataUrls = (files: File[]): Promise<string[]> => {
+    return Promise.all(
+      files.map((file) => {
+        return new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      })
+    );
+  };
 
-  //  수정 모드일 경우 기존 데이터 세팅
+  const handleImageChange = async (files: File[]) => {
+    const previews = await readFilesAsDataUrls(files);
+    setPreviewUrls(previews);
+
+    const uploadedUrls = await uploadFiles(files);
+    updateForm("images", uploadedUrls);
+  }; 
+
   useEffect(() => {
     if (!isEditMode || !productId) return;
 
@@ -51,6 +68,7 @@ export default function RegisterForm({
         endTime: data.endTime.slice(11, 16),
         latitude: data.latitude,
         longitude: data.longitude,
+        images: data.imageUrls ?? [],
       });
     })();
   }, [isEditMode, productId]);
@@ -60,6 +78,12 @@ export default function RegisterForm({
     if (!isValid) return;
     submit();
   };
+
+  const { submit } = usePostWifiRegister({
+    form,
+    onSuccess: () => setIsCompleteModalOpen(true),
+    onSubmit,
+  });
 
   return (
     <div className="mx-auto py-6 space-y-4">
@@ -71,7 +95,11 @@ export default function RegisterForm({
       <TimeRangeField form={form} updateForm={updateForm} errors={errors} />
 
       <label className="title-sm mb-12 block">사진 첨부</label>
-      <ImageUploader images={["/starbucks.png", "/starbucks.png"]} />
+      <ImageUploader
+        images={form.images ?? []} // S3 업로드 완료된 URL
+        previews={previewUrls} // base64 미리보기용
+        onChange={handleImageChange}
+      />
 
       <ButtonComponent className="w-full" variant="secondary" size="4xl" onClick={handleSubmit}>
         {isEditMode ? "수정 완료" : "등록하기"}

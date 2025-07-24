@@ -12,6 +12,8 @@ import { useTimeState } from "@/feature/map/hooks/useTimeState";
 import DeletePostModal from "@/feature/data/components/sections/modal/DeletePostModal";
 import { isValidTimeRange, parseHHMMToTime, isTimeInRange } from "@/lib/time";
 import { useProfileStore } from "@stores/useProfileStore";
+import { useWifiPriceRecommendation } from "@/feature/map/hooks/useWifiPriceRecommendation";
+
 import clsx from "clsx";
 
 export default function MapDetailPage() {
@@ -22,6 +24,8 @@ export default function MapDetailPage() {
   const { handlePurchase } = usePurchaseTimer();
   const { data, isLoading, isError } = useMapDetailData(postId);
   const [error, setError] = useState<string | null>(null);
+
+  const { recentPrice, avgPrice } = useWifiPriceRecommendation();
 
   const currentUserId = useProfileStore((state) => state.id);
   const isOwner = data && currentUserId === data.memberId;
@@ -77,7 +81,11 @@ export default function MapDetailPage() {
     <div className="w-[375px] mx-auto relative">
       <TopSheet
         type="wifi"
-        data={data}
+        data={{
+          ...data,
+          recentPrice,
+          averagePrice: avgPrice,
+        }}
         onImageClick={() => {}}
         onExpandChange={setTopSheetExpanded}
       />
