@@ -10,6 +10,8 @@ import ScrapLoadingState from "@feature/data/components/sections/scrap/ScrapLoad
 import { useScrapRecommendation } from "@feature/data/hooks/useScrapRecommendation";
 import CollapsibleDataList from "@feature/data/components/sections/default/CollapsibleDataList";
 import EmptyState from "@components/common/empty/EmptyState";
+import { usePaymentStore } from "@feature/payment/stores/paymentStore";
+import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
 
 export default function ScrapTabContent() {
   const [sortLabel, setSortLabel] = useState("최신순");
@@ -21,6 +23,23 @@ export default function ScrapTabContent() {
     setHasSearched(true);
     await search();
   };
+
+  const transformedCombinations = result.map((item) => ({
+    productId: item.id,
+    mobileDataId: item.userId,
+    memberName: item.userName,
+    price: Number(item.price.replace(/[^0-9]/g, "")),
+    purchasePrice: Number(item.price.replace(/[^0-9]/g, "")),
+    remainAmount: parseFloat(item.title),
+    purchaseAmount: parseFloat(item.title),
+    pricePer100MB: Number(item.pricePer.replace(/[^0-9]/g, "")),
+    splitType: item.splitType,
+    updatedAt: item.date,
+  }));
+
+  const setPayment = usePaymentStore((state) => state.setInfo);
+  const renderModals = UsePaymentModals();
+
 
   return (
     <div className="px-24 space-y-24">
@@ -60,7 +79,22 @@ export default function ScrapTabContent() {
                 <p className="title-sm">총 용량 {summary.totalAmount}GB</p>
                 <p className="title-sm">총 가격 {summary.totalPrice.toLocaleString()}원</p>
               </div>
-              <ButtonComponent variant="secondary" size="3xl" className="w-152">
+              <ButtonComponent 
+                variant="secondary" 
+                size="3xl" 
+                className="w-152"
+                onClick={() =>
+                  setPayment({
+                    type: "data",
+                    title: `${summary.totalAmount}GB`,
+                    price: `${summary.totalPrice.toLocaleString()}원`,
+                    badge: "자투리 구매",
+                    cash: "보유 캐시 보여주기", // ← 추후 상태 연동
+                    totalAmount: summary.totalAmount,
+                    totalPrice: summary.totalPrice,
+                    combinations: transformedCombinations,
+                  })
+                }>
                 확정하고 결제하기
               </ButtonComponent>
             </div>
@@ -73,6 +107,7 @@ export default function ScrapTabContent() {
           <p className="body-md">가장 저렴한 자투리 조합을 찾아드릴게요!</p>
         </div>
       )}
+      {renderModals}
     </div>
   );
 }
