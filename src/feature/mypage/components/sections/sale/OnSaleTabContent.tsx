@@ -6,18 +6,25 @@ import { HistoryCard } from "@feature/mypage/components/sections/sale/HistoryCar
 import { SaleHistoryType } from "@feature/mypage/types/mypageTypes";
 
 export default function OnSaleTabContent() {
-  const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
-    useVirtualizedInfiniteQuery<SaleHistoryType>({
-      queryKey: ["dataItems", "default"],
-      queryFn: ({ pageParam = 0 }) => getSaleHistoryList({ pageParam, isSold: false }),
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-      estimateSize: () => 130,
-      mode: "button",
-    });
+  const {
+    parentRef,
+    rowVirtualizer,
+    flatItems,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    totalNum,
+  } = useVirtualizedInfiniteQuery<SaleHistoryType>({
+    queryKey: ["/api/selling-products"],
+    queryFn: ({ pageParam = 0 }) => getSaleHistoryList({ pageParam, productState: "ACTIVE" }),
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    estimateSize: () => 130,
+    mode: "button",
+  });
 
   return (
     <div className="mt-12">
-      <TabTitle listLength={13}></TabTitle>
+      <TabTitle listLength={totalNum ?? 0}></TabTitle>
 
       <VirtualizedInfiniteList
         parentRef={parentRef}
@@ -26,7 +33,7 @@ export default function OnSaleTabContent() {
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
         items={flatItems}
-        renderItem={(item) => <HistoryCard data={item} key={item.id} />}
+        renderItem={(item) => <HistoryCard data={item} key={item.productId} />}
         mode="button"
         height="350px"
       />

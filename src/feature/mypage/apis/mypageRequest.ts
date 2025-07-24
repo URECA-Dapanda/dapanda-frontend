@@ -1,57 +1,55 @@
 import { PurchaseHistoryType, SaleHistoryType } from "../types/mypageTypes";
 import axios from "@lib/axios";
 
-const mockDataList = (isSold: boolean): Promise<SaleHistoryType[]> =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(
-        Array.from({ length: 20 }, (_, i) => ({
-          id: i,
-          title: i + "GB 데이터",
-          type: "데이터",
-          isSold: isSold,
-          registDate: Date.now().toString(),
-        }))
-      );
-    }, 0);
-  });
-
 function isNumber(value: unknown): value is number {
   return typeof value === "number";
 }
 
-export async function getSaleHistoryList({
-  pageParam = 0,
-  isSold = true,
-}: {
-  pageParam?: number | unknown;
-  isSold?: boolean;
-}): Promise<{
-  items: SaleHistoryType[];
-  nextCursor?: number;
-}> {
-  console.log("GET API DATA LIST", pageParam);
-  if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
-  const end = pageParam + 20;
-  const hasMore = end < 200;
-  const data = await mockDataList(isSold);
-
-  return { items: data, nextCursor: hasMore ? end : undefined };
-}
-
 export async function getPurchaseHistoryList({
-  pageParam = 0,
   size = 2,
-  cursorId = 0,
+  pageParam,
 }: {
   pageParam?: number | unknown;
   size?: number;
-  cursorId?: number;
-}): Promise<{ items: PurchaseHistoryType[]; nextCursor?: number }> {
+}): Promise<{ items: PurchaseHistoryType[]; nextCursor?: number; num?: number }> {
   if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
-  const { data } = await axios.get("/api/trades/purchase-history", { params: { size, cursorId } });
-  const items = data.trades.data;
-  const nextCursor = data.trades.pageInfo.nextCursorId;
+  const { data } = await axios.get("/api/trades/purchase-history", {
+    params: { size, cursorId: pageParam === 0 ? undefined : pageParam },
+  });
+  const items = data.data.trades.data;
 
-  return { items, nextCursor };
+  const nextCursor = data.data.trades.pageInfo.nextCursorId;
+
+  return { items, nextCursor, num: data.data.tradeCount };
+}
+
+export async function getSaleHistoryList({
+  size = 2,
+  pageParam,
+  productState,
+}: {
+  pageParam?: number | unknown;
+  size?: number;
+  productState: string;
+}): Promise<{ items: SaleHistoryType[]; nextCursor?: number; num?: number }> {
+  if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
+  const { data } = await axios.get("/api/selling-products", {
+    params: { size, cursorId: pageParam, productState },
+  });
+  const items = data.data.data;
+
+  const nextCursor = data.data.pageInfo.nextCursorId;
+
+  return { items, nextCursor, num: data.data.count };
+}
+
+export async function getUserData() {
+  const { data } = await axios.get("");
+  return data;
+}
+
+export async function getUserCash() {
+  const { data } = await axios.get("/api/members/cash");
+
+  return data.data;
 }

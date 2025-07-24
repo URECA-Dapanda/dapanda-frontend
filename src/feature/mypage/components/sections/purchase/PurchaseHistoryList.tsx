@@ -5,27 +5,39 @@ import { getPurchaseHistoryList } from "@feature/mypage/apis/mypageRequest";
 import { PurchaseHistoryType } from "@feature/mypage/types/mypageTypes";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import PurchaseHistoryCard from "@feature/mypage/components/sections/purchase/PurchaseHistoryCard";
+import TabTitle from "../TabTitle";
 
 export default function PurchaseHistoryList() {
-  const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
-    useVirtualizedInfiniteQuery<PurchaseHistoryType>({
-      queryKey: ["api/trades/purchase-history", "default"],
-      queryFn: ({ pageParam = 0 }) => getPurchaseHistoryList({ pageParam }),
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-      estimateSize: () => 160,
-      mode: "button",
-    });
+  const {
+    parentRef,
+    rowVirtualizer,
+    flatItems,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    totalNum,
+  } = useVirtualizedInfiniteQuery<PurchaseHistoryType>({
+    queryKey: ["api/trades/purchase-history"],
+    queryFn: ({ pageParam }) => getPurchaseHistoryList({ pageParam }),
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    estimateSize: () => 160,
+    mode: "button",
+  });
 
   return (
-    <VirtualizedInfiniteList
-      parentRef={parentRef}
-      rowVirtualizer={rowVirtualizer}
-      fetchNextPage={fetchNextPage}
-      hasNextPage={hasNextPage}
-      isFetchingNextPage={isFetchingNextPage}
-      items={flatItems}
-      renderItem={(item) => <PurchaseHistoryCard data={item} key={item.id} />}
-      mode="button"
-    />
+    <>
+      <TabTitle listLength={totalNum ?? 0}></TabTitle>
+      <VirtualizedInfiniteList
+        parentRef={parentRef}
+        rowVirtualizer={rowVirtualizer}
+        fetchNextPage={fetchNextPage}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        items={flatItems}
+        height="350px"
+        renderItem={(item) => <PurchaseHistoryCard data={item} key={item.id} />}
+        mode="button"
+      />
+    </>
   );
 }

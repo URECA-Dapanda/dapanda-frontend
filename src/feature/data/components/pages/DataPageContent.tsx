@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { PlusIcon } from "lucide-react";
 import { ButtonComponent } from "@/components/common/button";
 import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
@@ -22,7 +22,6 @@ export default function DataPageContent() {
   const setIsVisible = useHeaderStore((state) => state.setIsVisible);
   const [registModalOpen, setRegistModalOpen] = useState(false);
   const clearDataAmount = useDataFilterStore((state) => state.clearDataAmount);
-
 
   useEffect(() => {
     setIsVisible(sheetOpen);
@@ -50,6 +49,11 @@ export default function DataPageContent() {
     }
     clearDataAmount();
   };
+
+  const handleRegistButtonClick = useCallback(() => {
+    setRegistModalOpen(false);
+    router.refresh();
+  }, []);
 
   return (
     <div className="relative h-[100dvh] w-full bg-primary2 datapagecontent">
@@ -83,7 +87,7 @@ export default function DataPageContent() {
         variant="modal"
         zIndex={100}
       >
-        <DataRegistModal onClose={() => setRegistModalOpen(false)} />
+        <DataRegistModal onClose={handleRegistButtonClick} />
       </BaseBottomSheet>
 
       <BaseBottomSheet
@@ -96,10 +100,7 @@ export default function DataPageContent() {
       >
         <div className="flex justify-center mt-24">
           <PurchaseModeTabs value={tab} onChange={handleTabChange}>
-            <DefaultTabBody 
-              isSheetOpen={sheetOpen}
-              onSearchClick={handleSnapDown}
-              />
+            <DefaultTabBody isSheetOpen={sheetOpen} onSearchClick={handleSnapDown} />
             <ScrapTabBody />
           </PurchaseModeTabs>
         </div>
