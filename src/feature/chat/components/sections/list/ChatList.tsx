@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ChatItem from "@feature/chat/components/sections/list/ChatItem";
 import { useChatStore } from "@feature/chat/stores/useChatStore";
 import { formatRelativeTime } from "@/lib/time";
@@ -13,6 +13,9 @@ export default function ChatList() {
   const chatList = useChatStore((state) => state.chatList);
   const setChatList = useChatStore((state) => state.setChatList);
   const myUserId = useProfileStore((state) => state.id);
+  const [productDetails, setProductDetails] = useState<
+    Record<number, { place: string; pricePer10min: number }>
+  >({});
 
   useEffect(() => {
     async function fetchChatRooms() {
@@ -27,8 +30,8 @@ export default function ChatList() {
             return {
               chatRoomId: item.chatRoomId,
               name: isMine ? "알 수 없음" : item.senderName, // 또는 receiverName
-              title: item.itemType,
-              price: 0,
+              title: item.title || item.itemType || "상품",
+              price: item.price,
               lastMessage: "",
               updatedAt: item.createdAt,
               productId: item.productId,
@@ -36,6 +39,31 @@ export default function ChatList() {
           });
           setChatList(chatList);
           console.log("chatList:", chatList);
+          console.log("API response raw data:", apiList);
+
+          // 각 상품의 상세 정보 가져오기
+          const uniqueProductIds = [...new Set(apiList.map((item: ApiChatRoom) => item.productId))];
+          const productDetailsMap: Record<number, { place: string; pricePer10min: number }> = {};
+
+          for (const productId of uniqueProductIds) {
+            try {
+              const productRes = await axiosInstance.get(`/api/products/wifi/${productId}`);
+              const productData = productRes.data.data;
+              productDetailsMap[productId as number] = {
+                place: productData.title,
+                pricePer10min: productData.price,
+              };
+            } catch (error) {
+              console.error(`상품 ${productId} 정보 가져오기 실패:`, error);
+              productDetailsMap[productId as number] = {
+                place: "상품",
+                pricePer10min: 0,
+              };
+            }
+          }
+
+          setProductDetails(productDetailsMap);
+          console.log("Product details:", productDetailsMap);
         } else {
           toast.error(response.data.message || "채팅방 조회 실패");
         }
@@ -61,6 +89,8 @@ export default function ChatList() {
             title: chat.title,
             price: (chat.price ?? 0).toLocaleString(),
           }}
+          place={productDetails[chat.productId]?.place}
+          pricePer10min={productDetails[chat.productId]?.pricePer10min}
         />
       ))}
     </div>

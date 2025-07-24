@@ -16,6 +16,8 @@ export interface ChatItemProps {
     title: string;
     price: string;
   };
+  place?: string;
+  pricePer10min?: number;
 }
 
 export default function ChatItem({
@@ -27,8 +29,11 @@ export default function ChatItem({
   avatarUrl,
   productId,
   post,
+  place,
+  pricePer10min,
 }: ChatItemProps) {
   const router = useRouter();
+  console.log("ChatItem props:", { chatRoomId, name, productId, post, place, pricePer10min });
 
   return (
     <Link href={`/chat/${chatRoomId}?productId=${productId}`} className="block">
@@ -37,7 +42,11 @@ export default function ChatItem({
           <AvatarIcon avatar={avatarUrl} size="medium" />
           <div className="flex flex-col gap-2">
             <span className="body-sm text-black">{name}</span>
-            <span className="body-sm text-gray-800">{post.title}</span>
+            <span className="body-sm text-gray-800">{place || post.title}</span>
+            <span className="body-sm text-gray-800">
+              {pricePer10min ? `${pricePer10min}원/10분` : post.price}
+            </span>
+
             <span className="body-xs text-gray-600 truncate max-w-[180px]">{lastMessage}</span>
           </div>
         </div>
