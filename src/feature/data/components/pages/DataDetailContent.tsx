@@ -22,6 +22,7 @@ export default function DataDetailContent() {
   const { postId } = useParams<{ postId: string }>();
   const { data, loading } = useDataDetail(postId);
   const { setInfo } = usePaymentStore();
+  //수정필요
   const currentUserId = useProfileStore((state) => state.id);
   const isOwner = data && currentUserId === data.memberId;
   const renderModals = UsePaymentModals();
@@ -40,6 +41,8 @@ export default function DataDetailContent() {
   const handleDefaultPurchase = () => {
     setInfo(buildDefaultPaymentInfo(data));
   };
+
+  console.log("QQerq", isOwner, currentUserId, data.memberId);
 
   return (
     <div className="relative">
@@ -70,7 +73,7 @@ export default function DataDetailContent() {
       <div className="space-y-28">
         <div className="flex items-center justify-between mx-24 mb-16">
           <div className="title-md">판매자</div>
-          {!isOwner && (
+          {!!isOwner && (
             <div className="flex flex-row gap-4">
               <ButtonComponent variant={"outlineGray"} size="xs" onClick={handleDeleteModalOpen}>
                 글 삭제하기

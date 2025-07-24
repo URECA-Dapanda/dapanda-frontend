@@ -23,7 +23,7 @@ export default function DeletePostModal({ isOpen, setIsOpen }: DeletePostModalPr
     mutationFn: deleteDataPost,
     mutationKey: ["/api/products"],
     onSuccess: () => {
-      router.replace(redirectTarget);
+      router.replace(`/${redirectTarget}`);
     },
   });
 

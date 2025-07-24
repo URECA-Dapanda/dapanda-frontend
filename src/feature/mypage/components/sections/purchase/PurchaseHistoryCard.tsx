@@ -3,14 +3,16 @@ import { BadgeComponent } from "@components/common/badge";
 import ItemCard from "@components/common/card/ItemCard";
 import LayoutBox from "@components/common/container/LayoutBox";
 import { PurchaseHistoryType } from "@feature/mypage/types/mypageTypes";
+import { formatDataSize } from "@lib/formatters";
+import { formatDateDivider } from "@lib/time";
 
 interface PurchaseHistoryCardProps {
   data: PurchaseHistoryType;
 }
 
 const tradeMapper: { [key: string]: string } = {
-  MOBILE_DATA_SINGLE: "데이터",
-  MOBILE_DATA_COMPOSITE: "자투리 구매",
+  MOBILE_PURCHASE_SINGLE: "데이터",
+  MOBILE_PURCHASE_COMPOSITE: "자투리 구매",
   WIFI: "와이파이",
 };
 
@@ -26,8 +28,8 @@ export default function PurchaseHistoryCard({ data }: PurchaseHistoryCardProps) 
         <AvatarIcon size="small" />
         <LayoutBox layout="flex" direction="column" gap={0}>
           <p className="title-sm">{tradeMapper[data.tradeType]}</p>
-          <p className="body-sm">거래 일자: {data.createdAt}</p>
-          <p className="body-sm text-gray-600">거래 상품: {data.title}</p>
+          <p className="body-sm">거래 일자: {formatDateDivider(data.createdAt)}</p>
+          <p className="body-sm text-gray-600">거래 상품: {formatDataSize(data.dataAmount)}</p>
         </LayoutBox>
       </LayoutBox>
     </ItemCard>
