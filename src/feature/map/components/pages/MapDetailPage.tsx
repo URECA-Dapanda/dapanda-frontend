@@ -28,6 +28,14 @@ export default function MapDetailPage() {
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
+  const params = new URLSearchParams(
+    data && {
+      id: data.productId,
+      lat: String(data.latitude),
+      lng: String(data.longitude),
+    }
+  );
+
   const { startTime, endTime, setStartTime, setEndTime } = useTimeState("09:00", "22:00");
 
   useEffect(() => {
@@ -88,13 +96,7 @@ export default function MapDetailPage() {
           minTime={minTime}
           maxTime={maxTime}
           showEditButton={isOwner}
-          onEditClick={() =>
-            router.push(
-              `/map/regist/wifi?edit=true&id=${data.productId}&lat=${data.latitude}&lng=${
-                data.longitude
-              }&address=${encodeURIComponent(data.address)}`
-            )
-          }
+          onEditClick={() => router.push(`/map/regist/wifi?edit=true&${params.toString()}`)}
           onDeleteClick={() => setDeleteModalOpen(true)}
         />
 
