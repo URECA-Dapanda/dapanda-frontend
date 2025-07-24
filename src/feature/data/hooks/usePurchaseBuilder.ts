@@ -17,7 +17,7 @@ export const buildSplitPaymentInfo = (
     seller: data.memberName,
     remainingData: formatDataSize(data.remainAmount - selectedAmount),
     productId: data.productId,
-    mobileDataId: data.mobileDataId,
+    mobileDataId: data.itemId,
     dataAmount: selectedAmount,
   };
 };
@@ -32,7 +32,7 @@ export const buildDefaultPaymentInfo = (data: DataDetailResponse) => {
     seller: data.memberName,
     remainingData: formatDataSize(data.remainAmount),
     productId: data.productId,
-    mobileDataId: data.mobileDataId,
+    mobileDataId: data.itemId,
     dataAmount: data.remainAmount,
   };
 };

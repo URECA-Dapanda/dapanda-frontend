@@ -47,6 +47,7 @@ export default function UsePaymentModals() {
                   throw new Error("상품 정보가 누락되었습니다.");
                 }
               } else if (info.badge === "분할 구매") {
+                console.log(info)
                 // 분할 구매 (분할 가능 상품 일부 구매)
                 if (info.productId && info.mobileDataId && info.dataAmount) {
                   const tradeId = await postDefaultTrade(

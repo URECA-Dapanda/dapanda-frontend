@@ -22,6 +22,7 @@ export interface PaymentInfo {
   location?: string;
   duration?: string;
   remainingData?: string;
+  purchaseAmount?: string;
 
   // 기본 구매 / 분할 구매용
   productId?: number;

@@ -7,6 +7,7 @@ export const postDefaultTrade = async (productId: number, mobileDataId: number, 
     mobileDataId,
     dataAmount: dataAmount ?? null,
   };
+  console.log("구매요청 api호출:", payload);
   const res = await axios.post("/api/trades/mobile-data/default", payload);
   return res.data.data.tradeId;
 };

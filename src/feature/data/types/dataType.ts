@@ -28,7 +28,7 @@ export interface ProductItemProps<T> {
 
 export interface DataDetailResponse {
   productId: number;
-  mobileDataId: number;
+  itemId: number;
   price: number;
   memberId: number;
   memberName: string;
