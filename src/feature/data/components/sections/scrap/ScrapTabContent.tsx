@@ -40,7 +40,6 @@ export default function ScrapTabContent() {
   const setPayment = usePaymentStore((state) => state.setInfo);
   const renderModals = UsePaymentModals();
 
-
   return (
     <div className="px-24 space-y-24">
       {/* 정렬 드롭다운 */}
@@ -89,7 +88,6 @@ export default function ScrapTabContent() {
                     title: `${summary.totalAmount}GB`,
                     price: `${summary.totalPrice.toLocaleString()}원`,
                     badge: "자투리 구매",
-                    cash: "보유 캐시 보여주기", // ← 추후 상태 연동
                     totalAmount: summary.totalAmount,
                     totalPrice: summary.totalPrice,
                     combinations: transformedCombinations,

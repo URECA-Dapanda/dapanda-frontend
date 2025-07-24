@@ -21,7 +21,6 @@ export interface PaymentInfo {
   seller?: string;
   location?: string;
   duration?: string;
-  cash: string;
   remainingData?: string;
 
   productId?: number;
