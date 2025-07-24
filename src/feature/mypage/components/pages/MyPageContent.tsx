@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import CurrentCashCard from "@feature/mypage/components/sections/profile/CurrentCashCard";
 import TransactionHistory from "@feature/mypage/components/sections/TransactionHistory";
