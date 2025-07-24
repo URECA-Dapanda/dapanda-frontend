@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import InteractiveMap from "../sections/regist/InteractiveMap";
+import InteractiveMap from "@feature/map/components/sections/regist/InteractiveMap";
 import { ButtonComponent } from "@components/common/button";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 
@@ -61,7 +61,7 @@ export default function MapSelectLocationPage() {
   };
 
   const goToSearch = () => {
-    router.push(`/map/regist/${type}/location`); // ✅ 위치 검색 페이지로 이동
+    router.push(`/map/regist/${type}/location`); // 위치 검색 페이지로 이동
   };
 
   return (

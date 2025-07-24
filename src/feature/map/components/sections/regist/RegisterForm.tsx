@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react"; // ✅ useEffect 추가!
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ButtonComponent } from "@components/common/button";
 import BasicInfoFields from "@/feature/map/components/sections/regist/BasicInfoFields";
@@ -11,7 +11,7 @@ import { useRegisterFormState, SaleType } from "@/feature/map/hooks/useRegisterF
 import { useRegisterFormValidation } from "@feature/map/hooks/useRegisterFormValidation";
 import type { RegisterFormData } from "@/feature/map/types/registerForm";
 import { usePostWifiRegister } from "@feature/map/hooks/usePostWifiRegister";
-import { getMapDetailById } from "@/feature/map/api/getMapDetailById"; // ✅ API 추가
+import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 
 export default function RegisterForm({
   type,

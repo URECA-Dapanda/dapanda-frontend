@@ -77,7 +77,7 @@ export default function MapItemCardContent({
           disabled={isDisabled}
           onClick={() => {
             if (!isDisabled) {
-              router.push(`/map/detail?id=${id}`);
+              router.push(`/map/${id}`);
             }
           }}
         >

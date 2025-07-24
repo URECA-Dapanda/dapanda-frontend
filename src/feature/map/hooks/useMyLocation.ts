@@ -1,4 +1,3 @@
-// src/feature/map/hooks/useMyLocation.ts
 import { useEffect } from "react";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 

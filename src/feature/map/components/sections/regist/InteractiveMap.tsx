@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { useInitializeMap } from "@/feature/map/hooks/useInitializeMap";
 import { useMyLocation } from "@/feature/map/hooks/useMyLocation";
 import { getAddressVariantsFromLatLng } from "@/feature/map/utils/reverseGeocode";
-import { useSearchParams } from "next/navigation";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 
 interface InteractiveMapProps {
@@ -28,7 +28,7 @@ export default function InteractiveMap({ onLocationSelect }: InteractiveMapProps
     const id = searchParams.get("id");
     const isEditMode = searchParams.get("edit") === "true";
 
-    // ✅ edit 모드일 경우 초기 마커 세팅
+    // edit 모드일 경우 초기 마커 세팅
     if (isEditMode && id) {
       getMapDetailById(id).then((data) => {
         const latlng = new naver.maps.LatLng(data.latitude, data.longitude);

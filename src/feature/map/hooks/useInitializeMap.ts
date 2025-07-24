@@ -1,5 +1,3 @@
-// src/feature/map/hooks/useInitializeMap.ts
-
 import { useEffect, useState, RefObject } from "react";
 
 export function useInitializeMap(ref: RefObject<HTMLDivElement | null>) {

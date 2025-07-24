@@ -1,5 +1,5 @@
 import ItemCard from "@components/common/card/ItemCard";
-import MapItemCardContent from "./MapItemContent";
+import MapItemCardContent from "@feature/map/components/sections/product/MapItemContent";
 import type { ProductItemProps } from "@/feature/data/types/dataType";
 import type { MapType } from "@/feature/map/types/mapType";
 

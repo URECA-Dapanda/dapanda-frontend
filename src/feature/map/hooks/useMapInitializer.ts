@@ -1,5 +1,3 @@
-// src/feature/map/hooks/useMapInitializer.ts
-
 import { useEffect } from "react";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import type { MapType } from "@/feature/map/types/mapType";

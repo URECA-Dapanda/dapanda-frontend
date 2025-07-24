@@ -10,18 +10,18 @@ import { useMyLocation } from "@feature/map/hooks/useMyLocation";
 
 export default function MapContainer() {
   const mapRef = useRef<HTMLDivElement>(null);
-  const { map, storeList } = useMapStore(); // ✅ myPosition 추가
+  const { map, storeList } = useMapStore();
   const router = useRouter();
 
   useMapInitializer();
 
   useMapMarkers(map, storeList, {
     onMarkerClick: (store) => {
-      router.push(`/map/detail?id=${store.id}`);
+      router.push(`/map/${store.id}`);
     },
   });
 
-  // ✅ 내 위치 마커 따로 렌더링
+  // 내 위치 마커 따로 렌더링
   useMyLocation(map);
 
   // 지도 DOM ID 설정

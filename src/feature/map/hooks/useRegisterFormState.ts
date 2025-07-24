@@ -17,7 +17,7 @@ export const useRegisterFormState = () => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
-  // ✅ 전체 초기값 세팅용
+  // 전체 초기값 세팅용
   const setAllForm = (newForm: RegisterFormValues) => {
     setForm(newForm);
   };
