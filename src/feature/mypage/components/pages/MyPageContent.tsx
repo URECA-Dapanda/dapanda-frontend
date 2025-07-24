@@ -34,9 +34,6 @@ export default function MyPageContent() {
         </ButtonComponent>
         <TransactionHistory />
         <CurrentCashCard isInterection={true} />
-        <Link href={"/"}>
-          <Image src={"/pandaDic.svg"} alt="PandaDic" width={327} height={170} />
-        </Link>
         <LogOutButton />
       </div>
     </>
