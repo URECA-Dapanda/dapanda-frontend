@@ -30,7 +30,7 @@ export default function MapDetailPage() {
 
   const params = new URLSearchParams(
     data && {
-      id: data.productId,
+      productId: String(data.productId),
       lat: String(data.latitude),
       lng: String(data.longitude),
     }
@@ -104,7 +104,7 @@ export default function MapDetailPage() {
           memberName={data.memberName}
           rating={data.averagePrice}
           reviewCount={data.reviewCount}
-          productId={data.productId}
+          productId={String(data.productId)}
         />
 
         <div className="px-6 mt-12">
