@@ -11,7 +11,8 @@ import ScrapTabBody from "@feature/data/components/sections/scrap/ScrapTabConten
 import { PurchaseModeTabs } from "@/components/common/tabs";
 import { useHeaderStore } from "@stores/useHeaderStore";
 import DefaultFilterCard from "@feature/data/components/sections/filter/DefaultFilterCard";
-import DataRegistModal from "@feature/data/components/pages/DataRegistModal";
+import DataRegistModal from "@feature/data/components/sections/modal/DataRegistModal";
+import { useDataFilterStore } from "@feature/data/stores/useDataFilterStore";
 
 export default function DataPageContent() {
   const searchParams = useSearchParams();
@@ -20,6 +21,7 @@ export default function DataPageContent() {
   const [sheetOpen, setSheetOpen] = useState(tab === "scrap");
   const setIsVisible = useHeaderStore((state) => state.setIsVisible);
   const [registModalOpen, setRegistModalOpen] = useState(false);
+  const clearDataAmount = useDataFilterStore((state) => state.clearDataAmount);
 
 
   useEffect(() => {
@@ -46,6 +48,7 @@ export default function DataPageContent() {
       params.set("tab", "default");
       router.replace(`?${params.toString()}`);
     }
+    clearDataAmount();
   };
 
   return (
@@ -60,7 +63,7 @@ export default function DataPageContent() {
       </div>
       {/* 상단 필터 영역 */}
       <div className="sticky top-0 z-10 bg-primary2 p-4 pt-60">
-        <DefaultFilterCard />
+        <DefaultFilterCard onSearch={() => setSheetOpen(true)} />
       </div>
       <div className="absolute bottom-144 right-24 z-60">
         <ButtonComponent
@@ -93,7 +96,10 @@ export default function DataPageContent() {
       >
         <div className="flex justify-center mt-24">
           <PurchaseModeTabs value={tab} onChange={handleTabChange}>
-            <DefaultTabBody isSheetOpen={sheetOpen} />
+            <DefaultTabBody 
+              isSheetOpen={sheetOpen}
+              onSearchClick={handleSnapDown}
+              />
             <ScrapTabBody />
           </PurchaseModeTabs>
         </div>

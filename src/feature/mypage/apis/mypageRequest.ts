@@ -42,3 +42,14 @@ export async function getSaleHistoryList({
 
   return { items, nextCursor, num: data.data.count };
 }
+
+export async function getUserData() {
+  const { data } = await axios.get("");
+  return data;
+}
+
+export async function getUserCash() {
+  const { data } = await axios.get("/api/members/cash");
+
+  return data.data;
+}

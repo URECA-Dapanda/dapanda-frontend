@@ -9,6 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import { registReport } from "@apis/reportRequest";
 import ReportCompleteModal from "./ReportCompleteModal";
 import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 interface ReportModalProps {
   isOpen: boolean;
@@ -45,10 +46,10 @@ export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }:
     onError: (e: AxiosError) => {
       switch (e.status) {
         case 409:
-          return alert("이미 신고 처리중입니다.");
+          return toast.error("이미 신고 처리중입니다.");
         default:
           console.error(e.status);
-          return alert("신고 처리중 오류가 발생했습니다.");
+          return toast.error("신고 처리중 오류가 발생했습니다.");
       }
     },
   });
@@ -57,7 +58,7 @@ export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }:
   const handleReportClick = useCallback(() => {
     const comment = ref.current?.value;
     if (!comment || comment === "") {
-      alert("신고 사유를 작성해 주세요.");
+      toast.error("신고 사유를 작성해 주세요.");
       ref.current?.focus();
     } else {
       reportMutation.mutate();
