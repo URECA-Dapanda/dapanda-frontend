@@ -18,3 +18,11 @@ export interface PurchaseHistoryType extends HistoryType {
   title: string;
   createdAt: string;
 }
+
+export interface CashHistoryType {
+  tradeId: number;
+  tradeType: string;
+  price: number;
+  description: string;
+  createdAt: string;
+}
