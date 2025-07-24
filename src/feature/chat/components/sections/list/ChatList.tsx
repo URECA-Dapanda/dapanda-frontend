@@ -29,7 +29,7 @@ export default function ChatList() {
   useEffect(() => {
     async function fetchChatRooms() {
       try {
-        const response = await axiosInstance.get("/api/chat-room");
+        const response = await axiosInstance.get("/api/chat-room", { params: { size: 10 } });
         if (response.data.code === 0) {
           const apiList = response.data.data.data;
           const chatList = apiList.map((item: ApiChatRoom) => ({
