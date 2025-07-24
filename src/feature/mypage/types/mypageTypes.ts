@@ -24,5 +24,10 @@ export interface CashHistoryType {
   tradeType: string;
   price: number;
   description: string;
+  classification: string;
   createdAt: string;
+}
+
+export interface ParsedCashHistoryType {
+  [key: string]: CashHistoryType[] | undefined;
 }

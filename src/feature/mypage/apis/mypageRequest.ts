@@ -1,5 +1,12 @@
-import { PurchaseHistoryType, SaleHistoryType } from "../types/mypageTypes";
+import dayjs from "dayjs";
+import {
+  CashHistoryType,
+  ParsedCashHistoryType,
+  PurchaseHistoryType,
+  SaleHistoryType,
+} from "../types/mypageTypes";
 import axios from "@lib/axios";
+import "dayjs/locale/ko";
 
 const mockDataList = (isSold: boolean): Promise<SaleHistoryType[]> =>
   new Promise((resolve) => {
@@ -30,7 +37,6 @@ export async function getSaleHistoryList({
   items: SaleHistoryType[];
   nextCursor?: number;
 }> {
-  console.log("GET API DATA LIST", pageParam);
   if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
   const end = pageParam + 20;
   const hasMore = end < 200;
@@ -65,4 +71,36 @@ export async function getUserCash() {
   const { data } = await axios.get("/api/members/cash");
 
   return data.data;
+}
+
+export async function getCashHistoryList({
+  pageParam,
+  size = 20,
+  year,
+  month,
+}: {
+  pageParam?: number | unknown;
+  size?: number;
+  year: string;
+  month: string;
+}) {
+  dayjs.locale("ko");
+  const { data } = await axios.get("/api/trades/cash-history", {
+    params: {
+      cursorId: pageParam ? pageParam : undefined,
+      size,
+      year,
+      month,
+    },
+  });
+
+  const items: ParsedCashHistoryType = Object.groupBy(
+    data.data.cashHistorySummary.data,
+    (item: CashHistoryType) => {
+      return dayjs(item.createdAt).format("D (dd)");
+    }
+  );
+  const nextCursor = data.data.cashHistorySummary.pageInfo.nextCursorId;
+
+  return { items, nextCursor };
 }

@@ -21,19 +21,21 @@ interface CashHistoryDateBoxProps {
   dataList: CashHistoryType[];
 }
 
-export function CashHistoryDateBox({ date, dataList }: CashHistoryDateBoxProps) {
+export default function CashHistoryDateBox({ date, dataList }: CashHistoryDateBoxProps) {
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full gap-16  mb-[50px]">
       <div className="text-start text-gray-600 body-sm">{date}</div>
-      {dataList.map((data) => (
-        <CashHistoryCard key={data.tradeId} data={data} />
-      ))}
+      <div className="flex flex-col gap-8">
+        {dataList.map((data) => (
+          <CashHistoryCard key={data.tradeId} data={data} />
+        ))}
+      </div>
     </div>
   );
 }
 
-export default function CashHistoryCard({
-  data: { tradeType, description, price },
+export function CashHistoryCard({
+  data: { tradeType, description, price, classification },
 }: HistoryLinkComponentProps) {
   const icon = useMemo(() => {
     if (tradeType === "SALE") return <CirclePlus className={"text-success"} size={30} />;
@@ -41,12 +43,25 @@ export default function CashHistoryCard({
     return <CircleMinus className="text-black" size={30} />;
   }, [tradeType]);
 
+  const type = useMemo(() => {
+    switch (classification) {
+      case "충전":
+      case "판매":
+        return "plus";
+      case "구매":
+      case "출금":
+        return "minus";
+      default:
+        return undefined;
+    }
+  }, [classification]);
+
   return (
     <LayoutBox layout="flex" direction="row" gap={12} width="full">
       {icon}
       <LayoutBox layout="flex" direction="column">
-        <CashHistoryLine size="md" title={tradeType} value={formatPriceString(price)} />
-        <CashHistoryLine size="sm" title={description} value={tradeType} />
+        <CashHistoryLine size="md" title={tradeType} value={formatPriceString(price)} type={type} />
+        <CashHistoryLine size="sm" title={description} value={classification} />
       </LayoutBox>
     </LayoutBox>
   );
