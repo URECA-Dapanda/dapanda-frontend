@@ -1,6 +1,7 @@
 "use client";
 
-import { Ref, useMemo } from "react";
+import React, { useMemo, forwardRef, Ref } from "react";
+
 import { Input } from "@/components/ui/input";
 
 import { cn } from "@/lib/utils";
@@ -38,88 +39,94 @@ interface TextareaProps extends BaseProps {
 
 type InputComponentProps = InputProps | TextareaProps;
 
-export default function InputComponent({
-  as = "input",
-  placeholder = "",
-  value,
-  onChange,
-  onKeyDown,
-  className = "",
-  color = "",
-  radius = "md",
-  size = "md",
-  disabled = false,
-  required = false,
-  type = "text",
-  rows = 3,
-  ref,
-}: InputComponentProps) {
-  const inputRadius = useMemo(() => {
-    switch (radius) {
-      case "lg":
-        return "rounded-12";
-      case "md":
-        return "rounded-10";
-      case "sm":
-        return "rounded-8";
-      default:
-        return `rounded-[${radius}px]`;
-    }
-  }, [radius]);
+const InputComponent = forwardRef<HTMLTextAreaElement | HTMLInputElement, InputComponentProps>(
+  function InputComponent(
+    {
+      as = "input",
+      placeholder = "",
+      value = "",
+      onChange,
+      onKeyDown,
+      className = "",
+      color = "",
+      radius = "md",
+      size = "md",
+      disabled = false,
+      required = false,
+      type = "text",
+      rows = 3,
+    },
+    ref
+  ) {
+    const inputRadius = useMemo(() => {
+      switch (radius) {
+        case "lg":
+          return "rounded-12";
+        case "md":
+          return "rounded-10";
+        case "sm":
+          return "rounded-8";
+        default:
+          return `rounded-[${radius}px]`;
+      }
+    }, [radius]);
 
-  const inputSize = useMemo(() => {
-    switch (size) {
-      case "sm":
-        return "h-16";
-      case "md":
-        return "h-48";
-      case "lg":
-        return "h-96";
-      default:
-        return "";
-    }
-  }, [size]);
+    const inputSize = useMemo(() => {
+      switch (size) {
+        case "sm":
+          return "h-16";
+        case "md":
+          return "h-48";
+        case "lg":
+          return "h-96";
+        default:
+          return "";
+      }
+    }, [size]);
 
-  if (as === "textarea") {
-    const textareaClass = cn(
-      "flex w-full min-w-0 px-3 py-1 rounded-6 border outline-none bg-transparent resize-none",
-      "font-pretendard body-md text-black placeholder:text-gray-400",
-      "border-gray-400 shadow-xs transition-colors",
-      "focus-visible:border-gray-500 focus-visible:ring-[3px] focus-visible:ring-gray-200",
-      "aria-invalid:border-error aria-invalid:ring-error/20 dark:aria-invalid:ring-error/40",
-      "selection:bg-primary-700 selection:text-white",
-      "disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none",
-      inputRadius,
-      color,
-      className
-    );
+    if (as === "textarea") {
+      const textareaClass = cn(
+        "flex w-full min-w-0 px-3 py-1 rounded-6 border outline-none bg-transparent resize-none",
+        "font-pretendard body-md text-black placeholder:text-gray-400",
+        "border-gray-400 shadow-xs transition-colors",
+        "focus-visible:border-gray-500 focus-visible:ring-[3px] focus-visible:ring-gray-200",
+        "aria-invalid:border-error aria-invalid:ring-error/20 dark:aria-invalid:ring-error/40",
+        "selection:bg-primary-700 selection:text-white",
+        "disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none",
+        inputRadius,
+        color,
+        className
+      );
+
+      return (
+        <textarea
+          ref={ref as React.Ref<HTMLTextAreaElement>}
+          className={textareaClass}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          onKeyDown={onKeyDown}
+          disabled={disabled}
+          required={required}
+          rows={rows}
+        />
+      );
+    }
 
     return (
-      <textarea
-        className={textareaClass}
+      <Input
+        ref={ref as React.Ref<HTMLInputElement>}
+        type={type}
         placeholder={placeholder}
         value={value}
-        onChange={onChange}
-        onKeyDown={onKeyDown}
+        onChange={onChange as React.ChangeEventHandler<HTMLInputElement>}
+        onKeyDown={onKeyDown as React.KeyboardEventHandler<HTMLInputElement>}
         disabled={disabled}
         required={required}
-        rows={rows}
-        ref={ref as Ref<HTMLTextAreaElement>}
+        className={cn(inputRadius, inputSize, color, className)}
       />
     );
   }
+);
 
-  return (
-    <Input
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange as React.ChangeEventHandler<HTMLInputElement>}
-      onKeyDown={onKeyDown as React.KeyboardEventHandler<HTMLInputElement>}
-      disabled={disabled}
-      required={required}
-      className={cn(inputRadius, inputSize, color, className)}
-      ref={ref as Ref<HTMLInputElement>}
-    />
-  );
-}
+export default InputComponent;

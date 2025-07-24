@@ -19,7 +19,8 @@ export default function MapItemCardContent({
       try {
         const response = await axiosInstance.post(`/api/products/${id}/chat-room`);
         if (response.data.code === 0) {
-          router.push(`/chat/${response.data.data.chatRoomId}`);
+          const chatRoomId = response.data.data.chatRoomId;
+          router.push(`/chat/${chatRoomId}?productId=${id}`);
         } else {
           toast.error(response.data.message || "채팅방 생성에 실패했습니다.");
         }
