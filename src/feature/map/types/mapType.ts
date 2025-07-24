@@ -5,7 +5,7 @@ export interface MapType {
   address: string;
   location: string;
   updatedAt: string;
-  isOpen: boolean;
+  open: boolean;
   score: number;
   price: string;
 }
@@ -27,4 +27,5 @@ export type MapDetailItem = {
   reviewCount: number;
   longitude: number;
   latitude: number;
+  open: boolean;
 };

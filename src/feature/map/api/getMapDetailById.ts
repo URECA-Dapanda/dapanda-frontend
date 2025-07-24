@@ -1,6 +1,7 @@
 import axiosInstance from "@/lib/axios";
 
 interface WifiDetailResponse {
+  address: string;
   productId: number;
   itemId: number;
   price: number;
@@ -16,6 +17,7 @@ interface WifiDetailResponse {
   startTime: string;
   endTime: string;
   updatedAt: string;
+  open: boolean;
 }
 
 export async function getMapDetailById(id: string): Promise<WifiDetailResponse> {
