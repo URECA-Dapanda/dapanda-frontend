@@ -1,4 +1,3 @@
-// src/app/map/regist/[type]/location/page.tsx
 "use client";
 
 import RegistLocation from "@/feature/map/components/pages/RegistLocation";
@@ -9,7 +8,6 @@ export default function RegistLocationPage({
 }: {
   params: Promise<{ type: "hotspot" | "wifi" }>;
 }) {
-  const { type } = use(params); // ✅ use()로 unwrap
-
+  const { type } = use(params); 
   return <RegistLocation type={type} />;
 }
