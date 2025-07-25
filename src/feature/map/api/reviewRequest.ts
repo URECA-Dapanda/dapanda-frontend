@@ -1,5 +1,5 @@
 import axios from "@lib/axios";
-import type { ReviewRequest, ReviewResponse } from "@feature/review/types/reviewType";
+import type { ReviewRequest, ReviewResponse } from "@feature/map/types/reviewType";
 
 export async function registReview({
   tradeId,

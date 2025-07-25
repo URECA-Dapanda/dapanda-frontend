@@ -1,4 +1,4 @@
-import ReviewPageContent from "@feature/mypage/components/pages/ReviewPageContent";
+import ReviewPageContent from "@feature/map/components/pages/ReviewPageContent";
 
 export default function ReviewPage() {
   return <ReviewPageContent />;
