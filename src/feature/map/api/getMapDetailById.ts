@@ -16,6 +16,7 @@ interface WifiDetailResponse {
   imageUrls: string[];
   startTime: string;
   endTime: string;
+  myProduct: boolean;
   updatedAt: string;
   open: boolean;
 }
