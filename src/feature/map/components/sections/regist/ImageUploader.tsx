@@ -41,13 +41,14 @@ export default function ImageUploader({ images, previews, onChange }: Props) {
       </div>
 
       {/* preview (업로드 전 base64) */}
-      {previews.map((src, i) => (
-        <div
-          key={`preview-${i}`}
-          className="w-80 h-80 bg-primary-50 rounded-20"
-          style={{ backgroundImage: `url(${src})`, backgroundSize: "cover" }}
-        />
-      ))}
+      {images.length === 0 &&
+        previews.map((src, i) => (
+          <div
+            key={`preview-${i}`}
+            className="w-80 h-80 bg-primary-50 rounded-20"
+            style={{ backgroundImage: `url(${src})`, backgroundSize: "cover" }}
+          />
+        ))}
 
       {/* uploaded image url (업로드 후) */}
       {images.map((url, i) => (

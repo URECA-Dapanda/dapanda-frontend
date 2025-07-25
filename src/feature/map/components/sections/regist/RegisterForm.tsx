@@ -52,7 +52,7 @@ export default function RegisterForm({
 
     const uploadedUrls = await uploadFiles(files);
     updateForm("images", uploadedUrls);
-  }; 
+  };
 
   useEffect(() => {
     if (!isEditMode || !productId) return;
@@ -70,6 +70,7 @@ export default function RegisterForm({
         longitude: data.longitude,
         images: data.imageUrls ?? [],
       });
+      setPreviewUrls(data.imageUrls ?? []);
     })();
   }, [isEditMode, productId]);
 

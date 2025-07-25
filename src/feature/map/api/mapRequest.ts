@@ -92,6 +92,7 @@ export async function getMapList({
       score: item.averageRate,
       type: "와이파이",
       updatedAt: new Date(item.updatedAt).toLocaleTimeString(),
+      imageUrl: item.imageUrl ?? "",
     }));
 
     return {
