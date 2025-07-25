@@ -17,7 +17,7 @@ export default function MapContainer() {
 
   useMapMarkers(map, storeList, {
     onMarkerClick: (store) => {
-      router.push(`/map/${store.id}`);
+      router.push(`/map/${store.productId}`);
     },
   });
 

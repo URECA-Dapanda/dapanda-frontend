@@ -34,7 +34,7 @@ export default function MapDetailPage() {
 
   const params = new URLSearchParams(
     data && {
-      id: data.productId,
+      productId: data.productId,
       lat: String(data.latitude),
       lng: String(data.longitude),
     }

@@ -20,7 +20,7 @@ export default function MapSelectLocationPage() {
     const lng = searchParams.get("lng");
     const address = searchParams.get("address");
     const isEdit = searchParams.get("edit") === "true";
-    const productId = searchParams.get("id");
+    const productId = searchParams.get("productId");
 
     if (lat && lng && address) {
       setSelected({
@@ -43,11 +43,11 @@ export default function MapSelectLocationPage() {
     if (!selected) return alert("위치를 선택해주세요");
     const { lat, lng, address } = selected;
     const edit = searchParams.get("edit");
-    const id = searchParams.get("id");
+    const productId = searchParams.get("productId");
 
     const baseUrl = `/map/regist/${type}/form`;
     const query = `lat=${lat}&lng=${lng}&address=${encodeURIComponent(address)}`;
-    const editParams = edit === "true" && id ? `&edit=true&id=${id}` : "";
+    const editParams = edit === "true" && productId ? `&edit=true&id=${productId}` : "";
 
     router.push(`${baseUrl}?${query}${editParams}`);
   };
