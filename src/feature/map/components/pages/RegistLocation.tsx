@@ -17,9 +17,13 @@ export default function RegistLocation({ type }: RegistLocationProps) {
       alert("위치를 선택해주세요.");
       return;
     }
-    const url = `/map/regist/${type}/form?lat=${latLng.lat}&lng=${
-      latLng.lng
-    }&address=${encodeURIComponent(address)}`;
+    const params = new URLSearchParams({
+      lat: String(latLng.lat),
+      lng: String(latLng.lng),
+      address: encodeURIComponent(address),
+    });
+
+    const url = `/map/regist/${type}/form?${params.toString()}`;
     window.location.href = url;
   };
 
