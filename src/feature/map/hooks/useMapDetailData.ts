@@ -37,6 +37,7 @@ export const useMapDetailData = (id: string): UseMapDetailDataResult => {
         reviewCount: detail.reviewCount,
         latitude: detail.latitude,
         longitude: detail.longitude,
+        open: detail.open,
       }
     : undefined;
 
