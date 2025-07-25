@@ -1,8 +1,6 @@
 "use client";
 
 import MonthPicker from "@components/common/calendar/MonthPicker";
-import ItemCard from "@components/common/card/ItemCard";
-import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 import dayjs, { Dayjs } from "dayjs";
 import { Suspense, useEffect, useRef, useState } from "react";
 import CashHistoryDateBox from "../sections/profile/CashHistoryDateBox";
@@ -14,7 +12,7 @@ export default function CashHistoryContent() {
   const month = (currentDate.get("month") + 1).toString();
   const year = currentDate.get("year").toString();
 
-  const { parentRef, pages, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+  const { parentRef, pages, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useVirtualizedGroupedInfiniteQuery({ year, month });
 
   const handleDate = (newDate: Dayjs) => {

@@ -3,7 +3,7 @@
 import { cn } from "@lib/utils";
 import dayjs, { Dayjs } from "dayjs";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { MouseEvent as ReactMouseEvent, useCallback, useEffect, useRef, useState } from "react";
 
 interface MonthNavigatorProps {
   value: Dayjs;
@@ -68,6 +68,15 @@ export function YearMonthPicker({ initial, onSelect, onClose }: Props) {
   const currentYear = now.year();
   const currentMonth = now.month(); // 0~11
 
+  const handleSelectMonth = useCallback(
+    (e: ReactMouseEvent<HTMLButtonElement>) => {
+      const target = Number(e.currentTarget.value);
+      setMonth(target);
+      onSelect(dayjs().year(year).month(target));
+    },
+    [year]
+  );
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
@@ -104,7 +113,8 @@ export function YearMonthPicker({ initial, onSelect, onClose }: Props) {
           return (
             <button
               key={i}
-              onClick={() => onSelect(dayjs().year(year).month(i))}
+              value={i}
+              onClick={handleSelectMonth}
               className={`p-2 rounded text-sm border ${
                 isSelected ? "bg-blue-100 font-bold" : "hover:bg-gray-100"
               } ${isFuture ? "text-gray-400 cursor-not-allowed" : ""}`}
