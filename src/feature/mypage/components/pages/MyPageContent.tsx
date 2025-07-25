@@ -24,14 +24,11 @@ export default function MyPageContent() {
   return (
     <>
       <TossSuccessModal />
-      <div className="flex flex-col items-center justify-center w-full h-full p-24 pt-8 gap-12">
+      <div className="flex flex-col items-center justify-center w-full h-full p-24 pt-8 gap-28">
         <ProfileCard />
         <DataUsageDonut current={7} unit="GB" />
-        <ButtonComponent variant={"text"} size={"sm"}>
-          요금제 추천 보러가기
-        </ButtonComponent>
-        <TransactionHistory />
         <CurrentCashCard isInterection={true} />
+        <TransactionHistory />
         <LogOutButton />
       </div>
     </>

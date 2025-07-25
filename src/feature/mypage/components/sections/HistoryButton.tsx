@@ -17,8 +17,9 @@ export default function HistoryButton({ target, children }: PropsWithChildren<Hi
   return (
     <ButtonComponent
       variant={"outlineGray"}
-      className="flex-4 justify-between w-full"
+      className="flex-4 justify-between w-full py-16"
       onClick={handleClick}
+      size={"2xl"}
     >
       <div className="flex flex-row items-center subtitle-md">{children}</div>
       <ChevronRight className="w-16 h-16 text-end" />

@@ -1,3 +1,4 @@
+import { UserType } from "@type/User";
 import { PurchaseHistoryType, SaleHistoryType } from "../types/mypageTypes";
 import axios from "@lib/axios";
 
@@ -56,6 +57,12 @@ export async function getUserCash() {
 
 export async function getMyData() {
   const { data } = await axios.get("api/plans/my-data");
+
+  return data.data;
+}
+
+export async function getMyInfo(): Promise<UserType> {
+  const { data } = await axios.get("/api/members/info");
 
   return data.data;
 }
