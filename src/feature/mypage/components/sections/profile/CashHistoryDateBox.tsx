@@ -3,7 +3,7 @@ import { CashHistoryType } from "@feature/mypage/types/mypageTypes";
 import { formatPriceString } from "@lib/formatters";
 import { cn } from "@lib/utils";
 import { CircleMinus, CirclePlus } from "lucide-react";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 
 interface HistoryLinkComponentProps {
   data: CashHistoryType;
@@ -28,9 +28,10 @@ const historyTypeMapper: { [key: string]: string } = {
   CHARGE: "충전",
   PURCHASE_MOBILE_SINGLE: "데이터 구매",
   PURCHASE_WIFI: "와이파이 구매",
+  PURCHASE_MOBILE_COMPOSITE: "데이터 구매 (자투리 구매)",
 };
 
-export default function CashHistoryDateBox({ date, dataList }: CashHistoryDateBoxProps) {
+function CashHistoryDateBox({ date, dataList }: CashHistoryDateBoxProps) {
   return (
     <div className="flex flex-col w-full gap-16  mb-[50px]">
       <div className="text-start text-gray-600 body-sm">{date}</div>
@@ -43,45 +44,47 @@ export default function CashHistoryDateBox({ date, dataList }: CashHistoryDateBo
   );
 }
 
-export function CashHistoryCard({
-  data: { tradeType, description, price, classification },
-}: HistoryLinkComponentProps) {
-  const icon = useMemo(() => {
-    if (tradeType.includes("SALE")) return <CirclePlus className={"text-success"} size={30} />;
-    if (tradeType === "CHARGE") return <CirclePlus className={"text-secondary-700"} size={30} />;
-    return <CircleMinus className="text-black" size={30} />;
-  }, [tradeType]);
+export default memo(CashHistoryDateBox);
 
-  const type = useMemo(() => {
-    switch (classification) {
-      case "충전":
-      case "판매":
-        return "plus";
-      case "구매":
-      case "출금":
-        return "minus";
-      default:
-        return undefined;
-    }
-  }, [classification]);
+export const CashHistoryCard = memo(
+  ({ data: { tradeType, description, price, classification } }: HistoryLinkComponentProps) => {
+    const icon = useMemo(() => {
+      if (tradeType.includes("SALE")) return <CirclePlus className={"text-success"} size={30} />;
+      if (tradeType === "CHARGE") return <CirclePlus className={"text-secondary-700"} size={30} />;
+      return <CircleMinus className="text-black" size={30} />;
+    }, [tradeType]);
 
-  return (
-    <LayoutBox layout="flex" direction="row" gap={12} width="full">
-      {icon}
-      <LayoutBox layout="flex" direction="column">
-        <CashHistoryLine
-          size="md"
-          title={historyTypeMapper[tradeType]}
-          value={formatPriceString(price)}
-          type={type}
-        />
-        <CashHistoryLine size="sm" title={description} value={classification} />
+    const type = useMemo(() => {
+      switch (classification) {
+        case "충전":
+        case "판매":
+          return "plus";
+        case "구매":
+        case "출금":
+          return "minus";
+        default:
+          return undefined;
+      }
+    }, [classification]);
+
+    return (
+      <LayoutBox layout="flex" direction="row" gap={12} width="full">
+        {icon}
+        <LayoutBox layout="flex" direction="column">
+          <CashHistoryLine
+            size="md"
+            title={historyTypeMapper[tradeType]}
+            value={formatPriceString(price)}
+            type={type}
+          />
+          <CashHistoryLine size="sm" title={description} value={classification} />
+        </LayoutBox>
       </LayoutBox>
-    </LayoutBox>
-  );
-}
+    );
+  }
+);
 
-export function CashHistoryLine({ size, title, value, type }: CashHistoryLineProps) {
+export const CashHistoryLine = memo(({ size, title, value, type }: CashHistoryLineProps) => {
   const textSize = useMemo(() => {
     switch (size) {
       case "lg":
@@ -89,7 +92,7 @@ export function CashHistoryLine({ size, title, value, type }: CashHistoryLinePro
       case "md":
         return "body-sm text-gray-700";
       case "sm":
-        return "body-xxs text-gray 600";
+        return "body-xxs text-gray-600";
       default:
         return "body-sm text-gray-700";
     }
@@ -112,4 +115,4 @@ export function CashHistoryLine({ size, title, value, type }: CashHistoryLinePro
       <p className={cn("text-end", textColor)}>{type ? formatPriceString(value) : value}</p>
     </div>
   );
-}
+});
