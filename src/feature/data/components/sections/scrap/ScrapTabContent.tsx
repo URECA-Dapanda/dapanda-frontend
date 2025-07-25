@@ -31,12 +31,12 @@ export default function ScrapTabContent() {
   const transformedCombinations = result.map((item) => ({
     productId: item.productId,
     mobileDataId: item.mobileDataId,
-    memberName: item.userName,
+    memberName: item.memberName,
     price: Number(item.price.replace(/[^0-9]/g, "")),
     purchasePrice: Number(item.price.replace(/[^0-9]/g, "")),
     remainAmount: parseFloat(item.title),
     purchaseAmount: item.purchaseAmount,
-    pricePer100MB: Number(item.pricePer.replace(/[^0-9]/g, "")),
+    pricePer100MB: Number(item.pricePer100MB.replace(/[^0-9]/g, "")),
     splitType: item.splitType,
     updatedAt: item.date,
   }));

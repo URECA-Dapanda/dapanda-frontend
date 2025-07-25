@@ -15,9 +15,9 @@ export interface DataType {
   mobileDataId: number;
   title: string;
   purchaseAmount: number;
-  userName: string;
+  memberName: string;
   price: string;
-  pricePer: string;
+  pricePer100MB: string;
   date: string;
   splitType: boolean;
 }
@@ -47,9 +47,9 @@ export function mapRawToDataType(raw: RawDataItem): DataType {
     mobileDataId: raw.mobileDataId,
     title: `${raw.remainAmount}GB`,
     purchaseAmount: raw.purchaseAmount,
-    userName: raw.memberName,
+    memberName: raw.memberName,
     price: `${raw.price.toLocaleString()}원`,
-    pricePer: `${raw.pricePer100MB}원/100MB`,
+    pricePer100MB: `${raw.pricePer100MB}원/100MB`,
     date: raw.updatedAt,
     splitType: raw.splitType,
   };
