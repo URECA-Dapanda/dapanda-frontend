@@ -26,16 +26,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-module.exports = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "dpd-bucket.s3.ap-northeast-2.amazonaws.com",
-        pathname: "/**",
-      },
-    ],
-  },
-};
-
 export default nextConfig;

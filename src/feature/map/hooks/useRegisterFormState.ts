@@ -11,7 +11,6 @@ export const useRegisterFormState = () => {
     address: "",
     startTime: "",
     endTime: "",
-    images: [],
   });
 
   const updateForm = <K extends keyof RegisterFormValues>(key: K, value: RegisterFormValues[K]) => {

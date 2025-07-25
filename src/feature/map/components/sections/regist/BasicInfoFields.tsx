@@ -2,7 +2,6 @@ import InputComponent from "@components/common/input/InputComponent";
 import { badgeVariants } from "@components/common/badge/badgeVariants";
 import type { SaleType } from "@/feature/map/hooks/useRegisterFormState";
 import { RegisterFormValues, RegisterFormErrors } from "@/feature/map/types/registerForm";
-import { useWifiPriceRecommendation } from "@/feature/map/hooks/useWifiPriceRecommendation";
 
 import { cn } from "@/lib/utils";
 
@@ -13,7 +12,6 @@ interface Props {
   type: SaleType;
 }
 export default function BasicInfoFields({ form, updateForm, errors, type }: Props) {
-  const { recentPrice, avgPrice } = useWifiPriceRecommendation();
   return (
     <>
       {/* 제목 */}
@@ -45,21 +43,14 @@ export default function BasicInfoFields({ form, updateForm, errors, type }: Prop
       {/* 가격 */}
       <div className="flex items-center mb-8 gap-8">
         <label className="title-sm block">가격 ({type === "hotspot" ? "15분" : "10분"})</label>
-        {/* 추후 핫스팟 확장 고려하여 type 추가 */}
-        {type === "wifi" && (
-          <div className="flex gap-8 items-center">
-            {recentPrice !== undefined && (
-              <span className={badgeVariants({ variant: "outlined", size: "md" })}>
-                최근 거래가: {recentPrice}원
-              </span>
-            )}
-            {avgPrice !== undefined && (
-              <span className={badgeVariants({ variant: "outlined", size: "md" })}>
-                평균 거래가: {avgPrice}원
-              </span>
-            )}
-          </div>
-        )}
+        <div className="flex gap-8">
+          <span className={badgeVariants({ variant: "outlined", size: "md" })}>
+            최근 거래가: 2000원
+          </span>
+          <span className={badgeVariants({ variant: "outlined", size: "md" })}>
+            평균 거래가: 2000원
+          </span>
+        </div>
       </div>
       <InputComponent
         placeholder="예: 300"

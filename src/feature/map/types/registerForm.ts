@@ -7,7 +7,6 @@ export interface RegisterFormValues {
   endTime: string;
   latitude?: number;
   longitude?: number;
-  images?: string[];
 }
 
 export interface RegisterFormErrors {

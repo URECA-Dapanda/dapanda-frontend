@@ -18,7 +18,7 @@ export function WifiTopSheetContent({ data, expanded }: { data: WifiData; expand
         </p>
         <p className="body-xs">{data.pricePer10min}원/10분</p>
         {expanded && <p className="body-sm">{data.description}</p>}
-        {data.recentPrice !== undefined && data.averagePrice !== undefined && (
+        {data.recentPrice && data.averagePrice && (
           <div className="flex gap-12 pt-4 flex-wrap">
             <BadgeComponent variant="outlined" size="sm" className="body-xxs">
               최근 거래가: {data.recentPrice}원

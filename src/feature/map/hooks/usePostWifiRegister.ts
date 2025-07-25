@@ -38,7 +38,6 @@ export const usePostWifiRegister = ({ form, onSuccess, onSubmit }: UsePostWifiRe
         startTime: formatToIsoDate(form.startTime),
         endTime: formatToIsoDatePlusOneYear(form.endTime),
         address,
-        images: form.images ?? [],
       };
 
       if (isEditMode) {

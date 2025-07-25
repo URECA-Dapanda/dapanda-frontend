@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { BottomSheetHeader, BaseBottomSheet } from "@components/common/bottomsheet";
 import { ButtonComponent } from "@components/common/button";
@@ -9,10 +8,6 @@ import { useMapStore } from "@/feature/map/stores/useMapStore";
 import MapItemCard from "@/feature/map/components/sections/product/MapItemCard";
 import type { DropdownOption } from "@/components/common/dropdown/dropdown.types";
 import { cn } from "@/lib/utils";
-import { useVirtualizedInfiniteQuery } from "@/hooks/useVirtualizedInfiniteQuery";
-import { getMapList } from "@/feature/map/api/mapRequest";
-import type { MapType } from "@/feature/map/types/mapType";
-import { sortOptionMap } from "@/components/common/dropdown/dropdownConfig";
 
 interface Props {
   open: boolean;
@@ -33,33 +28,7 @@ export default function MapBottomSheet({
   onSortChange,
   sortOptions,
 }: Props) {
-  const { myPosition } = useMapStore();
-
-  const { parentRef, rowVirtualizer, flatItems, hasNextPage } =
-    useVirtualizedInfiniteQuery<MapType>({
-      queryKey: [
-        "mapList",
-        String(myPosition?.lat()),
-        String(myPosition?.lng()),
-        sortLabel,
-      ] as const,
-      queryFn: ({ pageParam }) =>
-        getMapList({
-          cursorId: pageParam as number | undefined,
-          size: 10,
-          latitude: myPosition?.lat() ?? 0,
-          longitude: myPosition?.lng() ?? 0,
-          productSortOption: sortOptionMap[sortLabel],
-        }),
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-      estimateSize: () => 160,
-    });
-
-  useEffect(() => {
-    rowVirtualizer.scrollToIndex(0);
-  }, [sortLabel, availableOnly]);
-
-  const visibleItems = availableOnly ? flatItems.filter((item) => item.open) : flatItems;
+  const { storeList } = useMapStore();
 
   return (
     <BaseBottomSheet isOpen={open} onClose={onClose} variant="hybrid" snapHeight={300}>
@@ -89,39 +58,14 @@ export default function MapBottomSheet({
         </div>
       </div>
 
-      {/* 가상 리스트 렌더링 영역 */}
-      <div ref={parentRef} className="h-[calc(100vh-200px)] overflow-y-auto px-24">
-        <div
-          style={{
-            height: `${rowVirtualizer.getTotalSize()}px`,
-            position: "relative",
-          }}
-        >
-          {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-            const item = visibleItems[virtualRow.index];
-            return (
-              <div
-                key={virtualRow.key}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  transform: `translateY(${virtualRow.start}px)`,
-                }}
-              >
-                {item ? (
-                  <div className="mb-24">
-                    <MapItemCard data={item} disableUseButton={!item.open && !availableOnly} />
-                  </div>
-                ) : hasNextPage ? (
-                  <div className="text-center text-gray-400 py-4">불러오는 중...</div>
-                ) : null}
-              </div>
-            );
-          })}
-        </div>
-
+      <div className="px-24 space-y-24 mt-12">
+        {(availableOnly ? storeList.filter((store) => store.open) : storeList).map((store) => (
+          <MapItemCard
+            key={store.productId}
+            data={store}
+            disableUseButton={!store.open && !availableOnly}
+          />
+        ))}
       </div>
     </BaseBottomSheet>
   );
