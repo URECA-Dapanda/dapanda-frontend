@@ -12,7 +12,7 @@ export interface MapType {
 }
 
 export type MapDetailItem = {
-  productId: string;
+  productId: number;
   type: string;
   imageUrl: string[];
   place: string;

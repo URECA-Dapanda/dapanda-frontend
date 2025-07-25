@@ -12,7 +12,8 @@ export function formatDataSize(value: number): string {
  * @param price - 가격 문자열 또는 숫자 (예: "1000", 1000, "1000원" 등)
  * @returns 10,000원
  */
-export function formatPriceString(price: string | number): string {
+export function formatPriceString(price?: string | number): string {
+  if (price === undefined) return "- 원";
   let numericPrice: number;
 
   if (typeof price === "string") {
