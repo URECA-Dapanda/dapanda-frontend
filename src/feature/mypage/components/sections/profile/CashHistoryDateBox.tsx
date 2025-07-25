@@ -37,54 +37,52 @@ function CashHistoryDateBox({ date, dataList }: CashHistoryDateBoxProps) {
       <div className="text-start text-gray-600 body-sm">{date}</div>
       <div className="flex flex-col gap-8">
         {dataList.map((data) => (
-          <CashHistoryCard key={data.tradeId} data={data} />
+          <HistoryCard key={data.tradeId} data={data} />
         ))}
       </div>
     </div>
   );
 }
 
-export default memo(CashHistoryDateBox);
+function HistoryCard({
+  data: { tradeType, description, price, classification },
+}: HistoryLinkComponentProps) {
+  const icon = useMemo(() => {
+    if (tradeType.includes("SALE")) return <CirclePlus className={"text-success"} size={30} />;
+    if (tradeType === "CHARGE") return <CirclePlus className={"text-secondary-700"} size={30} />;
+    return <CircleMinus className="text-black" size={30} />;
+  }, [tradeType]);
 
-export const CashHistoryCard = memo(
-  ({ data: { tradeType, description, price, classification } }: HistoryLinkComponentProps) => {
-    const icon = useMemo(() => {
-      if (tradeType.includes("SALE")) return <CirclePlus className={"text-success"} size={30} />;
-      if (tradeType === "CHARGE") return <CirclePlus className={"text-secondary-700"} size={30} />;
-      return <CircleMinus className="text-black" size={30} />;
-    }, [tradeType]);
+  const type = useMemo(() => {
+    switch (classification) {
+      case "충전":
+      case "판매":
+        return "plus";
+      case "구매":
+      case "출금":
+        return "minus";
+      default:
+        return undefined;
+    }
+  }, [classification]);
 
-    const type = useMemo(() => {
-      switch (classification) {
-        case "충전":
-        case "판매":
-          return "plus";
-        case "구매":
-        case "출금":
-          return "minus";
-        default:
-          return undefined;
-      }
-    }, [classification]);
-
-    return (
-      <LayoutBox layout="flex" direction="row" gap={12} width="full">
-        {icon}
-        <LayoutBox layout="flex" direction="column">
-          <CashHistoryLine
-            size="md"
-            title={historyTypeMapper[tradeType]}
-            value={formatPriceString(price)}
-            type={type}
-          />
-          <CashHistoryLine size="sm" title={description} value={classification} />
-        </LayoutBox>
+  return (
+    <LayoutBox layout="flex" direction="row" gap={12} width="full">
+      {icon}
+      <LayoutBox layout="flex" direction="column">
+        <HistoryLine
+          size="md"
+          title={historyTypeMapper[tradeType]}
+          value={formatPriceString(price)}
+          type={type}
+        />
+        <HistoryLine size="sm" title={description} value={classification} />
       </LayoutBox>
-    );
-  }
-);
+    </LayoutBox>
+  );
+}
 
-export const CashHistoryLine = memo(({ size, title, value, type }: CashHistoryLineProps) => {
+function HistoryLine({ size, title, value, type }: CashHistoryLineProps) {
   const textSize = useMemo(() => {
     switch (size) {
       case "lg":
@@ -115,4 +113,8 @@ export const CashHistoryLine = memo(({ size, title, value, type }: CashHistoryLi
       <p className={cn("text-end", textColor)}>{type ? formatPriceString(value) : value}</p>
     </div>
   );
-});
+}
+
+export const CashHistoryLine = memo(HistoryLine);
+export const CashHistoryCard = memo(HistoryCard);
+export default memo(CashHistoryDateBox);
