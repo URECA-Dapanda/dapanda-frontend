@@ -11,7 +11,7 @@ interface FetchMapListParams {
 }
 
 interface WifiItemResponse {
-  id: number;
+  productId: number;
   price: number;
   itemId: number;
   memberName: string;
@@ -81,7 +81,7 @@ export async function getMapList({
     const json = res.data;
 
     const items: MapType[] = json.data.data.map((item) => ({
-      id: item.id,
+      productId: item.productId,
       title: item.title,
       price: `${item.price}원`,
       address: "", // 추후 reverse geocode 필요

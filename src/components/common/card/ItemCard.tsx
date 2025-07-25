@@ -13,7 +13,7 @@ export default function ItemCard({
   children,
 }: PropsWithChildren<ItemCardProps>) {
   return (
-    <div onClick={handleClick} className={`${handleClick ? "hover:cursor-pointer" : ""}`}>
+    <div onClick={handleClick} className={`${handleClick ? "hover:cursor-pointer" : "w-full"}`}>
       <CardComponent variant="material" size={size}>
         <CardContentComponent size={"sm"}>{children}</CardContentComponent>
       </CardComponent>
