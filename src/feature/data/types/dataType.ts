@@ -1,7 +1,8 @@
 export interface RawDataItem {
   productId: number;
   price: number;
-  mobileDataId: number;
+  itemId: number;
+  // mobileDataId: number;
   memberName: string;
   remainAmount: number;
   purchaseAmount: number;
@@ -44,7 +45,7 @@ export interface DataDetailResponse {
 export function mapRawToDataType(raw: RawDataItem): DataType {
   return {
     productId: raw.productId,
-    mobileDataId: raw.mobileDataId,
+    mobileDataId: raw.itemId,
     title: `${raw.remainAmount}GB`,
     purchaseAmount: raw.purchaseAmount,
     memberName: raw.memberName,
