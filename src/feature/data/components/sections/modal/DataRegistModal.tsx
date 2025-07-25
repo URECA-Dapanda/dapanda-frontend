@@ -23,7 +23,12 @@ export default function DataRegistModal({ onClose }: { onClose: () => void }) {
             dataAmount,
             price: priceInt,
             isSplitType: isSplit,
-            onSuccess: onClose,
+            onSuccess: () => {
+                setPrice("");
+                setValue([1]);
+                setIsSplit(false);
+                onClose();
+            }
         });
     };
 
