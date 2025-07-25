@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import CurrentCashCard from "@feature/mypage/components/sections/profile/CurrentCashCard";
 import TransactionHistory from "@feature/mypage/components/sections/TransactionHistory";
@@ -34,9 +32,6 @@ export default function MyPageContent() {
         </ButtonComponent>
         <TransactionHistory />
         <CurrentCashCard isInterection={true} />
-        <Link href={"/"}>
-          <Image src={"/pandaDic.svg"} alt="PandaDic" width={327} height={170} />
-        </Link>
         <LogOutButton />
       </div>
     </>

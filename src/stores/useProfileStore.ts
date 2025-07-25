@@ -14,7 +14,7 @@ interface ProfileStoreProps extends Partial<UserType> {
  * @param showAvatar 추후 default value => undefined로 수정해야 함
  */
 export const useProfileStore = create<ProfileStoreProps>((set) => ({
-  id: 0,
+  id: 17,
   balance: "12,500",
   avatar: "",
   setUserName: (newName) => {

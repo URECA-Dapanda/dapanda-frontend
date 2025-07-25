@@ -4,10 +4,9 @@ import { ChevronDown } from "lucide-react";
 import { BottomSheetHeader, BaseBottomSheet } from "@components/common/bottomsheet";
 import { ButtonComponent } from "@components/common/button";
 import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
-import { dataSortOptions } from "@components/common/dropdown/dropdownConfig";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import MapItemCard from "@/feature/map/components/sections/product/MapItemCard";
-
+import type { DropdownOption } from "@/components/common/dropdown/dropdown.types";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -17,6 +16,7 @@ interface Props {
   setAvailableOnly: (v: boolean) => void;
   sortLabel: string;
   onSortChange: (v: string) => void;
+  sortOptions: DropdownOption[];
 }
 
 export default function MapBottomSheet({
@@ -26,6 +26,7 @@ export default function MapBottomSheet({
   setAvailableOnly,
   sortLabel,
   onSortChange,
+  sortOptions,
 }: Props) {
   const { storeList } = useMapStore();
 
@@ -35,7 +36,7 @@ export default function MapBottomSheet({
       <div className="flex justify-between items-center px-24 mb-12 mt-6">
         <div className="flex items-center gap-12">
           <UserDropdownMenu
-            options={dataSortOptions}
+            options={sortOptions}
             selectedLabel={sortLabel}
             onSelectLabel={onSortChange}
             align="start"
@@ -58,8 +59,12 @@ export default function MapBottomSheet({
       </div>
 
       <div className="px-24 space-y-24 mt-12">
-        {storeList.map((store) => (
-          <MapItemCard key={store.id} data={store} />
+        {(availableOnly ? storeList.filter((store) => store.open) : storeList).map((store) => (
+          <MapItemCard
+            key={store.id}
+            data={store}
+            disableUseButton={!store.open && !availableOnly}
+          />
         ))}
       </div>
     </BaseBottomSheet>

@@ -8,6 +8,7 @@ export const useRegisterFormState = () => {
     title: "",
     description: "",
     price: "",
+    address: "",
     startTime: "",
     endTime: "",
   });
@@ -16,5 +17,10 @@ export const useRegisterFormState = () => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
-  return { form, updateForm };
+  // 전체 초기값 세팅용
+  const setAllForm = (newForm: RegisterFormValues) => {
+    setForm(newForm);
+  };
+
+  return { form, updateForm, setAllForm };
 };

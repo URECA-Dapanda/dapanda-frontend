@@ -8,16 +8,27 @@ interface Props {
   onClose: () => void;
   onGoHome: () => void;
   type: SaleType;
+  isEdit?: boolean;
 }
 
-export default function RegisterSuccessModal({ isOpen, onClose, onGoHome, type }: Props) {
+export default function RegisterSuccessModal({
+  isOpen,
+  onClose,
+  onGoHome,
+  type,
+  isEdit = false,
+}: Props) {
   return (
     <BaseModal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center gap-24">
         <CheckCircle2 className="w-68 h-68 text-success" />
-        <div className="title-md">상품 등록 완료!</div>
+        <div className="title-md">{isEdit ? "상품 수정 완료!" : "상품 등록 완료!"}</div>
         <p className="body-sm text-gray-600 mb-24">
-          {type === "wifi"
+          {isEdit
+            ? type === "wifi"
+              ? "와이파이 상품이 정상적으로 수정되었습니다."
+              : "핫스팟 상품이 정상적으로 수정되었습니다."
+            : type === "wifi"
             ? "와이파이 상품이 정상적으로 등록되었습니다."
             : "핫스팟 상품이 정상적으로 등록되었습니다."}
         </p>

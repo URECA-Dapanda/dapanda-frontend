@@ -4,6 +4,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 
 type PageResponse<TData> = {
   items: TData[];
+  num?: number;
   nextCursor?: number;
 };
 
@@ -75,7 +76,13 @@ export function useVirtualizedInfiniteQuery<TData>({
     initialPageParam: 0,
   });
 
-  const flatItems = data?.pages.flatMap((page) => page.items) ?? [];
+  let totalNum: number | undefined;
+
+  const flatItems =
+    data?.pages.flatMap((page) => {
+      totalNum = page.num;
+      return page.items;
+    }) ?? [];
 
   const rowVirtualizer = useVirtualizer({
     count: hasNextPage ? flatItems.length + 1 : flatItems.length,
@@ -112,5 +119,6 @@ export function useVirtualizedInfiniteQuery<TData>({
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
+    totalNum,
   };
 }

@@ -7,8 +7,14 @@ interface HistoryType {
   isSold: boolean;
 }
 
-export interface SaleHistoryType extends HistoryType {
-  registDate: string;
+export interface SaleHistoryType {
+  productId: number;
+  type: string;
+  state: string;
+  dataAmount: number;
+  remainAmount: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface PurchaseHistoryType extends HistoryType {

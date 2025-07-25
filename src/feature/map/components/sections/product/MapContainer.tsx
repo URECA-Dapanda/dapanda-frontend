@@ -6,6 +6,7 @@ import { useMapInitializer } from "@/feature/map/hooks/useMapInitializer";
 import { useMapMarkers } from "@/feature/map/hooks/useMapMarkers";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import { MAP_CONTAINER_ID } from "@/feature/map/constants/map";
+import { useMyLocation } from "@feature/map/hooks/useMyLocation";
 
 export default function MapContainer() {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -16,10 +17,14 @@ export default function MapContainer() {
 
   useMapMarkers(map, storeList, {
     onMarkerClick: (store) => {
-      router.push(`/map/detail?id=${store.id}`);
+      router.push(`/map/${store.id}`);
     },
   });
 
+  // 내 위치 마커 따로 렌더링
+  useMyLocation(map);
+
+  // 지도 DOM ID 설정
   useEffect(() => {
     if (mapRef.current) {
       mapRef.current.id = MAP_CONTAINER_ID;

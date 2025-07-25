@@ -11,7 +11,7 @@ interface UseMapInitializerOptions {
 }
 
 export const useMapInitializer = (options?: UseMapInitializerOptions) => {
-  const { setMap, setStoreList } = useMapStore();
+  const { setMap, setStoreList, setMyPosition } = useMapStore();
 
   useEffect(() => {
     const tryInitMap = () => {
@@ -38,14 +38,7 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
           const current = new window.naver.maps.LatLng(latitude, longitude);
           map.setCenter(current);
 
-          new window.naver.maps.Marker({
-            position: current,
-            map,
-            icon: {
-              content:
-                '<div style="background:#e6007e;width:12px;height:12px;border-radius:9999px;"></div>',
-            },
-          });
+          setMyPosition(current); // ✅ 마커는 별도로
 
           try {
             const res = await getMapList({
