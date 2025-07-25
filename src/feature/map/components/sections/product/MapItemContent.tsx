@@ -6,9 +6,10 @@ import type { ProductItemProps } from "@/feature/data/types/dataType";
 import type { MapType } from "@/feature/map/types/mapType";
 import axiosInstance from "@/lib/axios";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 export default function MapItemCardContent({
-  data: { productId, address, price, score, title, type, updatedAt, open },
+  data: { productId, address, price, score, title, type, updatedAt, open, imageUrl },
   disableUseButton = false,
 }: ProductItemProps<MapType> & { disableUseButton?: boolean }) {
   const router = useRouter();
@@ -37,7 +38,17 @@ export default function MapItemCardContent({
       <div className="grid grid-cols-[auto_1fr_auto] gap-16 items-center">
         {/* 왼쪽 이미지 */}
         <div className="w-56 h-56 bg-gray-200 rounded-full flex items-center justify-center">
-          <ImageIcon />
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt="대표 이미지"
+              width={56}
+              height={56}
+              className="w-full h-full rounded-full object-cover"
+            />
+          ) : (
+            <ImageIcon className="text-gray-400" />
+          )}
         </div>
 
         {/* 가운데 텍스트 */}

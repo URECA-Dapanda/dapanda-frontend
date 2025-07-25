@@ -8,6 +8,7 @@ export interface MapType {
   open: boolean;
   score: number;
   price: string;
+  imageUrl?: string;
 }
 
 export type MapDetailItem = {
