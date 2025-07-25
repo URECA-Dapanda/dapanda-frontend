@@ -46,10 +46,18 @@ export default function MapSelectLocationPage() {
     const productId = searchParams.get("productId");
 
     const baseUrl = `/map/regist/${type}/form`;
-    const query = `lat=${lat}&lng=${lng}&address=${encodeURIComponent(address)}`;
-    const editParams = edit === "true" && productId ? `&edit=true&id=${productId}` : "";
 
-    router.push(`${baseUrl}?${query}${editParams}`);
+    const params = new URLSearchParams({
+      lat: String(lat),
+      lng: String(lng),
+      address: encodeURIComponent(address),
+    });
+    if (edit === "true" && productId) {
+      params.set("edit", "true");
+      params.set("id", productId);
+    }
+
+    router.push(`${baseUrl}?${params.toString()}`);
   };
 
   const goToSearch = () => {
