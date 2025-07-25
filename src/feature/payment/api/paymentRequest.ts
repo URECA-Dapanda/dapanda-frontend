@@ -1,16 +1,17 @@
 import axios from "@lib/axios";
 import type { ScrapCombination } from "@feature/payment/types/paymentTypes";
-// 일반/자투리 구매 통합
+// 통합/분할 구매
 export const postDefaultTrade = async (productId: number, mobileDataId: number, dataAmount?: number) => {
   const payload = {
     productId,
     mobileDataId,
     dataAmount: dataAmount ?? null,
   };
+  console.log("구매요청 api호출:", payload);
   const res = await axios.post("/api/trades/mobile-data/default", payload);
   return res.data.data.tradeId;
 };
-
+// 자투리 구매
 export const postScrapTrade = async (
   totalAmount: number,
   totalPrice: number,
@@ -21,5 +22,6 @@ export const postScrapTrade = async (
     totalPrice,
     combinations,
   });
+  console.log("자투리구매 api 호출",combinations)
   return res.data.data.tradeId;
 };
