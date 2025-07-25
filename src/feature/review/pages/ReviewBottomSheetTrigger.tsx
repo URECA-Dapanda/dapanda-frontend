@@ -12,7 +12,7 @@ export default function ReviewBottomSheetTrigger() {
       <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={() => setOpen(true)}>
         리뷰 바텀시트 열기
       </button>
-      <ReviewBottomSheet isOpen={open} onClose={() => setOpen(false)} tradeId={1} />
+      <ReviewBottomSheet isOpen={open} onClose={() => setOpen(false)} tradeId={160} />
     </div>
   );
 }

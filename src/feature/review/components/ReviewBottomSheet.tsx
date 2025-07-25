@@ -46,29 +46,28 @@ export default function ReviewBottomSheet({ isOpen, onClose, tradeId }: ReviewBo
           <X size={24} onClick={handleClose} className="cursor-pointer text-gray-500" />
         </div>
 
-        <p className="title-sm mb-8 text-black">거래한 물건</p>
-
-        <div className="rounded-2xl bg-primary2 flex px-24 py-24 items-stretch gap-8 ">
-          <div className="flex-1 flex flex-col justify-between">
-            <div className="text-black mb-2">와이파이</div>
-            <div className="text-sm text-black">
-              <div>판매자: 김데이터</div>
-              <div>위치: 스타벅스 선릉역점</div>
-            </div>
-          </div>
-          <div className="flex flex-col items-end justify-between text-right">
-            <div className="title-md text-primary mb-2">8,000원</div>
-            <div className="body-xs text-black">
-              <div>10분당 200원</div>
-              <div>
-                총 이용시간 <span className="text-primary">40분</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {step === "form" ? (
           <div className="flex flex-col gap-24">
+            <p className="title-sm mb-8 text-black">거래한 물건</p>
+
+            <div className="rounded-2xl bg-primary2 flex px-24 py-24 items-stretch gap-8 ">
+              <div className="flex-1 flex flex-col justify-between">
+                <div className="text-black mb-2">와이파이</div>
+                <div className="text-sm text-black">
+                  <div>판매자: 김데이터</div>
+                  <div>위치: 스타벅스 선릉역점</div>
+                </div>
+              </div>
+              <div className="flex flex-col items-end justify-between text-right">
+                <div className="title-md text-primary mb-2">8,000원</div>
+                <div className="body-xs text-black">
+                  <div>10분당 200원</div>
+                  <div>
+                    총 이용시간 <span className="text-primary">40분</span>
+                  </div>
+                </div>
+              </div>
+            </div>
             <p className="title-sm text-black">김데이터 님과의 거래는 어떠셨나요?</p>
             <div className="flex gap-4 justify-center">
               {[1, 2, 3, 4, 5].map((star) => (
