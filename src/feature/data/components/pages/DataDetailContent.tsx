@@ -9,7 +9,6 @@ import { formatRelativeTime } from "@lib/time";
 import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 import FilterCardContent from "@feature/data/components/sections/filter/FilterCardContent";
-import { useProfileStore } from "@stores/useProfileStore";
 import {
   buildDefaultPaymentInfo,
   buildSplitPaymentInfo,
@@ -22,8 +21,7 @@ export default function DataDetailContent() {
   const { postId } = useParams<{ postId: string }>();
   const { data, loading } = useDataDetail(postId);
   const { setInfo } = usePaymentStore();
-  const currentUserId = useProfileStore((state) => state.id);
-  const isOwner = data && currentUserId === data.memberId;
+  const isOwner = data?.myProduct;
   const renderModals = UsePaymentModals();
 
   const [selectedAmount, setSelectedAmount] = useState(0);

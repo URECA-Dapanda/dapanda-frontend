@@ -30,6 +30,7 @@ export default function MapDetailPage() {
   const currentUserId = useProfileStore((state) => state.id);
   const isOwner = data && currentUserId === data.memberId;
 
+
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const params = new URLSearchParams(

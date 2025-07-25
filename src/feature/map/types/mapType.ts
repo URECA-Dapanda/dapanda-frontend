@@ -25,6 +25,7 @@ export type MapDetailItem = {
   averagePrice: number;
   memberName: string;
   memberId: number;
+  myProduct: boolean;
   reviewCount: number;
   longitude: number;
   latitude: number;

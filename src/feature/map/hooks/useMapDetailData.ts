@@ -34,6 +34,7 @@ export const useMapDetailData = (id: string): UseMapDetailDataResult => {
         averagePrice: detail.averageRate,
         memberName: detail.memberName,
         memberId: detail.memberId,
+        myProduct: detail.myProduct,
         reviewCount: detail.reviewCount,
         latitude: detail.latitude,
         longitude: detail.longitude,
