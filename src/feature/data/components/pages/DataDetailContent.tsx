@@ -82,11 +82,7 @@ export default function DataDetailContent() {
           )}
         </div>
 
-        <ProfileCard
-          name={data.memberName}
-          rating={data.averageRate}
-          reviewCount={data.reviewCount}
-        />
+        <ProfileCard sellerId={data.memberId} />
 
         <div className="space-y-12 px-24 pb-28">
           {data.splitType && (

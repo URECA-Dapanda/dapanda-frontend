@@ -105,6 +105,7 @@ export default function MapDetailPage() {
           rating={data.averagePrice}
           reviewCount={data.reviewCount}
           productId={data.productId}
+          sellerId={data.memberId}
         />
 
         <div className="px-6 mt-12">

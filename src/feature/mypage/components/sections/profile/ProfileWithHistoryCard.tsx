@@ -10,19 +10,16 @@ import { getMyInfo } from "@feature/mypage/apis/mypageRequest";
 
 export default function ProfileWithHistoryCard() {
   const searchParams = useSearchParams();
-  const { data } = useQuery({
-    queryFn: getMyInfo,
-    queryKey: ["api/plans/my-data"],
-  });
-
   const id = searchParams.get("id");
-
-  console.log("id : ", id, " 프로필");
+  const { data } = useQuery({
+    queryFn: () => getMyInfo(id !== null ? id : undefined),
+    queryKey: ["api/plans/info", id],
+  });
 
   return (
     <div className="p-24">
       <LayoutBox layout="flex" direction="row" gap={19}>
-        <AvatarIcon size="medium" />
+        <AvatarIcon size="medium" avatar={data?.profileImageUrl ?? undefined} />
         <LayoutBox layout="flex" direction="column" gap={8}>
           <div className="flex flex-row justify-start gap-12">
             <p className="title-sm">{data?.name ?? "알 수 없음"}</p>

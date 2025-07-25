@@ -7,7 +7,7 @@ import axios from "@/lib/axios";
 const mockInfo = () =>
   new Promise<Partial<UserType>>((resolve) => {
     setTimeout(() => {
-      resolve({ userName: "판다유저", recommend: 3.5 });
+      resolve({ name: "판다유저", averageRating: 3.5 });
     }, 100);
   });
 

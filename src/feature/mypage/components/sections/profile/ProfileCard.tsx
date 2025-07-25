@@ -8,12 +8,12 @@ import { UserType } from "@type/User";
 export default function ProfileCard() {
   const { data } = useQuery<UserType>({
     queryKey: ["/api/members/info"],
-    queryFn: getMyInfo,
+    queryFn: () => getMyInfo(),
   });
 
   return (
     <Link
-      href={{ pathname: "/mypage/review", query: { id: 13, isMine: true, tab: "review" } }}
+      href={{ pathname: "/mypage/review", query: { isMine: true, tab: "review" } }}
       className="p-0 w-full"
     >
       <div className="flex flex-row gap-24 w-full items-center justify-between p-16">

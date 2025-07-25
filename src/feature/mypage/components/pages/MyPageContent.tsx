@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import CurrentCashCard from "@feature/mypage/components/sections/profile/CurrentCashCard";
 import TransactionHistory from "@feature/mypage/components/sections/TransactionHistory";
 import { DataUsageDonut } from "@feature/mypage/components/sections/profile/CicularProgressBar";
-import { ButtonComponent } from "@components/common/button";
 import LogOutButton from "../sections/LogOutButton";
 import ProfileCard from "@feature/mypage/components/sections/profile/ProfileCard";
 import { useTossSuccessModalStore } from "@feature/mypage/stores/useTossSuccessModalStore";
