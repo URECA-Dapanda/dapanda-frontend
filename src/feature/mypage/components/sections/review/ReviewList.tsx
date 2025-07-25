@@ -9,7 +9,7 @@ import { MouseEvent, useCallback, useState } from "react";
 import ReportModal from "@components/common/modal/ReportModal";
 import { useSearchParams } from "next/navigation";
 
-export default function ReviewList() {
+export default function ReviewList({ type }: { type?: "receive" | "post" }) {
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentTarget, setCurrentTarget] = useState<string>();
@@ -23,6 +23,7 @@ export default function ReviewList() {
           pageParam,
           size: 2,
           id,
+          type,
         }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       estimateSize: () => 130,

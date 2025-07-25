@@ -5,18 +5,23 @@ export async function getReviewList({
   pageParam,
   size = 2,
   id,
+  type,
 }: {
   pageParam?: number | unknown;
   size: number;
   id?: string;
+  type?: "receive" | "post";
 }): Promise<{ items: ReviewType[]; nextCursor?: number }> {
+  const request =
+    type === "post"
+      ? "/api/reviews/wrote"
+      : id
+      ? `/api/members/${id}/reviews/received`
+      : `/api/reviews/received`;
   try {
-    const response = await axios.get(
-      id ? `/api/members/${id}/reviews/received` : `/api/reviews/received`,
-      {
-        params: { cursorId: pageParam, size: size },
-      }
-    );
+    const response = await axios.get(request, {
+      params: { cursorId: pageParam, size: size },
+    });
 
     const rawList = response.data.data.data as ReviewType[];
     const nextCursor = response.data.data.pageInfo.nextCursorId ?? undefined;
