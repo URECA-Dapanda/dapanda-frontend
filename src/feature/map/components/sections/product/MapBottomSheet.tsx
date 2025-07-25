@@ -61,7 +61,7 @@ export default function MapBottomSheet({
       <div className="px-24 space-y-24 mt-12">
         {(availableOnly ? storeList.filter((store) => store.open) : storeList).map((store) => (
           <MapItemCard
-            key={store.id}
+            key={store.productId}
             data={store}
             disableUseButton={!store.open && !availableOnly}
           />

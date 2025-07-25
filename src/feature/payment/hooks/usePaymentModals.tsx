@@ -36,24 +36,38 @@ export default function UsePaymentModals() {
           try {
             if (info.type === "data") {
               if (info.badge === "일반 구매") {
+                // 일반 전체 구매 (분할 불가)
                 if (info.productId && info.mobileDataId) {
                   const tradeId = await postDefaultTrade(
                     info.productId,
-                    info.mobileDataId,
-                    info.dataAmount // optional
+                    info.mobileDataId
                   );
-                  console.log("결제 완료", tradeId);
+                  console.log("일반 구매 완료", tradeId);
                 } else {
                   throw new Error("상품 정보가 누락되었습니다.");
                 }
+              } else if (info.badge === "분할 구매") {
+                console.log(info)
+                // 분할 구매 (분할 가능 상품 일부 구매)
+                if (info.productId && info.mobileDataId && info.dataAmount) {
+                  const tradeId = await postDefaultTrade(
+                    info.productId,
+                    info.mobileDataId,
+                    info.dataAmount
+                  );
+                  console.log("분할 구매 완료", tradeId);
+                } else {
+                  throw new Error("분할 구매 정보가 누락되었습니다.");
+                }
               } else if (info.badge === "자투리 구매") {
+                // 자투리 조합 구매
                 if (info.totalAmount && info.totalPrice && info.combinations) {
                   const tradeId = await postScrapTrade(
                     info.totalAmount,
                     info.totalPrice,
                     info.combinations
                   );
-                  console.log("자투리 결제 완료", tradeId);
+                  console.log("자투리 구매 완료", tradeId);
                 } else {
                   throw new Error("자투리 구매 정보가 누락되었습니다.");
                 }
@@ -72,7 +86,6 @@ export default function UsePaymentModals() {
         type={info.type}
         info={info}
       />
-
       <PaymentCompleteModal
         isOpen={step === "complete"}
         onClose={reset}

@@ -11,6 +11,7 @@ export const useDataDetail = (postId: string) => {
       try {
         const res = await getDataDetail(postId);
         setData(res);
+        console.log(res)
       } catch (e) {
         console.error("상세 정보 불러오기 실패:", e);
       } finally {
