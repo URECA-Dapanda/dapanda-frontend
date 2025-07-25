@@ -21,7 +21,7 @@ export const useMapDetailData = (id: string): UseMapDetailDataResult => {
 
   const mapDetailItem: MapDetailItem | undefined = detail
     ? {
-        productId: detail.productId.toString(),
+        productId: detail.productId,
         type: "와이파이",
         imageUrl: detail.imageUrls ?? [],
         place: detail.title,

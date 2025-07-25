@@ -1,5 +1,5 @@
 export interface MapType {
-  id: number;
+  productId: number;
   type: "와이파이" | "핫스팟";
   title: string;
   address: string;
@@ -11,7 +11,7 @@ export interface MapType {
 }
 
 export type MapDetailItem = {
-  productId: string;
+  productId: number;
   type: string;
   imageUrl: string[];
   place: string;
