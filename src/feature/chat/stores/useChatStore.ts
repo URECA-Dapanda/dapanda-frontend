@@ -1,12 +1,15 @@
 import { create } from "zustand";
 
 export interface ChatRoomPreview {
+  itemId: number;
   chatRoomId: number;
   name: string;
   title: string;
   price: number;
   lastMessage: string;
   updatedAt: string;
+  productId: number;
+  senderName: string;
 }
 
 interface ChatStore {

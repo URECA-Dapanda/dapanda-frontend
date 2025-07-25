@@ -38,8 +38,9 @@ export interface DataDetailResponse {
   pricePer100MB: number;
   averageRate: number;
   reviewCount: number;
-  updatedAt: string;
+  myProduct: boolean;
   splitType: boolean;
+  updatedAt: string;
 }
 
 export function mapRawToDataType(raw: RawDataItem): DataType {

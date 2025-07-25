@@ -24,3 +24,24 @@ export interface PurchaseHistoryType extends HistoryType {
   title: string;
   createdAt: string;
 }
+
+export interface CashHistoryType {
+  tradeId: number;
+  tradeType: string;
+  price: number;
+  description: string;
+  classification: string;
+  createdAt: string;
+}
+
+export interface ParsedCashHistoryType {
+  [key: string]: CashHistoryType[] | undefined;
+}
+
+export interface MonthlyCashTotalType {
+  totalPurchase: number;
+  totalSelling: number;
+  totalCharge: number;
+  totalRefund: number;
+  total: number;
+}

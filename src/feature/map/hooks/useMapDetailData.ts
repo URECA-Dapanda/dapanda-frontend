@@ -21,7 +21,7 @@ export const useMapDetailData = (id: string): UseMapDetailDataResult => {
 
   const mapDetailItem: MapDetailItem | undefined = detail
     ? {
-        productId: detail.productId.toString(),
+        productId: detail.productId,
         type: "와이파이",
         imageUrl: detail.imageUrls ?? [],
         place: detail.title,
@@ -34,6 +34,7 @@ export const useMapDetailData = (id: string): UseMapDetailDataResult => {
         averagePrice: detail.averageRate,
         memberName: detail.memberName,
         memberId: detail.memberId,
+        myProduct: detail.myProduct,
         reviewCount: detail.reviewCount,
         latitude: detail.latitude,
         longitude: detail.longitude,
