@@ -31,3 +31,11 @@ export interface CashHistoryType {
 export interface ParsedCashHistoryType {
   [key: string]: CashHistoryType[] | undefined;
 }
+
+export interface MonthlyCashTotalType {
+  totalPurchase: number;
+  totalSelling: number;
+  totalCharge: number;
+  totalRefund: number;
+  total: number;
+}

@@ -5,6 +5,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { Suspense, useEffect, useRef, useState } from "react";
 import CashHistoryDateBox from "../sections/profile/CashHistoryDateBox";
 import { useVirtualizedGroupedInfiniteQuery } from "@hooks/useGroupedVirtualizedInfiniteQuery";
+import MonthlyCashTotalBox from "../sections/profile/MonthlyCashTotalBox";
 
 export default function CashHistoryContent() {
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -33,11 +34,13 @@ export default function CashHistoryContent() {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
-    <div className="flex flex-col gap-24 justify-center items-center">
-      <MonthPicker value={currentDate} onChange={handleDate} />
-
+    <div className="flex flex-col gap-24 items-center w-full">
       <Suspense>
-        <div ref={parentRef} className="overflow-auto h-[calc(100dvh-150px)] px-4 space-y-6">
+        <MonthlyCashTotalBox data={pages.at(0)?.monthlyInfo} />
+      </Suspense>
+      <MonthPicker value={currentDate} onChange={handleDate} />
+      <Suspense>
+        <div ref={parentRef} className="overflow-auto h-[50dvh] px-24 space-y-6 w-full">
           {pages.map((page, i) => (
             <div key={i} className="space-y-6">
               {Object.entries(page.items).map(
@@ -46,7 +49,6 @@ export default function CashHistoryContent() {
               )}
             </div>
           ))}
-
           {hasNextPage && (
             <div ref={observerRef} className="py-10 text-center text-sm text-gray-400">
               불러오는 중...

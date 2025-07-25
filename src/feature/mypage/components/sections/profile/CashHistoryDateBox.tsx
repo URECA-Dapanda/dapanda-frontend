@@ -12,7 +12,7 @@ interface HistoryLinkComponentProps {
 interface CashHistoryLineProps {
   size: "lg" | "md" | "sm";
   title: string;
-  value: string;
+  value?: string | number;
   type?: "plus" | "minus";
 }
 
@@ -20,6 +20,15 @@ interface CashHistoryDateBoxProps {
   date: string;
   dataList: CashHistoryType[];
 }
+
+const historyTypeMapper: { [key: string]: string } = {
+  SALE_MOBILE_DATA: "데이터 판매",
+  SALE_WIFI: "와이파이 판매",
+  REFUND: "출금",
+  CHARGE: "충전",
+  PURCHASE_MOBILE_SINGLE: "데이터 구매",
+  PURCHASE_WIFI: "와이파이 구매",
+};
 
 export default function CashHistoryDateBox({ date, dataList }: CashHistoryDateBoxProps) {
   return (
@@ -38,7 +47,7 @@ export function CashHistoryCard({
   data: { tradeType, description, price, classification },
 }: HistoryLinkComponentProps) {
   const icon = useMemo(() => {
-    if (tradeType === "SALE") return <CirclePlus className={"text-success"} size={30} />;
+    if (tradeType.includes("SALE")) return <CirclePlus className={"text-success"} size={30} />;
     if (tradeType === "CHARGE") return <CirclePlus className={"text-secondary-700"} size={30} />;
     return <CircleMinus className="text-black" size={30} />;
   }, [tradeType]);
@@ -60,7 +69,12 @@ export function CashHistoryCard({
     <LayoutBox layout="flex" direction="row" gap={12} width="full">
       {icon}
       <LayoutBox layout="flex" direction="column">
-        <CashHistoryLine size="md" title={tradeType} value={formatPriceString(price)} type={type} />
+        <CashHistoryLine
+          size="md"
+          title={historyTypeMapper[tradeType]}
+          value={formatPriceString(price)}
+          type={type}
+        />
         <CashHistoryLine size="sm" title={description} value={classification} />
       </LayoutBox>
     </LayoutBox>
@@ -93,9 +107,9 @@ export function CashHistoryLine({ size, title, value, type }: CashHistoryLinePro
   }, [type]);
 
   return (
-    <div className={cn("flex flex-row justify-between items-center", textSize)}>
+    <div className={cn("w-full flex flex-row justify-between items-center", textSize)}>
       <p>{title}</p>
-      <p className={cn("text-end", textColor)}>{value}</p>
+      <p className={cn("text-end", textColor)}>{type ? formatPriceString(value) : value}</p>
     </div>
   );
 }

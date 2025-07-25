@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import {
   CashHistoryType,
+  MonthlyCashTotalType,
   ParsedCashHistoryType,
   PurchaseHistoryType,
   SaleHistoryType,
@@ -100,7 +101,9 @@ export async function getCashHistoryList({
       return dayjs(item.createdAt).format("D (dd)");
     }
   );
+
+  const info: MonthlyCashTotalType = data.data.cashHistoryMonthlySummary;
   const nextCursor = data.data.cashHistorySummary.pageInfo.nextCursorId;
 
-  return { items, nextCursor };
+  return { items, nextCursor, monthlyInfo: info };
 }
