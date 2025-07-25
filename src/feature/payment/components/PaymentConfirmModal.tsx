@@ -12,7 +12,7 @@ interface PaymentConfirmModalProps {
   info: {
     title: string;
     price: string;
-    buyerType?: "일반 구매" | "자투리 구매"; // 데이터만 해당
+    buyerType?: "일반 구매" | "분할 구매" | "자투리 구매"; // 데이터만 해당
     seller?: string;
     location?: string; // 와이파이/핫스팟
     duration?: string; // 와이파이/핫스팟
