@@ -53,3 +53,9 @@ export async function getUserCash() {
 
   return data.data;
 }
+
+export async function getMyData() {
+  const { data } = await axios.get("api/plans/my-data");
+
+  return data.data;
+}

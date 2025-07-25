@@ -26,7 +26,7 @@ export default function MyPageContent() {
       <TossSuccessModal />
       <div className="flex flex-col items-center justify-center w-full h-full p-24 pt-8 gap-12">
         <ProfileCard />
-        <DataUsageDonut current={5.6} total={10} unit="GB" />
+        <DataUsageDonut current={7} unit="GB" />
         <ButtonComponent variant={"text"} size={"sm"}>
           요금제 추천 보러가기
         </ButtonComponent>
