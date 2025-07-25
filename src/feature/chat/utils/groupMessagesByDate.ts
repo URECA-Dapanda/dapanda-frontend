@@ -1,7 +1,12 @@
-import type { ChatMessage } from "@/feature/chat/types/message";
+import type { ChatMessage } from "@/feature/chat/types/chatType";
+
+interface GroupedMessages {
+  date: string;
+  messages: ChatMessage[];
+}
 
 //채팅 메시지를 날짜별로 그룹화
-export function groupMessagesByDate(messages: ChatMessage[]) {
+export function groupMessagesByDate(messages: ChatMessage[]): GroupedMessages[] {
   const groups: { [date: string]: ChatMessage[] } = {};
 
   messages.forEach((msg) => {
@@ -12,8 +17,13 @@ export function groupMessagesByDate(messages: ChatMessage[]) {
     groups[date].push(msg);
   });
 
-  // 날짜 순 정렬해서 반환
+  // 날짜 순 정렬 + 각 그룹 내 messages도 시간순 정렬
   return Object.entries(groups)
     .sort(([a], [b]) => new Date(a).getTime() - new Date(b).getTime())
-    .map(([date, messages]) => ({ date, messages }));
+    .map(([date, messages]) => ({
+      date,
+      messages: messages.sort(
+        (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      ),
+    }));
 }

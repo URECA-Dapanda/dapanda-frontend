@@ -9,22 +9,19 @@ import { formatRelativeTime } from "@lib/time";
 import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 import FilterCardContent from "@feature/data/components/sections/filter/FilterCardContent";
-import { useProfileStore } from "@stores/useProfileStore";
 import {
   buildDefaultPaymentInfo,
-  buildScrapPaymentInfo,
+  buildSplitPaymentInfo,
 } from "@feature/data/hooks/usePurchaseBuilder";
 import { useDataDetail } from "@feature/data/hooks/useDataDetail";
 import clsx from "clsx";
-import DeletePostModal from "../sections/modal/DeletePostModal";
+import DeletePostModal from "@feature/data/components/sections/modal/DeletePostModal";
 
 export default function DataDetailContent() {
   const { postId } = useParams<{ postId: string }>();
   const { data, loading } = useDataDetail(postId);
   const { setInfo } = usePaymentStore();
-  //수정필요
-  const currentUserId = useProfileStore((state) => state.id);
-  const isOwner = data && currentUserId === data.memberId;
+  const isOwner = data?.myProduct;
   const renderModals = UsePaymentModals();
 
   const [selectedAmount, setSelectedAmount] = useState(0);
@@ -35,14 +32,12 @@ export default function DataDetailContent() {
 
   if (loading || !data) return <div className="text-center mt-20">로딩 중...</div>;
 
-  const handleScrapPurchase = () => {
-    setInfo(buildScrapPaymentInfo(data, selectedAmount));
+  const handleSplitPurchase = () => {
+    setInfo(buildSplitPaymentInfo(data, selectedAmount));
   };
   const handleDefaultPurchase = () => {
     setInfo(buildDefaultPaymentInfo(data));
   };
-
-  console.log("QQerq", isOwner, currentUserId, data.memberId);
 
   return (
     <div className="relative">
@@ -99,7 +94,7 @@ export default function DataDetailContent() {
                 max={data.remainAmount}
                 value={[selectedAmount]}
                 onValueChange={(v) => setSelectedAmount(v[0])}
-                onButtonClick={handleScrapPurchase}
+                onButtonClick={handleSplitPurchase}
               />
             </div>
           )}

@@ -1,21 +1,24 @@
 export interface RawDataItem {
-  id: number;
+  productId: number;
   price: number;
   itemId: number;
+  mobileDataId: number;
   memberName: string;
   remainAmount: number;
+  purchaseAmount: number;
   pricePer100MB: number;
   splitType: boolean;
   updatedAt: string;
 }
 
 export interface DataType {
-  id: number;
-  userId: number;
+  productId: number;
+  mobileDataId: number;
   title: string;
-  userName: string;
+  purchaseAmount: number;
+  memberName: string;
   price: string;
-  pricePer: string;
+  pricePer100MB: string;
   date: string;
   splitType: boolean;
 }
@@ -31,21 +34,24 @@ export interface DataDetailResponse {
   memberId: number;
   memberName: string;
   remainAmount: number;
+  selectedAmount: number;
   pricePer100MB: number;
   averageRate: number;
   reviewCount: number;
-  updatedAt: string;
+  myProduct: boolean;
   splitType: boolean;
+  updatedAt: string;
 }
 
 export function mapRawToDataType(raw: RawDataItem): DataType {
   return {
-    id: raw.id,
-    userId: raw.itemId,
+    productId: raw.productId,
+    mobileDataId: raw.itemId ?? raw.mobileDataId,
     title: `${raw.remainAmount}GB`,
-    userName: raw.memberName,
+    purchaseAmount: raw.purchaseAmount,
+    memberName: raw.memberName,
     price: `${raw.price.toLocaleString()}원`,
-    pricePer: `${raw.pricePer100MB}원/100MB`,
+    pricePer100MB: `${raw.pricePer100MB}원/100MB`,
     date: raw.updatedAt,
     splitType: raw.splitType,
   };

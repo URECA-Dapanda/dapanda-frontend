@@ -6,7 +6,7 @@ import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
 import { chatMenuOptions } from "@/components/common/dropdown/dropdownConfig";
 import { toast } from "react-toastify";
 
-export default function ChatRoomHeader({ title }: { title: string }) {
+export default function ChatRoomHeader({ senderName }: { senderName: string }) {
   const router = useRouter();
   const handleReport = () => {
     toast.success("신고되었습니다.");
@@ -18,7 +18,7 @@ export default function ChatRoomHeader({ title }: { title: string }) {
           <ChevronLeft className="w-5 h-5" />
         </button>
 
-        <h1 className="title-sm font-semibold text-gray-900">{title}</h1>
+        <h1 className="title-sm font-semibold text-gray-900">{senderName}</h1>
       </div>
 
       <UserDropdownMenu options={chatMenuOptions(handleReport)}>

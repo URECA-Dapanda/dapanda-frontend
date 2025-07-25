@@ -1,5 +1,13 @@
-import { PurchaseHistoryType, SaleHistoryType } from "../types/mypageTypes";
+import dayjs from "dayjs";
+import {
+  CashHistoryType,
+  MonthlyCashTotalType,
+  ParsedCashHistoryType,
+  PurchaseHistoryType,
+  SaleHistoryType,
+} from "../types/mypageTypes";
 import axios from "@lib/axios";
+import "dayjs/locale/ko";
 
 function isNumber(value: unknown): value is number {
   return typeof value === "number";
@@ -52,4 +60,38 @@ export async function getUserCash() {
   const { data } = await axios.get("/api/members/cash");
 
   return data.data;
+}
+
+export async function getCashHistoryList({
+  pageParam,
+  size = 20,
+  year,
+  month,
+}: {
+  pageParam?: number | unknown;
+  size?: number;
+  year: string;
+  month: string;
+}) {
+  dayjs.locale("ko");
+  const { data } = await axios.get("/api/trades/cash-history", {
+    params: {
+      cursorId: pageParam ? pageParam : undefined,
+      size,
+      year,
+      month,
+    },
+  });
+
+  const items: ParsedCashHistoryType = Object.groupBy(
+    data.data.cashHistorySummary.data,
+    (item: CashHistoryType) => {
+      return dayjs(item.createdAt).format("D (dd)");
+    }
+  );
+
+  const info: MonthlyCashTotalType = data.data.cashHistoryMonthlySummary;
+  const nextCursor = data.data.cashHistorySummary.pageInfo.nextCursorId;
+
+  return { items, nextCursor, monthlyInfo: info };
 }

@@ -49,7 +49,7 @@ export const useMapMarkers = (
         });
       }
 
-      newMarkerMap.set(store.id, marker);
+      newMarkerMap.set(store.productId, marker);
     });
 
     // 이전 마커 제거

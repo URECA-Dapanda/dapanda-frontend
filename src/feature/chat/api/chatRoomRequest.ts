@@ -1,27 +1,6 @@
-import { useChatStore } from "@feature/chat/stores/useChatStore";
 import axiosInstance from "@/lib/axios";
 
-export const createOrGetChatRoom = async (
-  productId: number,
-  title: string,
-  price: number
-): Promise<number> => {
-  if (process.env.NEXT_PUBLIC_USE_MOCK === "true") {
-    const mockId = 999;
-    console.warn("현재는 테스트(mock 모드)로 채팅방 ID 반환 중");
-
-    useChatStore.getState().addChatRoom({
-      chatRoomId: mockId,
-      title,
-      price,
-      name: "상대방 이름",
-      lastMessage: "",
-      updatedAt: new Date().toISOString(),
-    });
-
-    return 999;
-  }
-
+export const createOrGetChatRoom = async (productId: number): Promise<number> => {
   try {
     const response = await axiosInstance.post(`/api/products/${productId}/chat-room`);
     const chatRoomId = response.data.data.chatRoomId;

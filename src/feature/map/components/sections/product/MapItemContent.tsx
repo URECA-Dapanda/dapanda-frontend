@@ -6,9 +6,10 @@ import type { ProductItemProps } from "@/feature/data/types/dataType";
 import type { MapType } from "@/feature/map/types/mapType";
 import axiosInstance from "@/lib/axios";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 export default function MapItemCardContent({
-  data: { id, address, price, score, title, type, updatedAt, open },
+  data: { productId, address, price, score, title, type, updatedAt, open, imageUrl },
   disableUseButton = false,
 }: ProductItemProps<MapType> & { disableUseButton?: boolean }) {
   const router = useRouter();
@@ -17,9 +18,10 @@ export default function MapItemCardContent({
     async (e: React.MouseEvent) => {
       e.stopPropagation();
       try {
-        const response = await axiosInstance.post(`/api/products/${id}/chat-room`);
+        const response = await axiosInstance.post(`/api/products/${productId}/chat-room`);
         if (response.data.code === 0) {
-          router.push(`/chat/${response.data.data.chatRoomId}`);
+          const chatRoomId = response.data.data.chatRoomId;
+          router.push(`/chat/${chatRoomId}?productId=${productId}`);
         } else {
           toast.error(response.data.message || "채팅방 생성에 실패했습니다.");
         }
@@ -28,7 +30,7 @@ export default function MapItemCardContent({
         console.error(error);
       }
     },
-    [id, router]
+    [productId, router]
   );
 
   return (
@@ -36,7 +38,17 @@ export default function MapItemCardContent({
       <div className="grid grid-cols-[auto_1fr_auto] gap-16 items-center">
         {/* 왼쪽 이미지 */}
         <div className="w-56 h-56 bg-gray-200 rounded-full flex items-center justify-center">
-          <ImageIcon />
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt="대표 이미지"
+              width={56}
+              height={56}
+              className="w-full h-full rounded-full object-cover"
+            />
+          ) : (
+            <ImageIcon className="text-gray-400" />
+          )}
         </div>
 
         {/* 가운데 텍스트 */}
@@ -77,7 +89,7 @@ export default function MapItemCardContent({
           disabled={isDisabled}
           onClick={() => {
             if (!isDisabled) {
-              router.push(`/map/${id}`);
+              router.push(`/map/${productId}`);
             }
           }}
         >

@@ -6,6 +6,7 @@ import ModalHeader from "@/components/common/modal/ModalHeader";
 import { ButtonComponent } from "@/components/common/button/ButtonComponent";
 import { BadgeComponent } from "@/components/common/badge/BadgeComponent";
 import { Wallet } from "lucide-react";
+import CurrentCashCard from "@feature/mypage/components/sections/profile/CurrentCashCard";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -17,10 +18,9 @@ interface PaymentModalProps {
     price: string;
     unitPrice?: string;
     seller?: string;
-    badge?: "일반 구매" | "자투리 구매";
+    badge?: "일반 구매" | "분할 구매" | "자투리 구매";
     location?: string;
     duration?: string;
-    cash: string;
   };
 }
 
@@ -73,18 +73,12 @@ const PaymentModal = ({
               checked={selected}
               onChange={() => setSelected(true)}
             />
-            <Wallet className="w-20"/>
+            <Wallet className="w-20" />
             <span>캐시로 결제하기</span>
           </label>
 
           {/* 보유 캐시 카드 */}
-          <div className="bg-gradient-to-r from-primary-100 to-[#DCE6FF] h-80 p-16 rounded-12 flex justify-between items-center mb-24">
-            <div className="flex flex-col">
-                <span className="body-sm text-gray-600">보유 캐시</span>
-                <span className="title-lg text-gray-700">{info.cash}</span>
-            </div>
-            <img src="/creditIcon.png" alt="₩" className="w-48 h-48" />
-          </div>
+          <CurrentCashCard />
         </div>
 
         {/* 결제 버튼 */}

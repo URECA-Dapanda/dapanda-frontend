@@ -15,7 +15,6 @@ export function useScrapRecommendation() {
     const fetchRecommendation = async (amount: number) => {
         return await getScrapRecommendation(amount);
       };
-    
       const search = async () => {
         setLoading(true);
         const { items, summary } = await fetchRecommendation(value[0]);
@@ -23,6 +22,7 @@ export function useScrapRecommendation() {
         setSummary(summary);
         setLoading(false);
       };
+      console.log("result: ",result)
 
     return {
         value,
