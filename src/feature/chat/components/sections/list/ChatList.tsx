@@ -29,14 +29,17 @@ export default function ChatList() {
   useEffect(() => {
     async function fetchChatRooms() {
       try {
-        const response = await axiosInstance.get("/api/chat-room", { params: { size: 10 } });
+        const response = await axiosInstance.get("/api/chat-room", {
+          params: {
+            size: 10,
+            chatRoomReadOption: "ALL",
+          },
+        });
         if (response.data.code === 0) {
           const apiList = response.data.data.data;
           const chatList = apiList.map((item: ApiChatRoom) => ({
             chatRoomId: item.chatRoomId,
             name: item.senderName,
-            title: item.title,
-            price: item.price,
             lastMessage: "",
             updatedAt: item.createdAt,
             productId: item.productId,
@@ -97,15 +100,12 @@ export default function ChatList() {
           key={chat.chatRoomId}
           chatRoomId={String(chat.chatRoomId)}
           name={chat.name}
-          lastMessage={chat.lastMessage}
           timeAgo={formatRelativeTime(chat.updatedAt)}
           productId={chat.productId}
-          post={{
-            title: chat.title,
-            price: (chat.price ?? 0).toLocaleString(),
-          }}
           place={productDetails[chat.productId]?.place}
           pricePer10min={productDetails[chat.productId]?.pricePer10min}
+          lastMessage={chat.lastMessage}
+          avatarUrl={chat.avatarUrl}
         />
       ))}
     </div>

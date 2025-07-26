@@ -11,7 +11,7 @@ interface ProductInfo {
   productId: number;
   itemId: number;
   title: string;
-  price: string;
+  pricePer10min: number;
 }
 
 export default function ChatRoomPage() {
@@ -25,30 +25,14 @@ export default function ChatRoomPage() {
 
   useEffect(() => {
     if (!chatRoomId) return;
+
     // chatList에서 먼저 찾기
     const found = chatList.find((c) => String(c.chatRoomId) === String(chatRoomId));
     if (found) {
       setChatRoom(found);
-    } else {
-      // 없으면 직접 fetch
-      axiosInstance
-        .get(`/api/chat-room/${chatRoomId}`)
-        .then((res) => {
-          setChatRoom({
-            chatRoomId: res.data.data.id,
-            productId: res.data.data.itemId,
-            title: res.data.data.title,
-            price: res.data.data.price,
-            senderName: res.data.data.senderName,
-            name: res.data.data.senderName,
-            lastMessage: res.data.data.lastMessage ?? "",
-            updatedAt: res.data.data.updatedAt ?? "",
-            itemId: res.data.data.itemId,
-          });
-        })
-        .catch((err) => {
-          console.error("chat content info fetch error:", err);
-        });
+    } else if (chatList.length > 0) {
+      console.error(`채팅방을 찾을 수 없습니다.`);
+      // 여기서 에러 처리 (404 페이지로 리다이렉트)
     }
   }, [chatRoomId, chatList]);
 
@@ -59,7 +43,7 @@ export default function ChatRoomPage() {
           productId: res.data.data.productId,
           itemId: res.data.data.itemId,
           title: res.data.data.title,
-          price: res.data.data.price,
+          pricePer10min: res.data.data.price,
         });
       });
     }
@@ -70,7 +54,11 @@ export default function ChatRoomPage() {
   console.log("productId:", productId);
   console.log("senderName:", chatRoom?.senderName ?? "상대방");
 
-  if (!product) return null;
+  if (!product) {
+    return (
+      <div className="flex items-center justify-center h-screen">상품 정보를 불러오는 중...</div>
+    );
+  }
 
   return (
     <>
@@ -78,7 +66,7 @@ export default function ChatRoomPage() {
         chatRoomId={Number(chatRoomId)}
         itemId={product.itemId}
         title={product.title}
-        price={product.price}
+        pricePer10min={product.pricePer10min}
         senderName={chatRoom?.senderName ?? "상대방"}
       />
     </>

@@ -11,10 +11,6 @@ export interface ChatItemProps {
   unreadCount?: number;
   avatarUrl?: string;
   productId: number;
-  post: {
-    title: string;
-    price: string;
-  };
   place?: string;
   pricePer10min?: number;
 }
@@ -22,16 +18,14 @@ export interface ChatItemProps {
 export default function ChatItem({
   chatRoomId,
   name,
-  lastMessage,
   timeAgo,
   unreadCount = 0,
   avatarUrl,
   productId,
-  post,
   place,
   pricePer10min,
 }: ChatItemProps) {
-  console.log("ChatItem props:", { chatRoomId, name, productId, post, place, pricePer10min });
+  console.log("ChatItem props:", { chatRoomId, name, productId, place, pricePer10min });
 
   return (
     <Link href={`/chat/${chatRoomId}?productId=${productId}`} className="block">
@@ -40,12 +34,12 @@ export default function ChatItem({
           <AvatarIcon avatar={avatarUrl} size="medium" />
           <div className="flex flex-col gap-2">
             <span className="body-sm text-black">{name}</span>
-            <span className="body-sm text-gray-800">{place || post.title}</span>
+            <span className="body-sm text-gray-800">{place}</span>
             <span className="body-sm text-gray-800">
-              {pricePer10min ? `${pricePer10min}원/10분` : post.price}
+              {pricePer10min ? `${pricePer10min}원/10분` : ""}
             </span>
 
-            <span className="body-xs text-gray-600 truncate max-w-[180px]">{lastMessage}</span>
+            {/* <span className="body-xs text-gray-600 truncate max-w-[180px]">{lastMessage}</span> */}
           </div>
         </div>
         <div className="flex flex-col items-end gap-2">

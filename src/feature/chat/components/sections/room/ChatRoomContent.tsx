@@ -2,34 +2,31 @@
 
 import { useState, useEffect, useRef } from "react";
 import { formatDateDivider } from "@lib/time";
-import { useProfileStore } from "@stores/useProfileStore";
 import { Client } from "@stomp/stompjs";
 import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
-import type { ChatMessage } from "@/feature/chat/types/chatType";
+import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
 import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
 import { groupMessagesByDate } from "@feature/chat/utils/groupMessagesByDate";
 import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
 import { createStompClient, sendMessage } from "@feature/chat/utils/chatSocket";
 import { getChatHistory } from "@feature/chat/api/getChatHistory";
 import ChatRoomHeader from "@feature/chat/components/sections/room/ChatRoomHeader";
-import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
+import ReportModal from "@/components/common/modal/ReportModal";
 
 interface ChatRoomContentProps {
   chatRoomId: number;
   itemId: number;
   title: string;
-  price: string;
+  pricePer10min?: number;
   senderName: string;
 }
 export default function ChatRoomContent({
   chatRoomId,
-  itemId,
   title,
-  price,
+  pricePer10min,
   senderName,
 }: ChatRoomContentProps) {
-  const currentUserId = useProfileStore((state) => state.id);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatSocketMessage[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const clientRef = useRef<Client | null>(null);
@@ -37,7 +34,7 @@ export default function ChatRoomContent({
   const fetchMoreMessages = async () => {
     if (!hasMore || loadingMore) return;
     setLoadingMore(true);
-    const oldestId = Number(messages[0]?.id);
+    const oldestId = Number(messages[0]?.chatMessageId);
     const more = await getChatHistory(chatRoomId, oldestId, 10);
     setMessages((prev) => [...more, ...prev]);
     setHasMore(more.length === 10);
@@ -58,16 +55,17 @@ export default function ChatRoomContent({
     // 웹소켓 연결
     clientRef.current = createStompClient(chatRoomId, (msg: ChatSocketMessage) => {
       const data = typeof msg === "string" ? JSON.parse(msg) : msg;
-      const incomingMessage: ChatMessage = {
-        id: String(data.chatMessageId),
-        senderId: String(data.senderId),
-        text: data.message,
+      console.log("서버에서 받은 메시지:", data); // 디버깅용 로그
+      const incomingMessage: ChatSocketMessage = {
+        chatMessageId: data.chatMessageId,
+        isMine: data.isMine,
+        message: data.message,
         createdAt: data.createdAt,
-        productId: itemId,
       };
+      console.log("변환된 메시지:", incomingMessage); // 디버깅용 로그
       // 중복 방지 로직
       setMessages((prev) => {
-        if (prev.some((m) => m.id === incomingMessage.id)) {
+        if (prev.some((m) => m.chatMessageId === incomingMessage.chatMessageId)) {
           return prev;
         }
         return [...prev, incomingMessage];
@@ -84,13 +82,12 @@ export default function ChatRoomContent({
   }, [messages.length]);
 
   const addMessage = (text: string) => {
-    const tempId = `temp-${Date.now()}`;
-    const newMessage: ChatMessage = {
-      id: tempId,
-      senderId: currentUserId?.toString() ?? "unknown",
-      text,
+    const tempId = Date.now();
+    const newMessage: ChatSocketMessage = {
+      chatMessageId: tempId,
+      isMine: true,
+      message: text,
       createdAt: new Date().toISOString(),
-      productId: itemId,
     };
 
     // 1. 내 화면에 바로 optimistic 메시지 추가
@@ -111,12 +108,16 @@ export default function ChatRoomContent({
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
   );
 
+  const [isReportOpen, setIsReportOpen] = useState(false);
+
   return (
     <div className="flex flex-col h-screen mb-20">
       <div className="fixed top-0 left-0 w-full z-20 bg-white">
-        <ChatRoomHeader senderName={senderName} />
-        <div className="bg-white px-24 pt-24 pb-12">
-          <ChatPostCard title={title} price={price} />
+        <div className="w-[375px] mx-auto">
+          <ChatRoomHeader senderName={senderName} onReport={() => setIsReportOpen(true)} />
+          <div className="bg-white px-24 pt-24 pb-12">
+            <ChatPostCard title={title} pricePer10min={pricePer10min} />
+          </div>
         </div>
       </div>
       <div
@@ -127,17 +128,15 @@ export default function ChatRoomContent({
           }
         }}
       >
-        {loadingMore && <div className="text-center py-2">이전 메시지 불러오는 중...</div>}
+        {loadingMore && (
+          <div className="text-center py-2 text-gray-400">이전 메시지 불러오는 중...</div>
+        )}
         {groupMessagesByDate(sortedMessages).map(({ date, messages }) => (
           <div key={date} className="space-y-6">
             <div className="text-center text-gray-500 body-xs py-6">{formatDateDivider(date)}</div>
             <div className="flex flex-col gap-24">
               {messages.map((msg) => (
-                <ChatBubble
-                  key={msg.id}
-                  message={msg}
-                  currentUserId={String(currentUserId ?? "")}
-                />
+                <ChatBubble key={msg.chatMessageId} message={msg} />
               ))}
             </div>
           </div>
@@ -145,7 +144,8 @@ export default function ChatRoomContent({
         <div ref={messagesEndRef} />
         <div className="pb-44" />
       </div>
-      <ChatInputBar onSend={addMessage} />
+      {!isReportOpen && <ChatInputBar onSend={addMessage} />}
+      <ReportModal isOpen={isReportOpen} setIsOpen={setIsReportOpen} targetName={senderName} />
     </div>
   );
 }

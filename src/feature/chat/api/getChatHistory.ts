@@ -1,19 +1,19 @@
 import axios from "@/lib/axios";
-import type { ChatMessage, ChatSocketMessage } from "@/feature/chat/types/chatType";
+import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
 
 export async function getChatHistory(
   chatRoomId: number,
   cursorId?: number,
   size: number = 10
-): Promise<ChatMessage[]> {
+): Promise<ChatSocketMessage[]> {
+  const params: { size: number; cursorId?: number } = { size };
+  if (cursorId !== undefined && !isNaN(cursorId)) {
+    params.cursorId = cursorId;
+  }
+
   const res = await axios.get(`/api/chat-room/${chatRoomId}/history`, {
-    params: { size, cursorId },
+    params,
   });
   if (res.data.code !== 0) throw new Error(res.data.message);
-  return res.data.data.data.map((msg: ChatSocketMessage) => ({
-    id: String(msg.chatMessageId),
-    senderId: String(msg.senderId),
-    text: msg.message,
-    createdAt: msg.createdAt,
-  }));
+  return res.data.data.data;
 }
