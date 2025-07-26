@@ -15,24 +15,10 @@ export interface ReviewBottomSheetProps {
   isOpen: boolean;
   onClose: () => void;
   tradeId: number;
-  memberName: string;
-  address: string;
-  price: number;
-  unitPrice: number;
-  usedMinutes: number;
   hideHeader?: boolean;
 }
 
-export default function ReviewBottomSheet({
-  isOpen,
-  onClose,
-  tradeId,
-  memberName,
-  address,
-  price,
-  unitPrice,
-  usedMinutes,
-}: ReviewBottomSheetProps) {
+export default function ReviewBottomSheet({ isOpen, onClose, tradeId }: ReviewBottomSheetProps) {
   const [step, setStep] = useState<"form" | "complete">("form");
   const [rating, setRating] = useState(4);
   const [review, setReview] = useState("");
@@ -56,8 +42,8 @@ export default function ReviewBottomSheet({
   };
 
   return (
-    <BaseBottomSheet isOpen={isOpen} onClose={handleClose}>
-      <div className="flex flex-col gap-24 px-24 py-24">
+    <BaseBottomSheet isOpen={isOpen} onClose={handleClose} variant="hybrid" snapHeight={320}>
+      <div className="flex flex-col gap-8 px-24 py-24">
         <div className="flex justify-between items-center">
           <span className="h3 text-black">거래 후기 남기기</span>
           <X size={24} onClick={handleClose} className="cursor-pointer text-gray-500" />
@@ -66,27 +52,7 @@ export default function ReviewBottomSheet({
         <div className="flex flex-col gap-24"></div>
         {step === "form" ? (
           <div className="flex flex-col gap-24">
-            <p className="title-sm mb-8 text-black">거래한 물건</p>
-
-            <div className="rounded-2xl bg-primary2 flex px-24 py-24 items-stretch gap-8 ">
-              <div className="flex-1 flex flex-col justify-between">
-                <div className="text-black mb-2">와이파이</div>
-                <div className="text-sm text-black">
-                  <div>판매자: {memberName}</div>
-                  <div>위치: {address}</div>
-                </div>
-              </div>
-              <div className="flex flex-col items-end justify-between text-right">
-                <div className="title-md text-primary mb-2">{price.toLocaleString()}원</div>
-                <div className="body-xs text-black">
-                  <div>10분당 {unitPrice.toLocaleString()}원</div>
-                  <div>
-                    총 이용시간 <span className="text-primary">{usedMinutes}분</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p className="title-sm text-black">{memberName} 님과의 거래는 어떠셨나요?</p>
+            <p className="title-sm text-black">거래는 어떠셨나요?</p>
             <div className="flex gap-4 justify-center">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -106,7 +72,7 @@ export default function ReviewBottomSheet({
             <div className="flex flex-col gap-12 w-full">
               <p className="body-md text-black">한 줄 후기를 남겨주세요!</p>
               <InputComponent
-                className="min-h-60 w-full"
+                className="min-h-144 w-full"
                 as="textarea"
                 value={review}
                 onChange={(e) => setReview(e.target.value)}
@@ -119,7 +85,7 @@ export default function ReviewBottomSheet({
             </ButtonComponent>
           </div>
         ) : (
-          <div className="mt-120 items-center justify-center">
+          <div className="mt-52 items-center justify-center">
             <div className="flex flex-col items-center justify-center gap-32">
               <div className="rounded-full w-60 h-60 bg-success flex justify-center items-center">
                 <Check className="bg-success" size={30} color="white" />
@@ -127,7 +93,7 @@ export default function ReviewBottomSheet({
               <div className="title-sm text-black font-bold">리뷰 작성 완료!</div>
               <div className="body-sm text-gray-600 text-center">리뷰 작성이 완료되었습니다.</div>
               <ButtonComponent
-                className="w-full mt-120"
+                className="w-full mt-52"
                 variant="primary"
                 onClick={() => router.push("/data")}
               >
