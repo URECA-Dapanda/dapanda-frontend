@@ -3,20 +3,19 @@
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useProfileStore } from "@stores/useProfileStore";
+
 import { formatRelativeTime } from "@/lib/time";
-import axiosInstance from "@/lib/axios";
 import { useChatStore } from "@feature/chat/stores/useChatStore";
 import ChatItem from "@feature/chat/components/sections/list/ChatItem";
-import { getChatContentInfo } from "@feature/chat/api/chatContentRequest";
+import { getChatRoomList } from "@feature/chat/api/chatRoomRequest";
+import { getMapDetailById } from "@feature/map/api/getMapDetailById";
 import { ApiChatRoom } from "@feature/chat/types/chatType";
 
 export default function ChatList() {
   const chatList = useChatStore((state) => state.chatList);
   const setChatList = useChatStore((state) => state.setChatList);
-  const myUserId = useProfileStore((state) => state.id);
   const [productDetails, setProductDetails] = useState<
-    Record<number, { place: string; pricePer10min: number }>
+    Record<number, { place: string; pricePer10min: number; memberName: string }>
   >({});
 
   const params = useParams();
@@ -29,69 +28,58 @@ export default function ChatList() {
   useEffect(() => {
     async function fetchChatRooms() {
       try {
-        const response = await axiosInstance.get("/api/chat-room", {
-          params: {
-            size: 10,
-            chatRoomReadOption: "ALL",
-          },
-        });
-        if (response.data.code === 0) {
-          const apiList = response.data.data.data;
-          const chatList = apiList.map((item: ApiChatRoom) => ({
+        const apiList = await getChatRoomList(10, "ALL");
+        console.log("API response raw data:", apiList);
+
+        const uniqueProductIds = [...new Set(apiList.map((item: ApiChatRoom) => item.productId))];
+        const productDetailsMap: Record<
+          number,
+          { place: string; pricePer10min: number; memberName: string }
+        > = {};
+
+        // 상품 정보를 먼저 가져오기
+        for (const productId of uniqueProductIds) {
+          try {
+            const productData = await getMapDetailById(String(productId));
+            productDetailsMap[productId as number] = {
+              place: productData.title,
+              pricePer10min: productData.price,
+              memberName: productData.memberName,
+            };
+          } catch (error) {
+            console.error(`상품 ${productId} 정보 가져오기 실패:`, error);
+            productDetailsMap[productId as number] = {
+              place: "상품",
+              pricePer10min: 0,
+              memberName: "판매자",
+            };
+          }
+        }
+
+        setProductDetails(productDetailsMap);
+        console.log("Product details:", productDetailsMap);
+
+        // 상품 정보를 사용해서 채팅방 목록 생성
+        const chatList = apiList.map((item: ApiChatRoom) => {
+          const productDetail = productDetailsMap[item.productId];
+          return {
             chatRoomId: item.chatRoomId,
-            name: item.senderName,
+            name: productDetail?.memberName || item.senderName, // 판매자 이름 우선, 없으면 senderName
             lastMessage: "",
             updatedAt: item.createdAt,
             productId: item.productId,
-          }));
-          setChatList(chatList);
-          console.log("chatList:", chatList);
-          console.log("API response raw data:", apiList);
+          };
+        });
 
-          const uniqueProductIds = [...new Set(apiList.map((item: ApiChatRoom) => item.productId))];
-          const productDetailsMap: Record<number, { place: string; pricePer10min: number }> = {};
-
-          for (const productId of uniqueProductIds) {
-            try {
-              const productRes = await axiosInstance.get(`/api/products/wifi/${productId}`);
-              const productData = productRes.data.data;
-              productDetailsMap[productId as number] = {
-                place: productData.title,
-                pricePer10min: productData.price,
-              };
-            } catch (error) {
-              console.error(`상품 ${productId} 정보 가져오기 실패:`, error);
-              productDetailsMap[productId as number] = {
-                place: "상품",
-                pricePer10min: 0,
-              };
-            }
-          }
-
-          setProductDetails(productDetailsMap);
-          console.log("Product details:", productDetailsMap);
-        } else {
-          toast.error(response.data.message || "채팅방 조회 실패");
-        }
+        setChatList(chatList);
+        console.log("chatList:", chatList);
       } catch (e) {
         toast.error("채팅방 조회 중 오류가 발생했습니다.");
         console.error(e);
       }
     }
     fetchChatRooms();
-  }, [setChatList, myUserId]);
-
-  useEffect(() => {
-    if (chatRoomId) {
-      getChatContentInfo(Number(chatRoomId))
-        .then((data) => {
-          console.log("chat content info:", data);
-        })
-        .catch((err) => {
-          console.error("chat content fetch error:", err);
-        });
-    }
-  }, [chatRoomId]);
+  }, [setChatList]);
 
   return (
     <div className="flex flex-col pt-30 space-y-24 px-24 py-2">

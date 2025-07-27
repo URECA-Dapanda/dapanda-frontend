@@ -12,34 +12,57 @@ import { createStompClient, sendMessage } from "@feature/chat/utils/chatSocket";
 import { getChatHistory } from "@feature/chat/api/getChatHistory";
 import ChatRoomHeader from "@feature/chat/components/sections/room/ChatRoomHeader";
 import ReportModal from "@/components/common/modal/ReportModal";
+import { getMapDetailById } from "@feature/map/api/getMapDetailById";
+import { useProfileStore } from "@stores/useProfileStore";
 
 interface ChatRoomContentProps {
   chatRoomId: number;
+  productId: string | null;
+}
+
+interface ProductInfo {
+  productId: number;
   itemId: number;
   title: string;
-  pricePer10min?: number;
-  senderName: string;
+  pricePer10min: number;
+  memberName: string;
+  memberId: number;
 }
-export default function ChatRoomContent({
-  chatRoomId,
-  title,
-  pricePer10min,
-  senderName,
-}: ChatRoomContentProps) {
+
+export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomContentProps) {
   const [messages, setMessages] = useState<ChatSocketMessage[]>([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
+  const [product, setProduct] = useState<ProductInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isReportOpen, setIsReportOpen] = useState(false);
   const clientRef = useRef<Client | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const fetchMoreMessages = async () => {
-    if (!hasMore || loadingMore) return;
-    setLoadingMore(true);
-    const oldestId = Number(messages[0]?.chatMessageId);
-    const more = await getChatHistory(chatRoomId, oldestId, 10);
-    setMessages((prev) => [...more, ...prev]);
-    setHasMore(more.length === 10);
-    setLoadingMore(false);
-  };
+  const myUserId = useProfileStore((state) => state.id);
+
+  // 상품 정보 가져오기
+  useEffect(() => {
+    if (!productId) return;
+
+    const fetchProductInfo = async () => {
+      try {
+        const productData = await getMapDetailById(productId);
+        setProduct({
+          productId: productData.productId,
+          itemId: productData.itemId,
+          title: productData.title,
+          pricePer10min: productData.price,
+          memberName: productData.memberName,
+          memberId: productData.memberId,
+        });
+      } catch (error) {
+        console.error("상품 정보 가져오기 실패:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductInfo();
+  }, [productId]);
+
   useEffect(() => {
     if (!chatRoomId) return;
     console.log("fetching history for", chatRoomId);
@@ -108,44 +131,38 @@ export default function ChatRoomContent({
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
   );
 
-  const [isReportOpen, setIsReportOpen] = useState(false);
+  const groupedMessages = groupMessagesByDate(sortedMessages);
+
+  if (loading || !product) {
+    return (
+      <div className="flex items-center justify-center h-screen">상품 정보를 불러오는 중...</div>
+    );
+  }
+
+  // 상대방 이름 결정: 내가 판매자인지 구매자인지에 따라 다름
+  const opponentName = product.memberId === myUserId ? "구매자" : product.memberName;
 
   return (
-    <div className="flex flex-col h-screen mb-20">
-      <div className="fixed top-0 left-0 w-full z-20 bg-white">
-        <div className="w-[375px] mx-auto">
-          <ChatRoomHeader senderName={senderName} onReport={() => setIsReportOpen(true)} />
-          <div className="bg-white px-24 pt-24 pb-12">
-            <ChatPostCard title={title} pricePer10min={pricePer10min} />
-          </div>
-        </div>
-      </div>
-      <div
-        className="flex-1 overflow-y-auto px-24 space-y-6 pt-180"
-        onScroll={(e) => {
-          if (e.currentTarget.scrollTop < 100 && hasMore && !loadingMore) {
-            fetchMoreMessages();
-          }
-        }}
-      >
-        {loadingMore && (
-          <div className="text-center py-2 text-gray-400">이전 메시지 불러오는 중...</div>
-        )}
-        {groupMessagesByDate(sortedMessages).map(({ date, messages }) => (
-          <div key={date} className="space-y-6">
-            <div className="text-center text-gray-500 body-xs py-6">{formatDateDivider(date)}</div>
-            <div className="flex flex-col gap-24">
-              {messages.map((msg) => (
-                <ChatBubble key={msg.chatMessageId} message={msg} />
+    <>
+      <ChatRoomHeader senderName={opponentName} onReport={() => setIsReportOpen(true)} />
+      <div className="flex flex-col h-screen bg-gray-50">
+        <ChatPostCard title={product.title} pricePer10min={product.pricePer10min} />
+        <div className="flex-1 overflow-y-auto px-4 py-2">
+          {groupedMessages.map((group) => (
+            <div key={group.date}>
+              <div className="text-center text-xs text-gray-500 my-2">
+                {formatDateDivider(group.date)}
+              </div>
+              {group.messages.map((message) => (
+                <ChatBubble key={message.chatMessageId} message={message} />
               ))}
             </div>
-          </div>
-        ))}
-        <div ref={messagesEndRef} />
-        <div className="pb-44" />
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+        <ChatInputBar onSend={addMessage} />
       </div>
-      {!isReportOpen && <ChatInputBar onSend={addMessage} />}
-      <ReportModal isOpen={isReportOpen} setIsOpen={setIsReportOpen} targetName={senderName} />
-    </div>
+      <ReportModal isOpen={isReportOpen} setIsOpen={setIsReportOpen} targetName={opponentName} />
+    </>
   );
 }
