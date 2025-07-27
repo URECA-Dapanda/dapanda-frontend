@@ -3,7 +3,7 @@
 import ReviewBottomSheet from "@feature/map/components/sections/review/ReviewBottomSheet";
 import { useState } from "react";
 
-export default function ReviewPageContent() {
+export default function ReviewRegistPageContent() {
   // const tradeId = Number(params.get("tradeId"));
   const tradeId = 141;
   const [isOpen, setIsOpen] = useState(true);
