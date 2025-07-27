@@ -24,7 +24,7 @@ const postTypeGuard: { [key: string]: string } = {
 export function HistoryCard({ data, size = "sm" }: HistoryCardProps) {
   const router = useRouter();
   const handleCardClick = useCallback(() => {
-    router.push(`/data/${data.productId}`, { scroll: true });
+    router.push(`/${data.type !== "WIFI" ? "data" : "map"}/${data.productId}`, { scroll: true });
   }, [router]);
 
   return (
