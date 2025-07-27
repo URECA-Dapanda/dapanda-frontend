@@ -144,9 +144,9 @@ export default function TopSheet({
           )}
 
           <motion.div
-            className="relative z-10 pl-30 px-4 space-y-1"
+            className="relative z-10 pl-30 px-4 space-y-1 mb-20"
             animate={{
-              paddingTop: type === "wifi" ? 20 : expanded ? 200 : 60,
+              paddingTop: type === "wifi" ? 20 : expanded ? 200 : 90,
             }}
             transition={{ type: "spring", damping: 20, stiffness: 200 }}
           >

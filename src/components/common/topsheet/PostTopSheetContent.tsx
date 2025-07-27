@@ -23,18 +23,27 @@ export function PostTopSheetContent({ data, expanded }: { data: PostData; expand
       </div>
       <div className="flex flex-col gap-8">
         <p className="title-md">{data.price}원</p>
-        {expanded && <p className="body-xs">{data.unitPrice}원/100MB</p>}
+        {expanded && (
+          <>
+            <p className="body-xs">{data.unitPrice.toLocaleString()}원/100MB</p>
 
-        {data.recentPrice && data.averagePrice && (
-          <div className="flex gap-12 pt-20 flex-wrap">
-            <BadgeComponent variant="meta" size="md" className="bg-white">
-              최근거래가: {data.recentPrice}원
-            </BadgeComponent>
-            <BadgeComponent variant="meta" size="md" className="bg-white">
-              평균거래가: {data.averagePrice}원
-            </BadgeComponent>
-          </div>
+            {(data.recentPrice != null || data.averagePrice != null) && (
+              <div className="flex gap-12 pt-12 flex-wrap">
+                {data.recentPrice != null && (
+                  <BadgeComponent variant="meta" size="md" className="bg-white">
+                    최근 거래가: {data.recentPrice.toLocaleString()}원
+                  </BadgeComponent>
+                )}
+                {data.averagePrice != null && (
+                  <BadgeComponent variant="meta" size="md" className="bg-white">
+                    평균 거래가: {data.averagePrice.toLocaleString()}원
+                  </BadgeComponent>
+                )}
+              </div>
+            )}
+          </>
         )}
+
       </div>
     </>
   );
