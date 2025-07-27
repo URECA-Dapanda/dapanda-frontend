@@ -107,6 +107,16 @@ export const parseHHMMToTime = (hhmm: string): Time => {
   };
 };
 
+export const formatTimeToHHMM = (time: {
+  hour: string | number;
+  minute: string | number;
+}): string => {
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  const hour = typeof time.hour === "string" ? parseInt(time.hour, 10) : time.hour;
+  const minute = typeof time.minute === "string" ? parseInt(time.minute, 10) : time.minute;
+  return `${pad(hour)}:${pad(minute)}`;
+};
+
 export const compareTimes = (a: Time, b: Time): number => {
   const toMinutes = (t: Time) => {
     let hour = parseInt(t.hour, 10);

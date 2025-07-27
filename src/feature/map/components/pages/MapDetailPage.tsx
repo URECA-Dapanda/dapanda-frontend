@@ -6,21 +6,25 @@ import TopSheet from "@/components/common/topsheet/TopSheet";
 import { ButtonComponent } from "@components/common/button";
 import TimeSelectorSection from "@/feature/map/components/sections/product/TimeSelectorSection";
 import SellerSection from "@/feature/map/components/sections/seller/SellerSection";
-import { usePurchaseTimer } from "@/feature/map/hooks/usePurchaseTimer";
+// import { usePurchaseTimer } from "@/feature/map/hooks/usePurchaseTimer";
 import { useMapDetailData } from "@/feature/map/hooks/useMapDetailData";
 import { useTimeState } from "@/feature/map/hooks/useTimeState";
 import DeletePostModal from "@/feature/data/components/sections/modal/DeletePostModal";
-import { isValidTimeRange, parseHHMMToTime, isTimeInRange } from "@/lib/time";
+import { isValidTimeRange, parseHHMMToTime, isTimeInRange, formatTimeToHHMM } from "@/lib/time";
 import { useWifiPriceRecommendation } from "@/feature/map/hooks/useWifiPriceRecommendation";
+import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 
 import clsx from "clsx";
+import { buildWifiPaymentInfo } from "@feature/payment/hooks/useWifiPurchaseBuilder";
+import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
 
 export default function MapDetailPage() {
   const router = useRouter();
   const { postId } = useParams<{ postId: string }>();
+  const { setInfo } = usePaymentStore();
 
   const [topSheetExpanded, setTopSheetExpanded] = useState(false);
-  const { handlePurchase } = usePurchaseTimer();
+  // const { handlePurchase } = usePurchaseTimer();
   const { data, isLoading, isError } = useMapDetailData(postId);
   const [error, setError] = useState<string | null>(null);
 
@@ -70,9 +74,15 @@ export default function MapDetailPage() {
     }
 
     setError(null);
-    handlePurchase(startTime, endTime, () => {
-      router.push("/data");
-    });
+
+    const start = formatTimeToHHMM(startTime);
+    const end = formatTimeToHHMM(endTime);
+
+    setInfo(buildWifiPaymentInfo(data, start, end));
+
+    // handlePurchase(startTime, endTime, () => {
+    //   router.push("/data");
+    // });
   };
 
   return (
@@ -127,6 +137,7 @@ export default function MapDetailPage() {
         </div>
       </div>
       <DeletePostModal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} />
+      <UsePaymentModals />
     </div>
   );
 }
