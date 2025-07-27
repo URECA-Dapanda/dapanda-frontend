@@ -16,7 +16,7 @@ export function PostTopSheetContent({ data, expanded }: { data: PostData; expand
             분할판매중
           </BadgeComponent>
         )}
-        <BadgeComponent variant="meta" size="md" className="bg-gray-400 w-[58px] inline-flex">
+        <BadgeComponent variant="meta" size="md" className="bg-gray-400 w-[60px] inline-flex">
           {data.uploadTime} 전
         </BadgeComponent>
         <h2 className="h1">{data.title}</h2>
