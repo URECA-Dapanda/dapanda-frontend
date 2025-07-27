@@ -7,18 +7,23 @@ import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery"
 import ReviewItem from "@feature/mypage/components/sections/review/ReviewItem";
 import { MouseEvent, useCallback, useState } from "react";
 import ReportModal from "@components/common/modal/ReportModal";
+import { useSearchParams } from "next/navigation";
 
-export default function ReviewList() {
+export default function ReviewList({ type }: { type?: "receive" | "post" }) {
+  const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentTarget, setCurrentTarget] = useState<string>();
   const [currentName, setCurrentName] = useState<string>("알 수 없음");
+  const id = searchParams.get("id") ?? undefined;
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<ReviewType>({
       queryKey: ["review"],
-      queryFn: ({ pageParam = 0 }) =>
+      queryFn: ({ pageParam }) =>
         getReviewList({
           pageParam,
           size: 2,
+          id,
+          type,
         }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       estimateSize: () => 130,

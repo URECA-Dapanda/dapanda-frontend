@@ -2,14 +2,24 @@ import { ReviewType } from "@feature/mypage/types/reviewType";
 import axios from "@/lib/axios";
 
 export async function getReviewList({
-  pageParam = 0,
+  pageParam,
   size = 2,
+  id,
+  type,
 }: {
   pageParam?: number | unknown;
   size: number;
+  id?: string;
+  type?: "receive" | "post";
 }): Promise<{ items: ReviewType[]; nextCursor?: number }> {
+  const request =
+    type === "post"
+      ? "/api/reviews/wrote"
+      : id
+      ? `/api/members/${id}/reviews/received`
+      : `/api/reviews/received`;
   try {
-    const response = await axios.get(`/api/reviews/received`, {
+    const response = await axios.get(request, {
       params: { cursorId: pageParam, size: size },
     });
 

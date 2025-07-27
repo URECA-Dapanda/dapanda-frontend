@@ -1,3 +1,4 @@
+import { UserType } from "@type/User";
 import dayjs from "dayjs";
 import {
   CashHistoryType,
@@ -58,6 +59,19 @@ export async function getUserData() {
 
 export async function getUserCash() {
   const { data } = await axios.get("/api/members/cash");
+
+  return data.data;
+}
+
+export async function getMyData() {
+  const { data } = await axios.get("api/plans/my-data");
+
+  return data.data;
+}
+
+export async function getMyInfo(id?: string | number): Promise<UserType> {
+  console.log("id", id);
+  const { data } = await axios.get("/api/members/info", { params: { memberId: id } });
 
   return data.data;
 }

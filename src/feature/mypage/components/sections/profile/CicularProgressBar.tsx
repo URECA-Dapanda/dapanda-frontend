@@ -1,20 +1,26 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { getMyData } from "@feature/mypage/apis/mypageRequest";
+import { useQuery } from "@tanstack/react-query";
+import React, { useEffect, useMemo, useState } from "react";
 
 type DataUsageDonutProps = {
   current: number;
-  total: number;
   unit?: string;
 };
 
-export function DataUsageDonut({ current: used, total, unit = "GB" }: DataUsageDonutProps) {
+export function DataUsageDonut({ current: used, unit = "GB" }: DataUsageDonutProps) {
+  const { data } = useQuery({
+    queryFn: getMyData,
+    queryKey: ["api/plans/my-data"],
+  });
+
   const radius = 50;
   const stroke = 15;
   const normalizedRadius = radius - stroke / 2;
   const circumference = normalizedRadius * 2 * Math.PI;
 
-  const percent = Math.min(used / total, 1);
+  const percent = useMemo(() => Math.min(used / (data ? data.providingDataAmount : 1), 1), [data]);
 
   const targetOffset = circumference - percent * circumference;
 

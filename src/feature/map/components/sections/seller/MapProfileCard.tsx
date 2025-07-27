@@ -1,25 +1,25 @@
 import { useRouter } from "next/navigation";
-import { StarIcon } from "lucide-react";
 import AvatarIcon from "@components/common/AvatarIcon";
 import { ButtonComponent } from "@components/common/button";
+import { useQuery } from "@tanstack/react-query";
+import { getMyInfo } from "@feature/mypage/apis/mypageRequest";
+import { Rating, RatingButton } from "@components/common/rating/RatingScore";
 
 interface MapProfileCardProps {
+  sellerId: number;
   productId: string;
-  memberName: string;
-  rating: number;
-  reviewCount: number;
 }
 
-export default function MapProfileCard({
-  productId,
-  memberName,
-  rating,
-  reviewCount,
-}: MapProfileCardProps) {
+export default function MapProfileCard({ sellerId, productId }: MapProfileCardProps) {
   const router = useRouter();
 
+  const { data } = useQuery({
+    queryFn: () => getMyInfo(sellerId),
+    queryKey: ["api/plans/info", sellerId],
+  });
+
   const goToProfile = () => {
-    router.push(`/profile?productId=${productId}`);
+    router.push(`/map/review?id=${sellerId}&tab=review`);
   };
 
   const goToChat = (e: React.MouseEvent) => {
@@ -29,15 +29,13 @@ export default function MapProfileCard({
 
   return (
     <div className="flex items-center justify-between w-full px-24 py-16" onClick={goToProfile}>
-      <AvatarIcon size="medium" />
+      <AvatarIcon size="medium" avatar={data?.profileImageUrl ?? undefined} />
 
       <div className="flex flex-col gap-4 flex-1 px-16">
-        <span className="title-sm text-black">{memberName}</span>
-        <div className="flex items-center gap-4">
-          <StarIcon className="w-16 h-16 text-primary fill-current" />
-          <span className="body-sm text-black">{rating.toFixed(1)}</span>
-          <span className="body-xs text-gray-500">({reviewCount}개의 리뷰)</span>
-        </div>
+        <span className="title-sm text-black">{data?.name ?? "알 수 없음"}</span>
+        <Rating readOnly value={data?.averageRating} defaultValue={data?.averageRating}>
+          <RatingButton className="text-primary" />
+        </Rating>
       </div>
 
       <ButtonComponent
