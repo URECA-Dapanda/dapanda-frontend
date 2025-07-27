@@ -11,7 +11,7 @@ interface FetchMapListParams {
 }
 
 interface WifiItemResponse {
-  id: number;
+  productId: number;
   price: number;
   itemId: number;
   memberName: string;
@@ -34,6 +34,7 @@ interface WifiRegisterRequest {
   startTime: string;
   endTime: string;
   address: string;
+  images: string[];
 }
 
 export interface WifiUpdateRequest {
@@ -46,6 +47,7 @@ export interface WifiUpdateRequest {
   address: string;
   startTime: string;
   endTime: string;
+  images: string[];
 }
 
 interface ApiResponse {
@@ -81,7 +83,7 @@ export async function getMapList({
     const json = res.data;
 
     const items: MapType[] = json.data.data.map((item) => ({
-      id: item.id,
+      productId: item.productId,
       title: item.title,
       price: `${item.price}원`,
       address: "", // 추후 reverse geocode 필요
@@ -90,6 +92,7 @@ export async function getMapList({
       score: item.averageRate,
       type: "와이파이",
       updatedAt: new Date(item.updatedAt).toLocaleTimeString(),
+      imageUrl: item.imageUrl ?? "",
     }));
 
     return {
@@ -125,3 +128,10 @@ export async function putWifiUpdate(data: WifiUpdateRequest): Promise<void> {
     throw new Error("와이파이 상품 수정에 실패했습니다.");
   }
 }
+
+export const getWifiPriceRecommendation = async () => {
+  const response = await axiosInstance.get("/api/products/market-price", {
+    params: { productType: "WIFI" },
+  });
+  return response.data.data;
+};

@@ -1,5 +1,5 @@
 export interface MapType {
-  id: number;
+  productId: number;
   type: "와이파이" | "핫스팟";
   title: string;
   address: string;
@@ -8,10 +8,11 @@ export interface MapType {
   open: boolean;
   score: number;
   price: string;
+  imageUrl?: string;
 }
 
 export type MapDetailItem = {
-  productId: string;
+  productId: number;
   type: string;
   imageUrl: string[];
   place: string;
@@ -24,6 +25,7 @@ export type MapDetailItem = {
   averagePrice: number;
   memberName: string;
   memberId: number;
+  myProduct: boolean;
   reviewCount: number;
   longitude: number;
   latitude: number;

@@ -6,6 +6,7 @@ import { useInitializeMap } from "@feature/map/hooks/useInitializeMap";
 
 interface AddressSearchMapProps {
   onLatLngChange?: (lat: number, lng: number) => void;
+  onAddressChange?: (address: string) => void;
 }
 
 interface NaverPlaceItem {
@@ -15,7 +16,10 @@ interface NaverPlaceItem {
   mapy: string;
 }
 
-export default function AddressSearchMap({ onLatLngChange }: AddressSearchMapProps) {
+export default function AddressSearchMap({
+  onLatLngChange,
+  onAddressChange,
+}: AddressSearchMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<NaverPlaceItem[]>([]);
@@ -51,6 +55,7 @@ export default function AddressSearchMap({ onLatLngChange }: AddressSearchMapPro
     }
 
     onLatLngChange?.(lat, lng);
+    onAddressChange?.(item.address || item.title.replace(/<[^>]+>/g, ""));
     setQuery(item.title.replace(/<[^>]+>/g, "")); // 태그 제거 후 표시
     setResults([]); // 드롭다운 닫기
   };

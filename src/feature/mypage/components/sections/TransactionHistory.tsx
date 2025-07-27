@@ -3,7 +3,7 @@ import HistoryButton from "./HistoryButton";
 
 export default function TransactionHistory() {
   return (
-    <div className="flex flex-row items-center justify-between w-full gap-20">
+    <div className="flex flex-col items-center justify-between w-full gap-12">
       <HistoryButton target="purchase-history">
         <ShoppingCart className="w-16 h-16 mr-8" />
         구매내역

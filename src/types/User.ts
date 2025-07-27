@@ -1,7 +1,8 @@
 export interface UserType {
-  id: number;
-  userName: string;
-  recommend: number;
-  balance: string;
-  avatar: string;
+  name: string;
+  profileImageUrl: string;
+  joinedAt: string;
+  averageRating: number;
+  reviewCount: number;
+  tradeCount: number;
 }

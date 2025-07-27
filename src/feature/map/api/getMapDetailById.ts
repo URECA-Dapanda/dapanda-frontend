@@ -16,11 +16,12 @@ interface WifiDetailResponse {
   imageUrls: string[];
   startTime: string;
   endTime: string;
+  myProduct: boolean;
   updatedAt: string;
   open: boolean;
 }
 
-export async function getMapDetailById(id: string): Promise<WifiDetailResponse> {
-  const res = await axiosInstance.get(`/api/products/wifi/${id}`);
+export async function getMapDetailById(productId: string): Promise<WifiDetailResponse> {
+  const res = await axiosInstance.get(`/api/products/wifi/${productId}`);
   return res.data.data;
 }

@@ -73,7 +73,7 @@ export function useVirtualizedInfiniteQuery<TData>({
     queryKey,
     queryFn,
     getNextPageParam,
-    initialPageParam: 0,
+    initialPageParam: undefined,
   });
 
   let totalNum: number | undefined;
