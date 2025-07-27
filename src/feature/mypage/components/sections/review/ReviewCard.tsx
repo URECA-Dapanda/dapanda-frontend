@@ -6,14 +6,15 @@ import ReviewList from "@feature/mypage/components/sections/review/ReviewList";
 import SellingList from "@feature/mypage/components/sections/review/SellingList";
 
 export default function ReviewCard() {
-  const [currentTab, setCurrentTab] = useState<string>("selling");
+  const [currentTab, setCurrentTab] = useState<string>("review");
 
   const handleChangeTab = useCallback((newValue: string) => {
     setCurrentTab(newValue);
   }, []);
   return (
     <ReviewTabs value={currentTab} onChange={handleChangeTab}>
-      <ReviewList />
+      <ReviewList type={"post"} />
+      <ReviewList type={"receive"} />
       <SellingList />
     </ReviewTabs>
   );

@@ -2,10 +2,9 @@ import { UserType } from "@/types/User";
 import { create } from "zustand";
 
 interface ProfileStoreProps extends Partial<UserType> {
+  id?: number;
   setUserName: (newName: string) => void;
   setRecommend: (newScore: number) => void;
-  setBalance: (newBalance: number) => void;
-  setAvatar: (newAvatar: string) => void;
   setProfile: (profile: UserType) => void;
 }
 
@@ -15,19 +14,11 @@ interface ProfileStoreProps extends Partial<UserType> {
  */
 export const useProfileStore = create<ProfileStoreProps>((set) => ({
   id: 17,
-  balance: "12,500",
-  avatar: "",
   setUserName: (newName) => {
-    set({ userName: newName });
+    set({ name: newName });
   },
   setRecommend: (newScore) => {
-    set({ recommend: newScore });
-  },
-  setBalance: (newBalance) => {
-    set({ balance: newBalance.toLocaleString("ko-kr") });
-  },
-  setAvatar: (newAvatar) => {
-    set({ avatar: newAvatar });
+    set({ averageRating: newScore });
   },
   setProfile: (profile) => {
     set(profile);

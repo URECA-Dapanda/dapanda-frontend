@@ -9,6 +9,7 @@ export const SALES_HISTORY_TABS = [
 ] as const;
 
 export const REVIEW_TABS = [
+  { label: "보낸 리뷰", value: "post-review" },
   { label: "받은 리뷰", value: "review" },
   { label: "판매중 항목", value: "selling" },
 ];

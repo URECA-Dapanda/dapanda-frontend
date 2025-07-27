@@ -106,12 +106,7 @@ export default function MapDetailPage() {
           onDeleteClick={() => setDeleteModalOpen(true)}
         />
 
-        <SellerSection
-          memberName={data.memberName}
-          rating={data.averagePrice}
-          reviewCount={data.reviewCount}
-          productId={String(data.productId)}
-        />
+        <SellerSection sellerId={data.memberId} productId={String(data.productId)} />
 
         <div className="px-6 mt-12">
           <ButtonComponent
