@@ -32,8 +32,10 @@ interface ProductInfo {
 export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomContentProps) {
   const [messages, setMessages] = useState<ChatSocketMessage[]>([]);
   const [product, setProduct] = useState<ProductInfo | null>(null);
-  const [loading, setLoading] = useState(true);
   const [isReportOpen, setIsReportOpen] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [oldestMessageId, setOldestMessageId] = useState<number | undefined>(undefined);
   const clientRef = useRef<Client | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const myUserId = useProfileStore((state) => state.id);
@@ -55,8 +57,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         });
       } catch (error) {
         console.error("상품 정보 가져오기 실패:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -65,11 +65,16 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
   useEffect(() => {
     if (!chatRoomId) return;
-    console.log("fetching history for", chatRoomId);
+
     getChatHistory(chatRoomId)
-      .then((messages) => {
-        console.log("history result:", messages);
-        setMessages(messages);
+      .then((response) => {
+        setMessages(response.data);
+        // 가장 오래된 메시지 ID 저장 (다음 페이지 조회용)
+        if (response.data.length > 0) {
+          const oldestMessage = response.data[response.data.length - 1];
+          setOldestMessageId(Number(oldestMessage.chatMessageId));
+        }
+        setHasMore(response.pageInfo.hasNext);
       })
       .catch((err) => {
         console.error("채팅 기록 불러오기 실패:", err);
@@ -78,14 +83,14 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     // 웹소켓 연결
     clientRef.current = createStompClient(chatRoomId, (msg: ChatSocketMessage) => {
       const data = typeof msg === "string" ? JSON.parse(msg) : msg;
-      console.log("서버에서 받은 메시지:", data); // 디버깅용 로그
+      console.log("서버에서 받은 메시지:", data);
       const incomingMessage: ChatSocketMessage = {
         chatMessageId: data.chatMessageId,
         isMine: data.isMine,
         message: data.message,
         createdAt: data.createdAt,
       };
-      console.log("변환된 메시지:", incomingMessage); // 디버깅용 로그
+      console.log("변환된 메시지:", incomingMessage);
       // 중복 방지 로직
       setMessages((prev) => {
         if (prev.some((m) => m.chatMessageId === incomingMessage.chatMessageId)) {
@@ -99,6 +104,39 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
       clientRef.current?.deactivate();
     };
   }, [chatRoomId]);
+
+  // 이전 메시지 불러오기
+  const loadMoreMessages = async () => {
+    if (loadingMore || !hasMore || !oldestMessageId) return;
+
+    setLoadingMore(true);
+    try {
+      const response = await getChatHistory(chatRoomId, oldestMessageId, 20);
+
+      if (response.data.length > 0) {
+        setMessages((prev) => [...prev, ...response.data]);
+
+        const newOldestMessage = response.data[response.data.length - 1];
+        setOldestMessageId(Number(newOldestMessage.chatMessageId));
+
+        setHasMore(response.pageInfo.hasNext);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("이전 메시지 불러오기 실패:", error);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop } = e.currentTarget;
+
+    if (scrollTop < 100 && hasMore && !loadingMore) {
+      loadMoreMessages();
+    }
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
@@ -133,36 +171,43 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
   const groupedMessages = groupMessagesByDate(sortedMessages);
 
-  if (loading || !product) {
-    return (
-      <div className="flex items-center justify-center h-screen">상품 정보를 불러오는 중...</div>
-    );
-  }
-
-  // 상대방 이름 결정: 내가 판매자인지 구매자인지에 따라 다름
-  const opponentName = product.memberId === myUserId ? "구매자" : product.memberName;
+  // 백엔드에서 senderName이 상대방 이름으로 수정될 예정
+  // 현재는 임시로 product 정보를 사용
+  const senderName = product?.memberId === myUserId ? "구매자" : product?.memberName || "상대방";
 
   return (
-    <>
-      <ChatRoomHeader senderName={opponentName} onReport={() => setIsReportOpen(true)} />
-      <div className="flex flex-col h-screen bg-gray-50">
-        <ChatPostCard title={product.title} pricePer10min={product.pricePer10min} />
-        <div className="flex-1 overflow-y-auto px-4 py-2">
-          {groupedMessages.map((group) => (
-            <div key={group.date}>
-              <div className="text-center text-xs text-gray-500 my-2">
-                {formatDateDivider(group.date)}
-              </div>
+    <div className="flex flex-col h-screen">
+      <ChatRoomHeader senderName={senderName} onReport={() => setIsReportOpen(true)} />
+
+      {product && (
+        <div className="px-24 mt-24">
+          <ChatPostCard title={product.title} pricePer10min={product.pricePer10min} />
+        </div>
+      )}
+
+      <div className="flex-1 overflow-y-auto px-24 mt-8 mb-84 py-2" onScroll={handleScroll}>
+        {loadingMore && (
+          <div className="text-center text-sm text-gray-500 py-4">이전 내역을 불러오는 중...</div>
+        )}
+
+        {groupedMessages.map((group) => (
+          <div key={group.date}>
+            <div className="text-center text-xs text-gray-500 my-24">
+              {formatDateDivider(group.date)}
+            </div>
+            <div className="space-y-24">
               {group.messages.map((message) => (
                 <ChatBubble key={message.chatMessageId} message={message} />
               ))}
             </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
-        <ChatInputBar onSend={addMessage} />
+          </div>
+        ))}
+        <div ref={messagesEndRef} />
       </div>
-      <ReportModal isOpen={isReportOpen} setIsOpen={setIsReportOpen} targetName={opponentName} />
-    </>
+
+      <ChatInputBar onSend={addMessage} />
+
+      <ReportModal isOpen={isReportOpen} setIsOpen={setIsReportOpen} targetName={senderName} />
+    </div>
   );
 }

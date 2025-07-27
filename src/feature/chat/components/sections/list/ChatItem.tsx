@@ -6,7 +6,6 @@ import AvatarIcon from "@/components/common/AvatarIcon";
 export interface ChatItemProps {
   chatRoomId: string;
   name: string;
-  lastMessage: string;
   timeAgo: string;
   unreadCount?: number;
   avatarUrl?: string;
@@ -25,8 +24,6 @@ export default function ChatItem({
   place,
   pricePer10min,
 }: ChatItemProps) {
-  console.log("ChatItem props:", { chatRoomId, name, productId, place, pricePer10min });
-
   return (
     <Link href={`/chat/${chatRoomId}?productId=${productId}`} className="block">
       <div className="cursor-pointer flex justify-between items-center gap-12">
@@ -38,8 +35,6 @@ export default function ChatItem({
             <span className="body-sm text-gray-800">
               {pricePer10min ? `${pricePer10min}원/10분` : ""}
             </span>
-
-            {/* <span className="body-xs text-gray-600 truncate max-w-[180px]">{lastMessage}</span> */}
           </div>
         </div>
         <div className="flex flex-col items-end gap-2">
