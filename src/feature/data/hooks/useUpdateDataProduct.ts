@@ -23,7 +23,6 @@ export const useUpdateDataProduct = () => {
       try {
         const res = await putMobileDataProduct({ productId, changedAmount, price, isSplitType });
         if (res.code === 0) {
-          // 상세페이지 refetch
           queryClient.invalidateQueries({ queryKey: ["dataDetail", productId.toString()] });
           toast.success("수정이 완료되었습니다.");
           onSuccess?.();
