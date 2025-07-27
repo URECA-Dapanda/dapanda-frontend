@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { toast } from "react-toastify";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {  useQueryClient } from "@tanstack/react-query";
 import { putMobileDataProduct } from "@feature/data/api/dataRequest";
 
 export const useUpdateDataProduct = () => {
