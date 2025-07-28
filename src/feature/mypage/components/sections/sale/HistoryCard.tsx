@@ -28,33 +28,27 @@ export function HistoryCard({ data, size = "sm" }: HistoryCardProps) {
   }, [router]);
 
   return (
-    <div className="px-24">
-      <ItemCard size={size} handleClick={handleCardClick}>
-        <LayoutBox layout="flex" direction="row" gap={19}>
-          <AvatarIcon size="small" />
-          <LayoutBox layout="flex" direction="column" gap={0}>
-            <p className="title-sm">{postTypeGuard[data.type]}</p>
-            <p className="body-sm">등록 일자: {formatDateDivider(data.createdAt)}</p>
-            {data.state !== "ACTIVE" && (
-              <p className="body-sm">
-                거래 일자: {data.updatedAt ? formatDateDivider(data.updatedAt) : "--"}
-              </p>
-            )}
-            <p className="body-sm text-gray-600">
-              거래 상품: {`${formatDataSize(data.dataAmount)} ${postTypeGuard[data.type]}`}
+    <ItemCard size={size} handleClick={handleCardClick}>
+      <LayoutBox layout="flex" direction="row" gap={19}>
+        <AvatarIcon size="small" />
+        <LayoutBox layout="flex" direction="column" gap={0}>
+          <p className="title-sm">{postTypeGuard[data.type]}</p>
+          <p className="body-sm">등록 일자: {formatDateDivider(data.createdAt)}</p>
+          {data.state !== "ACTIVE" && (
+            <p className="body-sm">
+              거래 일자: {data.updatedAt ? formatDateDivider(data.updatedAt) : "--"}
             </p>
-          </LayoutBox>
+          )}
+          <p className="body-sm text-gray-600">
+            거래 상품: {`${formatDataSize(data.dataAmount)} ${postTypeGuard[data.type]}`}
+          </p>
         </LayoutBox>
-        {data.state !== "ACTIVE" && (
-          <ButtonComponent
-            variant={"primary2"}
-            size={"xxs"}
-            className="absolute bottom-12 right-36"
-          >
-            받은 후기 보기
-          </ButtonComponent>
-        )}
-      </ItemCard>
-    </div>
+      </LayoutBox>
+      {data.state !== "ACTIVE" && (
+        <ButtonComponent variant={"primary2"} size={"xxs"} className="absolute bottom-12 right-36">
+          받은 후기 보기
+        </ButtonComponent>
+      )}
+    </ItemCard>
   );
 }
