@@ -96,7 +96,10 @@ export default function BaseBottomSheet({
   return (
     <>
       {isOpen && (variant === "modal" || variant === "hybrid") && (
-        <div className="fixed inset-0 bg-black-60 z-20" onClick={onClose} />
+        <div
+          className="fixed inset-0 bg-black-60 z-40 w-[375px] h-[100dvh] mx-auto"
+          onClick={onClose}
+        />
       )}
 
       <motion.div

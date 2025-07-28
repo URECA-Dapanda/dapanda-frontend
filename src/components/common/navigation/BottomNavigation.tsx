@@ -5,7 +5,7 @@ import NavigationButton from "@components/common/navigation/NavigationButton";
 export default function BottomNavigation() {
   return (
     <div
-      className="bottom-0 z-50 bg-white border-none overflow-x-clip shrink-0"
+      className="bottom-0 z-101 bg-white border-none overflow-x-clip shrink-0"
       style={{ width: "375px" }}
     >
       <div className="grid grid-cols-4 px-8 shadow-nav">

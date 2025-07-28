@@ -70,7 +70,7 @@ export default function DataPageContent() {
         <div className="sticky top-0 z-10 bg-primary2 p-4 pt-60">
           <DefaultFilterCard onSearch={() => setSheetOpen(true)} />
         </div>
-        <div className="absolute bottom-24 right-24 z-60">
+        <div className="absolute bottom-24 right-24 z-35">
           <ButtonComponent
             variant="floatingPrimary"
             size="xl"
@@ -86,7 +86,7 @@ export default function DataPageContent() {
           isOpen={registModalOpen}
           onClose={() => setRegistModalOpen(false)}
           variant="modal"
-          zIndex={100}
+          zIndex={102}
         >
           <DataRegistModal onClose={handleRegistButtonClick} />
         </BaseBottomSheet>

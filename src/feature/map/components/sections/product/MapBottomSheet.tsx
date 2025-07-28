@@ -13,6 +13,7 @@ import { useVirtualizedInfiniteQuery } from "@/hooks/useVirtualizedInfiniteQuery
 import { getMapList } from "@/feature/map/api/mapRequest";
 import type { MapType } from "@/feature/map/types/mapType";
 import { sortOptionMap } from "@/components/common/dropdown/dropdownConfig";
+import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 
 interface Props {
   open: boolean;
@@ -35,7 +36,7 @@ export default function MapBottomSheet({
 }: Props) {
   const { myPosition } = useMapStore();
 
-  const { parentRef, rowVirtualizer, flatItems, hasNextPage } =
+  const { parentRef, rowVirtualizer, flatItems, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useVirtualizedInfiniteQuery<MapType>({
       queryKey: [
         "mapList",
@@ -62,7 +63,7 @@ export default function MapBottomSheet({
   const visibleItems = availableOnly ? flatItems.filter((item) => item.open) : flatItems;
 
   return (
-    <BaseBottomSheet isOpen={open} onClose={onClose} variant="hybrid" snapHeight={300}>
+    <BaseBottomSheet isOpen={open} onClose={onClose} variant="hybrid" snapHeight={300} zIndex={101}>
       <BottomSheetHeader />
       <div className="flex justify-between items-center px-24 mb-12 mt-6">
         <div className="flex items-center gap-12">
@@ -90,7 +91,7 @@ export default function MapBottomSheet({
       </div>
 
       {/* 가상 리스트 렌더링 영역 */}
-      <div ref={parentRef} className="h-[calc(100vh-200px)] overflow-y-auto px-24">
+      {/* <div ref={parentRef} className="h-[calc(100vh-200px)] overflow-y-auto px-24">
         <div
           style={{
             height: `${rowVirtualizer.getTotalSize()}px`,
@@ -121,8 +122,19 @@ export default function MapBottomSheet({
             );
           })}
         </div>
-
-      </div>
+      </div> */}
+      <VirtualizedInfiniteList
+        parentRef={parentRef}
+        fetchNextPage={fetchNextPage}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        items={visibleItems}
+        renderItem={(item) => (
+          <MapItemCard data={item} disableUseButton={!item.open && !availableOnly} />
+        )}
+        rowVirtualizer={rowVirtualizer}
+        height={open ? "calc( 70vh + 5px )" : "calc( 48vh - 54px )"}
+      />
     </BaseBottomSheet>
   );
 }
