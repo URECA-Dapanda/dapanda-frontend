@@ -6,17 +6,16 @@ export interface ChatRoomPreview {
   name: string;
   title: string;
   price: number;
-  lastMessage: string;
   updatedAt: string;
   productId: number;
   senderName: string;
+  avatarUrl: string;
 }
 
 interface ChatStore {
   chatList: ChatRoomPreview[];
   addChatRoom: (room: ChatRoomPreview) => void;
   setChatList: (rooms: ChatRoomPreview[]) => void;
-  removeChatRoom: (chatRoomId: number) => void;
 }
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -26,9 +25,4 @@ export const useChatStore = create<ChatStore>((set) => ({
       chatList: [room, ...state.chatList.filter((r) => r.chatRoomId !== room.chatRoomId)],
     })),
   setChatList: (list: ChatRoomPreview[]) => set({ chatList: list }),
-
-  removeChatRoom: (chatRoomId) =>
-    set((state) => ({
-      chatList: state.chatList.filter((room) => room.chatRoomId !== chatRoomId),
-    })),
 }));

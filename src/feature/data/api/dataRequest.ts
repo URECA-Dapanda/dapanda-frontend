@@ -29,7 +29,11 @@ export async function getDataList({
     const searchParam = new URLSearchParams();
     searchParam.set(
       "cursorId",
-      isNumber(pageParam) && pageParam > 0 ? String(pageParam) : String(0)
+      sort === "RECENT"
+        ? ""
+        : isNumber(pageParam) && pageParam > 0
+          ? String(pageParam)
+          : "0"
     );
     searchParam.set("productSortOption", sort);
     searchParam.set("size", String(size));
@@ -79,4 +83,14 @@ export const getPriceRecommendation = async () => {
 export async function deleteDataPost(postId: string) {
   const response = await axios.delete(`/api/products/${postId}`);
   return response.data.message;
+}
+
+export async function putMobileDataProduct(data: {
+  productId: number;
+  changedAmount: number;
+  price: number;
+  isSplitType: boolean;
+}) {
+  const response = await axios.put("/api/products/mobile-data", data);
+  return response.data;
 }

@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useCallback, useState } from "react";
+import { BaseBottomSheet } from "@components/common/bottomsheet";
 import TopSheet from "@/components/common/topsheet/TopSheet";
 import { ButtonComponent } from "@components/common/button";
 import ProfileCard from "@feature/data/components/sections/default/ProfileCard";
@@ -14,12 +15,14 @@ import {
   buildSplitPaymentInfo,
 } from "@feature/data/hooks/usePurchaseBuilder";
 import { useDataDetail } from "@feature/data/hooks/useDataDetail";
+import { usePriceRecommendation } from "@feature/data/hooks/usePriceRecommendation";
 import clsx from "clsx";
 import DeletePostModal from "@feature/data/components/sections/modal/DeletePostModal";
+import DataRegistModal from "@feature/data/components/sections/modal/DataRegistModal";
 
 export default function DataDetailContent() {
   const { postId } = useParams<{ postId: string }>();
-  const { data, loading } = useDataDetail(postId);
+  const { data, isPending, refetch } = useDataDetail(postId);
   const { setInfo } = usePaymentStore();
   const isOwner = data?.myProduct;
   const renderModals = UsePaymentModals();
@@ -27,10 +30,12 @@ export default function DataDetailContent() {
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [topSheetExpanded, setTopSheetExpanded] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { recentPrice, avgPrice } = usePriceRecommendation();
 
   const handleDeleteModalOpen = useCallback(() => setIsOpen(true), []);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
-  if (loading || !data) return <div className="text-center mt-20">로딩 중...</div>;
+  if (isPending || !data) return <div className="text-center mt-20">로딩 중...</div>;
 
   const handleSplitPurchase = () => {
     setInfo(buildSplitPaymentInfo(data, selectedAmount));
@@ -49,15 +54,14 @@ export default function DataDetailContent() {
           price: data.price,
           unitPrice: data.pricePer100MB,
           uploadTime: formatRelativeTime(data.updatedAt),
-          recentPrice: 0,
-          averagePrice: data.averageRate,
+          recentPrice: recentPrice != null ? data.remainAmount * 10 * recentPrice : undefined,
+          averagePrice: avgPrice != null ? data.remainAmount * 10 * avgPrice : undefined,
           hasReported: false,
           memberName: data.memberName,
         }}
-        onImageClick={() => {}}
+        onImageClick={() => { }}
         onExpandChange={setTopSheetExpanded}
       />
-
       <div
         className={clsx(
           "space-y-12 px-24 transition-all duration-300",
@@ -73,7 +77,10 @@ export default function DataDetailContent() {
               <ButtonComponent variant={"outlineGray"} size="xs" onClick={handleDeleteModalOpen}>
                 글 삭제하기
               </ButtonComponent>
-              <ButtonComponent variant={"outlineGray"} size="xs">
+              <ButtonComponent
+                variant={"outlineGray"}
+                size="xs"
+                onClick={() => setEditModalOpen(true)}>
                 글 수정하기
               </ButtonComponent>
             </div>
@@ -86,12 +93,12 @@ export default function DataDetailContent() {
           {data.splitType && (
             <div className="bg-primary2 w-[327px] p-16 rounded-20">
               <FilterCardContent
-                buttonText="구매하기"
+                buttonText={isOwner ? "내 게시글입니다" : "구매하기"}
                 max={data.remainAmount}
                 value={[selectedAmount]}
                 onValueChange={(v) => setSelectedAmount(v[0])}
-                onButtonClick={handleSplitPurchase}
-              />
+                onButtonClick={isOwner ? undefined : handleSplitPurchase}
+                disabled={isOwner}              />
             </div>
           )}
 
@@ -100,7 +107,8 @@ export default function DataDetailContent() {
               <ButtonComponent
                 variant={"primary"}
                 className="w-full px-60"
-                onClick={handleDefaultPurchase}
+                onClick={isOwner ? undefined : handleDefaultPurchase}
+                disabled={isOwner}
               >
                 구매하기
               </ButtonComponent>
@@ -109,8 +117,27 @@ export default function DataDetailContent() {
         </div>
       </div>
 
-      {renderModals}
       <DeletePostModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <BaseBottomSheet
+        isOpen={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        variant="modal"
+        zIndex={100}
+      >
+        <DataRegistModal
+          mode="edit"
+          onClose={() => { setEditModalOpen(false); refetch(); }}
+          defaultValues={{
+            productId: data.productId,
+            price: data.price,
+            amount: data.remainAmount,
+            isSplitType: data.splitType,
+          }}
+        />
+      </BaseBottomSheet>
+
+      {renderModals}
+
     </div>
   );
 }
