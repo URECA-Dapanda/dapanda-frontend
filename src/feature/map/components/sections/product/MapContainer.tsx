@@ -6,6 +6,7 @@ import { useMapMarkers } from "@/feature/map/hooks/useMapMarkers";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import { MAP_CONTAINER_ID } from "@/feature/map/constants/map";
 import { useMyLocation } from "@feature/map/hooks/useMyLocation";
+import { useMapRefresh } from "@/feature/map/hooks/useMapRefresh";
 import MapItemCard from "@/feature/map/components/sections/product/MapItemCard";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,7 +16,7 @@ export default function MapContainer() {
   const { map, storeList, selectedStore, setSelectedStore } = useMapStore();
 
   useMapInitializer();
-
+  useMapRefresh(map);
   useMyLocation(map);
 
   useMapMarkers(map, storeList, {
