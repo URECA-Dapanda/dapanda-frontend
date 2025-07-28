@@ -56,58 +56,60 @@ export default function DataPageContent() {
   }, []);
 
   return (
-    <div className="relative h-[100dvh] w-full bg-primary2 datapagecontent">
-      {/* 왼쪽 상단 로고 */}
-      <div className="absolute top-[-90] left-[-35] z-20">
-        <Image src="/dpd-logo.svg" alt="logo" width={237} height={0} />
-      </div>
-      {/* 오른쪽 상단 로고 */}
-      <div className="absolute top-[-50] right-0 z-20">
-        <Image src="/dpd-main-logo.svg" alt="logo" width={96} height={0} />
-      </div>
-      {/* 상단 필터 영역 */}
-      <div className="sticky top-0 z-10 bg-primary2 p-4 pt-60">
-        <DefaultFilterCard onSearch={() => setSheetOpen(true)} />
-      </div>
-      <div className="absolute bottom-144 right-24 z-60">
-        <ButtonComponent
-          variant="floatingPrimary"
-          size="xl"
-          onClick={() => {
-            console.log("글 등록 버튼 클릭");
-            setRegistModalOpen(true);
-          }}
-        >
-          <PlusIcon className="w-20 h-20" />글 쓰기
-        </ButtonComponent>
-      </div>
-      <BaseBottomSheet
-        isOpen={registModalOpen}
-        onClose={() => setRegistModalOpen(false)}
-        variant="modal"
-        zIndex={100}
-      >
-        <DataRegistModal onClose={handleRegistButtonClick} />
-      </BaseBottomSheet>
-
-      <BaseBottomSheet
-        isOpen={sheetOpen}
-        onClose={() => setSheetOpen(false)}
-        onSnapUp={() => setSheetOpen(true)}
-        onSnapDown={handleSnapDown}
-        variant="snap"
-        snapHeight={280}
-      >
-        <div className="flex justify-center mt-24">
-          <PurchaseModeTabs value={tab} onChange={handleTabChange}>
-            <DefaultTabBody isSheetOpen={sheetOpen} onSearchClick={handleSnapDown} />
-            <ScrapTabBody />
-          </PurchaseModeTabs>
+    <>
+      <div className="h-[100%] w-full bg-primary2 datapagecontent">
+        {/* 왼쪽 상단 로고 */}
+        <div className="absolute top-[-90] left-[-35] z-20">
+          <Image src="/dpd-logo.svg" alt="logo" width={237} height={0} />
         </div>
+        {/* 오른쪽 상단 로고 */}
+        <div className="absolute top-[-50] right-0 z-20">
+          <Image src="/dpd-main-logo.svg" alt="logo" width={96} height={0} />
+        </div>
+        {/* 상단 필터 영역 */}
+        <div className="sticky top-0 z-10 bg-primary2 p-4 pt-60">
+          <DefaultFilterCard onSearch={() => setSheetOpen(true)} />
+        </div>
+        <div className="absolute bottom-24 right-24 z-60">
+          <ButtonComponent
+            variant="floatingPrimary"
+            size="xl"
+            onClick={() => {
+              console.log("글 등록 버튼 클릭");
+              setRegistModalOpen(true);
+            }}
+          >
+            <PlusIcon className="w-20 h-20" />글 쓰기
+          </ButtonComponent>
+        </div>
+        <BaseBottomSheet
+          isOpen={registModalOpen}
+          onClose={() => setRegistModalOpen(false)}
+          variant="modal"
+          zIndex={100}
+        >
+          <DataRegistModal onClose={handleRegistButtonClick} />
+        </BaseBottomSheet>
 
-        {/* 탭에 따른 내용만 분기 */}
-        {/* {tab === "scrap" ? <ScrapTabBody /> : <DefaultTabBody isSheetOpen={sheetOpen} />} */}
-      </BaseBottomSheet>
-    </div>
+        <BaseBottomSheet
+          isOpen={sheetOpen}
+          onClose={() => setSheetOpen(false)}
+          onSnapUp={() => setSheetOpen(true)}
+          onSnapDown={handleSnapDown}
+          variant="snap"
+          snapHeight={280}
+        >
+          <div className="flex justify-center mt-24">
+            <PurchaseModeTabs value={tab} onChange={handleTabChange}>
+              <DefaultTabBody isSheetOpen={sheetOpen} onSearchClick={handleSnapDown} />
+              <ScrapTabBody />
+            </PurchaseModeTabs>
+          </div>
+
+          {/* 탭에 따른 내용만 분기 */}
+          {/* {tab === "scrap" ? <ScrapTabBody /> : <DefaultTabBody isSheetOpen={sheetOpen} />} */}
+        </BaseBottomSheet>
+      </div>
+    </>
   );
 }

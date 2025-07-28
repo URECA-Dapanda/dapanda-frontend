@@ -47,7 +47,7 @@ function TabsTrigger({ className, variant = "default", children, ...props }: Tab
         variant === "default" && [
           "inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent",
           "px-2 py-1 text-sm font-medium whitespace-nowrap",
-          "text-gray-600 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-sm",
+          "text-gray-600 data-[state=active]:text-black data-[state=active]:shadow-sm",
         ],
         variant === "outline" && [
           "shadow-none",
