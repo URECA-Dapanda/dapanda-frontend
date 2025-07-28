@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { MapType } from "@/feature/map/types/mapType";
+import { useMapStore } from "@/feature/map/stores/useMapStore";
 
 interface UseMapMarkersOptions {
   onMarkerClick?: (store: MapType) => void;
@@ -11,6 +12,7 @@ export const useMapMarkers = (
   options?: UseMapMarkersOptions
 ) => {
   const markerMapRef = useRef<Map<number, naver.maps.Marker>>(new Map());
+  const setIsManualPan = useMapStore((state) => state.setIsManualPan);
 
   useEffect(() => {
     if (!map || !window.naver) return;
@@ -45,6 +47,11 @@ export const useMapMarkers = (
 
       if (options?.onMarkerClick) {
         window.naver.maps.Event.addListener(marker, "click", () => {
+          setIsManualPan(true);
+          const markerLatLng = new window.naver.maps.LatLng(lat, lng);
+          map.setCenter(markerLatLng);
+          map.setZoom(16);
+
           options.onMarkerClick?.(store);
         });
       }
