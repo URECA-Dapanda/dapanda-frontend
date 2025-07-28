@@ -22,6 +22,7 @@ export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }:
   const path = usePathname().split("/");
   const ref = useRef<HTMLTextAreaElement>(null);
   const [isNext, setIsNext] = useState<boolean>(false);
+  const [reportReason, setReportReason] = useState<string>("");
   const target = useMemo(() => (targetId ? targetId : path.at(-1) ?? ""), [targetId, path]);
   const targetCategory = useMemo(() => {
     switch (path.at(1)) {
@@ -37,7 +38,7 @@ export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }:
     }
   }, [path]);
   const reportMutation = useMutation({
-    mutationFn: () => registReport(target, ref.current?.value ?? "", targetCategory),
+    mutationFn: () => registReport(target, reportReason, targetCategory),
     mutationKey: ["/api/report", target],
     onSuccess: () => {
       setIsOpen(false);
@@ -54,16 +55,18 @@ export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }:
     },
   });
 
-  const handleClose = useCallback(() => setIsOpen(false), []);
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
+    setReportReason("");
+  }, [setIsOpen]);
   const handleReportClick = useCallback(() => {
-    const comment = ref.current?.value;
-    if (!comment || comment === "") {
+    if (!reportReason || reportReason === "") {
       toast.error("신고 사유를 작성해 주세요.");
       ref.current?.focus();
     } else {
       reportMutation.mutate();
     }
-  }, [reportMutation]);
+  }, [reportMutation, reportReason]);
 
   return (
     <>
@@ -85,6 +88,8 @@ export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }:
             <InputComponent
               as="textarea"
               placeholder="신고 사유를 작성해주세요."
+              value={reportReason}
+              onChange={(e) => setReportReason(e.target.value)}
               ref={ref}
               required={true}
             />

@@ -21,14 +21,14 @@ export function formatRelativeTime(iso: string, withSuffix = false): string {
   if (diffMinutes < 1) {
     result = "방금";
   } else if (diffMinutes < 60) {
-    result = `${diffMinutes}분`;
+    result = `${diffMinutes}분 전`;
   } else {
     const diffHours = Math.floor(diffMinutes / 60);
     if (diffHours < 24) {
-      result = `${diffHours}시간`;
+      result = `${diffHours}시간 전`;
     } else {
       const diffDays = Math.floor(diffHours / 24);
-      result = `${diffDays}일`;
+      result = `${diffDays}일 전`;
     }
   }
 

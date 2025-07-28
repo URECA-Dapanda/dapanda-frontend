@@ -4,13 +4,20 @@ import { useRouter } from "next/navigation";
 import { MoreVertical, ChevronLeft } from "lucide-react";
 import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
 import { chatMenuOptions } from "@/components/common/dropdown/dropdownConfig";
-import { toast } from "react-toastify";
 
-export default function ChatRoomHeader({ senderName }: { senderName: string }) {
+export default function ChatRoomHeader({
+  senderName,
+  onReport,
+}: {
+  senderName: string;
+  onReport: () => void;
+}) {
   const router = useRouter();
+
   const handleReport = () => {
-    toast.success("신고되었습니다.");
+    onReport();
   };
+
   return (
     <div className="sticky top-0 z-50 bg-white shadow px-20 py-12 flex items-center justify-between">
       <div className="flex items-center gap-8">
