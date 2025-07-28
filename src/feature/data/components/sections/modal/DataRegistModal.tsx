@@ -8,6 +8,7 @@ import { buttonVariants } from "@components/common/button/buttonVariants";
 import { usePriceRecommendation } from "@feature/data/hooks/usePriceRecommendation";
 import { useRegisterDataProduct } from "@feature/data/hooks/useRegisterDataProduct";
 import { useUpdateDataProduct } from "@feature/data/hooks/useUpdateDataProduct";
+import { useMonthlyDataLimit } from "@feature/data/hooks/useMonthlyDataLimit";
 import { Switch } from "@ui/switch";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -28,8 +29,10 @@ export default function DataRegistModal({
   mode = "create",
   defaultValues,
 }: DataRegistModalProps) {
-    const router = useRouter();
-  const [value, setValue] = useState([defaultValues?.amount ?? 1]);
+  const router = useRouter();
+  const { remainingSelling, isLoading: isLimitLoading } = useMonthlyDataLimit();
+  const maxAmount = remainingSelling ?? 2;
+  const [value, setValue] = useState([Math.min(defaultValues?.amount ?? 1, maxAmount)]);
   const [price, setPrice] = useState(defaultValues?.price?.toString() ?? "");
   const [isSplit, setIsSplit] = useState(defaultValues?.isSplitType ?? false);
   const dataAmount = Number(value[0].toFixed(1));
@@ -82,8 +85,13 @@ export default function DataRegistModal({
           buttonText="확정"
           value={value}
           onValueChange={setValue}
-          max={2}
+          max={maxAmount}
         />
+        {value[0] >= maxAmount && (
+          <p className="body-xxs text-error mt-20">
+          이번 달 최대 판매 가능량을 모두 사용하셨습니다.
+          </p>
+        )}
       </FlatCard>
       <div className="flex gap-6 mt-4">
         {recentPrice !== null && (

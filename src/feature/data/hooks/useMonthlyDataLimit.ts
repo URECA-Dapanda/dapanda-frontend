@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getSellingDataAmount, getBuyingDataAmount } from "@feature/data/api/dataRequest";
-import { MAX_MONTHLY_DATA_LIMIT_GB } from "@feature/data/constrants/dataLimit";
+import { MAX_MONTHLY_DATA_LIMIT_GB } from "@feature/data/constants/dataLimit";
 
 export const useMonthlyDataLimit = () => {
     const buyingQuery = useQuery({
