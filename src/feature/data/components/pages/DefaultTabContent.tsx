@@ -58,7 +58,7 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
   return (
     <div className="bottomSheetContents space-y-4">
       {isSheetOpen && (
-        <div className="flex items-center justify-between gap-8 mb-12">
+        <div className="flex items-center justify-between gap-8 mb-12 px-24">
           {/* 왼쪽: 뱃지 (조건부) */}
           <div className="flex items-center gap-4">
             {dataAmount !== null && (
