@@ -6,9 +6,9 @@ export function SkeletonCard() {
       <Skeleton className="h-10 w-10 rounded-full" />
 
       <div className="flex-1 space-y-2">
-        <Skeleton className="h-8 w-120" />
+        <Skeleton className="h-3 w-152" />
         <div className="space-y-2">
-          <Skeleton className="h-3 w-152" />
+          <Skeleton className="h-8 w-120" />
           <Skeleton className="h-3 w-144" />
         </div>
       </div>
