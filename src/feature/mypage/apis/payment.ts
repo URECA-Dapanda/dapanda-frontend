@@ -11,7 +11,7 @@ export const verifyPaymentAmount = (orderId: string, amount: number) => {
 
 // 결제 승인
 export const confirmPayment = (paymentKey: string, orderId: string, amount: number) => {
-  return axios.post("/api/payments/confirm", {
+  return axios.post("/api/payments/charge", {
     paymentKey,
     orderId,
     amount,
