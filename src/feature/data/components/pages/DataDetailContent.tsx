@@ -16,9 +16,12 @@ import {
 } from "@feature/data/hooks/usePurchaseBuilder";
 import { useDataDetail } from "@feature/data/hooks/useDataDetail";
 import { usePriceRecommendation } from "@feature/data/hooks/usePriceRecommendation";
+import { useMonthlyDataLimit } from "@feature/data/hooks/useMonthlyDataLimit";
 import clsx from "clsx";
 import DeletePostModal from "@feature/data/components/sections/modal/DeletePostModal";
 import DataRegistModal from "@feature/data/components/sections/modal/DataRegistModal";
+import { BadgeComponent } from "@components/common/badge";
+import { formatDataSize } from "@lib/formatters";
 
 export default function DataDetailContent() {
   const { postId } = useParams<{ postId: string }>();
@@ -26,16 +29,16 @@ export default function DataDetailContent() {
   const { setInfo } = usePaymentStore();
   const isOwner = data?.myProduct;
   const renderModals = UsePaymentModals();
-
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [topSheetExpanded, setTopSheetExpanded] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { recentPrice, avgPrice } = usePriceRecommendation();
-
   const handleDeleteModalOpen = useCallback(() => setIsOpen(true), []);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const { remainingBuying, remainingSelling, isLoading: isLimitLoading } = useMonthlyDataLimit();
 
   if (isPending || !data) return <div className="text-center mt-20">로딩 중...</div>;
+  const isOverLimit = remainingBuying !== undefined && data.remainAmount > remainingBuying;
 
   const handleSplitPurchase = () => {
     setInfo(buildSplitPaymentInfo(data, selectedAmount));
@@ -98,17 +101,31 @@ export default function DataDetailContent() {
                 value={[selectedAmount]}
                 onValueChange={(v) => setSelectedAmount(v[0])}
                 onButtonClick={isOwner ? undefined : handleSplitPurchase}
-                disabled={isOwner}              />
+                disabled={isOwner} />
             </div>
           )}
-
+          {!isLimitLoading && (
+            <div className="flex flex-wrap gap-8 mb-24">
+              <BadgeComponent variant="outlined">
+                이번 달 구매 가능: <span className="font-semibold ml-4">{formatDataSize(remainingBuying ?? 0)}</span>
+              </BadgeComponent>
+              <BadgeComponent variant="outlined">
+                이번 달 판매 가능: <span className="font-semibold ml-4">{formatDataSize(remainingSelling ?? 0)}</span>
+              </BadgeComponent>
+            </div>
+          )}
+          {isOverLimit && (
+            <p className="body-xxs text-error">
+              ⚠️ 구매 가능 용량을 초과했습니다. 최대 {formatDataSize(remainingBuying ?? 0)}까지 구매할 수 있어요.
+            </p>
+          )}
           {!data.splitType && (
             <div className="flex justify-center">
               <ButtonComponent
                 variant={"primary"}
                 className="w-full px-60"
-                onClick={isOwner ? undefined : handleDefaultPurchase}
-                disabled={isOwner}
+                onClick={isOwner || isOverLimit ? undefined : handleDefaultPurchase}
+                disabled={isOwner || isOverLimit}
               >
                 구매하기
               </ButtonComponent>
