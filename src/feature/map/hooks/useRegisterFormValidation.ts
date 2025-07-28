@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { RegisterFormValues, RegisterFormErrors } from "@feature/map/types/registerForm";
+import { parseHHMMToTime, isValidTimeRange } from "@/lib/time";
 
 const initialErrors: RegisterFormErrors = {
   title: false,
@@ -39,12 +40,10 @@ export const useRegisterFormValidation = (form: RegisterFormValues) => {
       return false;
     }
 
-    const [sh, sm] = form.startTime.split(":").map(Number);
-    const [eh, em] = form.endTime.split(":").map(Number);
-    const start = sh * 60 + sm;
-    const end = eh * 60 + em;
+    const start = parseHHMMToTime(form.startTime);
+    const end = parseHHMMToTime(form.endTime);
 
-    if (start >= end) {
+    if (!isValidTimeRange(start, end)) {
       setErrors({ ...initialErrors, timeOrderInvalid: true });
       return false;
     }
