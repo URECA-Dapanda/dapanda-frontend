@@ -10,6 +10,16 @@ module.exports = {
   ],
   theme: {
     extend: {
+      animation: {
+        'spin-slow': 'spin 2s linear infinite',
+        'fade-in': 'fadeIn 0.6s ease-out',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
+      },
       colors: {
         white: "#ffffff",
         black: "#17171b",
