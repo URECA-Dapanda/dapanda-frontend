@@ -171,17 +171,23 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
   const groupedMessages = groupMessagesByDate(sortedMessages);
 
-  // 백엔드에서 senderName이 상대방 이름으로 수정될 예정
-  // 현재는 임시로 product 정보를 사용
   const senderName = product?.memberId === myUserId ? "구매자" : product?.memberName || "상대방";
 
   return (
     <div className="flex flex-col h-screen">
-      <ChatRoomHeader senderName={senderName} onReport={() => setIsReportOpen(true)} />
+      <ChatRoomHeader
+        senderName={senderName}
+        onReport={() => setIsReportOpen(true)}
+        senderId={product?.memberId}
+      />
 
       {product && (
         <div className="px-24 mt-24">
-          <ChatPostCard title={product.title} pricePer10min={product.pricePer10min} />
+          <ChatPostCard
+            title={product.title}
+            pricePer10min={product.pricePer10min}
+            productId={product.productId}
+          />
         </div>
       )}
 
@@ -197,7 +203,11 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
             </div>
             <div className="space-y-24">
               {group.messages.map((message) => (
-                <ChatBubble key={message.chatMessageId} message={message} />
+                <ChatBubble
+                  key={message.chatMessageId}
+                  message={message}
+                  senderId={product?.memberId}
+                />
               ))}
             </div>
           </div>

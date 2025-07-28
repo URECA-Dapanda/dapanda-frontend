@@ -1,9 +1,9 @@
 export type ApiChatRoom = {
   chatRoomId: number;
-  createdAt: string;
-  lastMessageAt: string | null;
+  lastMessageAt: string;
   senderId: number;
   senderName: string;
+  senderProfileImageUrl: string;
   productId: number;
   itemId: number;
   itemType: string;

@@ -1,23 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { formatRelativeTime } from "@/lib/time";
 import { useChatStore } from "@feature/chat/stores/useChatStore";
 import ChatItem from "@feature/chat/components/sections/list/ChatItem";
 import { getChatRoomList } from "@feature/chat/api/chatRoomRequest";
 import { getMapDetailById } from "@feature/map/api/getMapDetailById";
 import { ApiChatRoom } from "@feature/chat/types/chatType";
 import { ButtonComponent } from "@/components/common/button/ButtonComponent";
-import { useProfileStore } from "@/stores/useProfileStore";
+import { formatRelativeTime } from "@/lib/time";
 
 export default function ChatList() {
   const chatList = useChatStore((state) => state.chatList);
   const setChatList = useChatStore((state) => state.setChatList);
-  const myUserId = useProfileStore((state) => state.id);
-  const [productDetails, setProductDetails] = useState<
-    Record<number, { title: string; price: number; memberId: number; memberName: string }>
-  >({});
   const [selectedFilter, setSelectedFilter] = useState<"ALL" | "BUYER" | "SELLER">("ALL");
 
   useEffect(() => {
@@ -34,37 +28,39 @@ export default function ChatList() {
 
         for (const productId of uniqueProductIds) {
           try {
-            const productData = await getMapDetailById(String(productId));
-            productDetailsMap[productId as number] = {
-              title: productData.title,
-              price: productData.price,
-              memberId: productData.memberId,
-              memberName: productData.memberName,
-            };
+            if (!productDetailsMap[productId as number]) {
+              const productData = await getMapDetailById(String(productId));
+              productDetailsMap[productId as number] = {
+                title: productData.title,
+                price: productData.price,
+                memberId: productData.memberId,
+                memberName: productData.memberName,
+              };
+            }
           } catch (error) {
             console.error(`상품 ${productId} 정보 가져오기 실패:`, error);
           }
         }
 
-        setProductDetails(productDetailsMap);
-
         const chatList = apiList.map((item: ApiChatRoom) => {
           const productDetail = productDetailsMap[item.productId];
-
-          const senderName =
-            productDetail?.memberId === myUserId ? "구매자" : productDetail?.memberName || "상대방";
-
           return {
             chatRoomId: item.chatRoomId,
-            name: senderName,
-            updatedAt: item.createdAt,
+            itemId: item.itemId,
+            name: item.senderName,
+            title: productDetail?.title || "",
+            price: productDetail?.price || 0,
+            updatedAt: item.lastMessageAt,
             productId: item.productId,
+            senderName: item.senderName,
+            avatarUrl: item.senderProfileImageUrl || "c",
+            senderId: item.senderId,
           };
         });
 
+        console.log("최종 chatList 상태:", chatList);
         setChatList(chatList);
       } catch (e) {
-        toast.error("채팅방 조회 중 오류가 발생했습니다.");
         console.error(e);
       }
     }
@@ -73,27 +69,30 @@ export default function ChatList() {
 
   return (
     <div className="flex flex-col px-24 pt-20">
-      <div className="flex gap-12">
+      <div className="flex gap-8">
         <ButtonComponent
-          variant={selectedFilter === "ALL" ? "primary" : "outlinePrimary"}
+          variant={selectedFilter === "ALL" ? "floatingPrimary" : "floatingOutline"}
           size="sm"
+          className="w-[50px]"
           onClick={() => setSelectedFilter("ALL")}
         >
           전체
         </ButtonComponent>
         <ButtonComponent
-          variant={selectedFilter === "BUYER" ? "primary" : "outlinePrimary"}
+          variant={selectedFilter === "SELLER" ? "floatingPrimary" : "floatingOutline"}
           size="sm"
-          onClick={() => setSelectedFilter("BUYER")}
-        >
-          구매
-        </ButtonComponent>
-        <ButtonComponent
-          variant={selectedFilter === "SELLER" ? "primary" : "outlinePrimary"}
-          size="sm"
+          className="w-[50px]"
           onClick={() => setSelectedFilter("SELLER")}
         >
           판매
+        </ButtonComponent>
+        <ButtonComponent
+          variant={selectedFilter === "BUYER" ? "floatingPrimary" : "floatingOutline"}
+          size="sm"
+          className="w-[50px]"
+          onClick={() => setSelectedFilter("BUYER")}
+        >
+          구매
         </ButtonComponent>
       </div>
 
@@ -107,11 +106,12 @@ export default function ChatList() {
               key={chat.chatRoomId}
               chatRoomId={String(chat.chatRoomId)}
               name={chat.name}
-              timeAgo={formatRelativeTime(chat.updatedAt)}
+              updatedAt={formatRelativeTime(chat.updatedAt)}
               productId={chat.productId}
-              place={productDetails[chat.productId]?.title}
-              pricePer10min={productDetails[chat.productId]?.price}
+              place={chat.title}
+              pricePer10min={chat.price}
               avatarUrl={chat.avatarUrl}
+              senderId={chat.senderId}
             />
           ))}
         </div>
