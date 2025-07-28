@@ -33,4 +33,9 @@ export interface PaymentInfo {
   totalAmount?: number;
   totalPrice?: number;
   combinations?: ScrapCombination[];
+
+  // 와이파이 구매용
+  startTime?: string;
+  endTime?: string;
+  wifiId?: number;
 }

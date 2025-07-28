@@ -4,7 +4,7 @@ import {
   PaymentCompleteModal,
 } from "@feature/payment/components";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
-import { postDefaultTrade } from "@feature/payment/api/paymentRequest";
+import { postDefaultTrade, postWifiTrade } from "@feature/payment/api/paymentRequest";
 import { postScrapTrade } from "@feature/payment/api/paymentRequest";
 import { toast } from "react-toastify";
 
@@ -38,16 +38,13 @@ export default function UsePaymentModals() {
               if (info.badge === "일반 구매") {
                 // 일반 전체 구매 (분할 불가)
                 if (info.productId && info.mobileDataId) {
-                  const tradeId = await postDefaultTrade(
-                    info.productId,
-                    info.mobileDataId
-                  );
+                  const tradeId = await postDefaultTrade(info.productId, info.mobileDataId);
                   console.log("일반 구매 완료", tradeId);
                 } else {
                   throw new Error("상품 정보가 누락되었습니다.");
                 }
               } else if (info.badge === "분할 구매") {
-                console.log(info)
+                console.log(info);
                 // 분할 구매 (분할 가능 상품 일부 구매)
                 if (info.productId && info.mobileDataId && info.dataAmount) {
                   const tradeId = await postDefaultTrade(
@@ -71,6 +68,19 @@ export default function UsePaymentModals() {
                 } else {
                   throw new Error("자투리 구매 정보가 누락되었습니다.");
                 }
+              }
+            } else if (info.type === "wifi") {
+              // 와이파이 구매
+              if (info.productId && info.wifiId && info.startTime && info.endTime) {
+                const tradeId = await postWifiTrade(
+                  info.productId,
+                  info.wifiId,
+                  info.startTime,
+                  info.endTime
+                );
+                console.log("와이파이 구매 완료", tradeId);
+              } else {
+                throw new Error("구매 정보가 누락되었습니다.");
               }
             }
             setStep("complete");

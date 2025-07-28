@@ -24,13 +24,13 @@ const postTypeGuard: { [key: string]: string } = {
 export function HistoryCard({ data, size = "sm" }: HistoryCardProps) {
   const router = useRouter();
   const handleCardClick = useCallback(() => {
-    router.push(`/data/${data.productId}`, { scroll: true });
+    router.push(`/${data.type !== "WIFI" ? "data" : "map"}/${data.productId}`, { scroll: true });
   }, [router]);
 
   return (
     <div className="px-24">
       <ItemCard size={size} handleClick={handleCardClick}>
-        <LayoutBox layout="flex" direction="row" gap={19}>
+        <LayoutBox layout="flex" direction="row" gap={19} height="full">
           <AvatarIcon size="small" />
           <LayoutBox layout="flex" direction="column" gap={0}>
             <p className="title-sm">{postTypeGuard[data.type]}</p>
