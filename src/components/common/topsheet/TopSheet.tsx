@@ -104,7 +104,7 @@ export default function TopSheet({
                               alt={`와이파이 이미지 ${idx + 1}`}
                               width={200}
                               height={200}
-                              onClick={(e) => handleImageClick(idx, e)} // ✅ 이 부분!
+                              onClick={(e) => handleImageClick(idx, e)}
                               className="object-cover rounded-12 mx-auto cursor-zoom-in"
                             />
                           </CarouselItem>
