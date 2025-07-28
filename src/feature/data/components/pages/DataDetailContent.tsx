@@ -87,12 +87,12 @@ export default function DataDetailContent() {
           {data.splitType && (
             <div className="bg-primary2 w-[327px] p-16 rounded-20">
               <FilterCardContent
-                buttonText="구매하기"
+                buttonText={isOwner ? "내 게시글입니다" : "구매하기"}
                 max={data.remainAmount}
                 value={[selectedAmount]}
                 onValueChange={(v) => setSelectedAmount(v[0])}
-                onButtonClick={handleSplitPurchase}
-              />
+                onButtonClick={isOwner ? undefined : handleSplitPurchase}
+                disabled={isOwner}              />
             </div>
           )}
 
@@ -101,7 +101,8 @@ export default function DataDetailContent() {
               <ButtonComponent
                 variant={"primary"}
                 className="w-full px-60"
-                onClick={handleDefaultPurchase}
+                onClick={isOwner ? undefined : handleDefaultPurchase}
+                disabled={isOwner}
               >
                 구매하기
               </ButtonComponent>
