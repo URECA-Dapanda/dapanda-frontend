@@ -59,6 +59,8 @@ export default function MapDetailPage() {
   const maxTime = parseHHMMToTime(data.closeTime);
 
   const onBuy = () => {
+    if (isOwner) return;
+
     if (!isValidTimeRange(startTime, endTime)) {
       setError("종료 시간은 시작 시간보다 늦어야 합니다.");
       return;
@@ -104,17 +106,19 @@ export default function MapDetailPage() {
           topSheetExpanded ? "pt-[500px]" : "pt-[280px]"
         )}
       >
-        <TimeSelectorSection
-          startTime={startTime}
-          setStartTime={setStartTime}
-          endTime={endTime}
-          setEndTime={setEndTime}
-          minTime={minTime}
-          maxTime={maxTime}
-          showEditButton={isOwner}
-          onEditClick={() => router.push(`/map/regist/wifi?edit=true&${params.toString()}`)}
-          onDeleteClick={() => setDeleteModalOpen(true)}
-        />
+        <div className="mt-12">
+          <TimeSelectorSection
+            startTime={startTime}
+            setStartTime={setStartTime}
+            endTime={endTime}
+            setEndTime={setEndTime}
+            minTime={minTime}
+            maxTime={maxTime}
+            showEditButton={isOwner}
+            onEditClick={() => router.push(`/map/regist/wifi?edit=true&${params.toString()}`)}
+            onDeleteClick={() => setDeleteModalOpen(true)}
+          />
+        </div>
 
         <SellerSection sellerId={data.memberId} productId={String(data.productId)} />
 
@@ -124,9 +128,9 @@ export default function MapDetailPage() {
             variant="primary"
             size="xl"
             onClick={onBuy}
-            disabled={!data.open}
+            disabled={!data.open || isOwner}
           >
-            구매하기
+            {isOwner ? "내 게시글입니다" : "구매하기"}
           </ButtonComponent>
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}
         </div>
