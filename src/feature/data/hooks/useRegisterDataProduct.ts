@@ -24,7 +24,9 @@ export const useRegisterDataProduct = () => {
             }
 
             try {
+                console.log("등록 요청 파라미터", { price, dataAmount, isSplitType });
                 const res = await postMobileDataProduct(dataAmount, price, isSplitType);
+
                 if (res.code === 0) {
                     toast.success("등록 완료!");
                     queryClient.invalidateQueries({ queryKey: ["dataItems"] });

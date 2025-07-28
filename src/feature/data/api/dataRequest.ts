@@ -84,3 +84,13 @@ export async function deleteDataPost(postId: string) {
   const response = await axios.delete(`/api/products/${postId}`);
   return response.data.message;
 }
+
+export async function putMobileDataProduct(data: {
+  productId: number;
+  changedAmount: number;
+  price: number;
+  isSplitType: boolean;
+}) {
+  const response = await axios.put("/api/products/mobile-data", data);
+  return response.data;
+}
