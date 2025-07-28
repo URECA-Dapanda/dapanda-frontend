@@ -95,7 +95,7 @@ export default function BaseBottomSheet({
 
   return (
     <>
-      {isOpen && variant === "modal" && (
+      {isOpen && (variant === "modal" || variant === "hybrid") && (
         <div className="fixed inset-0 bg-black-60 z-20" onClick={onClose} />
       )}
 
