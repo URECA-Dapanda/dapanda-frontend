@@ -14,6 +14,7 @@ export interface ChatItemProps {
   place?: string;
   pricePer10min?: number;
   senderId?: number;
+  lastMessage?: string;
 }
 
 export default function ChatItem({
@@ -24,8 +25,8 @@ export default function ChatItem({
   avatarUrl,
   productId,
   place,
-  pricePer10min,
   senderId,
+  lastMessage,
 }: ChatItemProps) {
   const router = useRouter();
 
@@ -38,7 +39,7 @@ export default function ChatItem({
     }
   };
   return (
-    <div className="flex justify-between items-center gap-12 p-8 rounded-8 hover:bg-gray-50 transition-colors border-b border-gray-200">
+    <div className="flex justify-between items-start gap-12 py-12 rounded-8 hover:bg-gray-50 transition-colors">
       <div className="flex items-center gap-12 flex-1">
         <button onClick={handleAvatarClick} className="cursor-pointer">
           <AvatarIcon avatar={avatarUrl} size="medium" />
@@ -48,15 +49,13 @@ export default function ChatItem({
             <span className="body-sm text-black">{name}</span>
             <div className="flex flex-col gap-2">
               <span className="body-sm text-gray-800">{place}</span>
-              <span className="body-sm text-gray-800">
-                {pricePer10min ? `${pricePer10min}원/10분` : ""}
-              </span>
+              <span className="body-sm text-gray-600">{lastMessage}</span>
             </div>
           </div>
         </Link>
       </div>
       <Link href={`/chat/${chatRoomId}?productId=${productId}`}>
-        <div className="flex flex-col items-end gap-2 cursor-pointer">
+        <div className="flex flex-row items-center gap-2 cursor-pointer">
           <span className="caption-lg text-gray-500">{updatedAt}</span>
           {unreadCount > 0 && (
             <div className="w-20 h-20 rounded-full bg-primary text-white caption-md flex items-center justify-center">

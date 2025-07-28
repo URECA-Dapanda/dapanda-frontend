@@ -13,7 +13,6 @@ import { getChatHistory } from "@feature/chat/api/getChatHistory";
 import ChatRoomHeader from "@feature/chat/components/sections/room/ChatRoomHeader";
 import ReportModal from "@/components/common/modal/ReportModal";
 import { getMapDetailById } from "@feature/map/api/getMapDetailById";
-import { useProfileStore } from "@stores/useProfileStore";
 
 interface ChatRoomContentProps {
   chatRoomId: number;
@@ -38,7 +37,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const [oldestMessageId, setOldestMessageId] = useState<number | undefined>(undefined);
   const clientRef = useRef<Client | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const myUserId = useProfileStore((state) => state.id);
 
   // 상품 정보 가져오기
   useEffect(() => {
@@ -83,14 +81,12 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     // 웹소켓 연결
     clientRef.current = createStompClient(chatRoomId, (msg: ChatSocketMessage) => {
       const data = typeof msg === "string" ? JSON.parse(msg) : msg;
-      console.log("서버에서 받은 메시지:", data);
       const incomingMessage: ChatSocketMessage = {
         chatMessageId: data.chatMessageId,
         isMine: data.isMine,
         message: data.message,
         createdAt: data.createdAt,
       };
-      console.log("변환된 메시지:", incomingMessage);
       // 중복 방지 로직
       setMessages((prev) => {
         if (prev.some((m) => m.chatMessageId === incomingMessage.chatMessageId)) {
@@ -171,7 +167,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
   const groupedMessages = groupMessagesByDate(sortedMessages);
 
-  const senderName = product?.memberId === myUserId ? "구매자" : product?.memberName || "상대방";
+  const senderName = product?.memberName || "상대방";
 
   return (
     <div className="flex flex-col h-screen">
