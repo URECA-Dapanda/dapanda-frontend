@@ -40,15 +40,12 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
 
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<DataType>({
-      queryKey: [
-        "dataItems",
-        sortLabel,
-        dataAmount !== null ? `${dataAmount}` : "all",
-      ],
+      queryKey: ["dataItems", sortLabel, dataAmount !== null ? `${dataAmount}` : "all"],
       queryFn: ({ pageParam = 0 }) =>
         getDataList({
           pageParam,
           sort: convertSortLabelToEnum(sortLabel),
+          size: 4,
           dataAmount: dataAmount ?? undefined,
         }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -120,7 +117,6 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
           renderItem={(item: DataType) => <DataItemCard data={item} type="default" />}
         />
       )}
-
     </div>
   );
 }
