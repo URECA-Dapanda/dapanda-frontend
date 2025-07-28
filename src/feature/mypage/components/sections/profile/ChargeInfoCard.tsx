@@ -8,11 +8,11 @@ export default function ChargeInfoCard() {
   const chargeAmount = useChargeStore((state) => state.charge);
 
   return (
-    <CardComponent variant="outlined" size="xxs">
-      <CardContentComponent size={"sm"}>
+    <CardComponent variant="outlined" size="xs">
+      <CardContentComponent size={"md"}>
         <LayoutBox layout="flex" direction="row">
-          <p className="body-sm">결제금액</p>
-          <p className="body-sm ml-auto">{chargeAmount ? formatPriceString(chargeAmount) : "--"}</p>
+          <p className="title-sm">결제금액</p>
+          <p className="title-sm ml-auto">{chargeAmount ? formatPriceString(chargeAmount) : "--"}</p>
         </LayoutBox>
       </CardContentComponent>
     </CardComponent>

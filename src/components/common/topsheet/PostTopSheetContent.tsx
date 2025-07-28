@@ -17,7 +17,7 @@ export function PostTopSheetContent({ data, expanded }: { data: PostData; expand
           </BadgeComponent>
         )}
         <BadgeComponent variant="meta" size="md" className="bg-gray-400 w-[66px] inline-flex">
-          {data.uploadTime} 전
+          {data.uploadTime}
         </BadgeComponent>
         <h2 className="h1">{data.title}</h2>
       </div>
