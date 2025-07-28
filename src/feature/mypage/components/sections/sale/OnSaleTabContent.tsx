@@ -41,7 +41,7 @@ export default function OnSaleTabContent() {
         items={flatItems}
         renderItem={(item) => <HistoryCard data={item} key={item.productId} />}
         mode="button"
-        height="calc( 50vh + 19px )"
+        height={id ? "calc( 50vh + 19px )" : "calc( 60vh + 12px )"}
       />
     </div>
   );

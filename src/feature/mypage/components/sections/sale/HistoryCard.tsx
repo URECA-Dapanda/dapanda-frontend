@@ -1,7 +1,6 @@
 "use client";
 
 import AvatarIcon from "@components/common/AvatarIcon";
-import { ButtonComponent } from "@components/common/button";
 import ItemCard from "@components/common/card/ItemCard";
 import LayoutBox from "@components/common/container/LayoutBox";
 import { SaleHistoryType } from "@feature/mypage/types/mypageTypes";
@@ -44,11 +43,6 @@ export function HistoryCard({ data, size = "sm" }: HistoryCardProps) {
           </p>
         </LayoutBox>
       </LayoutBox>
-      {data.state !== "ACTIVE" && (
-        <ButtonComponent variant={"primary2"} size={"xxs"} className="absolute bottom-12 right-36">
-          받은 후기 보기
-        </ButtonComponent>
-      )}
     </ItemCard>
   );
 }

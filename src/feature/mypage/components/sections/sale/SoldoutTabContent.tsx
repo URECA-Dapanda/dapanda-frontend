@@ -34,7 +34,7 @@ export default function SoldoutTabContent() {
         items={flatItems}
         renderItem={(item) => <HistoryCard data={item} key={item.productId} size="lg" />}
         mode="button"
-        height="350px"
+        height="calc( 60vh + 12px )"
       />
     </div>
   );
