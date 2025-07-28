@@ -62,7 +62,7 @@ function VirtualizedList<T>({
   parentRef,
   rowVirtualizer,
   items,
-  height = "600px",
+  height = "400px",
   mode = "scroll",
   hasNextPage,
   isFetchingNextPage,
@@ -102,7 +102,8 @@ function VirtualizedList<T>({
                   left: 0,
                   width: "100%",
                   transform: `translateY(${virtualRow.start}px)`,
-                  padding: "0px",
+                  paddingInline: "24px",
+                  paddingBottom: "12px",
                 }}
               >
                 {mode === "scroll" && isLoaderRow

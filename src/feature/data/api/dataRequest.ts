@@ -7,12 +7,8 @@ import {
   mapRawToDataType,
 } from "@feature/data/types/dataType";
 
-function isNumber(value: unknown): value is number {
-  return typeof value === "number";
-}
-
 export async function getDataList({
-  pageParam = 0,
+  pageParam,
   sort = "RECENT",
   size = 10,
   dataAmount,
@@ -27,14 +23,7 @@ export async function getDataList({
 }> {
   try {
     const searchParam = new URLSearchParams();
-    searchParam.set(
-      "cursorId",
-      sort === "RECENT"
-        ? ""
-        : isNumber(pageParam) && pageParam > 0
-          ? String(pageParam)
-          : "0"
-    );
+    if (pageParam) searchParam.set("cursorId", String(pageParam));
     searchParam.set("productSortOption", sort);
     searchParam.set("size", String(size));
     if (dataAmount) searchParam.set("dataAmount", String(dataAmount));

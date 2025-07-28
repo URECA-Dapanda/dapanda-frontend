@@ -16,12 +16,12 @@ export default function SharedHeader() {
   const pathname = usePathname();
   const isVisible = useHeaderStore((state) => state.isVisible);
   const { hasEnded, reset } = useTimerStore();
-  const isDataPage = pathname.startsWith("/data") && pathname.split("/").length===2;
+  const isDataPage = pathname.startsWith("/data") && pathname.split("/").length === 2;
 
   return (
-    <div
+    <header
       className={clsx(
-        "bg-white border-none overflow-x-clip sticky top-0 z-50 transition-opacity duration-300",
+        "bg-white border-none overflow-x-clip sticky top-0 z-50 transition-opacity duration-300 shrink-0",
         isDataPage && !isVisible && "opacity-0 pointer-events-none",
         "w-[375px] mx-auto"
       )}
@@ -46,6 +46,6 @@ export default function SharedHeader() {
         </div>
       </div>
       {hasEnded ? <EndOfUseModal open={hasEnded} onClose={reset} /> : <TimerModal />}
-    </div>
+    </header>
   );
 }
