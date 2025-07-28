@@ -36,15 +36,20 @@ export async function getSaleHistoryList({
   size = 2,
   pageParam,
   productState,
+  id,
 }: {
   pageParam?: number | unknown;
   size?: number;
   productState: string;
+  id?: string;
 }): Promise<{ items: SaleHistoryType[]; nextCursor?: number; num?: number }> {
   if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
-  const { data } = await axios.get("/api/selling-products", {
-    params: { size, cursorId: pageParam, productState },
-  });
+  const { data } = await axios.get(
+    id ? `/api/members/${id}/selling-products` : "/api/selling-products",
+    {
+      params: { size, cursorId: pageParam, productState },
+    }
+  );
   const items = data.data.data;
 
   const nextCursor = data.data.pageInfo.nextCursorId;
