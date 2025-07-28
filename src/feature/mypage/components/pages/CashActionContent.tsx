@@ -37,8 +37,8 @@ export default function CashActionContent({ mode, buttonText }: CashActionConten
         const res = await requestRefund(requestId, Number(chargeAmount));
         toast.success(`${res.data.data.refundPrice.toLocaleString()}원 환불 완료`);
         open("refund");
-      } catch (err: any) {
-        toast.error(err?.response?.data?.message || "환불에 실패했습니다.");
+      } catch {
+        toast.error("환불에 실패했습니다.");
       }
     }
   };
