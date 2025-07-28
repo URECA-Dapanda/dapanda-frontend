@@ -50,12 +50,26 @@ export const parseTimeToMinutes = (hour: string, minute: string, period: "AM" | 
 
 export const getDurationMinutes = (start: Time, end: Time): number => {
   const startMins = parseTimeToMinutes(start.hour, start.minute, start.period);
-  const endMins = parseTimeToMinutes(end.hour, end.minute, end.period);
-  return Math.max(endMins - startMins, 0);
+  let endMins = parseTimeToMinutes(end.hour, end.minute, end.period);
+
+  // 자정을 넘긴 경우 다음 날로 간주
+  if (endMins <= startMins) {
+    endMins += 24 * 60;
+  }
+
+  return endMins - startMins;
 };
 
 export const isValidTimeRange = (start: Time, end: Time): boolean => {
-  return getDurationMinutes(start, end) > 0;
+  const startMins = parseTimeToMinutes(start.hour, start.minute, start.period);
+  const endMins = parseTimeToMinutes(end.hour, end.minute, end.period);
+
+  // 0분짜리 → 잘못된 범위
+  if (startMins === endMins) return false;
+
+  // 1분 ~ 1439분 → 모두 허용 (24시간은 허용하지 않음)
+  const duration = (endMins - startMins + 1440) % 1440;
+  return duration > 0;
 };
 
 export const formatToIsoTime = (time: Time): string => {
@@ -128,8 +142,36 @@ export const compareTimes = (a: Time, b: Time): number => {
   return toMinutes(a) - toMinutes(b);
 };
 
+export const compareTimesWithWraparound = (a: Time, b: Time, base: Time): number => {
+  const toMinutes = (t: Time) => {
+    let hour = parseInt(t.hour, 10);
+    if (t.period === "PM" && hour !== 12) hour += 12;
+    if (t.period === "AM" && hour === 12) hour = 0;
+    return hour * 60 + parseInt(t.minute, 10);
+  };
+
+  const baseMins = toMinutes(base);
+  let aMins = toMinutes(a);
+  let bMins = toMinutes(b);
+
+  if (aMins < baseMins) aMins += 1440;
+  if (bMins < baseMins) bMins += 1440;
+
+  return aMins - bMins;
+};
+
 export const isTimeInRange = (target: Time, min: Time, max: Time): boolean => {
-  return compareTimes(target, min) >= 0 && compareTimes(target, max) <= 0;
+  const minMins = parseTimeToMinutes(min.hour, min.minute, min.period);
+  const maxMins = parseTimeToMinutes(max.hour, max.minute, max.period);
+  let targetMins = parseTimeToMinutes(target.hour, target.minute, target.period);
+
+  if (maxMins <= minMins) {
+    // 자정을 넘기는 범위 (예: 18:00 ~ 00:00)
+    if (targetMins < minMins) targetMins += 1440;
+    return targetMins >= minMins && targetMins <= maxMins + 1440;
+  }
+
+  return targetMins >= minMins && targetMins <= maxMins;
 };
 
 export function formatDateDivider(isoOrDateString: string): string {
