@@ -8,6 +8,7 @@ interface FilterCardContentProps {
   value: number[];
   max: number;
   onValueChange: (val: number[]) => void;
+  disabled?: boolean;
 }
 
 export default function FilterCardContent({
@@ -16,6 +17,7 @@ export default function FilterCardContent({
   value,
   max,
   onValueChange,
+  disabled,
 }: FilterCardContentProps) {
   return (
     <div className="flex flex-col items-center text-center gap-12">
@@ -27,7 +29,12 @@ export default function FilterCardContent({
       <ButtonComponent
         variant="nonoutline"
         className="w-[280px]"
-        onClick={() => onButtonClick?.(value[0])}
+        onClick={() => {
+          if (!disabled) {
+            onButtonClick?.(value[0]);
+          }
+        }}
+        disabled={disabled}
       >
         {buttonText}
       </ButtonComponent>

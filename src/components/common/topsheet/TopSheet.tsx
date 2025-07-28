@@ -104,7 +104,7 @@ export default function TopSheet({
                               alt={`와이파이 이미지 ${idx + 1}`}
                               width={200}
                               height={200}
-                              onClick={(e) => handleImageClick(idx, e)} // ✅ 이 부분!
+                              onClick={(e) => handleImageClick(idx, e)}
                               className="object-cover rounded-12 mx-auto cursor-zoom-in"
                             />
                           </CarouselItem>
@@ -144,9 +144,9 @@ export default function TopSheet({
           )}
 
           <motion.div
-            className="relative z-10 pl-30 px-4 space-y-1"
+            className="relative z-10 pl-30 px-4 space-y-1 mb-20"
             animate={{
-              paddingTop: type === "wifi" ? 20 : expanded ? 200 : 60,
+              paddingTop: type === "wifi" ? 20 : expanded ? 200 : 90,
             }}
             transition={{ type: "spring", damping: 20, stiffness: 200 }}
           >
