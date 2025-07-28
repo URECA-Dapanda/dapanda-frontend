@@ -19,8 +19,16 @@ export default function ChatList() {
       try {
         const apiList = await getChatRoomList(10, selectedFilter);
 
+        // 메시지가 있는 채팅방만 필터링
+        const filteredApiList = apiList.filter(
+          (item: ApiChatRoom) => item.lastMessage && item.lastMessage.trim() !== ""
+        );
+
         // 상품 정보 가져오기
-        const uniqueProductIds = [...new Set(apiList.map((item: ApiChatRoom) => item.productId))];
+        const uniqueProductIds = [
+          ...new Set(filteredApiList.map((item: ApiChatRoom) => item.productId)),
+        ];
+
         const productDetailsMap: Record<
           number,
           { title: string; price: number; memberId: number; memberName: string }
@@ -42,7 +50,7 @@ export default function ChatList() {
           }
         }
 
-        const chatList = apiList.map((item: ApiChatRoom) => {
+        const chatList = filteredApiList.map((item: ApiChatRoom) => {
           const productDetail = productDetailsMap[item.productId];
           return {
             chatRoomId: item.chatRoomId,
@@ -55,13 +63,13 @@ export default function ChatList() {
             senderName: item.senderName,
             avatarUrl: item.senderProfileImageUrl || "c",
             senderId: item.senderId,
+            lastMessage: item.lastMessage || "",
           };
         });
 
-        console.log("최종 chatList 상태:", chatList);
         setChatList(chatList);
       } catch (e) {
-        console.error(e);
+        console.error("채팅방 목록 가져오기 실패:", e);
       }
     }
     fetchChatRooms();
@@ -100,19 +108,24 @@ export default function ChatList() {
         className="overflow-y-auto overflow-x-hidden scrollbar-track-transparent"
         style={{ height: "calc(-108px + 100vh)" }}
       >
-        <div className="space-y-24 py-24 mb-56">
-          {chatList.map((chat) => (
-            <ChatItem
-              key={chat.chatRoomId}
-              chatRoomId={String(chat.chatRoomId)}
-              name={chat.name}
-              updatedAt={formatRelativeTime(chat.updatedAt)}
-              productId={chat.productId}
-              place={chat.title}
-              pricePer10min={chat.price}
-              avatarUrl={chat.avatarUrl}
-              senderId={chat.senderId}
-            />
+        <div className="py-24 mb-56">
+          {chatList.map((chat, index) => (
+            <div key={chat.chatRoomId}>
+              <ChatItem
+                chatRoomId={String(chat.chatRoomId)}
+                name={chat.name}
+                updatedAt={formatRelativeTime(chat.updatedAt)}
+                productId={chat.productId}
+                place={chat.title}
+                pricePer10min={chat.price}
+                avatarUrl={chat.avatarUrl}
+                senderId={chat.senderId}
+                lastMessage={chat.lastMessage}
+              />
+              {index < chatList.length - 1 && (
+                <div className="border-b border-gray-200 mx-24"></div>
+              )}
+            </div>
           ))}
         </div>
       </div>
