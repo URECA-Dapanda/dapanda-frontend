@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { useChargeStore } from "@feature/mypage/stores/useChargeStore";
 import { useTossModalStore } from "@feature/mypage/stores/useTossModalStore";
 import { useCashSuccessModalStore } from "@feature/mypage/stores/useCashSuccessModalStore";
@@ -14,54 +15,54 @@ import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 
 interface CashActionContentProps {
-  mode: "charge" | "refund";
-  buttonText?: string;
+    mode: "charge" | "refund";
+    buttonText?: string;
 }
 
 export default function CashActionContent({ mode, buttonText }: CashActionContentProps) {
-  const chargeAmount = useChargeStore((state) => state.charge);
-  const openToss = useTossModalStore((state) => state.open);
-  const { isOpen, close, open } = useCashSuccessModalStore();
+    const chargeAmount = useChargeStore((state) => state.charge);
+    const openToss = useTossModalStore((state) => state.open);
+    const { isOpen, close, open } = useCashSuccessModalStore();
 
-  const handleClick = async () => {
-    if (!chargeAmount) {
-      toast.error(mode === "charge" ? "충전 금액을 입력해주세요." : "환불 금액을 입력해주세요.");
-      return;
-    }
+    const handleClick = useCallback(async () => {
+        if (!chargeAmount) {
+            toast.error(mode === "charge" ? "충전 금액을 입력해주세요." : "환불 금액을 입력해주세요.");
+            return;
+        }
 
-    if (mode === "charge") {
-      openToss();
-    } else {
-      const requestId = `refund-${uuidv4()}`;
-      try {
-        const res = await requestRefund(requestId, Number(chargeAmount));
-        toast.success(`${res.data.data.refundPrice.toLocaleString()}원 환불 완료`);
-        open("refund");
-      } catch {
-        toast.error("환불에 실패했습니다.");
-      }
-    }
-  };
+        if (mode === "charge") {
+            openToss();
+        } else {
+            const requestId = `refund-${uuidv4()}`;
+            try {
+                const res = await requestRefund(requestId, Number(chargeAmount));
+                toast.success(`${res.data.data.refundPrice.toLocaleString()}원 환불 완료`);
+                open("refund");
+            } catch {
+                toast.error("환불에 실패했습니다.");
+            }
+        }
+    }, [chargeAmount, mode, openToss, open]);
 
-  return (
-    <>
-      <div className="flex flex-col gap-12 p-24 pt-8">
-        <CurrentCashCard />
-        <SelectCharge title={mode === "refund" ? "환불 금액 선택" : "충전 금액 선택"} />
-        <ChargeInfoCard />
-        <ButtonComponent
-          variant={"primary"}
-          className="w-full mt-120"
-          onClick={handleClick}
-        >
-          {buttonText ?? (mode === "charge" ? "결제하기" : "현금으로 전환하기")}
-        </ButtonComponent>
-      </div>
+    return (
+        <>
+            <div className="flex flex-col gap-12 p-24 pt-8">
+                <CurrentCashCard />
+                <SelectCharge title={mode === "refund" ? "환불 금액 선택" : "충전 금액 선택"} />
+                <ChargeInfoCard />
+                <ButtonComponent
+                    variant={"primary"}
+                    className="w-full mt-120"
+                    onClick={handleClick}
+                >
+                    {buttonText ?? (mode === "charge" ? "결제하기" : "현금으로 전환하기")}
+                </ButtonComponent>
+            </div>
 
-      {mode === "charge" && <TossPaymentModal />}
+            {mode === "charge" && <TossPaymentModal />}
 
-      {/* 완료 시 뜨는 모달 */}
-      <CashSuccessModal isOpen={isOpen} onClose={close} mode={mode} />
-    </>
-  );
+            {/* 완료 시 뜨는 모달 */}
+            <CashSuccessModal isOpen={isOpen} onClose={close} mode={mode} />
+        </>
+    );
 }
