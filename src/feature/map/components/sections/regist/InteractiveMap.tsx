@@ -8,7 +8,13 @@ import { getAddressVariantsFromLatLng } from "@/feature/map/utils/reverseGeocode
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 
 interface InteractiveMapProps {
-  onLocationSelect: (lat: number, lng: number, address: string) => void;
+  onLocationSelect: (
+    lat: number,
+    lng: number,
+    roadAddress: string,
+    jibunAddress?: string,
+    postalCode?: string
+  ) => void;
 }
 
 export default function InteractiveMap({ onLocationSelect }: InteractiveMapProps) {
@@ -76,7 +82,13 @@ export default function InteractiveMap({ onLocationSelect }: InteractiveMapProps
       infoWindowRef.current?.open(map, latlng);
 
       // 도로명 주소 우선 전달
-      onLocationSelect(lat, lng, addressResult?.roadAddress ?? "주소 없음");
+      onLocationSelect(
+        lat,
+        lng,
+        addressResult?.roadAddress ?? "주소 없음",
+        addressResult?.jibunAddress,
+        addressResult?.postalCode
+      );
     });
 
     return () => {

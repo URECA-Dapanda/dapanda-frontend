@@ -11,9 +11,13 @@ export default function MapSelectLocationPage() {
   const searchParams = useSearchParams();
   const type = (searchParams.get("type") as "wifi" | "hotspot") ?? "wifi";
 
-  const [selected, setSelected] = useState<{ lat: number; lng: number; address: string } | null>(
-    null
-  );
+  const [selected, setSelected] = useState<{
+    lat: number;
+    lng: number;
+    roadAddress: string;
+    jibunAddress?: string;
+    postalCode?: string;
+  } | null>(null);
 
   useEffect(() => {
     const lat = searchParams.get("lat");
@@ -26,14 +30,18 @@ export default function MapSelectLocationPage() {
       setSelected({
         lat: parseFloat(lat),
         lng: parseFloat(lng),
-        address: decodeURIComponent(address),
+        roadAddress: decodeURIComponent(address),
+        jibunAddress: undefined,
+        postalCode: undefined,
       });
     } else if (isEdit && productId) {
       getMapDetailById(productId).then((data) => {
         setSelected({
           lat: data.latitude,
           lng: data.longitude,
-          address: data.address,
+          roadAddress: data.address,
+          jibunAddress: undefined,
+          postalCode: undefined,
         });
       });
     }
@@ -41,12 +49,12 @@ export default function MapSelectLocationPage() {
 
   const handleNext = () => {
     if (!selected) return alert("위치를 선택해주세요");
-    const { lat, lng, address } = selected;
+    const { lat, lng, roadAddress } = selected;
     const edit = searchParams.get("edit");
     const productId = searchParams.get("productId");
 
     const baseUrl = `/map/regist/${type}/form`;
-    const query = `lat=${lat}&lng=${lng}&address=${encodeURIComponent(address)}`;
+    const query = `lat=${lat}&lng=${lng}&address=${encodeURIComponent(roadAddress)}`;
     const editParams = edit === "true" && productId ? `&edit=true&id=${productId}` : "";
 
     router.push(`${baseUrl}?${query}${editParams}`);
@@ -67,29 +75,50 @@ export default function MapSelectLocationPage() {
       </div>
 
       {/* 지도 영역 */}
-      <div className="absolute top-[64px] bottom-[160px] left-0 right-0">
+      <div className="absolute top-[64px] bottom-[200px] left-0 right-0">
         <InteractiveMap
-          onLocationSelect={(lat, lng, address) => {
-            setSelected({ lat, lng, address });
+          onLocationSelect={(lat, lng, roadAddress, jibunAddress, postalCode) => {
+            setSelected({ lat, lng, roadAddress, jibunAddress, postalCode });
           }}
         />
 
         {/* 지도 안내 텍스트 (중앙 상단) */}
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 px-16 py-6 bg-black-60 text-white rounded-full text-sm shadow">
+        <div className="absolute top-16 left-1/2 -translate-x-1/2 px-16 py-6 bg-black-60 text-white rounded-full text-sm shadow whitespace-nowrap">
           지도를 움직여 위치를 지정하세요
         </div>
       </div>
 
-      {/* 선택된 주소 */}
+      {/* 선택된 주소 정보 - 실제 데이터 사용 */}
       {selected && (
-        <div className="absolute bottom-[100px] left-0 w-full text-center px-24">
-          <div className="text-primary font-semibold text-sm truncate">{selected.address}</div>
+        <div className="absolute bottom-[80px] left-0 w-full px-24">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-16">
+            <div className="text-pink-500 font-semibold text-lg mb-8">{selected.roadAddress}</div>
+            <div className="text-xs text-gray-500 space-y-4">
+              {selected.jibunAddress && (
+                <div className="flex items-center gap-8">
+                  <span className="bg-gray-100 px-8 py-4 rounded text-xs">지번</span>
+                  <span>{selected.jibunAddress}</span>
+                </div>
+              )}
+              {selected.postalCode && (
+                <div className="flex items-center gap-8">
+                  <span className="bg-gray-100 px-8 py-4 rounded text-xs">우편번호</span>
+                  <span>{selected.postalCode}</span>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
       {/* 하단 고정 버튼 */}
       <div className="absolute bottom-0 left-0 w-full px-24 py-20 bg-white border-t border-gray-200">
-        <ButtonComponent variant="primary" size="xl" onClick={handleNext} className="w-full">
+        <ButtonComponent
+          variant="primary"
+          size="xl"
+          onClick={handleNext}
+          className="w-full bg-pink-500 hover:bg-pink-600"
+        >
           다음 단계로
         </ButtonComponent>
       </div>

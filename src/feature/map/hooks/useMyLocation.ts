@@ -6,7 +6,7 @@ export function useMyLocation(map?: naver.maps.Map | null) {
   const isManualPan = useMapStore((state) => state.isManualPan);
 
   useEffect(() => {
-    if (!window.navigator || !navigator.geolocation || isManualPan) return;
+    if (!window.navigator || !navigator.geolocation || isManualPan || !map) return;
 
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
