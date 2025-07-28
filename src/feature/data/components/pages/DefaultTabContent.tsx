@@ -47,6 +47,7 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
         getDataList({
           pageParam,
           sort: convertSortLabelToEnum(sortLabel),
+          size: 4,
           dataAmount: dataAmount ?? undefined,
         }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,

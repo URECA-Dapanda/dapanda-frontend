@@ -9,7 +9,7 @@ import TabTitle from "@feature/mypage/components/sections/TabTitle";
 export default function SellingList() {
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<DataType>({
-      queryKey: ["dataItems"],
+      queryKey: ["/api/selling-products"],
       queryFn: ({ pageParam = 0 }) =>
         getDataList({
           pageParam,
