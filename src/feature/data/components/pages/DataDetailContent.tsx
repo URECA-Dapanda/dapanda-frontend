@@ -15,6 +15,7 @@ import {
   buildSplitPaymentInfo,
 } from "@feature/data/hooks/usePurchaseBuilder";
 import { useDataDetail } from "@feature/data/hooks/useDataDetail";
+import { usePriceRecommendation } from "@feature/data/hooks/usePriceRecommendation";
 import clsx from "clsx";
 import DeletePostModal from "@feature/data/components/sections/modal/DeletePostModal";
 import DataRegistModal from "@feature/data/components/sections/modal/DataRegistModal";
@@ -29,6 +30,7 @@ export default function DataDetailContent() {
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [topSheetExpanded, setTopSheetExpanded] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { recentPrice, avgPrice } = usePriceRecommendation();
 
   const handleDeleteModalOpen = useCallback(() => setIsOpen(true), []);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -52,15 +54,14 @@ export default function DataDetailContent() {
           price: data.price,
           unitPrice: data.pricePer100MB,
           uploadTime: formatRelativeTime(data.updatedAt),
-          recentPrice: 0,
-          averagePrice: data.averageRate,
+          recentPrice: recentPrice != null ? data.remainAmount * 10 * recentPrice : undefined,
+          averagePrice: avgPrice != null ? data.remainAmount * 10 * avgPrice : undefined,
           hasReported: false,
           memberName: data.memberName,
         }}
         onImageClick={() => { }}
         onExpandChange={setTopSheetExpanded}
       />
-
       <div
         className={clsx(
           "space-y-12 px-24 transition-all duration-300",
@@ -92,12 +93,12 @@ export default function DataDetailContent() {
           {data.splitType && (
             <div className="bg-primary2 w-[327px] p-16 rounded-20">
               <FilterCardContent
-                buttonText="구매하기"
+                buttonText={isOwner ? "내 게시글입니다" : "구매하기"}
                 max={data.remainAmount}
                 value={[selectedAmount]}
                 onValueChange={(v) => setSelectedAmount(v[0])}
-                onButtonClick={handleSplitPurchase}
-              />
+                onButtonClick={isOwner ? undefined : handleSplitPurchase}
+                disabled={isOwner}              />
             </div>
           )}
 
@@ -106,7 +107,8 @@ export default function DataDetailContent() {
               <ButtonComponent
                 variant={"primary"}
                 className="w-full px-60"
-                onClick={handleDefaultPurchase}
+                onClick={isOwner ? undefined : handleDefaultPurchase}
+                disabled={isOwner}
               >
                 구매하기
               </ButtonComponent>
