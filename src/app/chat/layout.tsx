@@ -1,13 +1,13 @@
-import { ReactNode, Suspense } from "react";
-import SharedHeader from "@components/common/header/SharedHeader";
+import LogoHeader from "@components/common/header/LogoHeader";
 import BottomNavigation from "@components/common/navigation/BottomNavigation";
+import { ReactNode } from "react";
 
-export default function MyPageLayout({ children }: { children: ReactNode }) {
+export default function ChatLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex flex-col justify-center items-center w-[375px] h-[100dvh] box-border">
-      <SharedHeader />
+      <LogoHeader />
       <main className="relative antialiased flex-1 min-h-[calc(100dvh-112px)] w-full overflow-y-visible overflow-x-clip bg-white">
-        <Suspense>{children}</Suspense>
+        {children}
       </main>
       <BottomNavigation />
     </div>

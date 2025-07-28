@@ -65,7 +65,7 @@ PropsWithChildren<SlidingTabsProps>) {
       highlight: "bottom-0 h-[2px] bg-primary",
       trigger: cn(
         "!shadow-none w-[140px] h-[30px] title-sm text-gray-400 text-center relative  hover:cursor-pointer",
-        "bg-white shadow-none border-none",
+        "bg-transparent shadow-none border-none",
         "data-[state=active]:text-primary data-[state=active]:font-bold"
       ),
     },
@@ -76,14 +76,14 @@ PropsWithChildren<SlidingTabsProps>) {
       value={currentTab}
       onValueChange={handleChange}
       defaultValue={defaultValue}
-      className="overflow-x-visible whitespace-nowrap transition-all "
+      className="overflow-x-visible whitespace-nowrap transition-all w-full"
     >
       <TabsList className={cn("relative mx-auto", styles.tabList)}>
         <motion.div
           layout
           transition={{ type: "spring", stiffness: 160, damping: 24, mass: 0.4 }}
           animate={{ left: highlightStyle.left, width: highlightStyle.width }}
-          className={cn("absolute hover:cursor-pointer ", styles.highlight)}
+          className={cn("absolute hover:cursor-pointer", styles.highlight)}
         />
         {tabs.map((tab, i) => (
           <TabsTrigger

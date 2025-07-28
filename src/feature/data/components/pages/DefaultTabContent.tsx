@@ -23,6 +23,8 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
   const [sortLabel, setSortLabel] = useState("최신순");
   const { dataAmount, clearDataAmount } = useDataFilterStore();
 
+  console.log("sheet", isSheetOpen);
+
   const convertSortLabelToEnum = (
     label: string
   ): "RECENT" | "PRICE_ASC" | "AMOUNT_ASC" | "AMOUNT_DESC" => {
@@ -41,7 +43,7 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<DataType>({
       queryKey: ["dataItems", sortLabel, dataAmount !== null ? `${dataAmount}` : "all"],
-      queryFn: ({ pageParam = 0 }) =>
+      queryFn: ({ pageParam }) =>
         getDataList({
           pageParam,
           sort: convertSortLabelToEnum(sortLabel),
@@ -54,9 +56,9 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
     });
 
   return (
-    <div className="space-y-4">
+    <div className="bottomSheetContents space-y-4">
       {isSheetOpen && (
-        <div className="flex items-center justify-between gap-8 mb-12">
+        <div className="flex items-center justify-between gap-8 mb-12 px-24">
           {/* 왼쪽: 뱃지 (조건부) */}
           <div className="flex items-center gap-4">
             {dataAmount !== null && (
@@ -109,7 +111,7 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
           mode="scroll"
           parentRef={parentRef}
           rowVirtualizer={rowVirtualizer}
-          height="700px"
+          height={isSheetOpen ? "calc( 70vh + 5px )" : "calc( 48vh - 54px )"}
           items={flatItems}
           isFetchingNextPage={isFetchingNextPage}
           hasNextPage={hasNextPage}

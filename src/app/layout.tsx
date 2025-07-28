@@ -14,11 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
-      <body className="flex flex-col min-h-screen w-full bg-gray-300">
-        <main className="antialiased flex-1 w-[375px] h-[812px] mx-auto overflow-hidden relative bg-white">
-          <ProviderWrapper>{children}</ProviderWrapper>
-        </main>
+    <html lang="ko" className="box-border h-[100dvh] overflow-y-hidden">
+      <body className="flex flex-col box-border min-h-screen w-full bg-gray-300 justify-center items-center">
+        <ProviderWrapper>{children}</ProviderWrapper>
+
         <ToastContainer
           position="top-center"
           autoClose={4000}

@@ -100,10 +100,10 @@ export default function BaseBottomSheet({
       )}
 
       <motion.div
-        className="fixed inset-0 flex items-end justify-center z-30 pointer-events-none"
+        className="fixed inset-0 flex items-end justify-center z-30 pointer-events-none overflow-y-hidden"
         dragConstraints={{ top: 0, bottom: 0 }}
         style={{
-          WebkitOverflowScrolling: "touch",
+          // WebkitOverflowScrolling: "touch",
           touchAction: "none",
           zIndex: zIndex ?? (variant === "modal" ? 99 : 30),
         }}
@@ -111,7 +111,7 @@ export default function BaseBottomSheet({
         drag="y"
       >
         <motion.div
-          className={`bg-white pointer-events-auto ${
+          className={`bottomSheet bg-white pointer-events-auto overflow-y-hidden ${
             (variant === "snap" || variant === "hybrid") && sheetY === 0
               ? "rounded-t-0"
               : "rounded-t-50"
