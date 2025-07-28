@@ -87,7 +87,7 @@ export async function getMapList({
       productId: item.productId,
       title: item.title,
       price: `${item.price}원`,
-      address: item.address, // 추후 reverse geocode 필요
+      address: item.address,
       open: item.open,
       location: `${item.latitude},${item.longitude}`,
       score: item.averageRate,
