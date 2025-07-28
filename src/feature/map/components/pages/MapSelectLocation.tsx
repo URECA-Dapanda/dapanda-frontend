@@ -58,7 +58,7 @@ export default function MapSelectLocationPage({ type }: Props) {
                   }`}
                 >
                   <div
-                    className="font-medium text-sm mb-4"
+                    className="font-medium body-sm mb-4"
                     dangerouslySetInnerHTML={{ __html: item.title }}
                   />
                   <div className="text-xs text-gray-500">{item.address}</div>
@@ -76,7 +76,7 @@ export default function MapSelectLocationPage({ type }: Props) {
           initialLocation={initialLocation}
         />
         {!isSearchMode && (
-          <div className="absolute top-84 left-1/2 -translate-x-1/2 px-16 py-6 bg-black-60 text-white rounded-full text-sm shadow whitespace-nowrap z-50">
+          <div className="absolute top-84 left-1/2 -translate-x-1/2 px-16 py-6 bg-black-60 text-white rounded-full body-sm shadow whitespace-nowrap z-50">
             지도를 클릭하여 위치를 지정하세요
           </div>
         )}

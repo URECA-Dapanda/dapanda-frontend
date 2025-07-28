@@ -33,18 +33,18 @@ export default function MapSelectedInfoCard({ selected, onNext }: Props) {
           transition={{ delay: 0.1 }}
           className="mb-24"
         >
-          <div className="text-pink-500 font-semibold text-lg mb-12">{selected.roadAddress}</div>
+          <div className="text-pink-500 font-semibold body-lg mb-12">{selected.roadAddress}</div>
 
           <div className="space-y-8">
             {selected.jibunAddress && (
-              <div className="flex items-center gap-8 text-sm text-gray-600">
-                <span className="bg-gray-100 px-8 py-4 rounded text-xs min-w-fit">지번</span>
+              <div className="flex items-center gap-8 body-sm text-gray-600">
+                <span className="bg-gray-100 px-8 py-4 rounded body-xs min-w-fit">지번</span>
                 <span className="flex-1">{selected.jibunAddress}</span>
               </div>
             )}
             {selected.postalCode && (
-              <div className="flex items-center gap-8 text-sm text-gray-600">
-                <span className="bg-gray-100 px-8 py-4 rounded text-xs min-w-fit">우편번호</span>
+              <div className="flex items-center gap-8 body-sm text-gray-600">
+                <span className="bg-gray-100 px-8 py-4 rounded body-xs min-w-fit">우편번호</span>
                 <span className="flex-1">{selected.postalCode}</span>
               </div>
             )}

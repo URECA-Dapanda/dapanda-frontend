@@ -1,4 +1,3 @@
-// app/map/regist/[type]/page.tsx
 "use client";
 
 import MapSelectLocationPage from "@/feature/map/components/pages/MapSelectLocation";
@@ -9,6 +8,6 @@ export default function RegistLocationPage({
 }: {
   params: Promise<{ type: "hotspot" | "wifi" }>;
 }) {
-  const { type } = use(params); // ✅ 동적 라우팅된 type 값을 받아옴
+  const { type } = use(params);
   return <MapSelectLocationPage type={type} />;
 }

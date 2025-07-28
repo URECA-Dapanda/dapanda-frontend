@@ -145,7 +145,7 @@ export default function MapDetailPage() {
           >
             {isOwner ? "내 게시글입니다" : "구매하기"}
           </ButtonComponent>
-          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+          {error && <p className="body-sm text-error text-center">{error}</p>}
         </div>
       </div>
       <DeletePostModal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} />
