@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useCallback, useState } from "react";
+import { BaseBottomSheet } from "@components/common/bottomsheet";
 import TopSheet from "@/components/common/topsheet/TopSheet";
 import { ButtonComponent } from "@components/common/button";
 import ProfileCard from "@feature/data/components/sections/default/ProfileCard";
@@ -16,10 +17,11 @@ import {
 import { useDataDetail } from "@feature/data/hooks/useDataDetail";
 import clsx from "clsx";
 import DeletePostModal from "@feature/data/components/sections/modal/DeletePostModal";
+import DataRegistModal from "@feature/data/components/sections/modal/DataRegistModal";
 
 export default function DataDetailContent() {
   const { postId } = useParams<{ postId: string }>();
-  const { data, loading } = useDataDetail(postId);
+  const { data, isPending, refetch } = useDataDetail(postId);
   const { setInfo } = usePaymentStore();
   const isOwner = data?.myProduct;
   const renderModals = UsePaymentModals();
@@ -29,8 +31,9 @@ export default function DataDetailContent() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleDeleteModalOpen = useCallback(() => setIsOpen(true), []);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
-  if (loading || !data) return <div className="text-center mt-20">로딩 중...</div>;
+  if (isPending || !data) return <div className="text-center mt-20">로딩 중...</div>;
 
   const handleSplitPurchase = () => {
     setInfo(buildSplitPaymentInfo(data, selectedAmount));
@@ -54,7 +57,7 @@ export default function DataDetailContent() {
           hasReported: false,
           memberName: data.memberName,
         }}
-        onImageClick={() => {}}
+        onImageClick={() => { }}
         onExpandChange={setTopSheetExpanded}
       />
 
@@ -73,7 +76,10 @@ export default function DataDetailContent() {
               <ButtonComponent variant={"outlineGray"} size="xs" onClick={handleDeleteModalOpen}>
                 글 삭제하기
               </ButtonComponent>
-              <ButtonComponent variant={"outlineGray"} size="xs">
+              <ButtonComponent
+                variant={"outlineGray"}
+                size="xs"
+                onClick={() => setEditModalOpen(true)}>
                 글 수정하기
               </ButtonComponent>
             </div>
@@ -109,8 +115,27 @@ export default function DataDetailContent() {
         </div>
       </div>
 
-      {renderModals}
       <DeletePostModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <BaseBottomSheet
+        isOpen={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        variant="modal"
+        zIndex={100}
+      >
+        <DataRegistModal
+          mode="edit"
+          onClose={() => { setEditModalOpen(false); refetch(); }}
+          defaultValues={{
+            productId: data.productId,
+            price: data.price,
+            amount: data.remainAmount,
+            isSplitType: data.splitType,
+          }}
+        />
+      </BaseBottomSheet>
+
+      {renderModals}
+
     </div>
   );
 }
