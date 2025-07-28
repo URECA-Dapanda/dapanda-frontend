@@ -46,7 +46,7 @@ export const useTossPayment = () => {
 
     await widgetRef.current.requestPayment({
       orderId: orderIdRef.current,
-      orderName: "캐시 충전",
+      orderName: "DPD 캐시 충전",
       successUrl: `${window.location.origin}/mypage/charge/success`,
       failUrl: `${window.location.origin}/mypage/charge/fail`,
     });

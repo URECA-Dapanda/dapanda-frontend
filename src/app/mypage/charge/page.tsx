@@ -1,5 +1,5 @@
-import ChargeCashContent from "@feature/mypage/components/pages/ChargeCashContent";
+import CashActionContent from "@feature/mypage/components/pages/CashActionContent";
 
 export default function ChargeCashPage() {
-  return <ChargeCashContent />;
+  return <CashActionContent mode="charge" />;
 }
