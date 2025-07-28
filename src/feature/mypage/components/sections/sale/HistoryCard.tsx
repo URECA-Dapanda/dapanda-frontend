@@ -30,7 +30,7 @@ export function HistoryCard({ data, size = "sm" }: HistoryCardProps) {
   return (
     <div className="px-24">
       <ItemCard size={size} handleClick={handleCardClick}>
-        <LayoutBox layout="flex" direction="row" gap={19}>
+        <LayoutBox layout="flex" direction="row" gap={19} height="full">
           <AvatarIcon size="small" />
           <LayoutBox layout="flex" direction="column" gap={0}>
             <p className="title-sm">{postTypeGuard[data.type]}</p>
