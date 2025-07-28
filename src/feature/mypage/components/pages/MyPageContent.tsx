@@ -8,11 +8,13 @@ import { DataUsageDonut } from "@feature/mypage/components/sections/profile/Cicu
 import LogOutButton from "../sections/LogOutButton";
 import ProfileCard from "@feature/mypage/components/sections/profile/ProfileCard";
 import { useCashSuccessModalStore } from "@feature/mypage/stores/useCashSuccessModalStore";
-import CashSuccessModal from "@feature/mypage/components/sections/toss/CashSuccessModal"; // ✅ 공통 모달
+import CashSuccessModal from "@feature/mypage/components/sections/toss/CashSuccessModal";
 
 export default function MyPageContent() {
   const searchParams = useSearchParams();
-  const { isOpen, open, close } = useCashSuccessModalStore();
+  const isOpen = useCashSuccessModalStore((s) => s.isOpen);
+  const open = useCashSuccessModalStore((s) => s.open);
+  const close = useCashSuccessModalStore((s) => s.close);
 
   useEffect(() => {
     if (searchParams.get("payment") === "success") {
