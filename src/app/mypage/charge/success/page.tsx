@@ -2,7 +2,6 @@
 
 import { useHandleTossSuccess } from "@/feature/mypage/hooks/useHandleTossSuccess";
 import { Receipt } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export default function ChargeSuccessPage() {
   useHandleTossSuccess();
