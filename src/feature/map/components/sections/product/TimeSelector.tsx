@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { compareTimes } from "@/lib/time";
+import { compareTimesWithWraparound } from "@/lib/time";
 import type { Time } from "@type/Time";
 
 import { cn } from "@lib/utils";
@@ -88,8 +88,11 @@ export default function TimeSelector({
               period: rawTemp.period,
             };
 
-            const inMinRange = !minTime || compareTimes(tempTime, minTime) >= 0;
-            const inMaxRange = !maxTime || compareTimes(tempTime, maxTime) <= 0;
+            const inMinRange =
+              !minTime || compareTimesWithWraparound(tempTime, minTime, minTime) >= 0;
+            const inMaxRange =
+              !maxTime || compareTimesWithWraparound(tempTime, maxTime, minTime ?? maxTime) <= 0;
+
             const disabled = !inMinRange || !inMaxRange;
 
             const isSelected = itemStr === selectedValue;
