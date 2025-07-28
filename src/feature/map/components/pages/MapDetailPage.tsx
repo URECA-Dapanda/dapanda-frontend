@@ -10,13 +10,14 @@ import SellerSection from "@/feature/map/components/sections/seller/SellerSectio
 import { useMapDetailData } from "@/feature/map/hooks/useMapDetailData";
 import { useTimeState } from "@/feature/map/hooks/useTimeState";
 import DeletePostModal from "@/feature/data/components/sections/modal/DeletePostModal";
-import { isValidTimeRange, parseHHMMToTime, isTimeInRange, formatTimeToHHMM } from "@/lib/time";
+import { isValidTimeRange, parseHHMMToTime, isTimeInRange } from "@/lib/time";
 import { useWifiPriceRecommendation } from "@/feature/map/hooks/useWifiPriceRecommendation";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 
 import clsx from "clsx";
 import { buildWifiPaymentInfo } from "@feature/payment/hooks/useWifiPurchaseBuilder";
 import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
+import dayjs from "dayjs";
 
 export default function MapDetailPage() {
   const router = useRouter();
@@ -77,8 +78,20 @@ export default function MapDetailPage() {
 
     setError(null);
 
-    const start = formatTimeToHHMM(startTime);
-    const end = formatTimeToHHMM(endTime);
+    const start = dayjs()
+      .hour(Number(startTime.hour))
+      .minute(Number(startTime.minute))
+      .second(0)
+      .millisecond(0)
+      .toISOString();
+
+    const end = dayjs()
+      .add(1, "day")
+      .hour(Number(endTime.hour))
+      .minute(Number(endTime.minute))
+      .second(0)
+      .millisecond(0)
+      .toISOString();
 
     setInfo(buildWifiPaymentInfo(data, start, end));
 
