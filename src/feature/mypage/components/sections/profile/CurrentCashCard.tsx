@@ -30,9 +30,8 @@ export default function CurrentCashCard({ isInterection }: CurrentCashCardProps)
               </span>
               <Link
                 href={"/mypage/cash-history"}
-                className={`body-xs text-gray-500 hover:underline hover:cursor-pointer ${
-                  isInterection ? "" : "hidden"
-                }`}
+                className={`body-xs text-gray-500 hover:underline hover:cursor-pointer ${isInterection ? "" : "hidden"
+                  }`}
               >
                 내역 보기 &gt;
               </Link>
@@ -41,19 +40,24 @@ export default function CurrentCashCard({ isInterection }: CurrentCashCardProps)
 
           <Image src="/creditIcon.png" alt="₩" width={48} height={48} />
         </div>
-
         {isInterection && (
           <div className="flex gap-8">
-            <button className="flex-4 border border-primary text-primary body-sm rounded-6 py-4">
-              현금 전환
-            </button>
+            <Link href="/mypage/refund" className="flex-4">
+              <ButtonComponent
+                variant="outlinePrimary"
+                className="w-full text-primary border border-primary"
+              >
+                현금 전환
+              </ButtonComponent>
+            </Link>
             <Link href="/mypage/charge" className="flex-4">
-              <ButtonComponent variant={"primary"} className="w-full">
+              <ButtonComponent variant="primary" className="w-full">
                 충전하기
               </ButtonComponent>
             </Link>
           </div>
         )}
+
       </div>
     </FlatCard>
   );

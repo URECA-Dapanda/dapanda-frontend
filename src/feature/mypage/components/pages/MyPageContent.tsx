@@ -7,22 +7,22 @@ import TransactionHistory from "@feature/mypage/components/sections/TransactionH
 import { DataUsageDonut } from "@feature/mypage/components/sections/profile/CicularProgressBar";
 import LogOutButton from "../sections/LogOutButton";
 import ProfileCard from "@feature/mypage/components/sections/profile/ProfileCard";
-import { useTossSuccessModalStore } from "@feature/mypage/stores/useTossSuccessModalStore";
-import TossSuccessModal from "@feature/mypage/components/sections/toss/TossSuccessModal";
+import { useCashSuccessModalStore } from "@feature/mypage/stores/useCashSuccessModalStore";
+import CashSuccessModal from "@feature/mypage/components/sections/toss/CashSuccessModal"; // ✅ 공통 모달
 
 export default function MyPageContent() {
   const searchParams = useSearchParams();
-  const openSuccessModal = useTossSuccessModalStore((state) => state.open);
+  const { isOpen, open, close } = useCashSuccessModalStore();
 
   useEffect(() => {
     if (searchParams.get("payment") === "success") {
-      openSuccessModal();
+      open("charge");
     }
-  }, [searchParams, openSuccessModal]);
+  }, [searchParams, open]);
 
   return (
     <>
-      <TossSuccessModal />
+      <CashSuccessModal isOpen={isOpen} onClose={close} mode="charge" />
       <div className="flex flex-col items-center justify-center w-full h-full p-24 pt-8 gap-28">
         <ProfileCard />
         <DataUsageDonut current={7} unit="GB" />

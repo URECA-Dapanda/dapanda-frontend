@@ -9,7 +9,11 @@ import InputComponent from "@components/common/input/InputComponent";
 import { formatPriceString } from "@lib/formatters";
 import { useChargeStore } from "@feature/mypage/stores/useChargeStore";
 
-export default function SelectCharge() {
+interface SelectChargeProps {
+  title?: string;
+}
+
+export default function SelectCharge({ title = "충전 금액 선택" }: SelectChargeProps) {
   const selectValue = useChargeStore((state) => state.charge);
   const setSelectValue = useChargeStore((state) => state.setCharge);
 
@@ -22,7 +26,7 @@ export default function SelectCharge() {
   };
   return (
     <CardComponent variant="outlined" size="fit">
-      <CardHeaderComponent title="충전 금액 선택" />
+      <CardHeaderComponent title={title} />
       <CardContentComponent size={"sm"}>
         <LayoutBox layout="grid" columns={3} gap="16px">
           <ButtonComponent variant={"outlineGray"} value={1000} onClick={handleButtonClick}>
