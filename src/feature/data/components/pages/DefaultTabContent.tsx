@@ -43,7 +43,7 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
   const { parentRef, rowVirtualizer, flatItems, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useVirtualizedInfiniteQuery<DataType>({
       queryKey: ["dataItems", sortLabel, dataAmount !== null ? `${dataAmount}` : "all"],
-      queryFn: ({ pageParam = 0 }) =>
+      queryFn: ({ pageParam }) =>
         getDataList({
           pageParam,
           sort: convertSortLabelToEnum(sortLabel),
