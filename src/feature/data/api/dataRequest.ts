@@ -29,7 +29,11 @@ export async function getDataList({
     const searchParam = new URLSearchParams();
     searchParam.set(
       "cursorId",
-      isNumber(pageParam) && pageParam > 0 ? String(pageParam) : String(0)
+      sort === "RECENT"
+        ? ""
+        : isNumber(pageParam) && pageParam > 0
+          ? String(pageParam)
+          : "0"
     );
     searchParam.set("productSortOption", sort);
     searchParam.set("size", String(size));
