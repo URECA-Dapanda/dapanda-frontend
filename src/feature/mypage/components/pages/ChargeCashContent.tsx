@@ -26,7 +26,10 @@ export default function ChargeCashContent() {
         <CurrentCashCard />
         <SelectCharge />
         <ChargeInfoCard />
-        <ButtonComponent variant={"primary"} className="w-full" onClick={handleClick}>
+        <ButtonComponent 
+          variant={"primary"} 
+          className="w-full mt-120" 
+          onClick={handleClick}>
           결제하기
         </ButtonComponent>
       </div>

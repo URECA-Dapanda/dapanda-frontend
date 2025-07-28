@@ -21,7 +21,7 @@ export default function SelectCharge() {
     setSelectValue(e.currentTarget.value);
   };
   return (
-    <CardComponent variant="outlined" size="xxl">
+    <CardComponent variant="outlined" size="fit">
       <CardHeaderComponent title="충전 금액 선택" />
       <CardContentComponent size={"sm"}>
         <LayoutBox layout="grid" columns={3} gap="16px">
@@ -44,7 +44,7 @@ export default function SelectCharge() {
             {formatPriceString("10000원")}
           </ButtonComponent>
         </LayoutBox>
-        <p className="body-sm mb-8 mt-8">직접 입력</p>
+        <p className="body-sm mb-12 mt-20">직접 입력</p>
         <LayoutBox layout="flex" direction="row" height="fit" gap={"8px"}>
           <InputComponent
             placeholder="금액을 입력하세요"
