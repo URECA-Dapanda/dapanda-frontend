@@ -20,7 +20,7 @@ export default function FilterCardContent({
   disabled,
 }: FilterCardContentProps) {
   return (
-    <div className="flex flex-col items-center text-center gap-12">
+    <div className="flex flex-col h-full justify-center items-center text-center gap-12 p-12">
       <h2 className="h1 text-black">{formatDataSize(value[0])}</h2>
       <p className="body-sm text-gray-600">원하는 용량을 선택하세요</p>
 

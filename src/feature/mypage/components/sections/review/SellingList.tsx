@@ -33,9 +33,9 @@ export default function SellingList() {
         isFetchingNextPage={isFetchingNextPage}
         hasNextPage={hasNextPage}
         fetchNextPage={fetchNextPage}
-        renderItem={(item: DataType) => (
+        renderItem={(index, item?: DataType) => (
           <div className="px-24">
-            <DataItemCard data={item} type="default" />
+            <DataItemCard data={item} key={index} type="default" />
           </div>
         )}
       />

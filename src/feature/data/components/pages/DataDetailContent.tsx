@@ -16,9 +16,14 @@ import {
 } from "@feature/data/hooks/usePurchaseBuilder";
 import { useDataDetail } from "@feature/data/hooks/useDataDetail";
 import { usePriceRecommendation } from "@feature/data/hooks/usePriceRecommendation";
+import { useMonthlyDataLimit } from "@feature/data/hooks/useMonthlyDataLimit";
 import clsx from "clsx";
 import DeletePostModal from "@feature/data/components/sections/modal/DeletePostModal";
 import DataRegistModal from "@feature/data/components/sections/modal/DataRegistModal";
+import { BadgeComponent } from "@components/common/badge";
+import { formatDataSize } from "@lib/formatters";
+import OverLimitAlert from "@feature/data/components/sections/default/OverLimitAlert";
+import FlatCard from "@components/common/card/FlatCard";
 
 export default function DataDetailContent() {
   const { postId } = useParams<{ postId: string }>();
@@ -26,16 +31,17 @@ export default function DataDetailContent() {
   const { setInfo } = usePaymentStore();
   const isOwner = data?.myProduct;
   const renderModals = UsePaymentModals();
-
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [topSheetExpanded, setTopSheetExpanded] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { recentPrice, avgPrice } = usePriceRecommendation();
-
   const handleDeleteModalOpen = useCallback(() => setIsOpen(true), []);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const { remainingBuying, remainingSelling, isLoading: isLimitLoading } = useMonthlyDataLimit();
 
   if (isPending || !data) return <div className="text-center mt-20">로딩 중...</div>;
+  const isOverLimit = remainingBuying !== undefined && data.remainAmount > remainingBuying;
+  const effectiveMaxAmount = Math.min(data.remainAmount, remainingBuying ?? data.remainAmount);
 
   const handleSplitPurchase = () => {
     setInfo(buildSplitPaymentInfo(data, selectedAmount));
@@ -59,7 +65,7 @@ export default function DataDetailContent() {
           hasReported: false,
           memberName: data.memberName,
         }}
-        onImageClick={() => { }}
+        onImageClick={() => {}}
         onExpandChange={setTopSheetExpanded}
       />
       <div
@@ -80,7 +86,8 @@ export default function DataDetailContent() {
               <ButtonComponent
                 variant={"outlineGray"}
                 size="xs"
-                onClick={() => setEditModalOpen(true)}>
+                onClick={() => setEditModalOpen(true)}
+              >
                 글 수정하기
               </ButtonComponent>
             </div>
@@ -91,24 +98,44 @@ export default function DataDetailContent() {
 
         <div className="space-y-12 px-24 pb-28">
           {data.splitType && (
-            <div className="bg-primary2 w-[327px] p-16 rounded-20">
+            <FlatCard size="xxl">
               <FilterCardContent
                 buttonText={isOwner ? "내 게시글입니다" : "구매하기"}
-                max={data.remainAmount}
+                max={effectiveMaxAmount}
                 value={[selectedAmount]}
                 onValueChange={(v) => setSelectedAmount(v[0])}
                 onButtonClick={isOwner ? undefined : handleSplitPurchase}
-                disabled={isOwner}              />
+                disabled={isOwner}
+              />
+            </FlatCard>
+          )}
+          {!isLimitLoading && (
+            <div className="flex flex-wrap gap-8">
+              <BadgeComponent variant="outlined">
+                이번 달 구매 가능:{" "}
+                <span className="font-semibold ml-4">{formatDataSize(remainingBuying ?? 0)}</span>
+              </BadgeComponent>
+              <BadgeComponent variant="outlined">
+                이번 달 판매 가능:{" "}
+                <span className="font-semibold ml-4">{formatDataSize(remainingSelling ?? 0)}</span>
+              </BadgeComponent>
             </div>
           )}
+          {/* 구매 가능 초과 경고 */}
+          <OverLimitAlert
+            isSplitType={data.splitType}
+            selectedAmount={selectedAmount}
+            remainAmount={data.remainAmount}
+            remainingBuying={remainingBuying}
+          />
 
           {!data.splitType && (
-            <div className="flex justify-center">
+            <div className="flex justify-center mt-24">
               <ButtonComponent
                 variant={"primary"}
                 className="w-full px-60"
-                onClick={isOwner ? undefined : handleDefaultPurchase}
-                disabled={isOwner}
+                onClick={isOwner || isOverLimit ? undefined : handleDefaultPurchase}
+                disabled={isOwner || isOverLimit}
               >
                 구매하기
               </ButtonComponent>
@@ -126,7 +153,10 @@ export default function DataDetailContent() {
       >
         <DataRegistModal
           mode="edit"
-          onClose={() => { setEditModalOpen(false); refetch(); }}
+          onClose={() => {
+            setEditModalOpen(false);
+            refetch();
+          }}
           defaultValues={{
             productId: data.productId,
             price: data.price,
@@ -137,7 +167,6 @@ export default function DataDetailContent() {
       </BaseBottomSheet>
 
       {renderModals}
-
     </div>
   );
 }

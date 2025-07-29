@@ -37,7 +37,7 @@ export function DataUsageDonut({ unit = "GB" }: DataUsageDonutProps) {
   }, [targetOffset]);
 
   return (
-    <svg height={radius * 2} width={radius * 2} className="relative">
+    <svg height={radius * 2} width={radius * 2} className="relative shrink-0">
       {/* Background circle */}
       <circle
         stroke="#FDEDF6"

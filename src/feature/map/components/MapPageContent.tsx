@@ -39,7 +39,7 @@ export default function MapPageContent() {
         isFetchingNextPage={isFetchingNextPageForMap}
         hasNextPage={hasNextPageForMap}
         fetchNextPage={fetchNextPageForMap}
-        renderItem={(item: MapType) => <MapItemCard data={item} />}
+        renderItem={(index, item?: MapType) => <MapItemCard data={item} key={index} />}
       />
       <SelectTypeCard />
     </Fragment>

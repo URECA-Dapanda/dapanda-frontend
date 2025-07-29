@@ -25,7 +25,7 @@ export default function MyPageContent() {
   return (
     <>
       <CashSuccessModal isOpen={isOpen} onClose={close} mode="charge" />
-      <div className="flex flex-col items-center justify-center w-full h-full p-24 pt-8 gap-28">
+      <div className="flex flex-col items-center justify-center w-[100%] h-full p-24 pt-8 gap-28 overflow-y-scroll">
         <ProfileCard />
         <DataUsageDonut unit="GB" />
         <CurrentCashCard isInterection={true} />
