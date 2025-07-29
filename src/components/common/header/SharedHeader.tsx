@@ -19,14 +19,14 @@ export default function SharedHeader() {
   const isDataPage = pathname.startsWith("/data") && pathname.split("/").length === 2;
 
   return (
-    <header
-      className={clsx(
-        "bg-white border-none overflow-x-clip sticky top-0 z-50 transition-opacity duration-300 shrink-0",
-        isDataPage && !isVisible && "opacity-0 pointer-events-none",
-        "w-[375px] mx-auto"
-      )}
-    >
-      <div className="shadow-header">
+    <header className={clsx(isDataPage && "bg-primary2")}>
+      <div
+        className={clsx(
+          "bg-white border-none overflow-x-clip sticky top-0 z-50 transition-opacity duration-300 shrink-0",
+          isDataPage && !isVisible && "opacity-0 pointer-events-none",
+          "w-[375px] mx-auto shadow-header"
+        )}
+      >
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full flex items-center justify-center primary-gradient">

@@ -21,7 +21,6 @@ export async function getPurchaseHistoryList({
   pageParam?: number | unknown;
   size?: number;
 }): Promise<{ items: PurchaseHistoryType[]; nextCursor?: number; num?: number }> {
-  if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
   const { data } = await axios.get("/api/trades/purchase-history", {
     params: { size, cursorId: pageParam === 0 ? undefined : pageParam },
   });

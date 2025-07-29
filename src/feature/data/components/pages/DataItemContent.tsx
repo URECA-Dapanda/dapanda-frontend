@@ -3,9 +3,10 @@ import LayoutBox from "@components/common/container/LayoutBox";
 import { DataType, ProductItemProps } from "@feature/data/types/dataType";
 import { BadgeComponent } from "@components/common/badge";
 import { formatRelativeTime } from "@lib/time";
-export default function DataItemContent({
-  data: { date, price, pricePer100MB, title, memberName, splitType },
-}: ProductItemProps<DataType>) {
+import { SkeletonCard } from "@components/common/skeleton";
+export default function DataItemContent({ data }: Partial<ProductItemProps<DataType>>) {
+  if (!data) return <SkeletonCard />;
+  const { date, price, pricePer100MB, title, memberName, splitType } = data ?? {};
   return (
     <LayoutBox layout="grid" autoFit gap={32} direction="row" height="full">
       <AvatarIcon size="large" />
