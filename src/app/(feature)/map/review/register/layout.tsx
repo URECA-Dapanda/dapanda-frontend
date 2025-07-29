@@ -1,5 +1,5 @@
 import { ReactNode, Suspense } from "react";
 
-export default function ReviewLayout({ children }: { children: ReactNode }) {
+export default function ReviewWriteLayout({ children }: { children: ReactNode }) {
   return <Suspense>{children}</Suspense>;
 }

@@ -10,13 +10,14 @@ import SellerSection from "@/feature/map/components/sections/seller/SellerSectio
 import { useMapDetailData } from "@/feature/map/hooks/useMapDetailData";
 import { useTimeState } from "@/feature/map/hooks/useTimeState";
 import DeletePostModal from "@/feature/data/components/sections/modal/DeletePostModal";
-import { isValidTimeRange, parseHHMMToTime, isTimeInRange, formatTimeToHHMM } from "@/lib/time";
+import { isValidTimeRange, parseHHMMToTime, isTimeInRange } from "@/lib/time";
 import { useWifiPriceRecommendation } from "@/feature/map/hooks/useWifiPriceRecommendation";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 
 import clsx from "clsx";
 import { buildWifiPaymentInfo } from "@feature/payment/hooks/useWifiPurchaseBuilder";
 import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
+import dayjs from "dayjs";
 
 export default function MapDetailPage() {
   const router = useRouter();
@@ -59,6 +60,8 @@ export default function MapDetailPage() {
   const maxTime = parseHHMMToTime(data.closeTime);
 
   const onBuy = () => {
+    if (isOwner) return;
+
     if (!isValidTimeRange(startTime, endTime)) {
       setError("종료 시간은 시작 시간보다 늦어야 합니다.");
       return;
@@ -75,8 +78,20 @@ export default function MapDetailPage() {
 
     setError(null);
 
-    const start = formatTimeToHHMM(startTime);
-    const end = formatTimeToHHMM(endTime);
+    const start = dayjs()
+      .hour(Number(startTime.hour))
+      .minute(Number(startTime.minute))
+      .second(0)
+      .millisecond(0)
+      .toISOString();
+
+    const end = dayjs()
+      .add(1, "day")
+      .hour(Number(endTime.hour))
+      .minute(Number(endTime.minute))
+      .second(0)
+      .millisecond(0)
+      .toISOString();
 
     setInfo(buildWifiPaymentInfo(data, start, end));
 
@@ -86,7 +101,7 @@ export default function MapDetailPage() {
   };
 
   return (
-    <div className="w-[375px] mx-auto relative">
+    <div className="w-[100dvw] lg:w-[375px] mx-auto relative">
       <TopSheet
         type="wifi"
         data={{
@@ -104,17 +119,19 @@ export default function MapDetailPage() {
           topSheetExpanded ? "pt-[500px]" : "pt-[280px]"
         )}
       >
-        <TimeSelectorSection
-          startTime={startTime}
-          setStartTime={setStartTime}
-          endTime={endTime}
-          setEndTime={setEndTime}
-          minTime={minTime}
-          maxTime={maxTime}
-          showEditButton={isOwner}
-          onEditClick={() => router.push(`/map/regist/wifi?edit=true&${params.toString()}`)}
-          onDeleteClick={() => setDeleteModalOpen(true)}
-        />
+        <div className="mt-12">
+          <TimeSelectorSection
+            startTime={startTime}
+            setStartTime={setStartTime}
+            endTime={endTime}
+            setEndTime={setEndTime}
+            minTime={minTime}
+            maxTime={maxTime}
+            showEditButton={isOwner}
+            onEditClick={() => router.push(`/map/regist/wifi?edit=true&${params.toString()}`)}
+            onDeleteClick={() => setDeleteModalOpen(true)}
+          />
+        </div>
 
         <SellerSection sellerId={data.memberId} productId={String(data.productId)} />
 
@@ -124,11 +141,11 @@ export default function MapDetailPage() {
             variant="primary"
             size="xl"
             onClick={onBuy}
-            disabled={!data.open}
+            disabled={!data.open || isOwner}
           >
-            구매하기
+            {isOwner ? "내 게시글입니다" : "구매하기"}
           </ButtonComponent>
-          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+          {error && <p className="body-sm text-error text-center">{error}</p>}
         </div>
       </div>
       <DeletePostModal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} />

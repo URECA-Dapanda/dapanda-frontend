@@ -17,13 +17,15 @@ export default function SharedHeader() {
   const isVisible = useHeaderStore((state) => state.isVisible);
   const { hasEnded, reset } = useTimerStore();
   const isDataPage = pathname.startsWith("/data") && pathname.split("/").length === 2;
+  const isChatRoom = pathname.startsWith("/chat") && pathname.split("/").length > 2;
 
   return (
     <header
       className={clsx(
         "bg-white border-none overflow-x-clip sticky top-0 z-35 transition-opacity duration-300 shrink-0",
         isDataPage && !isVisible && "opacity-0 pointer-events-none",
-        "w-[375px] mx-auto"
+        "w-[100dvw] lg:w-[375px] mx-auto shadow-header",
+        isChatRoom && "hidden"
       )}
     >
       <div className="shadow-header">

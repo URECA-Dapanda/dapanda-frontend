@@ -32,7 +32,9 @@ export default function SoldoutTabContent() {
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
         items={flatItems}
-        renderItem={(item) => <HistoryCard data={item} key={item.productId} size="lg" />}
+        renderItem={(index, item) => (
+          <HistoryCard data={item} key={item ? item.productId : index} size="lg" />
+        )}
         mode="button"
         height="63dvh"
       />

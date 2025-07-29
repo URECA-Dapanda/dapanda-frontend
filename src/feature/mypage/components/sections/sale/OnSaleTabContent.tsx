@@ -39,7 +39,9 @@ export default function OnSaleTabContent() {
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
         items={flatItems}
-        renderItem={(item) => <HistoryCard data={item} key={item.productId} />}
+        renderItem={(index, item) => (
+          <HistoryCard data={item} key={item ? item.productId : index} />
+        )}
         mode="button"
         height={id ? "53dvh" : "63dvh"}
       />

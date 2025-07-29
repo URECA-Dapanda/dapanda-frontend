@@ -42,7 +42,7 @@ export default function ReviewBottomSheet({ isOpen, onClose, tradeId }: ReviewBo
   };
 
   return (
-    <BaseBottomSheet isOpen={isOpen} onClose={handleClose} variant="hybrid" snapHeight={320}>
+    <BaseBottomSheet isOpen={isOpen} onClose={handleClose} variant="hybrid" snapHeight={250}>
       <div className="flex flex-col gap-8 px-24 py-24">
         <div className="flex justify-between items-center">
           <span className="h3 text-black">거래 후기 남기기</span>

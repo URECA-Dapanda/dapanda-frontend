@@ -14,6 +14,7 @@ interface WifiItemResponse {
   productId: number;
   price: number;
   itemId: number;
+  address: string;
   memberName: string;
   title: string;
   latitude: number;
@@ -86,7 +87,7 @@ export async function getMapList({
       productId: item.productId,
       title: item.title,
       price: `${item.price}원`,
-      address: "", // 추후 reverse geocode 필요
+      address: item.address,
       open: item.open,
       location: `${item.latitude},${item.longitude}`,
       score: item.averageRate,

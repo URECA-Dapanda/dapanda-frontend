@@ -40,7 +40,7 @@ export default function MapItemCardContent({
         <div className="w-56 h-56 bg-gray-200 rounded-full flex items-center justify-center">
           {imageUrl ? (
             <Image
-              src={imageUrl}
+              src={imageUrl || "/default-wifi-image.png"}
               alt="대표 이미지"
               width={56}
               height={56}
@@ -63,7 +63,7 @@ export default function MapItemCardContent({
               <span className="caption-lg text-gray-500">{updatedAt}</span>
             </div>
           </div>
-          <span className="body-xs text-gray-400">{address}</span>
+          <span className="body-xxs text-gray-400 truncate max-w-[115px]">{address}</span>
         </div>
 
         {/* 오른쪽 요금 */}
