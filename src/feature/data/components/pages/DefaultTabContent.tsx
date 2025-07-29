@@ -47,7 +47,7 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
         getDataList({
           pageParam,
           sort: convertSortLabelToEnum(sortLabel),
-          size: 4,
+          size: 2,
           dataAmount: dataAmount ?? undefined,
         }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -98,7 +98,6 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
           </div>
         </div>
       )}
-
       {/* 검색 결과 없을 때 EmptyState, 있으면 list 렌더링 */}
       {flatItems.length === 0 && !isFetchingNextPage ? (
         <EmptyState
@@ -116,7 +115,9 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
           isFetchingNextPage={isFetchingNextPage}
           hasNextPage={hasNextPage}
           fetchNextPage={fetchNextPage}
-          renderItem={(item: DataType) => <DataItemCard data={item} type="default" />}
+          renderItem={(index, item?: DataType) => (
+            <DataItemCard data={item} key={index} type="default" />
+          )}
         />
       )}
     </div>

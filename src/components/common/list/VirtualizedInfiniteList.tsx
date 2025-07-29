@@ -11,7 +11,7 @@ interface VirtualizedListProps<T> {
   isFetchingNextPage: boolean;
   fetchNextPage: () => void;
   hasNextPage: boolean;
-  renderItem: (item: T, index: number) => React.ReactNode;
+  renderItem: (index: number, item?: T) => React.ReactNode;
 }
 
 /**
@@ -70,7 +70,6 @@ function VirtualizedList<T>({
   renderItem,
 }: VirtualizedListProps<T>) {
   const virtualItems = rowVirtualizer.getVirtualItems();
-
   const totalHeight = rowVirtualizer.getTotalSize();
 
   return (
@@ -84,7 +83,7 @@ function VirtualizedList<T>({
       >
         <div
           style={{
-            height: `${totalHeight - 120}px`,
+            height: `${totalHeight}px`,
             position: "relative",
             width: "100%",
           }}
@@ -106,30 +105,38 @@ function VirtualizedList<T>({
                   paddingBottom: "12px",
                 }}
               >
+                {mode === "button" &&
+                  hasNextPage &&
+                  isLoaderRow &&
+                  (isFetchingNextPage ? (
+                    renderItem(virtualRow.index)
+                  ) : (
+                    <div
+                      style={{ textAlign: "center" }}
+                      className={`${mode === "button" ? "" : "hidden"}`}
+                    >
+                      <ButtonComponent
+                        onClick={fetchNextPage}
+                        disabled={isFetchingNextPage}
+                        variant={"nonoutline"}
+                        className="text-gray-600 w-full shadow-none mb-[50px]"
+                        size={"sm"}
+                      >
+                        {"더보기"}
+                      </ButtonComponent>
+                    </div>
+                  ))}
                 {mode === "scroll" && isLoaderRow
                   ? isFetchingNextPage
-                    ? "Loading more..."
+                    ? renderItem(virtualRow.index)
                     : null
                   : !isLoaderRow
-                  ? renderItem(item, virtualRow.index)
+                  ? renderItem(virtualRow.index, item)
                   : null}
               </div>
             );
           })}
         </div>
-        {mode === "button" && hasNextPage && (
-          <div style={{ textAlign: "center" }} className={`${mode === "button" ? "" : "hidden"}`}>
-            <ButtonComponent
-              onClick={fetchNextPage}
-              disabled={isFetchingNextPage}
-              variant={"nonoutline"}
-              className="text-gray-600 w-full shadow-none mb-[50px]"
-              size={"sm"}
-            >
-              {isFetchingNextPage ? "로딩 중..." : "더보기"}
-            </ButtonComponent>
-          </div>
-        )}
       </div>
     </div>
   );

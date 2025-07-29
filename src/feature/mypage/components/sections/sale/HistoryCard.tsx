@@ -3,6 +3,7 @@
 import AvatarIcon from "@components/common/AvatarIcon";
 import ItemCard from "@components/common/card/ItemCard";
 import LayoutBox from "@components/common/container/LayoutBox";
+import { SkeletonCard } from "@components/common/skeleton";
 import { SaleHistoryType } from "@feature/mypage/types/mypageTypes";
 import { formatDataSize } from "@lib/formatters";
 import { formatDateDivider } from "@lib/time";
@@ -10,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 
 interface HistoryCardProps {
-  data: SaleHistoryType;
+  data?: SaleHistoryType;
   size?: "sm" | "lg";
 }
 
@@ -23,8 +24,16 @@ const postTypeGuard: { [key: string]: string } = {
 export function HistoryCard({ data, size = "sm" }: HistoryCardProps) {
   const router = useRouter();
   const handleCardClick = useCallback(() => {
-    router.push(`/${data.type === "WIFI" ? "map" : "data"}/${data.productId}`, { scroll: true });
+    if (data)
+      router.push(`/${data.type === "WIFI" ? "map" : "data"}/${data.productId}`, { scroll: true });
   }, [router]);
+
+  if (!data)
+    return (
+      <ItemCard size={size}>
+        <SkeletonCard />
+      </ItemCard>
+    );
 
   return (
     <ItemCard size={size} handleClick={handleCardClick}>
