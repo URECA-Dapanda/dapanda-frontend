@@ -35,11 +35,11 @@ export default function FilterCardContent({
         variant="nonoutline"
         className="w-[280px]"
         onClick={() => {
-          if (!disabled) {
+          if (!disabled && value[0] >= 0.1) {
             onButtonClick?.(value[0]);
           }
         }}
-        disabled={disabled}
+        disabled={disabled || value[0] < 0.1}
       >
         {buttonText}
       </ButtonComponent>

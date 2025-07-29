@@ -14,7 +14,7 @@ interface SliderProps {
 export default function Slider({
   value,
   onValueChange,
-  min = 0.1,
+  min = 0,
   max = 2,
   step = 0.1,
   className = "",
