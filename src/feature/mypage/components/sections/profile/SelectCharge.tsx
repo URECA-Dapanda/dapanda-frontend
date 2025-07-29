@@ -9,7 +9,11 @@ import InputComponent from "@components/common/input/InputComponent";
 import { formatPriceString } from "@lib/formatters";
 import { useChargeStore } from "@feature/mypage/stores/useChargeStore";
 
-export default function SelectCharge() {
+interface SelectChargeProps {
+  title?: string;
+}
+
+export default function SelectCharge({ title = "충전 금액 선택" }: SelectChargeProps) {
   const selectValue = useChargeStore((state) => state.charge);
   const setSelectValue = useChargeStore((state) => state.setCharge);
 
@@ -21,8 +25,8 @@ export default function SelectCharge() {
     setSelectValue(e.currentTarget.value);
   };
   return (
-    <CardComponent variant="outlined" size="xxl">
-      <CardHeaderComponent title="충전 금액 선택" />
+    <CardComponent variant="outlined" size="fit">
+      <CardHeaderComponent title={title} />
       <CardContentComponent size={"sm"}>
         <LayoutBox layout="grid" columns={3} gap="16px">
           <ButtonComponent variant={"outlineGray"} value={1000} onClick={handleButtonClick}>
@@ -44,7 +48,7 @@ export default function SelectCharge() {
             {formatPriceString("10000원")}
           </ButtonComponent>
         </LayoutBox>
-        <p className="body-sm mb-8 mt-8">직접 입력</p>
+        <p className="body-sm mb-12 mt-20">직접 입력</p>
         <LayoutBox layout="flex" direction="row" height="fit" gap={"8px"}>
           <InputComponent
             placeholder="금액을 입력하세요"

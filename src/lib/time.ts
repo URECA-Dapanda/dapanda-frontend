@@ -32,7 +32,7 @@ export function formatRelativeTime(iso: string, withSuffix = false): string {
     }
   }
 
-  return withSuffix && result !== "방금" ? `${result} 전` : result;
+  return withSuffix && result !== "방금" ? `${result}` : result;
 }
 
 export const formatTime = (time: number) => {
