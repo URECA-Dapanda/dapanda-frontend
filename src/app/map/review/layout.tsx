@@ -1,5 +1,15 @@
 import { ReactNode, Suspense } from "react";
+import SharedHeader from "@components/common/header/SharedHeader";
+import BottomNavigation from "@components/common/navigation/BottomNavigation";
 
 export default function ReviewLayout({ children }: { children: ReactNode }) {
-  return <Suspense>{children}</Suspense>;
+  return (
+    <div className="relative h-[100dvh] w-full">
+      <SharedHeader />
+      <div className="flex-1 w-full max-w-4xl p-6">
+        <Suspense>{children}</Suspense>
+      </div>
+      <BottomNavigation />
+    </div>
+  );
 }

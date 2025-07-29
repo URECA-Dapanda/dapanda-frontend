@@ -1,18 +1,20 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 interface ChatPostCardProps {
   title: string;
   pricePer10min?: number;
+  productId?: number;
 }
 
-export default function ChatPostCard({ title, pricePer10min }: ChatPostCardProps) {
+export default function ChatPostCard({ title, pricePer10min, productId }: ChatPostCardProps) {
   const match = title.match(/(\d+)GB/);
   const imageFile = match ? `/${match[1]}.png` : "/dpd-main-logo.png";
 
-  return (
-    <div className="flex border border-primary-200 rounded-20 h-64 px-16 py-8 bg-white">
+  const cardContent = (
+    <div className="flex border border-primary-200 rounded-20 h-64 px-16 py-8 bg-white cursor-pointer hover:bg-gray-50 transition-colors">
       <Image
         src={imageFile}
         alt={`${match?.[1]}GB 이미지`}
@@ -28,4 +30,10 @@ export default function ChatPostCard({ title, pricePer10min }: ChatPostCardProps
       </div>
     </div>
   );
+
+  if (productId) {
+    return <Link href={`/map/${productId}`}>{cardContent}</Link>;
+  }
+
+  return cardContent;
 }

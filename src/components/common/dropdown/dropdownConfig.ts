@@ -43,11 +43,11 @@ export const createDataSortOptions = (onSelect: (label: string) => void): Dropdo
   },
 ];
 
-export const chatMenuOptions = (onReport: () => void): DropdownOption[] => [
+export const chatMenuOptions = (onReport: () => void, senderId?: number): DropdownOption[] => [
   {
     label: "프로필 보기",
     icon: User,
-    action: { type: "link", href: "/user/profile" },
+    action: { type: "link", href: senderId ? `/map/review?memberId=${senderId}` : "/map/review" },
   },
   {
     label: "신고하기",
