@@ -111,13 +111,12 @@ export default function BaseBottomSheet({
         drag="y"
       >
         <motion.div
-          className={`bottomSheet bg-white pointer-events-auto overflow-y-hidden ${
+          className={` bottomSheet bg-white pointer-events-auto overflow-y-hidden w-[100dvw] lg:w-[375px] ${
             (variant === "snap" || variant === "hybrid") && sheetY === 0
               ? "rounded-t-0"
               : "rounded-t-50"
           }`}
           style={{
-            width: "375px",
             height:
               variant === "snap" || variant === "hybrid"
                 ? `calc(100vh - ${HEADER_OFFSET + BOTTOM_OFFSET}px)`

@@ -4,10 +4,7 @@ import NavigationButton from "@components/common/navigation/NavigationButton";
 
 export default function BottomNavigation() {
   return (
-    <div
-      className="bottom-0 z-50 bg-white border-none overflow-x-clip shrink-0"
-      style={{ width: "375px" }}
-    >
+    <div className="bottom-0 z-50 bg-white border-none overflow-x-clip w-[100dvw] lg:w-[375px] shrink-0">
       <div className="grid grid-cols-4 px-8 shadow-nav">
         <NavigationButton target={"/data"}>
           <Fragment>
