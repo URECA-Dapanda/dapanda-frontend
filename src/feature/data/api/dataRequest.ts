@@ -83,3 +83,13 @@ export async function putMobileDataProduct(data: {
   const response = await axios.put("/api/products/mobile-data", data);
   return response.data;
 }
+
+export async function getBuyingDataAmount(): Promise<number> {
+  const res = await axios.get("/api/members/buying-data");
+  return res.data.data.data;
+}
+
+export async function getSellingDataAmount(): Promise<number> {
+  const res = await axios.get("/api/members/selling-data");
+  return res.data.data.data;
+}
