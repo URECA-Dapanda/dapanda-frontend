@@ -23,6 +23,7 @@ import DataRegistModal from "@feature/data/components/sections/modal/DataRegistM
 import { BadgeComponent } from "@components/common/badge";
 import { formatDataSize } from "@lib/formatters";
 import OverLimitAlert from "@feature/data/components/sections/default/OverLimitAlert";
+import FlatCard from "@components/common/card/FlatCard";
 
 export default function DataDetailContent() {
   const { postId } = useParams<{ postId: string }>();
@@ -64,7 +65,7 @@ export default function DataDetailContent() {
           hasReported: false,
           memberName: data.memberName,
         }}
-        onImageClick={() => { }}
+        onImageClick={() => {}}
         onExpandChange={setTopSheetExpanded}
       />
       <div
@@ -85,7 +86,8 @@ export default function DataDetailContent() {
               <ButtonComponent
                 variant={"outlineGray"}
                 size="xs"
-                onClick={() => setEditModalOpen(true)}>
+                onClick={() => setEditModalOpen(true)}
+              >
                 글 수정하기
               </ButtonComponent>
             </div>
@@ -96,23 +98,26 @@ export default function DataDetailContent() {
 
         <div className="space-y-12 px-24 pb-28">
           {data.splitType && (
-            <div className="bg-primary2 w-[327px] p-16 rounded-20">
+            <FlatCard size="xxl">
               <FilterCardContent
                 buttonText={isOwner ? "내 게시글입니다" : "구매하기"}
                 max={effectiveMaxAmount}
                 value={[selectedAmount]}
                 onValueChange={(v) => setSelectedAmount(v[0])}
                 onButtonClick={isOwner ? undefined : handleSplitPurchase}
-                disabled={isOwner} />
-            </div>
+                disabled={isOwner}
+              />
+            </FlatCard>
           )}
           {!isLimitLoading && (
             <div className="flex flex-wrap gap-8">
               <BadgeComponent variant="outlined">
-                이번 달 구매 가능: <span className="font-semibold ml-4">{formatDataSize(remainingBuying ?? 0)}</span>
+                이번 달 구매 가능:{" "}
+                <span className="font-semibold ml-4">{formatDataSize(remainingBuying ?? 0)}</span>
               </BadgeComponent>
               <BadgeComponent variant="outlined">
-                이번 달 판매 가능: <span className="font-semibold ml-4">{formatDataSize(remainingSelling ?? 0)}</span>
+                이번 달 판매 가능:{" "}
+                <span className="font-semibold ml-4">{formatDataSize(remainingSelling ?? 0)}</span>
               </BadgeComponent>
             </div>
           )}
@@ -148,7 +153,10 @@ export default function DataDetailContent() {
       >
         <DataRegistModal
           mode="edit"
-          onClose={() => { setEditModalOpen(false); refetch(); }}
+          onClose={() => {
+            setEditModalOpen(false);
+            refetch();
+          }}
           defaultValues={{
             productId: data.productId,
             price: data.price,
@@ -159,7 +167,6 @@ export default function DataDetailContent() {
       </BaseBottomSheet>
 
       {renderModals}
-
     </div>
   );
 }
