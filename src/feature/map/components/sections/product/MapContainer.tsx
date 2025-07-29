@@ -13,7 +13,10 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function MapContainer() {
   const mapRef = useRef<HTMLDivElement>(null);
-  const { map, storeList, selectedStore, setSelectedStore } = useMapStore();
+  const map = useMapStore((state) => state.map);
+  const storeList = useMapStore((state) => state.storeList);
+  const selectedStore = useMapStore((state) => state.selectedStore);
+  const setSelectedStore = useMapStore((state) => state.setSelectedStore);
 
   useMapInitializer();
   useMapRefresh(map);
