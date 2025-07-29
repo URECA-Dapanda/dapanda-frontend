@@ -5,12 +5,16 @@ import InteractiveMap from "@/feature/map/components/sections/regist/Interactive
 import MapHeaderSearchBox from "@/feature/map/components/sections/regist/MapHeaderSearchBox";
 import MapSelectedInfoCard from "@/feature/map/components/sections/regist/MapSelectedInfoCard";
 import { useMapLocationSelector } from "@/feature/map/hooks/useMapLocationSelector";
+import { useParams } from "next/navigation";
 
-interface Props {
-  type: "hotspot" | "wifi";
+function typeGuard(target: unknown): target is "hotspot" | "wifi" {
+  if (target === "hotspot" || target === "wifi") return true;
+  else return false;
 }
 
-export default function MapSelectLocationPage({ type }: Props) {
+export default function MapSelectLocationPage() {
+  const type = useParams().type;
+
   const {
     selected,
     isSearchMode,
@@ -25,7 +29,8 @@ export default function MapSelectLocationPage({ type }: Props) {
     handleKeyDown,
     handleAddressSelect,
     handleMapLocationSelect,
-  } = useMapLocationSelector(type);
+  } = useMapLocationSelector(typeGuard(type) ? type : "wifi");
+
   return (
     <div className="relative w-full h-[calc(100vh-112px)]">
       {/* 헤더 검색 영역 */}
