@@ -8,6 +8,7 @@ interface SliderProps {
   max?: number;
   step?: number;
   className?: string;
+  disabled?: boolean;
 }
 
 export default function Slider({
@@ -17,6 +18,7 @@ export default function Slider({
   max = 2,
   step = 0.1,
   className = "",
+  disabled = false,
 }: SliderProps) {
   return (
     <div className={`w-full px-8 ${className}`}>
@@ -26,6 +28,7 @@ export default function Slider({
         step={step}
         value={value}
         onValueChange={onValueChange}
+        disabled={disabled}
         className="w-full"
       />
       <div className="flex justify-between body-xs text-gray-600 mt-1">

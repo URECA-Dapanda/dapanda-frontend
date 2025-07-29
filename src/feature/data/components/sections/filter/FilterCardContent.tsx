@@ -24,7 +24,12 @@ export default function FilterCardContent({
       <h2 className="h1 text-black">{formatDataSize(value[0])}</h2>
       <p className="body-sm text-gray-600">원하는 용량을 선택하세요</p>
 
-      <Slider value={value} onValueChange={onValueChange} max={max} />
+      <Slider 
+        value={value} 
+        onValueChange={onValueChange} 
+        max={max} 
+        disabled={disabled}
+      />
 
       <ButtonComponent
         variant="nonoutline"
