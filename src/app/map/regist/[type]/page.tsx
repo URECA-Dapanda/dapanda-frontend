@@ -1,5 +1,7 @@
+"use client";
+
 import MapSelectLocationPage from "@/feature/map/components/pages/MapSelectLocation";
 
-export default function RegistSelectPage() {
+export default function RegistLocationPage() {
   return <MapSelectLocationPage />;
 }
