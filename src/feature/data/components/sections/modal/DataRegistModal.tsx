@@ -30,7 +30,7 @@ export default function DataRegistModal({
   defaultValues,
 }: DataRegistModalProps) {
   const router = useRouter();
-  const { remainingSelling, isLoading: isLimitLoading } = useMonthlyDataLimit();
+  const { remainingSelling } = useMonthlyDataLimit();
   const maxAmount = remainingSelling ?? 2;
   const [value, setValue] = useState([Math.min(defaultValues?.amount ?? 1, maxAmount)]);
   const [price, setPrice] = useState(defaultValues?.price?.toString() ?? "");
