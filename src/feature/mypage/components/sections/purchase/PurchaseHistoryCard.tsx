@@ -2,12 +2,13 @@ import AvatarIcon from "@components/common/AvatarIcon";
 import { BadgeComponent } from "@components/common/badge";
 import ItemCard from "@components/common/card/ItemCard";
 import LayoutBox from "@components/common/container/LayoutBox";
+import { SkeletonCard } from "@components/common/skeleton";
 import { PurchaseHistoryType } from "@feature/mypage/types/mypageTypes";
 import { formatDataSize } from "@lib/formatters";
 import { formatDateDivider } from "@lib/time";
 
 interface PurchaseHistoryCardProps {
-  data: PurchaseHistoryType;
+  data?: PurchaseHistoryType;
 }
 
 const tradeMapper: { [key: string]: string } = {
@@ -17,6 +18,12 @@ const tradeMapper: { [key: string]: string } = {
 };
 
 export default function PurchaseHistoryCard({ data }: PurchaseHistoryCardProps) {
+  if (!data)
+    return (
+      <ItemCard size="sm">
+        <SkeletonCard />
+      </ItemCard>
+    );
   return (
     <ItemCard size="sm">
       {data.tradeType === "MOBILE_DATA_COMPOSITE " && (

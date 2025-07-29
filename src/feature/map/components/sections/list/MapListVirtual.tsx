@@ -36,7 +36,7 @@ export default function MapListVirtual() {
       isFetchingNextPage={isFetchingNextPage}
       hasNextPage={hasNextPage}
       fetchNextPage={fetchNextPage}
-      renderItem={(item: MapType) => <MapItemCard data={item} />}
+      renderItem={(index, item?: MapType) => <MapItemCard data={item} key={index} />}
     />
   );
 }
