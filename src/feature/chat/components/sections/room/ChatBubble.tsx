@@ -1,15 +1,17 @@
 import { formatTimeToAmPm } from "@/lib/time";
 import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
 import AvatarIcon from "@/components/common/AvatarIcon";
+import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 
 interface ChatBubbleProps {
   message: ChatSocketMessage;
   avatarUrl?: string;
+  senderId?: number;
 }
 
-export default function ChatBubble({ message, avatarUrl }: ChatBubbleProps) {
+export default function ChatBubble({ message, avatarUrl, senderId }: ChatBubbleProps) {
   const isMine = message.isMine;
   const timeText = formatTimeToAmPm(message.createdAt);
 
@@ -21,7 +23,14 @@ export default function ChatBubble({ message, avatarUrl }: ChatBubbleProps) {
 
   return (
     <div className={cn("flex items-end gap-2", isMine ? "justify-end" : "justify-start")}>
-      {!isMine && <AvatarIcon avatar={avatarUrl} size="small" />}
+      {!isMine && (
+        <Link
+          href={senderId ? `/map/review?memberId=${senderId}` : "/map/review"}
+          className="cursor-pointer"
+        >
+          <AvatarIcon avatar={avatarUrl} size="small" />
+        </Link>
+      )}
 
       {isMine ? (
         <div className="flex flex-row-reverse items-end gap-1">

@@ -8,9 +8,11 @@ import { chatMenuOptions } from "@/components/common/dropdown/dropdownConfig";
 export default function ChatRoomHeader({
   senderName,
   onReport,
+  senderId,
 }: {
   senderName: string;
   onReport: () => void;
+  senderId?: number;
 }) {
   const router = useRouter();
 
@@ -28,7 +30,7 @@ export default function ChatRoomHeader({
         <h1 className="title-sm font-semibold text-gray-900">{senderName}</h1>
       </div>
 
-      <UserDropdownMenu options={chatMenuOptions(handleReport)}>
+      <UserDropdownMenu options={chatMenuOptions(handleReport, senderId)}>
         <button className="p-1">
           <MoreVertical className="w-5 h-5" />
         </button>

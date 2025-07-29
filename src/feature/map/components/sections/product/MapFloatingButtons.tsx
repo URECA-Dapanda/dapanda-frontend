@@ -44,7 +44,7 @@ export default function MapFloatingButtons({ onOpenModal, onOpenSheet, isSnapOpe
 
       <motion.div
         key="floating-list"
-        className="absolute bottom-24 left-1/2 -translate-x-1/2 z-50"
+        className="absolute bottom-24 left-1/2 -translate-x-1/2 z-10"
         initial={{ opacity: 0, y: 20 }}
         animate={isSnapOpen ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
@@ -58,7 +58,7 @@ export default function MapFloatingButtons({ onOpenModal, onOpenSheet, isSnapOpe
 
       <motion.div
         key="floating-location"
-        className="absolute bottom-24 left-1/8 -translate-x-1/2 z-50"
+        className="absolute bottom-24 left-1/8 -translate-x-1/2 z-10"
         initial={{ opacity: 0, y: 20 }}
         animate={isSnapOpen ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}

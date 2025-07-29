@@ -25,9 +25,9 @@ export const useMapDetailData = (id: string): UseMapDetailDataResult => {
         productId: detail.productId,
         wifiId: detail.itemId,
         type: "와이파이",
+        address: detail.address,
         imageUrl: detail.imageUrls ?? [],
         place: detail.title,
-        address: "", // reverse geocoding 필요
         openTime: detail.startTime.slice(11, 16),
         closeTime: detail.endTime.slice(11, 16),
         pricePer10min: detail.price,

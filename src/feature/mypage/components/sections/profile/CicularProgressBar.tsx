@@ -5,11 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useMemo, useState } from "react";
 
 type DataUsageDonutProps = {
-  current: number;
   unit?: string;
 };
 
-export function DataUsageDonut({ current: used, unit = "GB" }: DataUsageDonutProps) {
+export function DataUsageDonut({ unit = "GB" }: DataUsageDonutProps) {
   const { data } = useQuery({
     queryFn: getMyData,
     queryKey: ["api/plans/my-data"],
@@ -20,7 +19,10 @@ export function DataUsageDonut({ current: used, unit = "GB" }: DataUsageDonutPro
   const normalizedRadius = radius - stroke / 2;
   const circumference = normalizedRadius * 2 * Math.PI;
 
-  const percent = useMemo(() => Math.min(used / (data ? data.providingDataAmount : 1), 1), [data]);
+  const percent = useMemo(
+    () => (data ? Math.min(data.currentDataAmount / data.providingDataAmount, 1) : 0),
+    [data]
+  );
 
   const targetOffset = circumference - percent * circumference;
 
@@ -71,7 +73,7 @@ export function DataUsageDonut({ current: used, unit = "GB" }: DataUsageDonutPro
         fontWeight="bold"
         fill="#35363F"
       >
-        {used}
+        {data?.currentDataAmount ?? "-"}
         {unit}
       </text>
     </svg>

@@ -10,6 +10,8 @@ export interface ChatRoomPreview {
   productId: number;
   senderName: string;
   avatarUrl: string;
+  senderId: number;
+  lastMessage?: string;
 }
 
 interface ChatStore {

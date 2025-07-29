@@ -26,7 +26,7 @@ export default function BasicInfoFields({ form, updateForm, errors, type }: Prop
         radius="md"
         size="md"
       />
-      {errors.title && <p className="text-primary text-sm mb-8">제목을 입력해주세요.</p>}
+      {errors.title && <p className="text-primary body-sm mb-8">제목을 입력해주세요.</p>}
 
       {/* 설명 */}
       <label className="title-sm mb-8 block">설명</label>
@@ -40,7 +40,7 @@ export default function BasicInfoFields({ form, updateForm, errors, type }: Prop
         size="md"
         rows={3}
       />
-      {errors.description && <p className="text-primary text-sm mb-8">설명을 입력해주세요.</p>}
+      {errors.description && <p className="text-primary body-sm mb-8">설명을 입력해주세요.</p>}
 
       {/* 가격 */}
       <div className="flex items-center mb-8 gap-8">
@@ -70,7 +70,7 @@ export default function BasicInfoFields({ form, updateForm, errors, type }: Prop
         size="md"
         type="number"
       />
-      {errors.price && <p className="text-primary text-sm mb-8">가격을 입력해주세요.</p>}
+      {errors.price && <p className="text-primary body-sm mb-8">가격을 입력해주세요.</p>}
     </>
   );
 }
