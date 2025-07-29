@@ -2,7 +2,6 @@ import { BadgeComponent } from "@/components/common/badge";
 import { WifiData } from "./topSheet.types";
 
 export function WifiTopSheetContent({ data, expanded }: { data: WifiData; expanded: boolean }) {
-  console.log(data.place, data.address, data.recentPrice);
   return (
     <>
       <div className="space-y-8">
