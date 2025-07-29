@@ -3,7 +3,7 @@ import CardComponent from "./CardComponent";
 import CardContentComponent from "./CardContentComponent";
 
 interface FlatCardProps {
-  size: "xl" | "md" | "xs";
+  size: "xl" | "xxl" | "md" | "xs";
 }
 
 export default function FlatCard({ size, children }: PropsWithChildren<FlatCardProps>) {
@@ -12,7 +12,9 @@ export default function FlatCard({ size, children }: PropsWithChildren<FlatCardP
       variant="flat"
       size={size}
       color={`${
-        size !== "xl" ? "bg-gradient-to-r from-primary-100 to-[#DCE6FF]" : "bg-primary2"
+        size !== "xxl" && size !== "xl"
+          ? "bg-gradient-to-r from-primary-100 to-[#DCE6FF]"
+          : "bg-primary2"
       }`}
     >
       <CardContentComponent size={"sm"}>{children}</CardContentComponent>
