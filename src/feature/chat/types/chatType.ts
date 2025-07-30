@@ -21,6 +21,7 @@ export interface ChatSocketMessage {
   message: string;
   createdAt: string;
   isMine: boolean;
+  senderName?: string;
 }
 
 export interface CursorPageResponse<T> {

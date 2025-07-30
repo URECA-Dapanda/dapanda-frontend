@@ -44,7 +44,12 @@ export default function ChatItem({
         <button onClick={handleAvatarClick} className="cursor-pointer">
           <AvatarIcon avatar={avatarUrl} size="medium" />
         </button>
-        <Link href={`/chat/${chatRoomId}?productId=${productId}`} className="flex-1">
+        <Link
+          href={`/chat/${chatRoomId}?productId=${productId}&senderName=${encodeURIComponent(
+            name
+          )}&senderId=${senderId || ""}`}
+          className="flex-1"
+        >
           <div className="flex flex-col gap-2 cursor-pointer">
             <span className="body-sm text-black">{name}</span>
             <div className="flex flex-col gap-2">
