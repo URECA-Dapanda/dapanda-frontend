@@ -13,7 +13,7 @@ export default function BottomNavigation() {
   return (
     <div
       className={cn(
-        "fixed bottom-0 z-50 w-[100dvw] lg:w-[375px] mx-auto shadow-nav bg-white",
+        "fixed bottom-0 z-50 w-[100dvw] lg:w-[375px] mx-auto shadow-nav shrink-0 bg-white",
         isHidden && "hidden"
       )}
     >

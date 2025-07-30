@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="box-border h-[100vh] overflow-y-hidden">
+    <html lang="ko" className="box-border h-[100vh]">
       <body className="flex flex-col box-border min-h-screen w-full bg-gray-300 justify-center items-center">
         <ProviderWrapper>{children}</ProviderWrapper>
 
