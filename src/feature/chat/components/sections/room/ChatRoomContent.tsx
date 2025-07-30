@@ -2,17 +2,17 @@
 
 import { useState, useEffect, useRef } from "react";
 import { formatDateDivider } from "@lib/time";
-import { Client } from "@stomp/stompjs";
 import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
 import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
 import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
 import { groupMessagesByDate } from "@feature/chat/utils/groupMessagesByDate";
 import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
-import { createStompClient, sendMessage } from "@feature/chat/utils/chatSocket";
 import { getChatHistory } from "@feature/chat/api/getChatHistory";
 import ChatRoomHeader from "@feature/chat/components/sections/room/ChatRoomHeader";
 import ReportModal from "@/components/common/modal/ReportModal";
 import { getMapDetailById } from "@feature/map/api/getMapDetailById";
+import { useWebSocketStore } from "@/stores/useWebSocketStore";
+import { useSearchParams } from "next/navigation";
 
 interface ChatRoomContentProps {
   chatRoomId: number;
@@ -35,8 +35,10 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [oldestMessageId, setOldestMessageId] = useState<number | undefined>(undefined);
-  const clientRef = useRef<Client | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
+
+  const { subscribe, unsubscribe, sendMessage } = useWebSocketStore();
 
   // 상품 정보 가져오기
   useEffect(() => {
@@ -67,7 +69,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     getChatHistory(chatRoomId)
       .then((response) => {
         setMessages(response.data);
-        // 가장 오래된 메시지 ID 저장 (다음 페이지 조회용)
         if (response.data.length > 0) {
           const oldestMessage = response.data[response.data.length - 1];
           setOldestMessageId(Number(oldestMessage.chatMessageId));
@@ -77,9 +78,12 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
       .catch((err) => {
         console.error("채팅 기록 불러오기 실패:", err);
       });
+  }, [chatRoomId]);
 
-    // 웹소켓 연결
-    clientRef.current = createStompClient(chatRoomId, (msg: ChatSocketMessage) => {
+  useEffect(() => {
+    if (!chatRoomId) return;
+
+    const handleMessage = (msg: ChatSocketMessage) => {
       const data = typeof msg === "string" ? JSON.parse(msg) : msg;
       const incomingMessage: ChatSocketMessage = {
         chatMessageId: data.chatMessageId,
@@ -87,6 +91,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         message: data.message,
         createdAt: data.createdAt,
       };
+
       // 중복 방지 로직
       setMessages((prev) => {
         if (prev.some((m) => m.chatMessageId === incomingMessage.chatMessageId)) {
@@ -94,12 +99,14 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         }
         return [...prev, incomingMessage];
       });
-    });
+    };
+
+    subscribe(chatRoomId, handleMessage);
 
     return () => {
-      clientRef.current?.deactivate();
+      unsubscribe(chatRoomId);
     };
-  }, [chatRoomId]);
+  }, [chatRoomId, subscribe, unsubscribe]);
 
   // 이전 메시지 불러오기
   const loadMoreMessages = async () => {
@@ -152,7 +159,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
     // 2. 서버로 메시지 전송
     sendMessage(
-      clientRef.current as Client,
       chatRoomId,
       JSON.stringify({
         message: text,
@@ -167,14 +173,17 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
   const groupedMessages = groupMessagesByDate(sortedMessages);
 
-  const senderName = product?.memberName || "상대방";
+  const urlSenderName = searchParams.get("senderName");
+  const urlSenderId = searchParams.get("senderId");
+  const senderName = urlSenderName || product?.memberName || "상대방";
+  const senderId = urlSenderId ? parseInt(urlSenderId) : product?.memberId;
 
   return (
     <div className="flex flex-col h-screen">
       <ChatRoomHeader
         senderName={senderName}
         onReport={() => setIsReportOpen(true)}
-        senderId={product?.memberId}
+        senderId={senderId}
       />
 
       {product && (
@@ -199,11 +208,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
             </div>
             <div className="space-y-24">
               {group.messages.map((message) => (
-                <ChatBubble
-                  key={message.chatMessageId}
-                  message={message}
-                  senderId={product?.memberId}
-                />
+                <ChatBubble key={message.chatMessageId} message={message} senderId={senderId} />
               ))}
             </div>
           </div>
