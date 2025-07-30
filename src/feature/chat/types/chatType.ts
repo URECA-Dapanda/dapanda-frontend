@@ -10,6 +10,7 @@ export type ApiChatRoom = {
   itemType: string;
   startTime: number;
   endTime: number;
+  unreadCount?: number;
 };
 
 export interface ContentInfoType {
@@ -22,6 +23,7 @@ export interface ChatSocketMessage {
   createdAt: string;
   isMine: boolean;
   senderName?: string;
+  unreadCount?: number;
 }
 
 export interface CursorPageResponse<T> {

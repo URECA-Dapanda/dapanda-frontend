@@ -4,8 +4,8 @@ export interface MapType {
   title: string;
   address: string;
   location: string;
-  openTime: string;
-  closeTime: string;
+  startTime: string;
+  endTime: string;
   open: boolean;
   score: number;
   price: string;
@@ -20,8 +20,8 @@ export type MapDetailItem = {
   imageUrl: string[];
   place: string;
   address: string;
-  openTime: string;
-  closeTime: string;
+  startTime: string;
+  endTime: string;
   pricePer10min: number;
   description: string;
   recentPrice: number;

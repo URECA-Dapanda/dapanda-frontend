@@ -63,7 +63,7 @@ export default function MapBottomSheet({
   const visibleItems = availableOnly ? flatItems.filter((item) => item.open) : flatItems;
 
   return (
-    <BaseBottomSheet isOpen={open} onClose={onClose} variant="hybrid" snapHeight={300}>
+    <BaseBottomSheet isOpen={open} onClose={onClose} variant="hybrid" snapHeight={300} zIndex={101}>
       <BottomSheetHeader />
       <div className="flex justify-between items-center px-24 mb-12 mt-6">
         <div className="flex items-center gap-12">

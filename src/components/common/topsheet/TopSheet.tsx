@@ -51,7 +51,7 @@ export default function TopSheet({
 
   return (
     <>
-      <div className="absolute top-12 right-12 z-30">
+      <div className="absolute top-12 right-12 z-36">
         <ReportTriggerButton targetName={data.memberName} />
       </div>
 

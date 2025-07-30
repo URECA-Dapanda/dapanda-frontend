@@ -1,18 +1,19 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { formatDateDivider } from "@lib/time";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { formatDateDivider } from "@/lib/time";
+import { useWebSocketStore } from "@/stores/useWebSocketStore";
+import ReportModal from "@/components/common/modal/ReportModal";
 import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
 import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
 import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
-import { groupMessagesByDate } from "@feature/chat/utils/groupMessagesByDate";
+import { groupMessagesByDate } from "@/feature/chat/utils/groupMessagesByDate";
 import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
-import { getChatHistory } from "@feature/chat/api/getChatHistory";
+import { getChatHistory } from "@/feature/chat/api/getChatHistory";
+import { markMessageAsRead } from "@/feature/chat/api/chatRoomRequest";
 import ChatRoomHeader from "@feature/chat/components/sections/room/ChatRoomHeader";
-import ReportModal from "@/components/common/modal/ReportModal";
-import { getMapDetailById } from "@feature/map/api/getMapDetailById";
-import { useWebSocketStore } from "@/stores/useWebSocketStore";
-import { useSearchParams } from "next/navigation";
+import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 
 interface ChatRoomContentProps {
   chatRoomId: number;
@@ -30,17 +31,34 @@ interface ProductInfo {
 
 export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomContentProps) {
   const [messages, setMessages] = useState<ChatSocketMessage[]>([]);
-  const [product, setProduct] = useState<ProductInfo | null>(null);
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [oldestMessageId, setOldestMessageId] = useState<number | undefined>(undefined);
+  const [product, setProduct] = useState<ProductInfo | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
 
-  const { subscribe, unsubscribe, sendMessage } = useWebSocketStore();
+  const { subscribe, unsubscribe, sendMessage, setActiveChatRoomId } = useWebSocketStore();
 
-  // 상품 정보 가져오기
+  useEffect(() => {
+    if (!chatRoomId) return;
+
+    getChatHistory(chatRoomId)
+      .then((response) => {
+        setMessages(response.data);
+        if (response.data.length > 0) {
+          const oldestMessage = response.data[response.data.length - 1];
+          setOldestMessageId(Number(oldestMessage.chatMessageId));
+        }
+        setHasMore(response.pageInfo.hasNext);
+      })
+      .catch((err) => {
+        console.error("채팅 기록 불러오기 실패:", err);
+      });
+  }, [chatRoomId]);
+
+  // 제품 정보 가져오기
   useEffect(() => {
     if (!productId) return;
 
@@ -64,27 +82,81 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   }, [productId]);
 
   useEffect(() => {
-    if (!chatRoomId) return;
+    if (chatRoomId) {
+      setActiveChatRoomId(chatRoomId);
+    }
 
-    getChatHistory(chatRoomId)
-      .then((response) => {
-        setMessages(response.data);
-        if (response.data.length > 0) {
-          const oldestMessage = response.data[response.data.length - 1];
-          setOldestMessageId(Number(oldestMessage.chatMessageId));
+    return () => {
+      setActiveChatRoomId(null);
+    };
+  }, [chatRoomId, setActiveChatRoomId]);
+
+  // 채팅방을 나갈 때 읽음 처리
+  useEffect(() => {
+    return () => {
+      if (messages.length > 0) {
+        const latestMessage = messages[0];
+
+        const TEMP_ID_THRESHOLD = 1000000000000; // 임시 ID 임계값
+
+        const isRealMessage =
+          typeof latestMessage.chatMessageId === "number" &&
+          latestMessage.chatMessageId < TEMP_ID_THRESHOLD;
+
+        const shouldMarkAsRead = !latestMessage.isMine && isRealMessage;
+
+        if (shouldMarkAsRead) {
+          markMessageAsRead(latestMessage.chatMessageId)
+            .then(() => {
+              const { updateUnreadCount } = useWebSocketStore.getState();
+              updateUnreadCount(chatRoomId, false);
+            })
+            .catch(console.error);
+        } else {
+          // 채팅방 리스트만 새로고침
+          const { updateUnreadCount } = useWebSocketStore.getState();
+          updateUnreadCount(chatRoomId, false);
         }
-        setHasMore(response.pageInfo.hasNext);
-      })
-      .catch((err) => {
-        console.error("채팅 기록 불러오기 실패:", err);
-      });
-  }, [chatRoomId]);
+      }
+    };
+  }, [messages, chatRoomId]);
 
+  const addMessage = async (text: string) => {
+    const tempId = Date.now();
+    const newMessage: ChatSocketMessage = {
+      chatMessageId: tempId,
+      isMine: true,
+      message: text,
+      createdAt: new Date().toISOString(),
+    };
+
+    // 즉시 화면에 표시
+    setMessages((prev) => {
+      const newMessages = [...prev, newMessage];
+      return newMessages;
+    });
+
+    // WebSocket으로 메시지 전송
+    try {
+      sendMessage(
+        chatRoomId,
+        JSON.stringify({
+          message: text,
+          clientTempId: tempId,
+        })
+      );
+    } catch (error) {
+      console.error("메시지 전송 실패:", error);
+    }
+  };
+
+  // WebSocket 메시지 수신 핸들러 수정
   useEffect(() => {
     if (!chatRoomId) return;
 
     const handleMessage = (msg: ChatSocketMessage) => {
       const data = typeof msg === "string" ? JSON.parse(msg) : msg;
+
       const incomingMessage: ChatSocketMessage = {
         chatMessageId: data.chatMessageId,
         isMine: data.isMine,
@@ -94,9 +166,26 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
       // 중복 방지 로직
       setMessages((prev) => {
+        // 내가 보낸 메시지이고 실제 ID가 있으면 기존 임시 메시지를 실제 ID로 업데이트
+        if (data.isMine && data.clientTempId && data.chatMessageId !== data.clientTempId) {
+          const updatedMessages = prev.map((msg) => {
+            if (msg.chatMessageId === data.clientTempId && msg.message === data.message) {
+              return {
+                ...msg,
+                chatMessageId: data.chatMessageId,
+              };
+            }
+            return msg;
+          });
+
+          return updatedMessages;
+        }
+
+        // 일반적인 중복 방지
         if (prev.some((m) => m.chatMessageId === incomingMessage.chatMessageId)) {
           return prev;
         }
+
         return [...prev, incomingMessage];
       });
     };
@@ -144,28 +233,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
   }, [messages.length]);
-
-  const addMessage = (text: string) => {
-    const tempId = Date.now();
-    const newMessage: ChatSocketMessage = {
-      chatMessageId: tempId,
-      isMine: true,
-      message: text,
-      createdAt: new Date().toISOString(),
-    };
-
-    // 1. 내 화면에 바로 optimistic 메시지 추가
-    setMessages((prev) => [...prev, newMessage]);
-
-    // 2. 서버로 메시지 전송
-    sendMessage(
-      chatRoomId,
-      JSON.stringify({
-        message: text,
-        clientTempId: tempId,
-      })
-    );
-  };
 
   const sortedMessages = [...messages].sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()

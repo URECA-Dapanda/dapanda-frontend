@@ -16,8 +16,8 @@ export interface WifiData {
   imageUrl: string[];
   place: string;
   address: string;
-  openTime: string;
-  closeTime: string;
+  startTime: string;
+  endTime: string;
   pricePer10min: number;
   description?: string;
   recentPrice?: number;

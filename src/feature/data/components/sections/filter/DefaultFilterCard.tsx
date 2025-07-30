@@ -18,7 +18,7 @@ export default function DefaultFilterCard({ onSearch }: DefaultFilterCardProps) 
   };
 
   return (
-    <FlatCard size="xl">
+    <FlatCard size="xl" color="bg-transparent">
       <FilterCardContent
         buttonText="검색하기"
         value={value}

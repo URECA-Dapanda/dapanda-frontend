@@ -23,7 +23,7 @@ export default function TossPaymentModal() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black-60 z-60 flex justify-center items-center">
+    <div className="fixed inset-0 bg-black-60 w-[375px] h-[100dvh] mx-auto z-60 flex justify-center items-center">
       <div className="bg-white rounded-lg p-8 w-[375px] max-w-full">
         <h2 className="title-md mb-4">결제하기</h2>
 
@@ -32,11 +32,7 @@ export default function TossPaymentModal() {
         <div id="agreement" className="mb-6" />
 
         {/* 결제 버튼 추가 */}
-        <ButtonComponent
-          variant={"primary"}
-          onClick={requestTossPayment}
-          className="w-full mt-4"
-        >
+        <ButtonComponent variant={"primary"} onClick={requestTossPayment} className="w-full mt-4">
           결제 진행하기
         </ButtonComponent>
 
