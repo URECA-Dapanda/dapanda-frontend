@@ -3,15 +3,38 @@ import { ButtonComponent } from "@components/common/button";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
+import { useMemo } from "react";
 
 interface Props {
   onOpenModal: () => void;
   onOpenSheet: () => void;
   isSnapOpen: boolean;
+  mapHeight?: string;
 }
 
-export default function MapFloatingButtons({ onOpenModal, onOpenSheet, isSnapOpen }: Props) {
+export default function MapFloatingButtons({
+  onOpenModal,
+  onOpenSheet,
+  isSnapOpen,
+  mapHeight,
+}: Props) {
   const { map } = useMapStore();
+
+  // 헤더/푸터 높이를 기반으로 동적 위치 계산
+  const dynamicPositions = useMemo(() => {
+    const header = document.getElementById("appHead");
+    const footer = document.getElementById("appFooter");
+
+    const headerHeight = header?.offsetHeight ?? 56; // 기본값 56px
+    const footerHeight = footer?.offsetHeight ?? 56; // 기본값 56px
+
+    return {
+      // 등록 버튼: 헤더 아래 24px
+      registerTop: `${headerHeight + 24}px`,
+      // 목록/위치 버튼: 푸터 위 24px
+      bottomButtonsBottom: `${footerHeight + 24}px`,
+    };
+  }, [mapHeight]); // mapHeight가 변경되면 다시 계산
 
   const handleGoToCurrentLocation = () => {
     if (!map || !window.naver) return;
@@ -31,6 +54,7 @@ export default function MapFloatingButtons({ onOpenModal, onOpenSheet, isSnapOpe
       <motion.div
         key="floating-register"
         className="absolute top-24 right-24 z-50"
+        style={{ top: dynamicPositions.registerTop }}
         initial={{ opacity: 0, scale: 0.95 }}
         animate={isSnapOpen ? { opacity: 0, scale: 0.95 } : { opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
@@ -45,6 +69,7 @@ export default function MapFloatingButtons({ onOpenModal, onOpenSheet, isSnapOpe
       <motion.div
         key="floating-list"
         className="absolute bottom-24 left-1/2 -translate-x-1/2 z-10"
+        style={{ bottom: dynamicPositions.bottomButtonsBottom }}
         initial={{ opacity: 0, y: 20 }}
         animate={isSnapOpen ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
@@ -59,6 +84,7 @@ export default function MapFloatingButtons({ onOpenModal, onOpenSheet, isSnapOpe
       <motion.div
         key="floating-location"
         className="absolute bottom-24 left-1/8 -translate-x-1/2 z-10"
+        style={{ bottom: dynamicPositions.bottomButtonsBottom }}
         initial={{ opacity: 0, y: 20 }}
         animate={isSnapOpen ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
