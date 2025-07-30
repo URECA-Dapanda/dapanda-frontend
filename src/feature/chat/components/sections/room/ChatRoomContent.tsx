@@ -12,7 +12,7 @@ import { groupMessagesByDate } from "@/feature/chat/utils/groupMessagesByDate";
 import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
 import { getChatHistory } from "@/feature/chat/api/getChatHistory";
 import { markMessageAsRead } from "@/feature/chat/api/chatRoomRequest";
-import ChatRoomHeader from "@feature/chat/components/sections/room/ChatRoomHeader";
+import ChatHeader from "@feature/chat/components/sections/room/ChatHeader";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 
 interface ChatRoomContentProps {
@@ -247,14 +247,14 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
   return (
     <div className="flex flex-col h-screen">
-      <ChatRoomHeader
+      <ChatHeader
         senderName={senderName}
         onReport={() => setIsReportOpen(true)}
         senderId={senderId}
       />
 
       {product && (
-        <div className="px-24 mt-24">
+        <div className="fixed top-52 left-0 right-0 z-40 px-24 py-32 bg-white w-[100dvw] lg:w-[375px] mx-auto">
           <ChatPostCard
             title={product.title}
             pricePer10min={product.pricePer10min}
@@ -263,7 +263,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto px-24 mt-8 mb-84 py-2" onScroll={handleScroll}>
+      <div className="flex-1 overflow-y-auto px-24 pb-24 pt-100" onScroll={handleScroll}>
         {loadingMore && (
           <div className="text-center text-sm text-gray-500 py-4">이전 내역을 불러오는 중...</div>
         )}
