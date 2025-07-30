@@ -56,7 +56,7 @@ export default function DataPageContent() {
 
   return (
     <>
-      <div className="h-[100%] w-full bg-primary2 datapagecontent">
+      <div className="w-full bg-primary2 datapagecontent h-[100%]">
         {/* 상단 필터 영역 */}
         <div className="p-4 pt-60">
           <DefaultFilterCard onSearch={() => setSheetOpen(true)} />

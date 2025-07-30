@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@lib/utils";
 import { motion, PanInfo } from "framer-motion";
 import { ReactNode, useEffect, useState } from "react";
 
@@ -103,7 +104,10 @@ export default function BaseBottomSheet({
       )}
 
       <motion.div
-        className="fixed w-[100dvw] lg:w-[375px] mx-auto inset-0 flex items-end justify-center z-30 pointer-events-none overflow-y-hidden"
+        className={cn(
+          "absolute w-[100dvw] lg:w-[375px] mx-auto inset-0 flex items-end justify-center z-30 pointer-events-none overflow-y-hidden",
+          isOpen || variant === "snap" ? "" : "hidden"
+        )}
         dragConstraints={{ top: 0, bottom: 0 }}
         style={{
           WebkitOverflowScrolling: "touch",
