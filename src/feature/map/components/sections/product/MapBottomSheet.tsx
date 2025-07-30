@@ -129,8 +129,8 @@ export default function MapBottomSheet({
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
         items={visibleItems}
-        renderItem={(item) => (
-          <MapItemCard data={item} disableUseButton={!item.open && !availableOnly} />
+        renderItem={(index, item) => (
+          <MapItemCard data={item} key={index} disableUseButton={!item?.open && !availableOnly} />
         )}
         rowVirtualizer={rowVirtualizer}
         height={open ? "calc( 70vh + 5px )" : "calc( 48vh - 54px )"}

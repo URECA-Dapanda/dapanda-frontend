@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
 import { ButtonComponent } from "@/components/common/button";
-import { dataSortOptions } from "@components/common/dropdown/dropdownConfig";
-import { ChevronDown, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import ScrapFilterCard from "@feature/data/components/sections/filter/ScrapFilterCard";
 import ScrapLoadingState from "@feature/data/components/sections/scrap/ScrapLoadingState";
 import { useScrapRecommendation } from "@feature/data/hooks/useScrapRecommendation";
@@ -15,7 +13,6 @@ import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
 import { formatPriceString } from "@lib/formatters";
 
 export default function ScrapTabContent() {
-  const [sortLabel, setSortLabel] = useState("최신순");
   const { value, setValue, loading, result, summary, search } = useScrapRecommendation();
   const [hasSearched, setHasSearched] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
