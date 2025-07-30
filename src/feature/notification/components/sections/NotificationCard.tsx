@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, animate } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import { Trash2 } from "lucide-react";
 
 interface NotificationCardProps {
