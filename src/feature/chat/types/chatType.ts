@@ -10,6 +10,7 @@ export type ApiChatRoom = {
   itemType: string;
   startTime: number;
   endTime: number;
+  unreadCount?: number;
 };
 
 export interface ContentInfoType {

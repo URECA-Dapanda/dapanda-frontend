@@ -8,11 +8,16 @@ interface WebSocketStore {
   isConnected: boolean;
   subscriptions: Map<number, (message: ChatSocketMessage) => void>;
   subscriptionObjects: Map<number, { unsubscribe: () => void }>;
+  chatListUpdateCallback: (() => void) | null;
+  activeChatRoomId: number | null;
   connect: () => Promise<void>;
   disconnect: () => void;
   subscribe: (chatRoomId: number, onMessage: (message: ChatSocketMessage) => void) => void;
   unsubscribe: (chatRoomId: number) => void;
   sendMessage: (chatRoomId: number, message: string) => void;
+  setChatListUpdateCallback: (callback: (() => void) | null) => void;
+  setActiveChatRoomId: (chatRoomId: number | null) => void;
+  updateUnreadCount: (chatRoomId: number, increment: boolean) => void;
 }
 
 export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
@@ -20,6 +25,8 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
   isConnected: false,
   subscriptions: new Map(),
   subscriptionObjects: new Map(),
+  chatListUpdateCallback: null,
+  activeChatRoomId: null,
 
   connect: async () => {
     const { client } = get();
@@ -152,6 +159,21 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
       });
     } else {
       console.error("WebSocket이 연결되지 않았습니다.");
+    }
+  },
+
+  setChatListUpdateCallback: (callback: (() => void) | null) => {
+    set({ chatListUpdateCallback: callback });
+  },
+
+  setActiveChatRoomId: (chatRoomId: number | null) => {
+    set({ activeChatRoomId: chatRoomId });
+  },
+
+  updateUnreadCount: () => {
+    const { chatListUpdateCallback } = get();
+    if (chatListUpdateCallback) {
+      chatListUpdateCallback();
     }
   },
 }));

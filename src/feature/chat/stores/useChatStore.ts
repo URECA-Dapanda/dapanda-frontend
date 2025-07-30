@@ -12,6 +12,7 @@ export interface ChatRoomPreview {
   avatarUrl: string;
   senderId: number;
   lastMessage?: string;
+  unreadCount?: number;
 }
 
 interface ChatStore {

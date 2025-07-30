@@ -8,9 +8,9 @@ import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
 import { groupMessagesByDate } from "@feature/chat/utils/groupMessagesByDate";
 import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
 import { getChatHistory } from "@feature/chat/api/getChatHistory";
+import { markMessageAsRead } from "@feature/chat/api/chatRoomRequest";
 import ChatRoomHeader from "@feature/chat/components/sections/room/ChatRoomHeader";
 import ReportModal from "@/components/common/modal/ReportModal";
-import { getMapDetailById } from "@feature/map/api/getMapDetailById";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import { useSearchParams } from "next/navigation";
 
@@ -19,18 +19,8 @@ interface ChatRoomContentProps {
   productId: string | null;
 }
 
-interface ProductInfo {
-  productId: number;
-  itemId: number;
-  title: string;
-  pricePer10min: number;
-  memberName: string;
-  memberId: number;
-}
-
 export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomContentProps) {
   const [messages, setMessages] = useState<ChatSocketMessage[]>([]);
-  const [product, setProduct] = useState<ProductInfo | null>(null);
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -38,30 +28,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
 
-  const { subscribe, unsubscribe, sendMessage } = useWebSocketStore();
-
-  // 상품 정보 가져오기
-  useEffect(() => {
-    if (!productId) return;
-
-    const fetchProductInfo = async () => {
-      try {
-        const productData = await getMapDetailById(productId);
-        setProduct({
-          productId: productData.productId,
-          itemId: productData.itemId,
-          title: productData.title,
-          pricePer10min: productData.price,
-          memberName: productData.memberName,
-          memberId: productData.memberId,
-        });
-      } catch (error) {
-        console.error("상품 정보 가져오기 실패:", error);
-      }
-    };
-
-    fetchProductInfo();
-  }, [productId]);
+  const { subscribe, unsubscribe, sendMessage, setActiveChatRoomId } = useWebSocketStore();
 
   useEffect(() => {
     if (!chatRoomId) return;
@@ -79,6 +46,29 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         console.error("채팅 기록 불러오기 실패:", err);
       });
   }, [chatRoomId]);
+
+  // 채팅방 입장 시 활성 채팅방 ID 설정
+  useEffect(() => {
+    if (chatRoomId) {
+      setActiveChatRoomId(chatRoomId);
+    }
+
+    return () => {
+      setActiveChatRoomId(null);
+    };
+  }, [chatRoomId, setActiveChatRoomId]);
+
+  // 채팅방을 나갈 때 읽음 처리
+  useEffect(() => {
+    return () => {
+      // 채팅방을 나갈 때 (뒤로가기, 다른 페이지 이동 등)
+      if (messages.length > 0) {
+        const latestMessage = messages[0];
+        console.log("채팅방 나가기 - 읽음 처리:", latestMessage.chatMessageId);
+        markMessageAsRead(latestMessage.chatMessageId).catch(console.error);
+      }
+    };
+  }, [messages]);
 
   useEffect(() => {
     if (!chatRoomId) return;
@@ -175,8 +165,8 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
   const urlSenderName = searchParams.get("senderName");
   const urlSenderId = searchParams.get("senderId");
-  const senderName = urlSenderName || product?.memberName || "상대방";
-  const senderId = urlSenderId ? parseInt(urlSenderId) : product?.memberId;
+  const senderName = urlSenderName || "상대방";
+  const senderId = urlSenderId ? parseInt(urlSenderId) : undefined;
 
   return (
     <div className="flex flex-col h-screen">
@@ -186,13 +176,9 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         senderId={senderId}
       />
 
-      {product && (
+      {productId && (
         <div className="px-24 mt-24">
-          <ChatPostCard
-            title={product.title}
-            pricePer10min={product.pricePer10min}
-            productId={product.productId}
-          />
+          <ChatPostCard title={productId} pricePer10min={0} productId={parseInt(productId)} />
         </div>
       )}
 
