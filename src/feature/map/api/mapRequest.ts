@@ -22,8 +22,9 @@ interface WifiItemResponse {
   imageUrl: string | null;
   averageRate: number;
   distanceKm: number;
-  updatedAt: string;
   open: boolean;
+  openTime: string;
+  closeTime: string;
 }
 
 interface WifiRegisterRequest {
@@ -92,7 +93,8 @@ export async function getMapList({
       location: `${item.latitude},${item.longitude}`,
       score: item.averageRate,
       type: "와이파이",
-      updatedAt: new Date(item.updatedAt).toLocaleTimeString(),
+      openTime: new Date(item.openTime).toLocaleTimeString(),
+      closeTime: new Date(item.closeTime).toLocaleTimeString(),
       imageUrl: item.imageUrl ?? "",
     }));
 

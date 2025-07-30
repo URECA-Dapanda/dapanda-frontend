@@ -81,14 +81,40 @@ export const formatToIsoTime = (time: Time): string => {
   return now.toISOString();
 };
 
-export function formatToIsoDate(time: string): string {
+export function formatIsoToHHMM(isoString: string): string {
+  const date = new Date(isoString);
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${hours}:${minutes}`;
+}
+
+export function formatToIsoDate(time: Time): string {
   const now = new Date();
-  const [hour, minute] = time.split(":");
-  now.setHours(Number(hour));
-  now.setMinutes(Number(minute));
+  let hour = parseInt(time.hour, 10);
+  if (time.period === "PM" && hour !== 12) hour += 12;
+  if (time.period === "AM" && hour === 12) hour = 0;
+
+  now.setHours(hour);
+  now.setMinutes(parseInt(time.minute, 10));
   now.setSeconds(0);
   now.setMilliseconds(0);
   return now.toLocaleString("sv-SE").replace(" ", "T");
+}
+
+// 1일 추가 -> 백엔드 처리 후 삭제
+export function formatToIsoDatePlusOneDay(time: Time): string {
+  const now = new Date();
+  now.setDate(now.getDate() + 1);
+
+  let hour = parseInt(time.hour, 10);
+  if (time.period === "PM" && hour !== 12) hour += 12;
+  if (time.period === "AM" && hour === 12) hour = 0;
+
+  now.setHours(hour);
+  now.setMinutes(parseInt(time.minute, 10));
+  now.setSeconds(0);
+  now.setMilliseconds(0);
+  return now.toLocaleString("sv-SE").replace(" ", "T"); // 예: 2025-07-31T09:00:00
 }
 
 // 1년 추가 -> 백엔드 처리 후 삭제

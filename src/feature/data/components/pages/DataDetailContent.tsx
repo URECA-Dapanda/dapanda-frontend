@@ -23,6 +23,7 @@ import DataRegistModal from "@feature/data/components/sections/modal/DataRegistM
 import { BadgeComponent } from "@components/common/badge";
 import { formatDataSize } from "@lib/formatters";
 import OverLimitAlert from "@feature/data/components/sections/default/OverLimitAlert";
+import { Trash2, Pencil } from "lucide-react";
 import FlatCard from "@components/common/card/FlatCard";
 
 export default function DataDetailContent() {
@@ -81,14 +82,15 @@ export default function DataDetailContent() {
           {!!isOwner && (
             <div className="flex flex-row gap-4">
               <ButtonComponent variant={"outlineGray"} size="xs" onClick={handleDeleteModalOpen}>
-                글 삭제하기
+                <Trash2 className="w-12 h-12 mr-2" />
+                삭제하기
               </ButtonComponent>
               <ButtonComponent
                 variant={"outlineGray"}
                 size="xs"
-                onClick={() => setEditModalOpen(true)}
-              >
-                글 수정하기
+                onClick={() => setEditModalOpen(true)}>
+                <Pencil className="w-12 h-12 mr-2" />
+                수정하기
               </ButtonComponent>
             </div>
           )}

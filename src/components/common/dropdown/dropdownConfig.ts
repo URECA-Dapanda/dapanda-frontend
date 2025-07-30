@@ -1,21 +1,35 @@
-import { ArrowDown, ArrowUp, Clock, User, AlertTriangle, MapPin, Star } from "lucide-react";
+import {
+  ArrowDown,
+  Clock,
+  User,
+  AlertTriangle,
+  MapPin,
+  Star,
+  HardDriveDownload,
+  HardDriveUpload,
+} from "lucide-react";
 import { DropdownOption } from "@/components/common/dropdown/dropdown.types";
 
-export const dataSortOptions: DropdownOption[] = [
+export const dataSortOptions = (onSelect: (label: string) => void): DropdownOption[] => [
   {
     label: "최신순",
     icon: Clock,
-    action: { type: "action", onClick: () => console.log("최신순") },
+    action: { type: "action", onClick: () => onSelect("최신순") },
   },
   {
     label: "가격 낮은순",
     icon: ArrowDown,
-    action: { type: "action", onClick: () => console.log("낮은순") },
+    action: { type: "action", onClick: () => onSelect("가격 낮은순") },
   },
   {
-    label: "가격 높은순",
-    icon: ArrowUp,
-    action: { type: "action", onClick: () => console.log("높은순") },
+    label: "데이터 적은순",
+    icon: HardDriveDownload,
+    action: { type: "action", onClick: () => onSelect("데이터 적은순") },
+  },
+  {
+    label: "데이터 많은순",
+    icon: HardDriveUpload,
+    action: { type: "action", onClick: () => onSelect("데이터 많은순") },
   },
 ];
 
