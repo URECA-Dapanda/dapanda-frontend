@@ -6,7 +6,7 @@ export default function FeatureLayout({ children }: { children: ReactNode }) {
   return (
     <div className="relative w-[100dvw] lg:w-[375px] h-[100vh] mx-auto bg-white overflow-hidden flex flex-col">
       <AppHeader />
-      <main className="flex-1 overflow-y-auto antialiased">
+      <main className="flex-1 overflow-y-auto py-[54px] antialiased">
         <Suspense>{children}</Suspense>
       </main>
       <BottomNavigation />
