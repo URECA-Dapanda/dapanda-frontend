@@ -24,7 +24,7 @@ export default function SharedHeader() {
     <header className={clsx(isDataPage && "bg-primary2")}>
       <div
         className={clsx(
-          "bg-white border-none overflow-x-clip sticky top-0 z-50 transition-opacity duration-300 shrink-0",
+          "fixed top-0 z-50 w-[100dvw] lg:w-[375px] mx-auto shadow-header bg-white",
           isDataPage && !isVisible && "opacity-0 pointer-events-none",
           "w-[100dvw] lg:w-[375px] mx-auto shadow-header",
           isChatRoom && "hidden"

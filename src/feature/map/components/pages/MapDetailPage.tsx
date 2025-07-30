@@ -17,7 +17,6 @@ import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 import clsx from "clsx";
 import { buildWifiPaymentInfo } from "@feature/payment/hooks/useWifiPurchaseBuilder";
 import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
-import dayjs from "dayjs";
 
 export default function MapDetailPage() {
   const router = useRouter();
@@ -78,22 +77,7 @@ export default function MapDetailPage() {
 
     setError(null);
 
-    const start = dayjs()
-      .hour(Number(startTime.hour))
-      .minute(Number(startTime.minute))
-      .second(0)
-      .millisecond(0)
-      .toISOString();
-
-    const end = dayjs()
-      .add(1, "day")
-      .hour(Number(endTime.hour))
-      .minute(Number(endTime.minute))
-      .second(0)
-      .millisecond(0)
-      .toISOString();
-
-    setInfo(buildWifiPaymentInfo(data, start, end));
+    setInfo(buildWifiPaymentInfo(data, startTime, endTime));
 
     // handlePurchase(startTime, endTime, () => {
     //   router.push("/data");
@@ -141,7 +125,7 @@ export default function MapDetailPage() {
             variant="primary"
             size="xl"
             onClick={onBuy}
-            disabled={!data.open || isOwner}
+            disabled={isOwner}
           >
             {isOwner ? "내 게시글입니다" : "구매하기"}
           </ButtonComponent>

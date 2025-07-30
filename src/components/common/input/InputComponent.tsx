@@ -21,6 +21,7 @@ interface BaseProps {
   size?: InputSize;
   disabled?: boolean;
   required?: boolean;
+  step?: number;
 }
 
 // input 전용 props
@@ -55,6 +56,7 @@ const InputComponent = forwardRef<HTMLTextAreaElement | HTMLInputElement, InputC
       required = false,
       type = "text",
       rows = 3,
+      step = 100,
     },
     ref
   ) {
@@ -123,6 +125,7 @@ const InputComponent = forwardRef<HTMLTextAreaElement | HTMLInputElement, InputC
         onKeyDown={onKeyDown as React.KeyboardEventHandler<HTMLInputElement>}
         disabled={disabled}
         required={required}
+        step={type === "number" ? step : undefined}
         className={cn(inputRadius, inputSize, color, className)}
       />
     );

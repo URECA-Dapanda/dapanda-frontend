@@ -57,12 +57,14 @@ export function useVirtualizedInfiniteQuery<TData>({
   queryFn,
   getNextPageParam,
   estimateSize = () => 100,
+  enabled,
   mode = "scroll",
 }: {
   queryKey: string[];
   queryFn: (ctx: QueryFunctionContext) => Promise<PageResponse<TData>>;
   getNextPageParam: (lastPage: PageResponse<TData>, allPages: PageResponse<TData>[]) => unknown;
   estimateSize?: () => number;
+  enabled?: boolean;
   mode?: "scroll" | "button";
 }) {
   const parentRef = useRef<HTMLDivElement | null>(null);
@@ -73,6 +75,7 @@ export function useVirtualizedInfiniteQuery<TData>({
     queryKey,
     queryFn,
     getNextPageParam,
+    enabled,
     initialPageParam: undefined,
   });
 
