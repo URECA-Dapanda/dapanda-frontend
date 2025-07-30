@@ -30,3 +30,18 @@ export const getChatRoomList = async (size: number = 10, chatRoomReadOption: str
     throw error;
   }
 };
+
+export const markMessageAsRead = async (chatMessageId: number | string) => {
+  try {
+    const response = await axiosInstance.post(`/api/chat-messages/${chatMessageId}/read-status`);
+
+    if (response.data.code === 0) {
+      return response.data.data;
+    } else {
+      throw new Error(response.data.message || "메시지 읽음 처리 실패");
+    }
+  } catch (error) {
+    console.error("메시지 읽음 처리 실패:", error);
+    throw error;
+  }
+};
