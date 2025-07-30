@@ -38,9 +38,9 @@ export default function MapFloatingButtons({
 
     return {
       // 등록 버튼: 헤더 아래 24px
-      registerTop: `${headerHeight + 24}px`,
+      registerTop: `${headerHeight}px`,
       // 목록/위치 버튼: 푸터 위 24px
-      bottomButtonsBottom: `${footerHeight + 24}px`,
+      bottomButtonsBottom: `${footerHeight}px`,
     };
   }, [mapHeight]); // mapHeight가 변경되면 다시 계산
 
