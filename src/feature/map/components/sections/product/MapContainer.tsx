@@ -10,10 +10,8 @@ import { useMapRefresh } from "@/feature/map/hooks/useMapRefresh";
 import MapItemCard from "@/feature/map/components/sections/product/MapItemCard";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation";
 
 export default function MapContainer() {
-  const pathname = usePathname();
   const mapRef = useRef<HTMLDivElement>(null);
   const map = useMapStore((state) => state.map);
   const storeList = useMapStore((state) => state.storeList);
@@ -23,19 +21,6 @@ export default function MapContainer() {
   useMapInitializer();
   useMapRefresh(map);
   useMyLocation(map);
-
-  useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.id = MAP_CONTAINER_ID;
-    }
-  }, [pathname]);
-
-  useEffect(() => {
-    if (map && window.naver?.maps) {
-      window.naver.maps.Event.trigger(map, "resize");
-      map.setCenter(map.getCenter());
-    }
-  }, [pathname]);
 
   useMapMarkers(map, storeList, {
     onMarkerClick: (store) => {
