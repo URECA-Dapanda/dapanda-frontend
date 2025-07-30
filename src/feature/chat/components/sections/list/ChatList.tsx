@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useChatStore } from "@feature/chat/stores/useChatStore";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import ChatItem from "@feature/chat/components/sections/list/ChatItem";
 import { getChatRoomList } from "@feature/chat/api/chatRoomRequest";
 import { getMapDetailById } from "@feature/map/api/getMapDetailById";
-import { ApiChatRoom } from "@feature/chat/types/chatType";
+import { ApiChatRoom, ChatSocketMessage } from "@feature/chat/types/chatType";
 import { ButtonComponent } from "@/components/common/button/ButtonComponent";
 import { formatRelativeTime } from "@/lib/time";
+import type { ChatRoomPreview } from "@feature/chat/stores/useChatStore";
 
-// 상품 정보 캐시 (컴포넌트 외부에 저장)
 const productCache = new Map<
   number,
   { title: string; price: number; memberId: number; memberName: string }
@@ -20,9 +20,10 @@ export default function ChatList() {
   const chatList = useChatStore((state) => state.chatList);
   const setChatList = useChatStore((state) => state.setChatList);
   const setChatListUpdateCallback = useWebSocketStore((state) => state.setChatListUpdateCallback);
+  const { subscribe, unsubscribe } = useWebSocketStore();
   const [selectedFilter, setSelectedFilter] = useState<"ALL" | "BUYER" | "SELLER">("ALL");
 
-  const fetchChatRooms = async () => {
+  const fetchChatRooms = useCallback(async () => {
     try {
       const apiList = await getChatRoomList(10, selectedFilter);
 
@@ -84,23 +85,62 @@ export default function ChatList() {
         };
       });
 
-      console.log("채팅방 목록 API 응답:", chatList);
       setChatList(chatList);
     } catch (e) {
       console.error("채팅방 목록 가져오기 실패:", e);
     }
-  };
+  }, [selectedFilter, setChatList]);
+
+  // 채팅방 목록이 변경될 때마다 웹소켓 구독 관리
+  useEffect(() => {
+    // 기존 구독 해제
+    chatList.forEach((chat: ChatRoomPreview) => {
+      unsubscribe(chat.chatRoomId);
+    });
+
+    // 새로운 채팅방들 구독
+    chatList.forEach((chat: ChatRoomPreview) => {
+      subscribe(chat.chatRoomId, (message) => {
+        setChatList((prevChatList: ChatRoomPreview[]) => {
+          return prevChatList.map((prevChat: ChatRoomPreview) => {
+            if (prevChat.chatRoomId === chat.chatRoomId) {
+              const extendedMessage = message as ChatSocketMessage & { unreadCount?: number };
+
+              return {
+                ...prevChat,
+                lastMessage: message.message,
+                updatedAt: message.createdAt,
+                unreadCount: extendedMessage.unreadCount ?? prevChat.unreadCount,
+              };
+            }
+            return prevChat;
+          });
+        });
+
+        if (!(message as ChatSocketMessage & { unreadCount?: number }).unreadCount) {
+          fetchChatRooms();
+        }
+      });
+    });
+
+    // 컴포넌트 언마운트 시 모든 구독 해제
+    return () => {
+      chatList.forEach((chat: ChatRoomPreview) => {
+        unsubscribe(chat.chatRoomId);
+      });
+    };
+  }, [chatList, subscribe, unsubscribe, fetchChatRooms]);
 
   // 웹소켓 스토어에 채팅방 목록 업데이트 콜백 등록
   useEffect(() => {
     setChatListUpdateCallback(fetchChatRooms);
     return () => setChatListUpdateCallback(null);
-  }, [selectedFilter, setChatListUpdateCallback]);
+  }, [selectedFilter, setChatListUpdateCallback, fetchChatRooms]);
 
   // 컴포넌트 마운트 시와 필터 변경 시 API 호출
   useEffect(() => {
     fetchChatRooms();
-  }, [selectedFilter]);
+  }, [selectedFilter, fetchChatRooms]);
 
   return (
     <div className="flex flex-col px-24 pt-20">
