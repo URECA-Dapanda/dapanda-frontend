@@ -23,12 +23,15 @@ export default function MyPageContent() {
   }, [searchParams, open]);
 
   return (
-    <div className="flex flex-col items-center justify-center w-[100%] p-24 gap-28">
-      <ProfileCard />
-      <DataUsageDonut unit="GB" />
-      <CurrentCashCard isInterection={true} />
-      <TransactionHistory />
-      <LogOutButton />
-    </div>
+    <>
+      <CashSuccessModal isOpen={isOpen} onClose={close} mode="charge" />
+      <div className="flex flex-col items-center justify-center w-[100%] p-24 gap-28">
+        <ProfileCard />
+        <DataUsageDonut unit="GB" />
+        <CurrentCashCard isInterection={true} />
+        <TransactionHistory />
+        <LogOutButton />
+      </div>
+    </>
   );
 }
