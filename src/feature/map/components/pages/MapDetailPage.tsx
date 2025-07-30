@@ -45,18 +45,18 @@ export default function MapDetailPage() {
   const { startTime, endTime, setStartTime, setEndTime } = useTimeState("09:00", "22:00");
 
   useEffect(() => {
-    if (data?.openTime && data?.closeTime) {
-      setStartTime(parseHHMMToTime(data.openTime));
-      setEndTime(parseHHMMToTime(data.closeTime));
+    if (data?.startTime && data?.endTime) {
+      setStartTime(parseHHMMToTime(data.startTime));
+      setEndTime(parseHHMMToTime(data.endTime));
     }
-  }, [data?.openTime, data?.closeTime, setStartTime, setEndTime]);
+  }, [data?.startTime, data?.endTime, setStartTime, setEndTime]);
 
   if (isLoading || !data) return <div className="text-center py-24">불러오는 중...</div>;
   if (isError)
     return <div className="text-center text-red-500">상품 정보를 불러오지 못했습니다.</div>;
 
-  const minTime = parseHHMMToTime(data.openTime);
-  const maxTime = parseHHMMToTime(data.closeTime);
+  const minTime = parseHHMMToTime(data.startTime);
+  const maxTime = parseHHMMToTime(data.endTime);
 
   const onBuy = () => {
     if (isOwner) return;

@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 
 export default function MapItemCardContent({
-  data: { productId, address, price, score, title, openTime, closeTime, open, imageUrl },
+  data: { productId, address, price, score, title, startTime, endTime, open, imageUrl },
 }: ProductItemProps<MapType> & { disableUseButton?: boolean }) {
   const router = useRouter();
   const handleCreateChatRoom = useCallback(
@@ -30,7 +30,7 @@ export default function MapItemCardContent({
     },
     [productId, router]
   );
-
+  console.log(startTime, endTime);
   return (
     <Fragment>
       <div className="grid grid-cols-[auto_1fr_auto] gap-16 items-center">
@@ -59,7 +59,7 @@ export default function MapItemCardContent({
                 <span className="body-xs text-black ml-4">({score})</span>
               </div>
               <span className="caption-lg text-gray-500">
-                {openTime}~{closeTime}
+                {startTime}~{endTime}
               </span>
             </div>
           </div>

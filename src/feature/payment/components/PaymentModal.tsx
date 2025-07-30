@@ -7,6 +7,7 @@ import { ButtonComponent } from "@/components/common/button/ButtonComponent";
 import { BadgeComponent } from "@/components/common/badge/BadgeComponent";
 import { Wallet } from "lucide-react";
 import CurrentCashCard from "@feature/mypage/components/sections/profile/CurrentCashCard";
+import { formatIsoToHHMM } from "@lib/time";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -20,17 +21,12 @@ interface PaymentModalProps {
     seller?: string;
     badge?: "일반 구매" | "분할 구매" | "자투리 구매";
     location?: string;
-    duration?: string;
+    startTime?: string;
+    endTime?: string;
   };
 }
 
-const PaymentModal = ({
-  isOpen,
-  onClose,
-  onPay,
-  type,
-  info,
-}: PaymentModalProps) => {
+const PaymentModal = ({ isOpen, onClose, onPay, type, info }: PaymentModalProps) => {
   const [selected, setSelected] = useState(false);
 
   return (
@@ -53,14 +49,12 @@ const PaymentModal = ({
           {info.unitPrice && (
             <p className="text-xs text-gray-500">100MB당 가격: {info.unitPrice}</p>
           )}
-          {info.seller && (
-            <p className="text-xs text-gray-500">판매자: {info.seller}</p>
-          )}
-          {info.location && (
-            <p className="text-xs text-gray-500">위치: {info.location}</p>
-          )}
-          {info.duration && (
-            <p className="text-xs text-gray-500">이용시간: {info.duration}</p>
+          {info.seller && <p className="text-xs text-gray-500">판매자: {info.seller}</p>}
+          {info.location && <p className="text-xs text-gray-500">위치: {info.location}</p>}
+          {info.startTime && info.endTime && (
+            <p className="text-xs text-gray-500">
+              이용시간: {formatIsoToHHMM(info.startTime)} ~ {formatIsoToHHMM(info.endTime)}
+            </p>
           )}
         </div>
 
@@ -68,11 +62,7 @@ const PaymentModal = ({
         <div className="space-y-8">
           <p className="title-xs">결제 수단</p>
           <label className="flex items-center gap-12 mb-24">
-            <input
-              type="radio"
-              checked={selected}
-              onChange={() => setSelected(true)}
-            />
+            <input type="radio" checked={selected} onChange={() => setSelected(true)} />
             <Wallet className="w-20" />
             <span>캐시로 결제하기</span>
           </label>
@@ -82,11 +72,7 @@ const PaymentModal = ({
         </div>
 
         {/* 결제 버튼 */}
-        <ButtonComponent
-          disabled={!selected}
-          onClick={onPay}
-          className="w-full"
-        >
+        <ButtonComponent disabled={!selected} onClick={onPay} className="w-full">
           {selected ? `${info.price} 결제하기` : `결제 수단을 선택해주세요`}
         </ButtonComponent>
       </div>
