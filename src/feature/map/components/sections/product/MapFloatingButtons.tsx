@@ -25,21 +25,19 @@ export default function MapFloatingButtons({
     // SSR에서는 기본값 사용
     if (typeof window === "undefined") {
       return {
-        registerTop: `${56}px`, // 기본 헤더 높이 + 24px
-        bottomButtonsBottom: `${56}px`, // 기본 푸터 높이 + 24px
+        registerTop: `${56}px`, 
+        bottomButtonsBottom: `${56}px`, 
       };
     }
 
     const header = document.getElementById("appHead");
     const footer = document.getElementById("appFooter");
 
-    const headerHeight = header?.offsetHeight ?? 56; // 기본값 56px
-    const footerHeight = footer?.offsetHeight ?? 56; // 기본값 56px
+    const headerHeight = header?.offsetHeight ?? 56; 
+    const footerHeight = footer?.offsetHeight ?? 56; 
 
     return {
-      // 등록 버튼: 헤더 아래 24px
       registerTop: `${headerHeight}px`,
-      // 목록/위치 버튼: 푸터 위 24px
       bottomButtonsBottom: `${footerHeight}px`,
     };
   }, [mapHeight]); // mapHeight가 변경되면 다시 계산
