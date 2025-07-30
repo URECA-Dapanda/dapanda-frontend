@@ -22,13 +22,18 @@ export default function SharedHeader() {
   return (
     <header
       className={clsx(
-        "bg-white border-none overflow-x-clip sticky top-0 z-35 transition-opacity duration-300 shrink-0",
-        isDataPage && !isVisible && "opacity-0 pointer-events-none",
+        "bg-primary2 border-none overflow-x-clip transition-opacity duration-300 shrink-0",
+
         "w-[100dvw] lg:w-[375px] mx-auto shadow-header",
         isChatRoom && "hidden"
       )}
     >
-      <div className="shadow-header">
+      <div
+        className={clsx(
+          "shadow-header bg-white",
+          isDataPage && !isVisible && "opacity-0 pointer-events-none"
+        )}
+      >
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full flex items-center justify-center primary-gradient">
