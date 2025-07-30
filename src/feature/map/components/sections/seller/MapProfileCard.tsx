@@ -28,7 +28,10 @@ export default function MapProfileCard({ sellerId, productId }: MapProfileCardPr
   };
 
   return (
-    <div className="flex items-center justify-between w-full px-24 py-16" onClick={goToProfile}>
+    <div
+      className="flex items-center justify-between w-full px-24 py-16 cursor-pointer"
+      onClick={goToProfile}
+    >
       <AvatarIcon size="medium" avatar={data?.profileImageUrl ?? undefined} />
 
       <div className="flex flex-col gap-4 flex-1 px-16">

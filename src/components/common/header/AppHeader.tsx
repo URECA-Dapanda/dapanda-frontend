@@ -83,7 +83,7 @@ export default function AppHeader({ children }: PropsWithChildren<AppHeaderProps
   return (
     <header
       className={cn(
-        "absolute top-0 flex h-[54px] shrink-0 w-[100dvw] lg:w-[375px] border-none transition-opacity mx-auto flex-row justify-between px-16 items-center overflow-x-clip",
+        "fixed top-0 flex h-[54px] shrink-0 w-[100dvw] lg:w-[375px] border-none transition-opacity mx-auto flex-row justify-between px-16 items-center overflow-x-clip",
         pathVariant === "base" ? "overflow-y-visible bg-primary2" : "shadow-header bg-white"
       )}
     >

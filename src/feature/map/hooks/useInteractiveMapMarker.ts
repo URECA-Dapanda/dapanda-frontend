@@ -91,4 +91,7 @@ export function useInteractiveMapMarker({
 
     onLocationSelect(lat, lng);
   }, [map, isEditMode, editData, onLocationSelect]);
+  return {
+    selectLocation: setMarkerWithInfo,
+  };
 }

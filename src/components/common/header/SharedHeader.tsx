@@ -30,8 +30,10 @@ export default function SharedHeader() {
     >
       <div
         className={clsx(
-          "shadow-header bg-white",
-          isDataPage && !isVisible && "opacity-0 pointer-events-none"
+          "fixed top-0 z-50 w-[100dvw] lg:w-[375px] mx-auto shadow-header bg-white",
+          isDataPage && !isVisible && "opacity-0 pointer-events-none",
+          "w-[100dvw] lg:w-[375px] mx-auto shadow-header",
+          isChatRoom && "hidden"
         )}
       >
         <div className="flex items-center justify-between px-4 py-3">

@@ -6,7 +6,7 @@ import type { MapType } from "@/feature/map/types/mapType";
 interface UseMapInfiniteQueryParams {
   latitude: number;
   longitude: number;
-  sortOption?: "PRICE_ASC" | "AVERAGE_RATE_DESC";
+  sortOption?: "PRICE_ASC" | "AVERAGE_RATE_DESC" | "DISTANCE_ASC";
   open?: boolean;
   size?: number;
 }

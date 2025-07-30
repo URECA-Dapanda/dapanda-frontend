@@ -21,7 +21,6 @@ export default function MapListVirtual() {
     useMapInfiniteQuery({
       latitude: coords?.lat ?? 0,
       longitude: coords?.lng ?? 0,
-      sortOption: "PRICE_ASC",
       open: true,
     });
 

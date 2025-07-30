@@ -13,7 +13,6 @@ import { useVirtualizedInfiniteQuery } from "@/hooks/useVirtualizedInfiniteQuery
 import { getMapList } from "@/feature/map/api/mapRequest";
 import type { MapType } from "@/feature/map/types/mapType";
 import { sortOptionMap } from "@/components/common/dropdown/dropdownConfig";
-import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 
 interface Props {
   open: boolean;
@@ -36,7 +35,7 @@ export default function MapBottomSheet({
 }: Props) {
   const { myPosition } = useMapStore();
 
-  const { parentRef, rowVirtualizer, flatItems, hasNextPage, fetchNextPage, isFetchingNextPage } =
+  const { parentRef, rowVirtualizer, flatItems, hasNextPage } =
     useVirtualizedInfiniteQuery<MapType>({
       queryKey: [
         "mapList",
@@ -52,6 +51,7 @@ export default function MapBottomSheet({
           longitude: myPosition?.lng() ?? 0,
           productSortOption: sortOptionMap[sortLabel],
         }),
+      enabled: !!myPosition,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       estimateSize: () => 160,
     });
@@ -91,7 +91,7 @@ export default function MapBottomSheet({
       </div>
 
       {/* 가상 리스트 렌더링 영역 */}
-      {/* <div ref={parentRef} className="h-[calc(100vh-200px)] overflow-y-auto px-24">
+      <div ref={parentRef} className="h-[calc(100vh-200px)] overflow-y-auto px-24">
         <div
           style={{
             height: `${rowVirtualizer.getTotalSize()}px`,
@@ -122,19 +122,7 @@ export default function MapBottomSheet({
             );
           })}
         </div>
-      </div> */}
-      <VirtualizedInfiniteList
-        parentRef={parentRef}
-        fetchNextPage={fetchNextPage}
-        hasNextPage={hasNextPage}
-        isFetchingNextPage={isFetchingNextPage}
-        items={visibleItems}
-        renderItem={(index, item) => (
-          <MapItemCard data={item} key={index} disableUseButton={!item?.open && !availableOnly} />
-        )}
-        rowVirtualizer={rowVirtualizer}
-        height={open ? "calc( 70vh + 5px )" : "calc( 48vh - 54px )"}
-      />
+      </div>
     </BaseBottomSheet>
   );
 }

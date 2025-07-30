@@ -6,8 +6,9 @@ export function WifiTopSheetContent({ data, expanded }: { data: WifiData; expand
     <>
       <div className="space-y-8">
         <BadgeComponent variant="meta" size="md" className="bg-primary2 text-black">
-          와이파이
+          {data.open ? "운영 중" : "운영 예정"}
         </BadgeComponent>
+
         <h2 className="title-sm">{data.place}</h2>
         <p className="caption-md text-gray-500 max-w-[142px] break-words">{data.address}</p>
       </div>
