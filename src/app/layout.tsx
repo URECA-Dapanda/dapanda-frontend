@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import ProviderWrapper from "@components/common/ProviderWrapper";
 import { Slide, ToastContainer } from "react-toastify";
+import FcmInitializer from "@components/common/FcmInitializer";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,7 +17,10 @@ export default function RootLayout({
   return (
     <html lang="ko" className="box-border h-[100vh]">
       <body className="flex flex-col box-border min-h-screen w-full bg-gray-300 justify-center items-center">
-        <ProviderWrapper>{children}</ProviderWrapper>
+        <ProviderWrapper>
+          <FcmInitializer />
+          {children}
+        </ProviderWrapper>
 
         <ToastContainer
           position="top-center"

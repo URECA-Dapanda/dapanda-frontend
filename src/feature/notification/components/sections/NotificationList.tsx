@@ -1,0 +1,35 @@
+"use client";
+
+import NotificationCard from "./NotificationCard";
+import { BellOff } from "lucide-react";
+
+export interface NotificationItem {
+  id: string;
+  title: string;
+  message: string;
+  createdAt: string;
+}
+
+interface NotificationListProps {
+  items: NotificationItem[];
+  onDelete: (id: string) => void;
+}
+
+export default function NotificationList({ items, onDelete }: NotificationListProps) {
+  if (items.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center text-gray-500 h-[calc(100vh-200px)]">
+        <BellOff className="w-24 h-24 mb-20" />
+        <p className="body-md">받은 알림이 없습니다.</p>
+      </div>
+    );
+  }
+
+  return (
+    <ul className="space-y-12">
+      {items.map((item) => (
+        <NotificationCard key={item.id} {...item} onDelete={onDelete} />
+      ))}
+    </ul>
+  );
+}

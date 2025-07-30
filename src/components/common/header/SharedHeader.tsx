@@ -1,7 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import AvatarIcon from "@/components/common/AvatarIcon";
+// import AvatarIcon from "@/components/common/AvatarIcon";
+import NotificationIcon from "../NotificationIcon";
 import HeaderTitle from "@/components/common/header/HeaderTitle";
 import HeaderCash from "@/components/common/header/HeaderCash";
 import HeaderTimer from "@/components/common/header/HeaderTimer";
@@ -45,12 +46,13 @@ export default function SharedHeader() {
           </div>
           <div
             className={`flex items-center gap-3 ${
-              HeaderCash !== null || AvatarIcon !== null ? "" : "hidden"
+              HeaderCash !== null ? "" : "hidden"
             }`}
           >
             <HeaderTimer />
             <HeaderCash />
-            <AvatarIcon />
+            {/* <AvatarIcon /> */}
+            <NotificationIcon />
           </div>
         </div>
       </div>
