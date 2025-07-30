@@ -20,7 +20,14 @@ export default function SharedHeader() {
   const isChatRoom = pathname.startsWith("/chat") && pathname.split("/").length > 2;
 
   return (
-    <header className={clsx(isDataPage && "bg-primary2")}>
+    <header
+      className={clsx(
+        "bg-primary2 border-none overflow-x-clip transition-opacity duration-300 shrink-0",
+
+        "w-[100dvw] lg:w-[375px] mx-auto shadow-header",
+        isChatRoom && "hidden"
+      )}
+    >
       <div
         className={clsx(
           "fixed top-0 z-50 w-[100dvw] lg:w-[375px] mx-auto shadow-header bg-white",

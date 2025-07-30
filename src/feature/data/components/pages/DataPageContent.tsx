@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { PlusIcon } from "lucide-react";
@@ -57,20 +56,12 @@ export default function DataPageContent() {
 
   return (
     <>
-      <div className="h-[100%] w-full bg-primary2 datapagecontent">
-        {/* 왼쪽 상단 로고 */}
-        <div className="absolute top-[-90] left-[-35] z-20">
-          <Image src="/dpd-logo.svg" alt="logo" width={237} height={0} />
-        </div>
-        {/* 오른쪽 상단 로고 */}
-        <div className="absolute top-[-50] right-0 z-20">
-          <Image src="/dpd-main-logo.svg" alt="logo" width={96} height={0} />
-        </div>
+      <div className="w-full bg-primary2 datapagecontent h-[100%]">
         {/* 상단 필터 영역 */}
-        <div className="sticky top-0 z-10 bg-primary2 p-4 pt-60">
+        <div className="p-4 pt-60">
           <DefaultFilterCard onSearch={() => setSheetOpen(true)} />
         </div>
-        <div className="absolute bottom-24 right-24 z-60">
+        <div className="absolute bottom-[78px] right-24 z-35">
           <ButtonComponent
             variant="floatingPrimary"
             size="xl"
@@ -86,7 +77,7 @@ export default function DataPageContent() {
           isOpen={registModalOpen}
           onClose={() => setRegistModalOpen(false)}
           variant="modal"
-          zIndex={100}
+          zIndex={102}
         >
           <DataRegistModal onClose={handleRegistButtonClick} />
         </BaseBottomSheet>
@@ -97,7 +88,7 @@ export default function DataPageContent() {
           onSnapUp={() => setSheetOpen(true)}
           onSnapDown={handleSnapDown}
           variant="snap"
-          snapHeight={280}
+          snapHeight={"40%"}
         >
           <div className="flex justify-center mt-24">
             <PurchaseModeTabs value={tab} onChange={handleTabChange}>

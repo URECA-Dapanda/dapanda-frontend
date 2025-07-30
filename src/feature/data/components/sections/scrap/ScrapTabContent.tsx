@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
 import { ButtonComponent } from "@/components/common/button";
-import { dataSortOptions } from "@components/common/dropdown/dropdownConfig";
-import { ChevronDown, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import ScrapFilterCard from "@feature/data/components/sections/filter/ScrapFilterCard";
 import ScrapLoadingState from "@feature/data/components/sections/scrap/ScrapLoadingState";
 import { useScrapRecommendation } from "@feature/data/hooks/useScrapRecommendation";
@@ -15,7 +13,6 @@ import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
 import { formatPriceString } from "@lib/formatters";
 
 export default function ScrapTabContent() {
-  const [sortLabel, setSortLabel] = useState("최신순");
   const { value, setValue, loading, result, summary, search } = useScrapRecommendation();
   const [hasSearched, setHasSearched] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -40,25 +37,11 @@ export default function ScrapTabContent() {
     splitType: item.splitType,
     updatedAt: item.date,
   }));
-  
+
   console.log("transformedCombinations", transformedCombinations);
 
   return (
-    <div className="px-24 space-y-24">
-      {/* 정렬 드롭다운 */}
-      <div className="flex justify-end items-center gap-8 mb-12">
-        <UserDropdownMenu
-          options={dataSortOptions(setSortLabel)}
-          selectedLabel={sortLabel}
-          onSelectLabel={setSortLabel}
-        >
-          <ButtonComponent variant="withIcon" size="sm" className="p-6 body-xs">
-            {sortLabel}
-            <ChevronDown className="w-20 h-20" />
-          </ButtonComponent>
-        </UserDropdownMenu>
-      </div>
-
+    <div className="px-24 space-y-24 h-full">
       {/* 필터 카드 */}
       <ScrapFilterCard value={value} setValue={setValue} onSearch={handleSearch} />
 
@@ -76,14 +59,14 @@ export default function ScrapTabContent() {
           />
 
           {(isExpanded || result.length <= 1) && (
-            <div className="px-8 mb-64 flex justify-between items-center">
+            <div className="px-8 flex justify-between items-center">
               <div>
                 <p className="title-sm">총 용량 {summary.totalAmount}GB</p>
                 <p className="title-sm">총 가격 {formatPriceString(summary.totalPrice)}</p>
               </div>
-              <ButtonComponent 
-                variant="secondary" 
-                size="3xl" 
+              <ButtonComponent
+                variant="secondary"
+                size="3xl"
                 className="w-152"
                 onClick={() =>
                   setPayment({
@@ -95,7 +78,8 @@ export default function ScrapTabContent() {
                     totalPrice: summary.totalPrice,
                     combinations: transformedCombinations,
                   })
-                }>
+                }
+              >
                 확정하고 결제하기
               </ButtonComponent>
             </div>
