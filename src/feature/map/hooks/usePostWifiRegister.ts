@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { postWifiRegister, putWifiUpdate } from "@/feature/map/api/mapRequest";
 import type { RegisterFormValues, RegisterFormData } from "@/feature/map/types/registerForm";
-import { formatToIsoDate, formatToIsoDatePlusOneYear } from "@lib/time";
+import { formatToIsoDate, formatToIsoDatePlusOneYear, parseHHMMToTime } from "@lib/time";
 
 interface UsePostWifiRegisterOptions {
   form: RegisterFormValues;
@@ -35,7 +35,7 @@ export const usePostWifiRegister = ({ form, onSuccess, onSubmit }: UsePostWifiRe
         price: parseInt(form.price, 10),
         latitude: parseFloat(lat),
         longitude: parseFloat(lng),
-        startTime: formatToIsoDate(form.startTime),
+        startTime: formatToIsoDate(parseHHMMToTime(form.startTime)),
         endTime: formatToIsoDatePlusOneYear(form.endTime),
         address,
         images: form.images ?? [],
@@ -49,6 +49,7 @@ export const usePostWifiRegister = ({ form, onSuccess, onSubmit }: UsePostWifiRe
       }
     },
     onSuccess: () => {
+      console.log(form);
       onSubmit?.({
         ...form,
         lat: parseFloat(lat!),

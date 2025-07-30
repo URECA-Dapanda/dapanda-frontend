@@ -37,13 +37,13 @@ export const postWifiTrade = async (
   startTime: string,
   endTime: string
 ): Promise<number> => {
+  console.log(productId, wifiId, startTime, endTime);
   const res = await axios.post("/api/trades/wifi", {
     productId,
     wifiId,
     startTime,
     endTime,
   });
-
   if (res.data.code !== 0) {
     throw new Error(res.data.message || "와이파이 결제 실패");
   }

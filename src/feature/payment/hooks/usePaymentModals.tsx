@@ -25,7 +25,8 @@ export default function UsePaymentModals() {
           buyerType: info.badge,
           seller: info.seller,
           location: info.location,
-          duration: info.duration,
+          startTime: info.startTime,
+          endTime: info.endTime,
         }}
       />
 
