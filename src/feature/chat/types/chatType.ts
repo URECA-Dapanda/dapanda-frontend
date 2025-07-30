@@ -23,6 +23,7 @@ export interface ChatSocketMessage {
   createdAt: string;
   isMine: boolean;
   senderName?: string;
+  unreadCount?: number;
 }
 
 export interface CursorPageResponse<T> {
