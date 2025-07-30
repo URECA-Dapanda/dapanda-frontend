@@ -58,10 +58,10 @@ export default function DataPageContent() {
     <>
       <div className="h-[100%] w-full bg-primary2 datapagecontent">
         {/* 상단 필터 영역 */}
-        <div className="z-10 bg-primary2 p-4 pt-60">
+        <div className="p-4 pt-60">
           <DefaultFilterCard onSearch={() => setSheetOpen(true)} />
         </div>
-        <div className="absolute bottom-24 right-24 z-35">
+        <div className="absolute bottom-[78px] right-24 z-35">
           <ButtonComponent
             variant="floatingPrimary"
             size="xl"
