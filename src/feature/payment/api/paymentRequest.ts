@@ -37,7 +37,6 @@ export const postWifiTrade = async (
   startTime: string,
   endTime: string
 ): Promise<number> => {
-  console.log(productId, wifiId, startTime, endTime);
   const res = await axios.post("/api/trades/wifi", {
     productId,
     wifiId,

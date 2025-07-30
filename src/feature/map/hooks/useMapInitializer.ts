@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 interface UseMapInitializerOptions {
   onStoreListUpdate?: (list: MapType[]) => void;
   onMapInit?: (map: naver.maps.Map) => void;
+  initialSort?: "DISTANCE_ASC" | "PRICE_ASC" | "AVERAGE_RATE_DESC";
 }
 
 export const useMapInitializer = (options?: UseMapInitializerOptions) => {
@@ -38,14 +39,14 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
           const current = new window.naver.maps.LatLng(latitude, longitude);
           map.setCenter(current);
 
-          setMyPosition(current); // ✅ 마커는 별도로
+          setMyPosition(current);
 
           try {
             const res = await getMapList({
               size: 10,
               latitude,
               longitude,
-              productSortOption: "PRICE_ASC",
+              productSortOption: "DISTANCE_ASC",
               open: true,
             });
 
