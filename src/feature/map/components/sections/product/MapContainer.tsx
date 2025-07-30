@@ -34,6 +34,31 @@ export default function MapContainer() {
     }
   }, []);
 
+  useEffect(() => {
+    if (!mapRef.current) return;
+    mapRef.current.id = MAP_CONTAINER_ID;
+
+    const resize = () => {
+      const mapElement = mapRef.current;
+      if (!mapElement || !map) return;
+
+      const header = document.getElementById("appHead");
+      const footer = document.getElementById("appFooter");
+      const mapWidth = window.innerWidth;
+      const mapHeight =
+        window.innerHeight - (header?.offsetHeight ?? 0) - (footer?.offsetHeight ?? 0);
+
+      map.setSize(new window.naver.maps.Size(mapWidth, mapHeight));
+    };
+
+    window.addEventListener("DOMContentLoaded", resize);
+    window.addEventListener("resize", resize);
+
+    return () => {
+      window.removeEventListener("resize", resize);
+    };
+  }, [map]);
+
   return (
     <>
       <div ref={mapRef} className="w-full h-full" />
