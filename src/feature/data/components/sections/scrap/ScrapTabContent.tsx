@@ -48,7 +48,7 @@ export default function ScrapTabContent() {
       {/* 정렬 드롭다운 */}
       <div className="flex justify-end items-center gap-8 mb-12">
         <UserDropdownMenu
-          options={dataSortOptions}
+          options={dataSortOptions(setSortLabel)}
           selectedLabel={sortLabel}
           onSelectLabel={setSortLabel}
         >
