@@ -4,6 +4,7 @@ import type { MapType } from "@/feature/map/types/mapType";
 import { MAP_CONTAINER_ID, DEFAULT_LOCATION } from "@/feature/map/constants/map";
 import { getMapList } from "@/feature/map/api/mapRequest";
 import { toast } from "react-toastify";
+import { usePathname } from "next/navigation";
 
 interface UseMapInitializerOptions {
   onStoreListUpdate?: (list: MapType[]) => void;
@@ -12,6 +13,7 @@ interface UseMapInitializerOptions {
 }
 
 export const useMapInitializer = (options?: UseMapInitializerOptions) => {
+  const pathname = usePathname();
   const { setMap, setStoreList, setMyPosition } = useMapStore();
 
   useEffect(() => {
@@ -62,5 +64,5 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
       );
     };
     tryInitMap();
-  }, [options]);
+  }, [options, pathname]);
 };
