@@ -9,11 +9,9 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 
 export default function MapItemCardContent({
-  data: { productId, address, price, score, title, type, updatedAt, open, imageUrl },
-  disableUseButton = false,
+  data: { productId, address, price, score, title, openTime, closeTime, open, imageUrl },
 }: ProductItemProps<MapType> & { disableUseButton?: boolean }) {
   const router = useRouter();
-  const isDisabled = disableUseButton || !open;
   const handleCreateChatRoom = useCallback(
     async (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -60,7 +58,9 @@ export default function MapItemCardContent({
                 <Star className="fill-current" />
                 <span className="body-xs text-black ml-4">({score})</span>
               </div>
-              <span className="caption-lg text-gray-500">{updatedAt}</span>
+              <span className="caption-lg text-gray-500">
+                {openTime}~{closeTime}
+              </span>
             </div>
           </div>
           <span className="body-xxs text-gray-400 truncate max-w-[115px]">{address}</span>
@@ -70,10 +70,10 @@ export default function MapItemCardContent({
         <div className="flex flex-col items-end">
           <span
             className={`${
-              type === "와이파이" ? "bg-primary2 text-black" : "bg-secondary2 text-black"
+              open ? "bg-primary2 text-black" : "bg-secondary2 text-black"
             } body-xxs rounded-circle px-8 py-2 mb-4`}
           >
-            {type}
+            {open ? "운영 중" : "운영 예정"}
           </span>
           <span className="text-primary body-md">{price}</span>
           <span className="body-xs text-gray-700">10분당</span>
@@ -86,11 +86,8 @@ export default function MapItemCardContent({
           size="sm"
           variant="primary"
           className="flex-6"
-          disabled={isDisabled}
           onClick={() => {
-            if (!isDisabled) {
-              router.push(`/map/${productId}`);
-            }
+            router.push(`/map/${productId}`);
           }}
         >
           이용하기

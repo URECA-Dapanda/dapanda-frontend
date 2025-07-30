@@ -23,8 +23,6 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
   const [sortLabel, setSortLabel] = useState("최신순");
   const { dataAmount, clearDataAmount } = useDataFilterStore();
 
-  console.log("sheet", isSheetOpen);
-
   const convertSortLabelToEnum = (
     label: string
   ): "RECENT" | "PRICE_ASC" | "AMOUNT_ASC" | "AMOUNT_DESC" => {

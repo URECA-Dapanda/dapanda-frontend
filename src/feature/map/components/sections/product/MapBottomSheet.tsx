@@ -51,6 +51,7 @@ export default function MapBottomSheet({
           longitude: myPosition?.lng() ?? 0,
           productSortOption: sortOptionMap[sortLabel],
         }),
+      enabled: !!myPosition,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       estimateSize: () => 160,
     });
@@ -121,7 +122,6 @@ export default function MapBottomSheet({
             );
           })}
         </div>
-
       </div>
     </BaseBottomSheet>
   );

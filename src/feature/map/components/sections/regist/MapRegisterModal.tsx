@@ -12,7 +12,7 @@ interface Props {
 export default function MapRegisterModal({ open, onClose }: Props) {
   return (
     <BaseModal isOpen={open} onClose={onClose}>
-      <ModalHeader title="등록 유형 선택" onClose={onClose} />
+      <ModalHeader title="새 게시글 등록" onClose={onClose} />
       <SelectTypeCard />
     </BaseModal>
   );

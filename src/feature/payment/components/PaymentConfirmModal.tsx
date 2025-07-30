@@ -3,6 +3,7 @@
 import BaseModal from "@/components/common/modal/BaseModal";
 import ModalHeader from "@/components/common/modal/ModalHeader";
 import { ButtonComponent } from "@/components/common/button/ButtonComponent";
+import { formatIsoToHHMM } from "@lib/time";
 
 interface PaymentConfirmModalProps {
   isOpen: boolean;
@@ -15,17 +16,12 @@ interface PaymentConfirmModalProps {
     buyerType?: "일반 구매" | "분할 구매" | "자투리 구매"; // 데이터만 해당
     seller?: string;
     location?: string; // 와이파이/핫스팟
-    duration?: string; // 와이파이/핫스팟
+    startTime?: string; // 와이파이/핫스팟
+    endTime?: string;
   };
 }
 
-const PaymentConfirmModal = ({
-  isOpen,
-  onClose,
-  onNext,
-  type,
-  info,
-}: PaymentConfirmModalProps) => {
+const PaymentConfirmModal = ({ isOpen, onClose, onNext, type, info }: PaymentConfirmModalProps) => {
   return (
     <BaseModal isOpen={isOpen} onClose={onClose}>
       <ModalHeader title="결제 확인" onClose={onClose} />
@@ -38,16 +34,20 @@ const PaymentConfirmModal = ({
 
         <div className="text-gray-600 body-sm space-y-4 mb-32 text-left">
           <p>📦 구매 물품: {info.title}</p>
-          {type === "data" && info.buyerType && (
-            <p>💳 구매 방식: {info.buyerType}</p>
-          )}
+          {type === "data" && info.buyerType && <p>💳 구매 방식: {info.buyerType}</p>}
           {info.seller && <p>👤 판매자: {info.seller}</p>}
           {info.location && <p>📍 위치: {info.location}</p>}
-          {info.duration && <p>⏱️ 이용 시간: {info.duration}</p>}
+          {info.startTime && info.endTime && (
+            <p>
+              ⏱️ 이용 시간: {formatIsoToHHMM(info.startTime)} ~ {formatIsoToHHMM(info.endTime)}
+            </p>
+          )}
           <p>💰 결제 가격: {info.price}</p>
         </div>
 
-        <ButtonComponent className="w-[278px]" onClick={onNext}>결제 계속하기</ButtonComponent>
+        <ButtonComponent className="w-[278px]" onClick={onNext}>
+          결제 계속하기
+        </ButtonComponent>
       </div>
     </BaseModal>
   );

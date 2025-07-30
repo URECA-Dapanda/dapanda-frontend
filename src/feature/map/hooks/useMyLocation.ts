@@ -26,6 +26,9 @@ export function useMyLocation(map?: naver.maps.Map | null) {
               content:
                 '<div style="background:#e6007e;width:12px;height:12px;border-radius:9999px;"></div>',
             },
+            zIndex: 999,
+          }).addListener("click", () => {
+            window.naver.maps.Event.trigger(map, "click", { coord: latlng });
           });
         }
       },

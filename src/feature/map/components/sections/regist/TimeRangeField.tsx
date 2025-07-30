@@ -10,6 +10,15 @@ interface Props {
 }
 
 export default function TimeRangeField({ form, updateForm, errors }: Props) {
+  const handleTimeChange =
+    (key: "startTime" | "endTime") =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      let raw = e.target.value.replace(/[^0-9]/g, "").slice(0, 4);
+      if (raw.length >= 3) {
+        raw = `${raw.slice(0, 2)}:${raw.slice(2)}`;
+      }
+      updateForm(key, raw);
+    };
   return (
     <section className="mb-16">
       <label className="title-sm mb-12 block">이용 시간</label>
@@ -17,7 +26,7 @@ export default function TimeRangeField({ form, updateForm, errors }: Props) {
         <InputComponent
           placeholder="예: 09:00"
           value={form.startTime}
-          onChange={(e) => updateForm("startTime", e.target.value)}
+          onChange={handleTimeChange("startTime")}
           className={cn("px-3", errors.startTime && "border-primary border-[2px]")}
           radius="md"
           size="md"
@@ -26,7 +35,7 @@ export default function TimeRangeField({ form, updateForm, errors }: Props) {
         <InputComponent
           placeholder="예: 18:00"
           value={form.endTime}
-          onChange={(e) => updateForm("endTime", e.target.value)}
+          onChange={handleTimeChange("endTime")}
           className={cn("px-3", errors.endTime && "border-primary border-[2px]")}
           radius="md"
           size="md"

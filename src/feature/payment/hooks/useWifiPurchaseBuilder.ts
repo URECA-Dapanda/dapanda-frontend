@@ -1,11 +1,12 @@
-import { formatToIsoDate } from "@/lib/time";
+import { formatToIsoDate, formatToIsoDatePlusOneDay } from "@/lib/time";
 import type { MapDetailItem } from "@/feature/map/types/mapType";
 import type { PaymentInfo } from "@/feature/payment/types/paymentTypes";
+import { Time } from "@type/Time";
 
 export const buildWifiPaymentInfo = (
   data: MapDetailItem,
-  startTime: string,
-  endTime: string
+  startTime: Time,
+  endTime: Time
 ): PaymentInfo => {
   return {
     type: "wifi",
@@ -17,6 +18,6 @@ export const buildWifiPaymentInfo = (
     productId: Number(data.productId),
     wifiId: data.wifiId,
     startTime: formatToIsoDate(startTime),
-    endTime: formatToIsoDate(endTime),
+    endTime: formatToIsoDatePlusOneDay(endTime),
   };
 };
