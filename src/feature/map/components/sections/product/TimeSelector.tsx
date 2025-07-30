@@ -71,7 +71,7 @@ export default function TimeSelector({
     return (
       <div
         ref={dropdownRef}
-        className="absolute top-full left-0 bg-white border border-gray-300 rounded-12 shadow-lg z-50 mt-4 min-w-[120px]"
+        className="absolute top-full left-0 bg-white border border-gray-300 rounded-12 shadow-lg z-0 mt-4 min-w-[120px]"
       >
         <div className="max-h-144 overflow-y-auto p-4 space-y-4">
           {items.map((item, idx) => {
@@ -139,7 +139,7 @@ export default function TimeSelector({
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center z-0">
       <div className="caption-md text-gray-600 mb-4">{label}</div>
       <div className="flex items-center gap-8">
         {/* 시간 선택 영역 */}

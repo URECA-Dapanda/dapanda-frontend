@@ -4,6 +4,11 @@ import { app } from "@/lib/firebase";
 export const onForegroundMessage = () => {
   if (typeof window === "undefined") return;
 
+  if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+    console.warn("FCM is not supported in this browser");
+    return;
+  }
+
   const messaging = getMessaging(app);
   onMessage(messaging, (payload) => {
     console.log("Foreground message received:", payload);

@@ -9,10 +9,6 @@ import SelectTypeContent from "@/feature/map/components/sections/regist/SelectTy
 export default function SelectTypeCard() {
   const router = useRouter();
 
-  // const goToHotspot = useCallback(() => {
-  //   router.push(`/map/regist/hotspot`);
-  // }, []);
-
   const goToWifi = useCallback(() => {
     router.push(`/map/regist/wifi`);
   }, []);

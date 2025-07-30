@@ -1,17 +1,22 @@
 "use client";
 
 import { MapPin, MessageCircle, User, Wifi } from "lucide-react";
-import { Fragment } from "react";
+import { Fragment, PropsWithChildren } from "react";
 import NavigationButton from "@components/common/navigation/NavigationButton";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@lib/utils";
 
-export default function BottomNavigation() {
+interface BottomNavigationProps {
+  id?: string;
+}
+
+export default function BottomNavigation({ id }: PropsWithChildren<BottomNavigationProps>) {
   const path = usePathname();
   const isHidden = path.startsWith("/chat") && path.split("/").length > 2;
   return (
     <div
+      id={id}
       className={cn(
         "fixed bottom-0 z-50 w-[100dvw] lg:w-[375px] mx-auto shadow-nav shrink-0 bg-white",
         isHidden && "hidden"
