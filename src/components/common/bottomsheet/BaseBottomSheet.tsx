@@ -97,37 +97,41 @@ export default function BaseBottomSheet({
     <>
       {isOpen && (variant === "modal" || variant === "hybrid") && (
         <div
-          className="fixed inset-0 bg-black-60 z-40 w-[375px] h-[100dvh] mx-auto"
+          className="fixed inset-0 bg-black-60 z-40 w-[100dvw] lg:w-[375px] h-[100vh] mx-auto"
           onClick={onClose}
         />
       )}
 
       <motion.div
-        className={`absolute bottom-0 inset-0 flex w-[100dvw] lg:w-[375px] bg-white items-end justify-center z-30 overflow-hidden ${
-          (variant === "snap" || variant === "hybrid") && sheetY === 0
-            ? "rounded-t-0"
-            : "rounded-t-50"
-        }`}
+        className="fixed inset-0 flex items-end justify-center z-30 pointer-events-none overflow-y-hidden"
         dragConstraints={{ top: 0, bottom: 0 }}
-        animate={{ y: sheetY }}
+        style={{
+          WebkitOverflowScrolling: "touch",
+          touchAction: "none",
+          zIndex: zIndex ?? (variant === "modal" ? 99 : 30),
+        }}
+        onDragEnd={handleDragEnd}
+        drag="y"
       >
         <motion.div
-          className={`w-full h-full`}
-          dragConstraints={{ top: 0, bottom: 0 }}
-          onDragEnd={handleDragEnd}
-          drag="y"
+          className={`bottomSheet bg-white pointer-events-auto overflow-y-hidden ${
+            (variant === "snap" || variant === "hybrid") && sheetY === 0
+              ? "rounded-t-0"
+              : "rounded-t-50"
+          }`}
           style={{
+            width: "100dvw",
             height:
               variant === "snap" || variant === "hybrid"
                 ? `calc(100vh - ${HEADER_OFFSET + BOTTOM_OFFSET}px)`
                 : `${MODAL_MAX_HEIGHT}px`,
-            width: "100dvh",
-
+            marginBottom: variant === "snap" || variant === "hybrid" ? `${BOTTOM_OFFSET}px` : "0px",
             overflowY: "auto",
-            WebkitOverflowScrolling: "touch",
-            // touchAction: "none",
+            // WebkitOverflowScrolling: "touch",
+            touchAction: "none",
           }}
-          transition={{ type: "decay", damping: 30, stiffness: 200 }}
+          animate={{ y: sheetY }}
+          transition={{ type: "spring", damping: 30, stiffness: 300 }}
         >
           {children}
         </motion.div>

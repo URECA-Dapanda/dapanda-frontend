@@ -58,16 +58,8 @@ export default function DataPageContent() {
   return (
     <>
       <div className="h-[100%] w-full bg-primary2 datapagecontent">
-        {/* 왼쪽 상단 로고 */}
-        <div className="absolute top-[-90] left-[-35] z-20">
-          <Image src="/dpd-logo.svg" alt="logo" width={237} height={0} />
-        </div>
-        {/* 오른쪽 상단 로고 */}
-        <div className="absolute top-[-50] right-0 z-20">
-          <Image src="/dpd-main-logo.svg" alt="logo" width={96} height={0} />
-        </div>
         {/* 상단 필터 영역 */}
-        <div className="sticky top-0 z-10 bg-primary2 p-4 pt-60">
+        <div className="z-10 bg-primary2 p-4 pt-60">
           <DefaultFilterCard onSearch={() => setSheetOpen(true)} />
         </div>
         <div className="absolute bottom-24 right-24 z-35">

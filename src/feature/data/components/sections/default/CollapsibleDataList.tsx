@@ -15,13 +15,13 @@ export default function CollapsibleDataList({
 }: CollapsibleDataListProps) {
   return (
     <div className="relative w-full space-y-16">
-      <div className="relative min-h-[240px]">
+      <div className="relative h-[30vh] overflow-y-scroll">
         {!isExpanded ? (
-          <div className="relative h-[240px]">
+          <div className="relative h-[30vh]">
             {items.slice(0, 3).map((item, index) => (
               <div
-              key={`${item.productId}-${index}`}
-              className="absolute left-0 right-0"
+                key={`${item.productId}-${index}`}
+                className="absolute left-0 right-0"
                 style={{
                   top: index * 12,
                   zIndex: 10 - index,
