@@ -13,7 +13,7 @@ export default function BottomNavigation() {
   return (
     <div
       className={cn(
-        "bottom-0 z-35 h-[54px] bg-white border-none overflow-x-clip w-[100dvw] lg:w-[375px] shrink-0",
+        "absolute bottom-0 z-35 h-[54px] bg-white border-none overflow-x-clip w-[100dvw] lg:w-[375px] shrink-0",
         isHidden && "hidden"
       )}
     >

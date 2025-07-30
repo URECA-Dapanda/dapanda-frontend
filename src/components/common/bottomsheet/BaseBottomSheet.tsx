@@ -97,13 +97,13 @@ export default function BaseBottomSheet({
     <>
       {isOpen && (variant === "modal" || variant === "hybrid") && (
         <div
-          className="fixed inset-0 bg-black-60 z-40 w-[100dvw] lg:w-[375px] h-[100vh] mx-auto"
+          className="fixed inset-0 bg-black-60 z-40 w-[100dvw] lg:w-[375px] h-full mx-auto"
           onClick={onClose}
         />
       )}
 
       <motion.div
-        className="fixed inset-0 flex items-end justify-center z-30 pointer-events-none overflow-y-hidden"
+        className="fixed w-[100dvw] lg:w-[375px] mx-auto inset-0 flex items-end justify-center z-30 pointer-events-none overflow-y-hidden"
         dragConstraints={{ top: 0, bottom: 0 }}
         style={{
           WebkitOverflowScrolling: "touch",
@@ -127,7 +127,7 @@ export default function BaseBottomSheet({
                 : `${MODAL_MAX_HEIGHT}px`,
             marginBottom: variant === "snap" || variant === "hybrid" ? `${BOTTOM_OFFSET}px` : "0px",
             overflowY: "auto",
-            // WebkitOverflowScrolling: "touch",
+            WebkitOverflowScrolling: "touch",
             touchAction: "none",
           }}
           animate={{ y: sheetY }}
