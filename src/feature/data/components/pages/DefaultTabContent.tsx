@@ -47,7 +47,7 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
         getDataList({
           pageParam,
           sort: convertSortLabelToEnum(sortLabel),
-          size: 2,
+          size: 10,
           dataAmount: dataAmount ?? undefined,
         }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -74,7 +74,7 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
           {/* 오른쪽: 드롭다운 + 검색 버튼 */}
           <div className="flex gap-8 ml-auto">
             <UserDropdownMenu
-              options={dataSortOptions}
+              options={dataSortOptions(setSortLabel)}
               selectedLabel={sortLabel}
               onSelectLabel={setSortLabel}
             >

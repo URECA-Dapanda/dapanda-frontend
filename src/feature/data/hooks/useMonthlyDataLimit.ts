@@ -14,11 +14,11 @@ export const useMonthlyDataLimit = () => {
     });
   
     const remainingBuying = buyingQuery.data !== undefined
-      ? Math.max(0, MAX_MONTHLY_DATA_LIMIT_GB - buyingQuery.data)
+      ? Math.max(0, Math.round((MAX_MONTHLY_DATA_LIMIT_GB - buyingQuery.data) * 10) / 10)
       : undefined;
   
     const remainingSelling = sellingQuery.data !== undefined
-      ? Math.max(0, MAX_MONTHLY_DATA_LIMIT_GB - sellingQuery.data)
+      ? Math.max(0, Math.round((MAX_MONTHLY_DATA_LIMIT_GB - sellingQuery.data) * 10) / 10)
       : undefined;
   
     return {

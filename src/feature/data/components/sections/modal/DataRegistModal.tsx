@@ -35,7 +35,7 @@ export default function DataRegistModal({
   const [value, setValue] = useState([Math.min(defaultValues?.amount ?? 1, maxAmount)]);
   const [price, setPrice] = useState(defaultValues?.price?.toString() ?? "");
   const [isSplit, setIsSplit] = useState(defaultValues?.isSplitType ?? false);
-  const dataAmount = Number(value[0].toFixed(1));
+  const dataAmount = Math.round(value[0] * 10) / 10;
 
   const { recentPrice, avgPrice } = usePriceRecommendation();
   const { register } = useRegisterDataProduct();
