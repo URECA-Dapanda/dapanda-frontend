@@ -47,7 +47,10 @@ export const chatMenuOptions = (onReport: () => void, senderId?: number): Dropdo
   {
     label: "프로필 보기",
     icon: User,
-    action: { type: "link", href: senderId ? `/map/review?memberId=${senderId}` : "/map/review" },
+    action: {
+      type: "link",
+      href: senderId ? `/data/review?id=${senderId}&tab=review` : "/data/review",
+    },
   },
   {
     label: "신고하기",

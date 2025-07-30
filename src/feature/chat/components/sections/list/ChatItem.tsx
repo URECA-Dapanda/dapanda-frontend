@@ -33,9 +33,9 @@ export default function ChatItem({
   const handleAvatarClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (senderId) {
-      router.push(`/map/review?memberId=${senderId}`);
+      router.push(`/data/review?id=${senderId}&tab=review`);
     } else {
-      router.push("/map/review");
+      router.push("/data/review");
     }
   };
   return (
