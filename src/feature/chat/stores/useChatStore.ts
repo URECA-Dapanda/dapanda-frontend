@@ -18,7 +18,9 @@ export interface ChatRoomPreview {
 interface ChatStore {
   chatList: ChatRoomPreview[];
   addChatRoom: (room: ChatRoomPreview) => void;
-  setChatList: (rooms: ChatRoomPreview[]) => void;
+  setChatList: (
+    rooms: ChatRoomPreview[] | ((prev: ChatRoomPreview[]) => ChatRoomPreview[])
+  ) => void;
 }
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -27,5 +29,8 @@ export const useChatStore = create<ChatStore>((set) => ({
     set((state: ChatStore) => ({
       chatList: [room, ...state.chatList.filter((r) => r.chatRoomId !== room.chatRoomId)],
     })),
-  setChatList: (list: ChatRoomPreview[]) => set({ chatList: list }),
+  setChatList: (list) =>
+    set((state) => ({
+      chatList: typeof list === "function" ? list(state.chatList) : list,
+    })),
 }));
