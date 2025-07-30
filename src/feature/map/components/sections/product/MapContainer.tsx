@@ -32,27 +32,7 @@ export default function MapContainer() {
     if (mapRef.current) {
       mapRef.current.id = MAP_CONTAINER_ID;
     }
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        if (!window.naver?.maps || !mapRef.current) return;
-
-        const containerHasMap = !!mapRef.current.querySelector(".mapbox, .gm-style");
-        const mapMissing = !map || !containerHasMap;
-
-        if (mapMissing) {
-          const newMap = new window.naver.maps.Map(mapRef.current, {
-            center: new window.naver.maps.LatLng(37.5665, 126.978), // 서울 기본값 또는 이전 위치
-            zoom: 15,
-          });
-          useMapStore.getState().setMap(newMap);
-        }
-      }
-    };
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
-  }, [map]);
+  }, []);
 
   return (
     <>

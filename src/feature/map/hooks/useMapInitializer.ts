@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import type { MapType } from "@/feature/map/types/mapType";
 import { MAP_CONTAINER_ID, DEFAULT_LOCATION } from "@/feature/map/constants/map";
@@ -12,12 +12,11 @@ interface UseMapInitializerOptions {
 }
 
 export const useMapInitializer = (options?: UseMapInitializerOptions) => {
-  const mapRef = useRef<HTMLDivElement>(null);
   const { setMap, setStoreList, setMyPosition } = useMapStore();
 
   useEffect(() => {
     const tryInitMap = () => {
-      if (!window.naver || !window.naver.maps || !mapRef.current) {
+      if (!window.naver || !window.naver.maps) {
         setTimeout(tryInitMap, 100);
         return;
       }
