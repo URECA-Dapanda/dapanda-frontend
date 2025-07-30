@@ -25,8 +25,8 @@ export default function MapFloatingButtons({
     // SSR에서는 기본값 사용
     if (typeof window === "undefined") {
       return {
-        registerTop: `${56 + 24}px`, // 기본 헤더 높이 + 24px
-        bottomButtonsBottom: `${56 + 24}px`, // 기본 푸터 높이 + 24px
+        registerTop: `${56}px`, // 기본 헤더 높이 + 24px
+        bottomButtonsBottom: `${56}px`, // 기본 푸터 높이 + 24px
       };
     }
 
