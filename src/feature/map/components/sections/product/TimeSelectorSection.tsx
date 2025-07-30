@@ -64,12 +64,14 @@ export default function TimeSelectorSection({
       <div className="flex items-center justify-between mb-4">
         <h3 className="title-md">이용할 시간</h3>
         {showEditButton && (
-          <div className="flex gap-6">
-            <ButtonComponent variant="outlineGray" size="sm" onClick={onDeleteClick}>
-              <Trash2 className="w-12 h-12 mr-2" />글 삭제하기
+          <div className="flex gap-4">
+            <ButtonComponent variant="outlineGray" size="xs" onClick={onDeleteClick}>
+              <Trash2 className="w-12 h-12 mr-2" />
+              삭제하기
             </ButtonComponent>
-            <ButtonComponent variant="outlineGray" size="sm" onClick={onEditClick}>
-              <Pencil className="w-12 h-12 mr-2" />글 수정하기
+            <ButtonComponent variant="outlineGray" size="xs" onClick={onEditClick}>
+              <Pencil className="w-12 h-12 mr-2" />
+              수정하기
             </ButtonComponent>
           </div>
         )}

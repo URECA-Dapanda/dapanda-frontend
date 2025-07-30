@@ -49,7 +49,6 @@ export const usePostWifiRegister = ({ form, onSuccess, onSubmit }: UsePostWifiRe
       }
     },
     onSuccess: () => {
-      console.log(form);
       onSubmit?.({
         ...form,
         lat: parseFloat(lat!),
