@@ -22,6 +22,14 @@ export default function MapFloatingButtons({
 
   // 헤더/푸터 높이를 기반으로 동적 위치 계산
   const dynamicPositions = useMemo(() => {
+    // SSR에서는 기본값 사용
+    if (typeof window === "undefined") {
+      return {
+        registerTop: `${56 + 24}px`, // 기본 헤더 높이 + 24px
+        bottomButtonsBottom: `${56 + 24}px`, // 기본 푸터 높이 + 24px
+      };
+    }
+
     const header = document.getElementById("appHead");
     const footer = document.getElementById("appFooter");
 

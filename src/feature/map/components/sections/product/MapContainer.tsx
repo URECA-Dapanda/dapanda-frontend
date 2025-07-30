@@ -51,6 +51,7 @@ export default function MapContainer() {
 
   // 푸터 기준으로 MapItemCard 위치 계산
   const cardBottomPosition = (() => {
+    if (typeof window === "undefined") return "80px"; // SSR에서는 기본값
     const footer = document.getElementById("appFooter");
     const footerHeight = footer?.offsetHeight ?? 56;
     return `${footerHeight + 24}px`; // 푸터 위 24px
