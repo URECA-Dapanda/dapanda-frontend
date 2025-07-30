@@ -254,7 +254,10 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
       />
 
       {product && (
-        <div className="fixed top-52 left-0 right-0 z-40 px-24 py-32 bg-white w-[100dvw] lg:w-[375px] mx-auto">
+        <div
+          className="fixed top-52 left-0 right-0 z-40 px-24 pt-24 pb-12
+         bg-white w-[100dvw] lg:w-[375px] mx-auto"
+        >
           <ChatPostCard
             title={product.title}
             pricePer10min={product.pricePer10min}
@@ -263,7 +266,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto px-24 pb-24 pt-100" onScroll={handleScroll}>
+      <div className="flex-1 overflow-y-auto px-24 pb-24 pt-180" onScroll={handleScroll}>
         {loadingMore && (
           <div className="text-center text-sm text-gray-500 py-4">이전 내역을 불러오는 중...</div>
         )}
