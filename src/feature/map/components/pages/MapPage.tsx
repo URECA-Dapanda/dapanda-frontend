@@ -50,7 +50,7 @@ export default function MapPage() {
 
   return (
     <div className="relative w-full" style={{ height: mapHeight }}>
-      <MapContainer mapHeight={mapHeight} />
+      <MapContainer />
       <MapFloatingButtons
         onOpenModal={() => setIsModalOpen(true)}
         onOpenSheet={() => setIsSnapOpen(true)}
