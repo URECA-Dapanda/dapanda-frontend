@@ -5,11 +5,11 @@ import { ReactNode, Suspense } from "react";
 export default function FeatureLayout({ children }: { children: ReactNode }) {
   return (
     <div className="relative w-[100dvw] lg:w-[375px] h-[100vh] mx-auto bg-white overflow-hidden flex flex-col">
-      <AppHeader />
+      <AppHeader id="appHead" />
       <main className="flex-1 overflow-y-auto py-[54px] antialiased">
         <Suspense>{children}</Suspense>
       </main>
-      <BottomNavigation />
+      <BottomNavigation id="appFooter" />
     </div>
   );
 }

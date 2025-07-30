@@ -9,10 +9,11 @@ import { usePathname } from "next/navigation";
 import { useHeaderStore } from "@stores/useHeaderStore";
 
 interface AppHeaderProps {
+  id?: string;
   variant?: string;
 }
 
-export default function AppHeader({ children }: PropsWithChildren<AppHeaderProps>) {
+export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderProps>) {
   const path = usePathname();
   const isVisible = useHeaderStore((state) => state.isVisible);
   const pathVariant = useMemo(() => {
@@ -82,6 +83,7 @@ export default function AppHeader({ children }: PropsWithChildren<AppHeaderProps
   }, [pathVariant]);
   return (
     <header
+      id={id}
       className={cn(
         "fixed top-0 z-50 flex h-[54px] shrink-0 w-[100dvw] lg:w-[375px] border-none transition-opacity mx-auto flex-row justify-between px-16 items-center overflow-x-clip",
         pathVariant === "base" ? "overflow-y-visible bg-primary2" : "shadow-header bg-white"
