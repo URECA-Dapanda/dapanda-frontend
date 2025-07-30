@@ -15,7 +15,7 @@ export function WifiTopSheetContent({ data, expanded }: { data: WifiData; expand
 
       <div className="flex flex-col gap-8 pt-12">
         <p className="body-xs">
-          {data.openTime} ~ {data.closeTime}
+          {data.startTime} ~ {data.endTime}
         </p>
         <p className="body-xs">{data.pricePer10min}원/10분</p>
         {expanded && <p className="body-sm">{data.description}</p>}
