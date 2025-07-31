@@ -23,8 +23,9 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
         return pathLen === 2 ? (!isVisible ? "base" : "normal") : "detail";
       case "map":
       case "mypage":
-      case "chat":
         return pathLen === 2 ? "normal" : "detail";
+      case "chat":
+        return pathLen === 2 ? "normal" : "hidden";
       default:
         return "normal";
     }
@@ -79,6 +80,8 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
             {children}
           </>
         );
+      case "hidden":
+        return null;
     }
   }, [pathVariant]);
   return (
