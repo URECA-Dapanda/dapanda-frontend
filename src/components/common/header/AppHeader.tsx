@@ -3,10 +3,11 @@ import { PropsWithChildren, useMemo } from "react";
 import HeaderTimer from "./HeaderTimer";
 import Image from "next/image";
 import { cn } from "@lib/utils";
-import BackButton from "./BackButton";
-import HeaderTitle from "./HeaderTitle";
+import BackButton from "@components/common/header/BackButton";
+import HeaderTitle from "@components/common/header/HeaderTitle";
 import { usePathname } from "next/navigation";
 import { useHeaderStore } from "@stores/useHeaderStore";
+import NotificationIcon from "@components/common/NotificationIcon";
 
 interface AppHeaderProps {
   id?: string;
@@ -35,6 +36,7 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
     () => (
       <>
         <HeaderTimer />
+        <NotificationIcon />
       </>
     ),
     []
