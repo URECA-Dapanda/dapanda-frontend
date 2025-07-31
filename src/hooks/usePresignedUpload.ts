@@ -33,6 +33,10 @@ export const usePresignedUpload = () => {
     await Promise.all(
       presignResults.map(async (result, idx) => {
         const file = files[idx];
+        console.log("📦 file", file);
+        console.log("📦 file.type", file.type); // 예: image/png
+        console.log("📦 presigned URL", result.url);
+
         await fetch(result.url, {
           method: "PUT",
           headers: {
@@ -42,6 +46,7 @@ export const usePresignedUpload = () => {
         });
       })
     );
+    console.log(presignResults)
 
     // S3 접근 가능한 publicUrl 반환
     return presignResults.map((r) => r.publicUrl);
