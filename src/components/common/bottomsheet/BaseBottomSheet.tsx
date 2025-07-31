@@ -105,7 +105,7 @@ export default function BaseBottomSheet({
 
       <motion.div
         className={cn(
-          "absolute w-[100dvw] lg:w-[375px] mx-auto inset-0 flex items-end justify-center z-30 pointer-events-none overflow-y-hidden",
+          "fixed bottom-0 w-[100dvw] lg:w-[375px] mx-auto inset-0 flex items-end justify-center z-30 pointer-events-none overflow-y-hidden",
           isOpen || variant === "snap" ? "" : "hidden"
         )}
         dragConstraints={{ top: 0, bottom: 0 }}

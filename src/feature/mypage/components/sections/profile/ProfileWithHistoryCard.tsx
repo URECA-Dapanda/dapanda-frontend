@@ -23,7 +23,7 @@ export default function ProfileWithHistoryCard() {
         <LayoutBox layout="flex" direction="column" gap={8}>
           <div className="flex flex-row justify-start gap-12">
             <p className="title-sm">{data?.name ?? "알 수 없음"}</p>
-            <Rating defaultValue={4} readOnly value={4}>
+            <Rating defaultValue={data?.averageRating} readOnly value={data?.averageRating}>
               <RatingButton className="text-primary" />
             </Rating>
           </div>
