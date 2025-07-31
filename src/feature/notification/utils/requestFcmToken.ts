@@ -1,6 +1,6 @@
 import { getToken, getMessaging } from "firebase/messaging";
 import { app } from "@/lib/firebase";
-import { postFcmToken } from "@feature/notification/api/requestNotification";
+import { postFcmToken } from "@feature/notification/api/postFcmToken";
 
 export const requestFcmToken = async () => {
   // SSR 방지용: window 없는 경우 return

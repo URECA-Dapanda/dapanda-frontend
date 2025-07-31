@@ -25,11 +25,13 @@ export default function ReviewItem({ data, handleClick }: ReviewItemProps) {
   return (
     <CardComponent variant="outlined" color={"border-gray-200"} size="sm">
       <CardContentComponent size={"sm"}>
-        <LayoutBox layout="flex" direction="row" width="fit" gap={8}>
+        <LayoutBox layout="flex" direction="row" width="fit" height="full" gap={8}>
           <AvatarIcon size="medium" />
           <LayoutBox layout="flex" direction="column" gap={2} width="fit">
-            <div className="flex flex-row justify-between gap-12 w-[220px]">
-              <p className="title-sm truncate">{data.reviewerName}</p>
+            <div className="flex flex-row justify-between gap-12 w-full">
+              <p className="title-sm truncate w-[200px]">
+                {data.reviewerName ?? data.revieweeName}
+              </p>
               <Rating defaultValue={data.rating} readOnly value={data.rating}>
                 <RatingButton className="text-primary" />
               </Rating>
@@ -41,7 +43,7 @@ export default function ReviewItem({ data, handleClick }: ReviewItemProps) {
         <ButtonComponent
           variant={"primary2"}
           size={"xxs"}
-          className="absolute bottom-12 right-20 caption-md"
+          className="absolute bottom-20 right-20 caption-md"
           onClick={handleClick}
           value={data.reviewId}
           data-name={data.reviewerName}

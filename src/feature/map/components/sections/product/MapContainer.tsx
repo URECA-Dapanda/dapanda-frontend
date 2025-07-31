@@ -18,7 +18,7 @@ export default function MapContainer() {
   const storeList = useMapStore((state) => state.storeList);
   const selectedStore = useMapStore((state) => state.selectedStore);
   const setSelectedStore = useMapStore((state) => state.setSelectedStore);
-  const mapHeight = useMapHeight();
+  const { mapHeight, footerHeight } = useMapHeight();
 
   useMapInitializer();
   useMapRefresh(map);
@@ -40,22 +40,22 @@ export default function MapContainer() {
     if (!map) return;
 
     const updateMapSize = () => {
-      const mapWidth = window.innerWidth;
-      const heightValue = parseInt(mapHeight.replace(/\D/g, "")); // "500px" -> 500
+      const mapWidth = mapRef.current?.offsetWidth ?? window.innerWidth;
+      const heightValue = parseInt(mapHeight.replace(/\D/g, ""));
 
       map.setSize(new window.naver.maps.Size(mapWidth, heightValue));
+
+      const fullWidth = window.innerWidth;
+      const offsetX = (fullWidth - mapWidth) / 2;
+
+      const isDesktop = fullWidth > 768;
+      if (isDesktop && offsetX > 0) {
+        map.panBy(new naver.maps.Point(-offsetX, 0));
+      }
     };
 
     updateMapSize();
   }, [map, mapHeight]);
-
-  // 푸터 기준으로 MapItemCard 위치 계산
-  const cardBottomPosition = (() => {
-    if (typeof window === "undefined") return "80px"; // SSR에서는 기본값
-    const footer = document.getElementById("appFooter");
-    const footerHeight = footer?.offsetHeight ?? 56;
-    return `${footerHeight + 24}px`; // 푸터 위 24px
-  })();
 
   return (
     <>
@@ -69,7 +69,7 @@ export default function MapContainer() {
             exit={{ opacity: 0, y: 40 }}
             transition={{ duration: 0.3 }}
             className="absolute bottom-24 left-0 w-full px-24 z-50"
-            style={{ bottom: cardBottomPosition }}
+            style={{ bottom: footerHeight }}
           >
             <div className="bg-white rounded-2xl shadow-lg pt-32 px-16 pb-16 relative">
               <button

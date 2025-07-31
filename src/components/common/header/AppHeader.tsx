@@ -12,6 +12,7 @@ import { UserDropdownMenu } from "@/components/common/dropdown/UserDropdownMenu"
 import { chatMenuOptions } from "@/components/common/dropdown/dropdownConfig";
 import ReportModal from "@/components/common/modal/ReportModal";
 import { useState } from "react";
+import NotificationIcon from "@components/common/NotificationIcon";
 
 interface AppHeaderProps {
   id?: string;
@@ -44,6 +45,7 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
     () => (
       <>
         <HeaderTimer />
+        <NotificationIcon />
       </>
     ),
     []

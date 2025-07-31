@@ -20,13 +20,13 @@ export default function PurchaseHistoryList() {
     queryKey: ["api/trades/purchase-history"],
     queryFn: ({ pageParam }) => getPurchaseHistoryList({ pageParam }),
     getNextPageParam: (lastPage) => lastPage.nextCursor,
-    estimateSize: () => 160,
+    estimateSize: () => 130,
     mode: "button",
   });
 
   return (
     <>
-      <TabTitle listLength={totalNum ?? 0}></TabTitle>
+      <TabTitle listLength={totalNum ?? 0}>구매 내역</TabTitle>
       <VirtualizedInfiniteList
         parentRef={parentRef}
         rowVirtualizer={rowVirtualizer}

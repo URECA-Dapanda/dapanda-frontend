@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useMotionValue } from "framer-motion";
+import { useEffect } from "react";
+import { motion, useMotionValue, animate } from "framer-motion";
 import { Trash2 } from "lucide-react";
 
 interface NotificationCardProps {
@@ -19,7 +20,18 @@ export default function NotificationCard({
   onDelete,
 }: NotificationCardProps) {
   const x = useMotionValue(0);
+  
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest(`#card-${id}`)) {
+        animate(x, 0);
+      }
+    };
 
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, [id]);
   return (
     <div className="relative overflow-hidden rounded-20">
       <div className="absolute inset-0 flex justify-end items-center pr-20 bg-white z-0">

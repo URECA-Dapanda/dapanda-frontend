@@ -15,7 +15,7 @@ function isNumber(value: unknown): value is number {
 }
 
 export async function getPurchaseHistoryList({
-  size = 2,
+  size = 4,
   pageParam,
 }: {
   pageParam?: number | unknown;
