@@ -8,6 +8,7 @@ import { formatDataSize } from "@lib/formatters";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
 import dayjs from "dayjs";
+import WriteReview from "./WriteReview";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
@@ -63,6 +64,7 @@ export default function PurchaseHistoryCard({ data }: PurchaseHistoryCardProps) 
             거래 상품:{" "}
             {data.title !== "" ? data.title : `${formatDataSize(data.dataAmount)} 모바일 데이터`}
           </p>
+          <WriteReview tradeId={data.tradeId} />
         </LayoutBox>
       </LayoutBox>
     </ItemCard>
