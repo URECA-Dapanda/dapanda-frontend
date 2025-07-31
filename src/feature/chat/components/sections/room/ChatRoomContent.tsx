@@ -44,7 +44,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   // 중복 요청 방지를 위한 ref들
   const lastReadMessageId = useRef<number | null>(null);
   const isExiting = useRef(false);
-  const abortControllerRef = useRef<AbortController | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
   const lastProductId = useRef<string | null>(null);
 
   const { subscribe, unsubscribe, sendMessage, setActiveChatRoomId } = useWebSocketStore();
@@ -97,8 +97,8 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   useEffect(() => {
     if (!chatRoomId) return;
 
-    abortControllerRef.current?.abort();
-    abortControllerRef.current = new AbortController();
+    abortRef.current?.abort();
+    abortRef.current = new AbortController();
 
     setMessages([]);
     setLoadingMore(false);
@@ -110,7 +110,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
     getChatHistory(chatRoomId)
       .then((response) => {
-        if (abortControllerRef.current?.signal.aborted) return;
+        if (abortRef.current?.signal.aborted) return;
 
         const messagesWithSenderId = addSenderIdToMessages(response.data, response.memberId);
         setMessages(messagesWithSenderId);
@@ -134,7 +134,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
       });
 
     return () => {
-      abortControllerRef.current?.abort();
+      abortRef.current?.abort();
     };
   }, [chatRoomId]);
 
