@@ -48,7 +48,7 @@ PropsWithChildren<SlidingTabsProps>) {
     }
     const params = new URLSearchParams(searchParams);
     params.set("tab", next);
-    router.push(`?${params.toString()}`);
+    router.replace(`?${params.toString()}`);
   };
 
   const styles = {

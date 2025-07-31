@@ -19,8 +19,6 @@ export default function DataStateComponent() {
     queryKey: ["api/members/selling-data"],
   });
 
-  console.log("WE", sellingData);
-
   return (
     <div className="flex flex-row gap-12 justify-between items-center">
       <DataUsageDonut

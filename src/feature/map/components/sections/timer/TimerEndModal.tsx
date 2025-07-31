@@ -38,7 +38,7 @@ export default function TimerEndModal({ open, onClose }: Props) {
           홈으로 돌아가기
         </button>
         <button
-          onClick={() => router.push("/map/review")}
+          onClick={() => router.push("/map/review/regist")}
           className="bg-primary text-white font-semibold rounded-lg py-12"
         >
           후기 작성하기
