@@ -123,9 +123,7 @@ export default function BaseBottomSheet({
               ? "rounded-t-0"
               : "rounded-t-50"
           } ${
-            variant === "snap" || variant === "hybrid"
-              ? `h-[calc(100dvh-${HEADER_OFFSET + BOTTOM_OFFSET}px-safe-area-top-safe-area-bottom)]`
-              : `${MODAL_MAX_HEIGHT}px`
+            variant === "snap" || variant === "hybrid" ? `h-sheet-safe` : `${MODAL_MAX_HEIGHT}px`
           }`}
           style={{
             width: "100dvw",

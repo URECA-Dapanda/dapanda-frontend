@@ -11,12 +11,13 @@ module.exports = {
   theme: {
     extend: {
       height: {
-        "main-safe":
-          "calc(100dvh - 54px - 54px - env(safe-area-inset-top) - env(safe-area-inset-bottom))",
+        "main-safe": "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom))",
+        "sheet-safe":
+          "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) - 108px",
       },
       padding: {
-        "safe-top": "env(safe-area-inset-top)",
-        "safe-bottom": "env(safe-area-inset-bottom)",
+        "safe-top": "calc(env(safe-area-inset-top) + 54px)",
+        "safe-bottom": "calc(env(safe-area-inset-bottom) + 54px)",
       },
       animation: {
         "spin-slow": "spin 2s linear infinite",

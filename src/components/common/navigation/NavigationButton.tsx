@@ -18,7 +18,7 @@ function NavigationButton({ target, children }: PropsWithChildren<NavigationButt
 
   return (
     <button
-      className={`flex flex-col items-center hover:cursor-pointer py-8 ${
+      className={`flex flex-col items-center hover:cursor-pointer py-6 ${
         target === currentPath ? "text-primary" : "text-gray-400"
       }`}
       value={target}

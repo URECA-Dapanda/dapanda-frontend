@@ -18,7 +18,7 @@ export default function BottomNavigation({ id }: PropsWithChildren<BottomNavigat
     <div
       id={id}
       className={cn(
-        "fixed bottom-0 z-50 w-[100dvw] lg:w-[375px] mx-auto shadow-nav shrink-0 bg-white",
+        "fixed bottom-0 h-[54px] z-50 w-[100dvw] lg:w-[375px] mx-auto shadow-nav shrink-0 bg-white",
         isHidden && "hidden"
       )}
     >
