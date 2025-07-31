@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import NotificationList, { NotificationItem } from "@/feature/notification/components/sections/NotificationList";
-import { fetchNotifications, deleteNotification } from "@feature/notification/api/requestNotification";
+// import { fetchNotifications, deleteNotification } from "@feature/notification/api/requestNotification";
 
 export default function NotificationPageContent() {
   const [items, setItems] = useState<NotificationItem[]>([]);
