@@ -96,7 +96,7 @@ export default function BaseBottomSheet({
 
   return (
     <>
-      {isOpen && (variant === "modal" || variant === "hybrid") && (
+      {isOpen && variant === "modal" && (
         <div
           className="fixed inset-0 bg-black-60 z-60 w-[100dvw] lg:w-[375px] h-full mx-auto"
           onClick={onClose}
@@ -129,7 +129,7 @@ export default function BaseBottomSheet({
               variant === "snap" || variant === "hybrid"
                 ? `calc(100vh - ${HEADER_OFFSET + BOTTOM_OFFSET}px)`
                 : `${MODAL_MAX_HEIGHT}px`,
-            marginBottom: variant === "snap" || variant === "hybrid" ? `${BOTTOM_OFFSET}px` : "0px",
+            marginBottom: variant === "snap" ? `${BOTTOM_OFFSET}px` : "0px",
             overflowY: "auto",
             WebkitOverflowScrolling: "touch",
             touchAction: "none",
