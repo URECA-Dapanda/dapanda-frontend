@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { formatDateDivider } from "@/lib/time";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import ReportModal from "@/components/common/modal/ReportModal";
@@ -14,8 +14,6 @@ import { getChatHistory } from "@/feature/chat/api/getChatHistory";
 import { markMessageAsRead } from "@/feature/chat/api/chatRoomRequest";
 import ChatHeader from "@feature/chat/components/sections/room/ChatHeader";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
-import { useChatStore } from "@feature/chat/stores/useChatStore";
-import type { ChatRoomPreview } from "@feature/chat/stores/useChatStore";
 import { isTemporaryMessage, formatMessageDate } from "@/feature/chat/utils/chatUtils";
 
 interface ChatRoomContentProps {
@@ -43,29 +41,55 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
 
+  // 중복 요청 방지를 위한 ref들
+  const lastReadMessageId = useRef<number | null>(null);
+  const isExiting = useRef(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const lastProductId = useRef<string | null>(null);
+
   const { subscribe, unsubscribe, sendMessage, setActiveChatRoomId } = useWebSocketStore();
 
-  // 메시지 정렬 함수 (컴포넌트 내부로 이동)
+  const addSenderIdToMessages = useCallback((messages: ChatSocketMessage[], memberId: number) => {
+    return messages.map((message) => ({
+      ...message,
+      senderId: message.senderId || (message.isMine ? memberId : undefined),
+    }));
+  }, []);
+
+  const markAsRead = useCallback((messageId: number) => {
+    if (lastReadMessageId.current !== messageId) {
+      markMessageAsRead(messageId)
+        .then(() => {
+          lastReadMessageId.current = messageId;
+        })
+        .catch((error) => {
+          console.error("읽음 처리 실패:", messageId, error);
+        });
+    }
+  }, []);
+
+  const getLatestMessageId = useCallback((messages: ChatSocketMessage[]) => {
+    const realMessages = messages.filter((message) => !isTemporaryMessage(message));
+    if (realMessages.length > 0) {
+      const latestMessage = realMessages[realMessages.length - 1];
+      return Number(latestMessage.chatMessageId);
+    }
+    return null;
+  }, []);
+
   const sortMessages = useCallback((messages: ChatSocketMessage[]): ChatSocketMessage[] => {
     return messages.sort((a, b) => {
       const aIsTemp = isTemporaryMessage(a);
       const bIsTemp = isTemporaryMessage(b);
-
-      // 둘 다 임시 메시지인 경우 createdAt으로 정렬
       if (aIsTemp && bIsTemp) {
         return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
       }
-
-      // 둘 다 실제 메시지인 경우 chatMessageId로 정렬
       if (!aIsTemp && !bIsTemp) {
         return Number(a.chatMessageId) - Number(b.chatMessageId);
       }
-
-      // 임시 메시지는 실제 메시지보다 앞에 배치 (생성 시간순)
       if (aIsTemp && !bIsTemp) {
         return -1;
       }
-
       return 1;
     });
   }, []);
@@ -73,28 +97,67 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   useEffect(() => {
     if (!chatRoomId) return;
 
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = new AbortController();
+
+    setMessages([]);
+    setLoadingMore(false);
+    setHasMore(true);
+    setOldestMessageId(undefined);
+    setCurrentMemberId(undefined);
+    lastReadMessageId.current = null;
+    isExiting.current = false;
+
     getChatHistory(chatRoomId)
       .then((response) => {
-        setMessages(response.data);
+        if (abortControllerRef.current?.signal.aborted) return;
+
+        const messagesWithSenderId = addSenderIdToMessages(response.data, response.memberId);
+        setMessages(messagesWithSenderId);
         setCurrentMemberId(response.memberId || undefined);
+
         if (response.data.length > 0) {
           const oldestMessage = response.data[response.data.length - 1];
           setOldestMessageId(Number(oldestMessage.chatMessageId));
         }
         setHasMore(response.pageInfo.hasNext);
+
+        // 채팅방 진입 시 마지막 메시지에 대해 read-status 요청
+        if (response.data.length > 0) {
+          const latestMessage = response.data[0];
+          const latestMessageId = Number(latestMessage.chatMessageId);
+          markAsRead(latestMessageId);
+        }
       })
       .catch((err) => {
         console.error("채팅 기록 불러오기 실패:", err);
       });
+
+    return () => {
+      abortControllerRef.current?.abort();
+    };
   }, [chatRoomId]);
 
-  // 제품 정보 가져오기
   useEffect(() => {
-    if (!productId) return;
+    if (!productId) {
+      setProduct(null);
+      lastProductId.current = null;
+      return;
+    }
+    if (lastProductId.current === productId) {
+      return;
+    }
+
+    lastProductId.current = productId;
+
+    const abortController = new AbortController();
 
     const fetchProductInfo = async () => {
       try {
         const productData = await getMapDetailById(productId);
+
+        if (abortController.signal.aborted) return;
+
         setProduct({
           productId: productData.productId,
           itemId: productData.itemId,
@@ -104,11 +167,17 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
           memberId: productData.memberId,
         });
       } catch (error) {
-        console.error("상품 정보 가져오기 실패:", error);
+        if (!abortController.signal.aborted) {
+          console.error("상품 정보 가져오기 실패:", error);
+        }
       }
     };
 
     fetchProductInfo();
+
+    return () => {
+      abortController.abort();
+    };
   }, [productId]);
 
   useEffect(() => {
@@ -121,59 +190,57 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     };
   }, [chatRoomId, setActiveChatRoomId]);
 
-  // 채팅방을 나갈 때 unreadCount를 0으로 만드는 함수
   const resetUnreadCountOnExit = useCallback(() => {
-    const { updateUnreadCount } = useWebSocketStore.getState();
-    updateUnreadCount();
-
-    // 해당 채팅방의 unreadCount를 로컬에서 즉시 0으로
-    const { setChatList } = useChatStore.getState();
-    setChatList((prevChatList: ChatRoomPreview[]) => {
-      return prevChatList.map((chat: ChatRoomPreview) => {
-        if (chat.chatRoomId === Number(chatRoomId)) {
-          return {
-            ...chat,
-            unreadCount: 0,
-          };
-        }
-        return chat;
-      });
-    });
-
-    // 확실하게 read-status 요청 (실제로 마지막으로 읽은 메시지)
-    if (messages.length > 0) {
-      // 실제 메시지만 필터링 (임시 메시지 제외)
-      const realMessages = messages.filter((message) => !isTemporaryMessage(message));
-
-      if (realMessages.length > 0) {
-        // 실제 메시지 중 가장 최신 메시지 찾기
-        const latestMessage = realMessages[realMessages.length - 1];
-        const latestMessageId = Number(latestMessage.chatMessageId);
-
-        console.log("채팅방 나갈 때 마지막 메시지 ID:", latestMessageId);
-
-        // 동기적으로 read-status 요청
-        markMessageAsRead(latestMessageId)
-          .then(() => {
-            console.log("채팅방 나갈 때 read-status 성공:", latestMessageId);
-          })
-          .catch((error) => {
-            console.error("채팅방 나갈 때 read-status 실패:", error);
-          });
-      }
+    if (isExiting.current) {
+      return;
     }
-  }, [messages, chatRoomId]);
+    isExiting.current = true;
+    const latestMessageId = getLatestMessageId(messages);
+    if (latestMessageId) {
+      markAsRead(latestMessageId);
+    }
+  }, [messages, chatRoomId, getLatestMessageId, markAsRead]);
 
-  // 읽음 처리 (채팅방 나갈 때만)
   useEffect(() => {
-    // 채팅방을 나갈 때 unreadCount를 0으로 만들기
+    let hasExecuted = false;
+
+    const handleBeforeUnload = () => {
+      if (!hasExecuted) {
+        hasExecuted = true;
+        resetUnreadCountOnExit();
+      }
+    };
+
+    const handlePopState = () => {
+      if (!hasExecuted) {
+        hasExecuted = true;
+        resetUnreadCountOnExit();
+      }
+    };
+
+    // 이벤트 리스너 등록
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("popstate", handlePopState);
+
     return () => {
-      resetUnreadCountOnExit();
+      if (!hasExecuted) {
+        hasExecuted = true;
+        resetUnreadCountOnExit();
+      }
+
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("popstate", handlePopState);
     };
   }, [resetUnreadCountOnExit]);
 
+  useEffect(() => {
+    const latestMessageId = getLatestMessageId(messages);
+    if (latestMessageId) {
+      markAsRead(latestMessageId);
+    }
+  }, [messages, markAsRead, getLatestMessageId]);
+
   const addMessage = async (text: string) => {
-    // WebSocket으로 메시지 전송 (임시 ID 없이)
     try {
       const messagePayload = JSON.stringify({
         message: text,
@@ -185,31 +252,14 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     }
   };
 
-  // WebSocket 메시지 수신 핸들러 수정
-  useEffect(() => {
-    if (!chatRoomId) return;
-
-    // WebSocket 연결 상태 확인
-    const { isConnected, subscribe, unsubscribe } = useWebSocketStore.getState();
-
-    if (!isConnected) {
-      return;
-    }
-
-    const handleMessage = (msg: ChatSocketMessage) => {
+  // WebSocket 메시지 수신 핸들러
+  const handleMessage = useCallback(
+    (msg: ChatSocketMessage) => {
       const data = typeof msg === "string" ? JSON.parse(msg) : msg;
-
-      console.log("WebSocket message received:", {
-        chatMessageId: data.chatMessageId,
-        isMine: data.isMine,
-        clientTempId: data.clientTempId,
-        message: data.message,
-        senderId: data.senderId,
-      });
 
       const incomingMessage: ChatSocketMessage = {
         chatMessageId: data.chatMessageId,
-        isMine: data.isMine,
+        isMine: data.senderId === currentMemberId,
         message: data.message,
         createdAt: data.createdAt,
         senderId: data.senderId,
@@ -217,44 +267,40 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
       // 중복 방지 로직
       setMessages((prev) => {
-        // 일반적인 중복 방지 (동일한 chatMessageId)
         if (prev.some((m) => m.chatMessageId === incomingMessage.chatMessageId)) {
           return prev;
         }
 
         const newMessages = [...prev, incomingMessage];
 
-        // 새 메시지가 추가된 후, 실제 메시지 중 가장 최신 메시지만 read-status 요청
-        const realMessages = newMessages.filter((message) => !isTemporaryMessage(message));
-
-        if (realMessages.length > 0) {
-          // 실제 메시지 중 가장 최신 메시지만 read-status 요청
-          const latestMessage = realMessages[realMessages.length - 1];
-          const latestMessageId = Number(latestMessage.chatMessageId);
-
-          markMessageAsRead(latestMessageId)
-            .then(() => {
-              const { updateUnreadCount } = useWebSocketStore.getState();
-              updateUnreadCount();
-            })
-            .catch((error) => {
-              console.error("메시지 읽음 처리 실패:", error);
-            });
-        }
+        // 새 메시지가 추가됨
+        const { updateUnreadCount } = useWebSocketStore.getState();
+        updateUnreadCount();
 
         return newMessages;
       });
-    };
+    },
+    [currentMemberId]
+  );
+
+  useEffect(() => {
+    if (!chatRoomId) return;
+
+    const { isConnected } = useWebSocketStore.getState();
+
+    if (!isConnected) {
+      return;
+    }
 
     subscribe(chatRoomId, handleMessage);
 
     return () => {
       unsubscribe(chatRoomId);
     };
-  }, [chatRoomId, subscribe, unsubscribe]);
+  }, [chatRoomId, subscribe, unsubscribe, handleMessage]);
 
   // 이전 메시지 불러오기
-  const loadMoreMessages = async () => {
+  const loadMoreMessages = useCallback(async () => {
     if (loadingMore || !hasMore || !oldestMessageId) return;
 
     setLoadingMore(true);
@@ -262,14 +308,14 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
       const response = await getChatHistory(chatRoomId, oldestMessageId, 20);
 
       if (response.data.length > 0) {
-        setMessages((prev) => [...prev, ...response.data]);
+        const messagesWithSenderId = addSenderIdToMessages(response.data, response.memberId);
+        setMessages((prev) => [...prev, ...messagesWithSenderId]);
 
         const newOldestMessage = response.data[response.data.length - 1];
         setOldestMessageId(Number(newOldestMessage.chatMessageId));
 
         setHasMore(response.pageInfo.hasNext);
 
-        // memberId가 아직 설정되지 않았다면 설정
         if (!currentMemberId && response.memberId) {
           setCurrentMemberId(response.memberId || undefined);
         }
@@ -281,29 +327,30 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     } finally {
       setLoadingMore(false);
     }
-  };
+  }, [loadingMore, hasMore, oldestMessageId, chatRoomId, currentMemberId]);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop } = e.currentTarget;
+  const handleScroll = useCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      const { scrollTop } = e.currentTarget;
 
-    if (scrollTop < 100 && hasMore && !loadingMore) {
-      loadMoreMessages();
-    }
-  };
+      if (scrollTop < 100 && hasMore && !loadingMore) {
+        loadMoreMessages();
+      }
+    },
+    [hasMore, loadingMore, loadMoreMessages]
+  );
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
   }, [messages.length]);
 
-  // 개선된 정렬 로직 적용
-  const sortedMessages = sortMessages([...messages]);
-
-  const groupedMessages = groupMessagesByDate(sortedMessages);
+  const sortedMessages = useMemo(() => sortMessages([...messages]), [messages, sortMessages]);
+  const groupedMessages = useMemo(() => groupMessagesByDate(sortedMessages), [sortedMessages]);
 
   const urlSenderName = searchParams.get("senderName");
   const urlSenderId = searchParams.get("senderId");
   const senderName = urlSenderName || product?.memberName || "상대방";
-  const senderId = urlSenderId ? parseInt(urlSenderId) : product?.memberId;
+  const senderId = urlSenderId ? parseInt(urlSenderId, 10) : product?.memberId;
 
   return (
     <div className="flex flex-col h-screen">
@@ -343,7 +390,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
                 <ChatBubble
                   key={message.chatMessageId}
                   message={message}
-                  senderId={senderId}
+                  memberId={senderId}
                   currentMemberId={currentMemberId}
                 />
               ))}

@@ -8,17 +8,18 @@ import { cn } from "@/lib/utils";
 interface ChatBubbleProps {
   message: ChatSocketMessage;
   avatarUrl?: string;
-  senderId?: number;
+  memberId?: number;
   currentMemberId?: number;
 }
 
 export default function ChatBubble({
   message,
   avatarUrl,
-  senderId,
+  memberId,
   currentMemberId,
 }: ChatBubbleProps) {
-  const isMine = message.senderId ? message.senderId === currentMemberId : message.isMine;
+  const isMine =
+    message.senderId !== undefined ? message.senderId === currentMemberId : message.isMine;
 
   const timeText = formatTimeToAmPm(message.createdAt);
 
@@ -32,7 +33,7 @@ export default function ChatBubble({
     <div className={cn("flex items-end gap-2", isMine ? "justify-end" : "justify-start")}>
       {!isMine && (
         <Link
-          href={senderId ? `/data/review?id=${senderId}&tab=review` : "/data/review"}
+          href={memberId ? `/data/review?id=${memberId}&tab=review` : "/data/review"}
           className="cursor-pointer"
         >
           <AvatarIcon avatar={avatarUrl} size="small" />
