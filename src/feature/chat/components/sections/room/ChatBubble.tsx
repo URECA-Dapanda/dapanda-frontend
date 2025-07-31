@@ -9,10 +9,16 @@ interface ChatBubbleProps {
   message: ChatSocketMessage;
   avatarUrl?: string;
   senderId?: number;
+  currentMemberId?: number;
 }
 
-export default function ChatBubble({ message, avatarUrl, senderId }: ChatBubbleProps) {
-  const isMine = message.isMine;
+export default function ChatBubble({
+  message,
+  avatarUrl,
+  senderId,
+  currentMemberId,
+}: ChatBubbleProps) {
+  const isMine = message.memberId ? message.memberId === currentMemberId : message.isMine;
   const timeText = formatTimeToAmPm(message.createdAt);
 
   const baseClasses =

@@ -36,6 +36,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const [hasMore, setHasMore] = useState(true);
   const [oldestMessageId, setOldestMessageId] = useState<number | undefined>(undefined);
   const [product, setProduct] = useState<ProductInfo | null>(null);
+  const [currentMemberId, setCurrentMemberId] = useState<number | undefined>(undefined);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
 
@@ -47,6 +48,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     getChatHistory(chatRoomId)
       .then((response) => {
         setMessages(response.data);
+        setCurrentMemberId(response.memberId || undefined);
         if (response.data.length > 0) {
           const oldestMessage = response.data[response.data.length - 1];
           setOldestMessageId(Number(oldestMessage.chatMessageId));
@@ -91,35 +93,56 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     };
   }, [chatRoomId, setActiveChatRoomId]);
 
-  // 채팅방을 나갈 때 읽음 처리
+  // 마지막으로 읽은 메시지 ID를 추적하는 상태
+  const [lastReadMessageId, setLastReadMessageId] = useState<number | null>(null);
+
+  // 마지막으로 읽은 메시지 ID를 업데이트하는 함수
+  const updateLastReadMessage = async () => {
+    if (messages.length === 0) return;
+
+    const TEMP_ID_THRESHOLD = 1000000000000; // 임시 ID 임계값
+
+    // 모든 메시지 중 가장 최신 메시지 찾기
+    const realMessages = messages.filter((message) => {
+      return typeof message.chatMessageId === "number" && message.chatMessageId < TEMP_ID_THRESHOLD;
+    });
+
+    // 가장 최신 메시지의 ID로 읽음 처리
+    if (realMessages.length > 0) {
+      const latestMessage = realMessages[0];
+      const latestMessageId = Number(latestMessage.chatMessageId);
+
+      // 이미 읽은 메시지라면 스킵
+      if (lastReadMessageId && latestMessageId <= lastReadMessageId) {
+        return;
+      }
+
+      try {
+        await markMessageAsRead(latestMessageId);
+        setLastReadMessageId(latestMessageId);
+
+        // 읽음 처리 후 unread count 업데이트
+        const { updateUnreadCount } = useWebSocketStore.getState();
+        updateUnreadCount();
+      } catch (error) {
+        console.error("마지막 읽은 메시지 업데이트 실패:", error);
+      }
+    }
+  };
+
+  // 읽음 처리 (새 메시지 수신 시 + 채팅방 나갈 때)
   useEffect(() => {
+    if (messages.length > 0 && currentMemberId) {
+      updateLastReadMessage();
+    }
+
+    // 채팅방을 나갈 때도 읽음 처리
     return () => {
       if (messages.length > 0) {
-        const latestMessage = messages[0];
-
-        const TEMP_ID_THRESHOLD = 1000000000000; // 임시 ID 임계값
-
-        const isRealMessage =
-          typeof latestMessage.chatMessageId === "number" &&
-          latestMessage.chatMessageId < TEMP_ID_THRESHOLD;
-
-        const shouldMarkAsRead = !latestMessage.isMine && isRealMessage;
-
-        if (shouldMarkAsRead) {
-          markMessageAsRead(latestMessage.chatMessageId)
-            .then(() => {
-              const { updateUnreadCount } = useWebSocketStore.getState();
-              updateUnreadCount(chatRoomId, false);
-            })
-            .catch(console.error);
-        } else {
-          // 채팅방 리스트만 새로고침
-          const { updateUnreadCount } = useWebSocketStore.getState();
-          updateUnreadCount(chatRoomId, false);
-        }
+        updateLastReadMessage();
       }
     };
-  }, [messages, chatRoomId]);
+  }, [messages, currentMemberId, chatRoomId]);
 
   const addMessage = async (text: string) => {
     const tempId = Date.now();
@@ -128,6 +151,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
       isMine: true,
       message: text,
       createdAt: new Date().toISOString(),
+      memberId: currentMemberId || undefined,
     };
 
     // 즉시 화면에 표시
@@ -138,13 +162,12 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
     // WebSocket으로 메시지 전송
     try {
-      sendMessage(
-        chatRoomId,
-        JSON.stringify({
-          message: text,
-          clientTempId: tempId,
-        })
-      );
+      const messagePayload = JSON.stringify({
+        message: text,
+        clientTempId: tempId,
+      });
+
+      sendMessage(chatRoomId, messagePayload);
     } catch (error) {
       console.error("메시지 전송 실패:", error);
     }
@@ -162,6 +185,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         isMine: data.isMine,
         message: data.message,
         createdAt: data.createdAt,
+        memberId: data.memberId,
       };
 
       // 중복 방지 로직
@@ -173,6 +197,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
               return {
                 ...msg,
                 chatMessageId: data.chatMessageId,
+                memberId: data.memberId,
               };
             }
             return msg;
@@ -212,6 +237,11 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         setOldestMessageId(Number(newOldestMessage.chatMessageId));
 
         setHasMore(response.pageInfo.hasNext);
+
+        // memberId가 아직 설정되지 않았다면 설정
+        if (!currentMemberId && response.memberId) {
+          setCurrentMemberId(response.memberId || undefined);
+        }
       } else {
         setHasMore(false);
       }
@@ -278,7 +308,12 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
             </div>
             <div className="space-y-24">
               {group.messages.map((message) => (
-                <ChatBubble key={message.chatMessageId} message={message} senderId={senderId} />
+                <ChatBubble
+                  key={message.chatMessageId}
+                  message={message}
+                  senderId={senderId}
+                  currentMemberId={currentMemberId}
+                />
               ))}
             </div>
           </div>

@@ -17,7 +17,7 @@ interface WebSocketStore {
   sendMessage: (chatRoomId: number, message: string) => void;
   setChatListUpdateCallback: (callback: (() => void) | null) => void;
   setActiveChatRoomId: (chatRoomId: number | null) => void;
-  updateUnreadCount: (chatRoomId: number, increment: boolean) => void;
+  updateUnreadCount: () => void;
 }
 
 export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
@@ -38,7 +38,14 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     }
 
     const newClient = new Client({
-      webSocketFactory: () => new SockJS(`${apiBaseUrl}/conn`),
+      webSocketFactory: () => {
+        const sock = new SockJS(`${apiBaseUrl}/conn`, null, {
+          transports: ["websocket", "xhr-streaming", "xhr-polling"],
+          timeout: 15000,
+        });
+
+        return sock;
+      },
       reconnectDelay: 5000,
       onConnect: () => {
         set({ isConnected: true });
@@ -66,7 +73,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
         set({ isConnected: false, subscriptionObjects: new Map() });
       },
       onStompError: (frame) => {
-        console.error("STOMP 오류", frame.headers["message"]);
+        console.error("STOMP 오류:", frame.headers["message"]);
         set({ isConnected: false, subscriptionObjects: new Map() });
       },
     });
@@ -118,8 +125,12 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
 
     // STOMP 구독 생성
     const subscription = client.subscribe(`/sub/${chatRoomId}`, (message) => {
-      const payload: ChatSocketMessage = JSON.parse(message.body);
-      onMessage(payload);
+      try {
+        const payload: ChatSocketMessage = JSON.parse(message.body);
+        onMessage(payload);
+      } catch (error) {
+        console.error("메시지 파싱 오류:", error);
+      }
     });
 
     const newSubscriptionObjects = new Map(subscriptionObjects);
@@ -152,11 +163,16 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
 
   sendMessage: (chatRoomId: number, message: string) => {
     const { client } = get();
+
     if (client && client.connected) {
-      client.publish({
-        destination: `/pub/${chatRoomId}`,
-        body: message,
-      });
+      try {
+        client.publish({
+          destination: `/pub/${chatRoomId}`,
+          body: message,
+        });
+      } catch (error) {
+        console.error("메시지 전송 중 오류:", error);
+      }
     } else {
       console.error("WebSocket이 연결되지 않았습니다.");
     }
