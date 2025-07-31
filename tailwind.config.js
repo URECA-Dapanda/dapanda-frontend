@@ -13,7 +13,7 @@ module.exports = {
       height: {
         "main-safe": "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom))",
         "sheet-safe":
-          "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) - 108px",
+          "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 107px)",
       },
       padding: {
         "safe-top": "calc(env(safe-area-inset-top) + 54px)",

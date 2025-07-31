@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="box-border">
+    <html lang="ko">
       <head>
         <script
           dangerouslySetInnerHTML={{
