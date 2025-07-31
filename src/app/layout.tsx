@@ -1,3 +1,4 @@
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import ProviderWrapper from "@components/common/ProviderWrapper";
 import { Slide, ToastContainer } from "react-toastify";
@@ -19,6 +20,7 @@ export default function RootLayout({
       <body className="flex flex-col box-border min-h-screen w-full bg-gray-300 justify-center items-center">
         <ProviderWrapper>
           <FcmInitializer />
+          <SpeedInsights />
           {children}
         </ProviderWrapper>
 
