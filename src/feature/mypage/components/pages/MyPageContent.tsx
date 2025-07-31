@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import CurrentCashCard from "@feature/mypage/components/sections/profile/CurrentCashCard";
 import TransactionHistory from "@feature/mypage/components/sections/TransactionHistory";
-import { DataUsageDonut } from "@feature/mypage/components/sections/profile/CicularProgressBar";
 import LogOutButton from "../sections/LogOutButton";
 import ProfileCard from "@feature/mypage/components/sections/profile/ProfileCard";
 import { useCashSuccessModalStore } from "@feature/mypage/stores/useCashSuccessModalStore";
