@@ -4,13 +4,15 @@ import { ButtonComponent } from "@components/common/button";
 import { useQuery } from "@tanstack/react-query";
 import { getMyInfo } from "@feature/mypage/apis/mypageRequest";
 import { Rating, RatingButton } from "@components/common/rating/RatingScore";
+import { toast } from "react-toastify";
 
 interface MapProfileCardProps {
   sellerId: number;
   productId: string;
+  isOwner?: boolean;
 }
 
-export default function MapProfileCard({ sellerId, productId }: MapProfileCardProps) {
+export default function MapProfileCard({ sellerId, productId, isOwner }: MapProfileCardProps) {
   const router = useRouter();
 
   const { data } = useQuery({
@@ -24,6 +26,10 @@ export default function MapProfileCard({ sellerId, productId }: MapProfileCardPr
 
   const goToChat = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (isOwner) {
+      toast.info("내 게시글입니다");
+      return;
+    }
     router.push(`/chat/${productId}`);
   };
 
