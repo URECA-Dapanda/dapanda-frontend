@@ -208,11 +208,3 @@ export function formatDateDivider(date?: string | Date): string {
   const day = targetDate.getDate();
   return `${year}년 ${month}월 ${day}일`;
 }
-
-export function formatChatDateDivider(): string {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth() + 1;
-  const day = now.getDate();
-  return `${year}년 ${month}월 ${day}일`;
-}

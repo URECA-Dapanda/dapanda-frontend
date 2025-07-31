@@ -1,19 +1,22 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { formatDateDivider } from "@/lib/time";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import ReportModal from "@/components/common/modal/ReportModal";
 import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
 import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
 import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
-import { groupMessagesByDate } from "@/feature/chat/utils/groupMessagesByDate";
+import { groupMessagesByDate } from "@feature/chat/utils/groupMessagesByDate";
 import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
 import { getChatHistory } from "@/feature/chat/api/getChatHistory";
 import { markMessageAsRead } from "@/feature/chat/api/chatRoomRequest";
 import ChatHeader from "@feature/chat/components/sections/room/ChatHeader";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
+import { useChatStore } from "@feature/chat/stores/useChatStore";
+import type { ChatRoomPreview } from "@feature/chat/stores/useChatStore";
+import { isTemporaryMessage, formatMessageDate } from "@/feature/chat/utils/chatUtils";
 
 interface ChatRoomContentProps {
   chatRoomId: number;
@@ -41,6 +44,31 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const searchParams = useSearchParams();
 
   const { subscribe, unsubscribe, sendMessage, setActiveChatRoomId } = useWebSocketStore();
+
+  // 메시지 정렬 함수 (컴포넌트 내부로 이동)
+  const sortMessages = useCallback((messages: ChatSocketMessage[]): ChatSocketMessage[] => {
+    return messages.sort((a, b) => {
+      const aIsTemp = isTemporaryMessage(a);
+      const bIsTemp = isTemporaryMessage(b);
+
+      // 둘 다 임시 메시지인 경우 createdAt으로 정렬
+      if (aIsTemp && bIsTemp) {
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      }
+
+      // 둘 다 실제 메시지인 경우 chatMessageId로 정렬
+      if (!aIsTemp && !bIsTemp) {
+        return Number(a.chatMessageId) - Number(b.chatMessageId);
+      }
+
+      // 임시 메시지는 실제 메시지보다 앞에 배치 (생성 시간순)
+      if (aIsTemp && !bIsTemp) {
+        return -1;
+      }
+
+      return 1;
+    });
+  }, []);
 
   useEffect(() => {
     if (!chatRoomId) return;
@@ -93,78 +121,62 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     };
   }, [chatRoomId, setActiveChatRoomId]);
 
-  // 마지막으로 읽은 메시지 ID를 추적하는 상태
-  const [lastReadMessageId, setLastReadMessageId] = useState<number | null>(null);
+  // 채팅방을 나갈 때 unreadCount를 0으로 만드는 함수
+  const resetUnreadCountOnExit = useCallback(() => {
+    const { updateUnreadCount } = useWebSocketStore.getState();
+    updateUnreadCount();
 
-  // 마지막으로 읽은 메시지 ID를 업데이트하는 함수
-  const updateLastReadMessage = async () => {
-    if (messages.length === 0) return;
-
-    const TEMP_ID_THRESHOLD = 1000000000000; // 임시 ID 임계값
-
-    // 모든 메시지 중 가장 최신 메시지 찾기
-    const realMessages = messages.filter((message) => {
-      return typeof message.chatMessageId === "number" && message.chatMessageId < TEMP_ID_THRESHOLD;
+    // 해당 채팅방의 unreadCount를 로컬에서 즉시 0으로
+    const { setChatList } = useChatStore.getState();
+    setChatList((prevChatList: ChatRoomPreview[]) => {
+      return prevChatList.map((chat: ChatRoomPreview) => {
+        if (chat.chatRoomId === Number(chatRoomId)) {
+          return {
+            ...chat,
+            unreadCount: 0,
+          };
+        }
+        return chat;
+      });
     });
 
-    // 가장 최신 메시지의 ID로 읽음 처리
-    if (realMessages.length > 0) {
-      const latestMessage = realMessages[0];
-      const latestMessageId = Number(latestMessage.chatMessageId);
+    // 확실하게 read-status 요청 (실제로 마지막으로 읽은 메시지)
+    if (messages.length > 0) {
+      // 실제 메시지만 필터링 (임시 메시지 제외)
+      const realMessages = messages.filter((message) => !isTemporaryMessage(message));
 
-      // 이미 읽은 메시지라면 스킵
-      if (lastReadMessageId && latestMessageId <= lastReadMessageId) {
-        return;
-      }
+      if (realMessages.length > 0) {
+        // 실제 메시지 중 가장 최신 메시지 찾기
+        const latestMessage = realMessages[realMessages.length - 1];
+        const latestMessageId = Number(latestMessage.chatMessageId);
 
-      try {
-        await markMessageAsRead(latestMessageId);
-        setLastReadMessageId(latestMessageId);
+        console.log("채팅방 나갈 때 마지막 메시지 ID:", latestMessageId);
 
-        // 읽음 처리 후 unread count 업데이트
-        const { updateUnreadCount } = useWebSocketStore.getState();
-        updateUnreadCount();
-      } catch (error) {
-        console.error("마지막 읽은 메시지 업데이트 실패:", error);
+        // 동기적으로 read-status 요청
+        markMessageAsRead(latestMessageId)
+          .then(() => {
+            console.log("채팅방 나갈 때 read-status 성공:", latestMessageId);
+          })
+          .catch((error) => {
+            console.error("채팅방 나갈 때 read-status 실패:", error);
+          });
       }
     }
-  };
+  }, [messages, chatRoomId]);
 
-  // 읽음 처리 (새 메시지 수신 시 + 채팅방 나갈 때)
+  // 읽음 처리 (채팅방 나갈 때만)
   useEffect(() => {
-    if (messages.length > 0 && currentMemberId) {
-      updateLastReadMessage();
-    }
-
-    // 채팅방을 나갈 때도 읽음 처리
+    // 채팅방을 나갈 때 unreadCount를 0으로 만들기
     return () => {
-      if (messages.length > 0) {
-        updateLastReadMessage();
-      }
+      resetUnreadCountOnExit();
     };
-  }, [messages, currentMemberId, chatRoomId]);
+  }, [resetUnreadCountOnExit]);
 
   const addMessage = async (text: string) => {
-    const tempId = Date.now();
-    const newMessage: ChatSocketMessage = {
-      chatMessageId: tempId,
-      isMine: true,
-      message: text,
-      createdAt: new Date().toISOString(),
-      memberId: currentMemberId || undefined,
-    };
-
-    // 즉시 화면에 표시
-    setMessages((prev) => {
-      const newMessages = [...prev, newMessage];
-      return newMessages;
-    });
-
-    // WebSocket으로 메시지 전송
+    // WebSocket으로 메시지 전송 (임시 ID 없이)
     try {
       const messagePayload = JSON.stringify({
         message: text,
-        clientTempId: tempId,
       });
 
       sendMessage(chatRoomId, messagePayload);
@@ -177,41 +189,60 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   useEffect(() => {
     if (!chatRoomId) return;
 
+    // WebSocket 연결 상태 확인
+    const { isConnected, subscribe, unsubscribe } = useWebSocketStore.getState();
+
+    if (!isConnected) {
+      return;
+    }
+
     const handleMessage = (msg: ChatSocketMessage) => {
       const data = typeof msg === "string" ? JSON.parse(msg) : msg;
+
+      console.log("WebSocket message received:", {
+        chatMessageId: data.chatMessageId,
+        isMine: data.isMine,
+        clientTempId: data.clientTempId,
+        message: data.message,
+        senderId: data.senderId,
+      });
 
       const incomingMessage: ChatSocketMessage = {
         chatMessageId: data.chatMessageId,
         isMine: data.isMine,
         message: data.message,
         createdAt: data.createdAt,
-        memberId: data.memberId,
+        senderId: data.senderId,
       };
 
       // 중복 방지 로직
       setMessages((prev) => {
-        // 내가 보낸 메시지이고 실제 ID가 있으면 기존 임시 메시지를 실제 ID로 업데이트
-        if (data.isMine && data.clientTempId && data.chatMessageId !== data.clientTempId) {
-          const updatedMessages = prev.map((msg) => {
-            if (msg.chatMessageId === data.clientTempId && msg.message === data.message) {
-              return {
-                ...msg,
-                chatMessageId: data.chatMessageId,
-                memberId: data.memberId,
-              };
-            }
-            return msg;
-          });
-
-          return updatedMessages;
-        }
-
-        // 일반적인 중복 방지
+        // 일반적인 중복 방지 (동일한 chatMessageId)
         if (prev.some((m) => m.chatMessageId === incomingMessage.chatMessageId)) {
           return prev;
         }
 
-        return [...prev, incomingMessage];
+        const newMessages = [...prev, incomingMessage];
+
+        // 새 메시지가 추가된 후, 실제 메시지 중 가장 최신 메시지만 read-status 요청
+        const realMessages = newMessages.filter((message) => !isTemporaryMessage(message));
+
+        if (realMessages.length > 0) {
+          // 실제 메시지 중 가장 최신 메시지만 read-status 요청
+          const latestMessage = realMessages[realMessages.length - 1];
+          const latestMessageId = Number(latestMessage.chatMessageId);
+
+          markMessageAsRead(latestMessageId)
+            .then(() => {
+              const { updateUnreadCount } = useWebSocketStore.getState();
+              updateUnreadCount();
+            })
+            .catch((error) => {
+              console.error("메시지 읽음 처리 실패:", error);
+            });
+        }
+
+        return newMessages;
       });
     };
 
@@ -264,9 +295,8 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
   }, [messages.length]);
 
-  const sortedMessages = [...messages].sort(
-    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-  );
+  // 개선된 정렬 로직 적용
+  const sortedMessages = sortMessages([...messages]);
 
   const groupedMessages = groupMessagesByDate(sortedMessages);
 
@@ -304,7 +334,9 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         {groupedMessages.map((group) => (
           <div key={group.date}>
             <div className="text-center text-xs text-gray-500 my-24">
-              {formatDateDivider(group.date)}
+              {group.messages.length > 0 && group.messages[0].createdAt
+                ? formatMessageDate(group.messages[0].createdAt)
+                : formatDateDivider()}
             </div>
             <div className="space-y-24">
               {group.messages.map((message) => (
