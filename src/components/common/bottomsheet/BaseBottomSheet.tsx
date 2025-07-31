@@ -122,13 +122,13 @@ export default function BaseBottomSheet({
             (variant === "snap" || variant === "hybrid") && sheetY === 0
               ? "rounded-t-0"
               : "rounded-t-50"
+          } ${
+            variant === "snap" || variant === "hybrid"
+              ? `h-[calc(100dvh-${HEADER_OFFSET + BOTTOM_OFFSET}px-safe-area-top-safe-area-bottom)]`
+              : `${MODAL_MAX_HEIGHT}px`
           }`}
           style={{
             width: "100dvw",
-            height:
-              variant === "snap" || variant === "hybrid"
-                ? `calc(100vh - ${HEADER_OFFSET + BOTTOM_OFFSET}px)`
-                : `${MODAL_MAX_HEIGHT}px`,
             marginBottom: variant === "snap" || variant === "hybrid" ? `${BOTTOM_OFFSET}px` : "0px",
             overflowY: "auto",
             WebkitOverflowScrolling: "touch",

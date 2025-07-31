@@ -10,14 +10,22 @@ module.exports = {
   ],
   theme: {
     extend: {
+      height: {
+        "main-safe":
+          "calc(100dvh - 54px - 54px - env(safe-area-inset-top) - env(safe-area-inset-bottom))",
+      },
+      padding: {
+        "safe-top": "env(safe-area-inset-top)",
+        "safe-bottom": "env(safe-area-inset-bottom)",
+      },
       animation: {
-        'spin-slow': 'spin 2s linear infinite',
-        'fade-in': 'fadeIn 0.6s ease-out',
+        "spin-slow": "spin 2s linear infinite",
+        "fade-in": "fadeIn 0.6s ease-out",
       },
       keyframes: {
         fadeIn: {
-          '0%': { opacity: 0 },
-          '100%': { opacity: 1 },
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
         },
       },
       colors: {
