@@ -7,7 +7,7 @@ interface WebSocketStore {
   client: Client | null;
   isConnected: boolean;
   subscriptions: Map<number, (message: ChatSocketMessage) => void>;
-  subscriptionObjects: Map<string, { unsubscribe: () => void }>;
+  subscriptionObjects: Map<number, { unsubscribe: () => void }>;
   chatListUpdateCallback: (() => void) | null;
   activeChatRoomId: number | null;
   connect: () => Promise<void>;
@@ -56,7 +56,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
 
         subscriptions.forEach((callback, chatRoomId) => {
           // 이미 구독 객체가 있으면 건너뛰기
-          if (newSubscriptionObjects.has(chatRoomId.toString())) {
+          if (newSubscriptionObjects.has(chatRoomId)) {
             return;
           }
 
@@ -64,7 +64,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
             const payload: ChatSocketMessage = JSON.parse(message.body);
             callback(payload);
           });
-          newSubscriptionObjects.set(chatRoomId.toString(), subscription);
+          newSubscriptionObjects.set(chatRoomId, subscription);
         });
 
         set({ subscriptionObjects: newSubscriptionObjects });
@@ -103,7 +103,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     const { client, subscriptions, subscriptionObjects } = get();
 
     // 이미 구독 중인지 확인 (구독 정보와 구독 객체 모두 확인)
-    if (subscriptions.has(chatRoomId) || subscriptionObjects.has(chatRoomId.toString())) {
+    if (subscriptions.has(chatRoomId) && subscriptionObjects.has(chatRoomId)) {
       const newSubscriptions = new Map(subscriptions);
       newSubscriptions.set(chatRoomId, onMessage);
       set({ subscriptions: newSubscriptions });
@@ -136,25 +136,22 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     });
 
     const newSubscriptionObjects = new Map(subscriptionObjects);
-    newSubscriptionObjects.set(chatRoomId.toString(), subscription);
+    newSubscriptionObjects.set(chatRoomId, subscription);
     set({ subscriptionObjects: newSubscriptionObjects });
   },
 
   unsubscribe: (chatRoomId: number) => {
     const { subscriptions, subscriptionObjects } = get();
 
-    if (!subscriptions.has(chatRoomId)) {
-      return;
-    }
-
+    // 구독 정보와 구독 객체 모두 정리
     const newSubscriptions = new Map(subscriptions);
     newSubscriptions.delete(chatRoomId);
 
     const newSubscriptionObjects = new Map(subscriptionObjects);
-    const subscription = newSubscriptionObjects.get(chatRoomId.toString());
+    const subscription = newSubscriptionObjects.get(chatRoomId);
     if (subscription) {
       subscription.unsubscribe();
-      newSubscriptionObjects.delete(chatRoomId.toString());
+      newSubscriptionObjects.delete(chatRoomId);
     }
 
     set({
