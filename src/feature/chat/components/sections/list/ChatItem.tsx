@@ -13,7 +13,7 @@ export interface ChatItemProps {
   productId: number;
   place?: string;
   pricePer10min?: number;
-  senderId?: number;
+  memberId?: number;
   lastMessage?: string;
 }
 
@@ -25,15 +25,15 @@ export default function ChatItem({
   avatarUrl,
   productId,
   place,
-  senderId,
+  memberId,
   lastMessage,
 }: ChatItemProps) {
   const router = useRouter();
 
   const handleAvatarClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (senderId) {
-      router.push(`/data/review?id=${senderId}&tab=review`);
+    if (memberId) {
+      router.push(`/data/review?id=${memberId}&tab=review`);
     } else {
       router.push("/data/review");
     }
@@ -45,9 +45,9 @@ export default function ChatItem({
           <AvatarIcon avatar={avatarUrl} size="medium" />
         </button>
         <Link
-          href={`/chat/${chatRoomId}?productId=${productId}&senderName=${encodeURIComponent(
+          href={`/chat/${chatRoomId}?productId=${productId}&memberName=${encodeURIComponent(
             name
-          )}&senderId=${senderId || ""}`}
+          )}&memberId=${memberId || ""}`}
           className="flex-1"
         >
           <div className="flex flex-col gap-2 cursor-pointer">
