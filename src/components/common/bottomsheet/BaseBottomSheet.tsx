@@ -26,7 +26,7 @@ export default function BaseBottomSheet({
   zIndex,
 }: BaseBottomSheetProps) {
   const BOTTOM_OFFSET = 54;
-  const HEADER_OFFSET = 54;
+  // const HEADER_OFFSET = 54;
   const MODAL_MAX_HEIGHT = 602;
   const FULL_HEIGHT = 0;
   const CLOSED_HEIGHT = typeof window !== "undefined" ? window.innerHeight : "100vh";
