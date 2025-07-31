@@ -13,7 +13,7 @@ import type { DropdownOption } from "@/components/common/dropdown/dropdown.types
 import { useMapHeight } from "@hooks/useMapHeight";
 
 export default function MapPage() {
-  const mapHeight = useMapHeight();
+  const { mapHeight } = useMapHeight();
   const {
     isModalOpen,
     isSnapOpen,
@@ -55,7 +55,6 @@ export default function MapPage() {
         onOpenModal={() => setIsModalOpen(true)}
         onOpenSheet={() => setIsSnapOpen(true)}
         isSnapOpen={isSnapOpen}
-        mapHeight={mapHeight}
       />
       <MapRegisterModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <MapBottomSheet

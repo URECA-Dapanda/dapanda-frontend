@@ -13,6 +13,7 @@ import DeletePostModal from "@/feature/data/components/sections/modal/DeletePost
 import { isValidTimeRange, parseHHMMToTime, isTimeInRange } from "@/lib/time";
 import { useWifiPriceRecommendation } from "@/feature/map/hooks/useWifiPriceRecommendation";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
+import { toast } from "react-toastify";
 
 import clsx from "clsx";
 import { buildWifiPaymentInfo } from "@feature/payment/hooks/useWifiPurchaseBuilder";
@@ -59,7 +60,10 @@ export default function MapDetailPage() {
   const maxTime = parseHHMMToTime(data.endTime);
 
   const onBuy = () => {
-    if (isOwner) return;
+    if (isOwner) {
+      toast.info("내 게시글입니다");
+      return;
+    }
 
     if (!isValidTimeRange(startTime, endTime)) {
       setError("종료 시간은 시작 시간보다 늦어야 합니다.");
@@ -117,17 +121,15 @@ export default function MapDetailPage() {
           />
         </div>
 
-        <SellerSection sellerId={data.memberId} productId={String(data.productId)} />
+        <SellerSection
+          sellerId={data.memberId}
+          productId={String(data.productId)}
+          isOwner={isOwner}
+        />
 
         <div className="px-6 mt-12">
-          <ButtonComponent
-            className="w-full"
-            variant="primary"
-            size="xl"
-            onClick={onBuy}
-            disabled={isOwner}
-          >
-            {isOwner ? "내 게시글입니다" : "구매하기"}
+          <ButtonComponent className="w-full" variant="primary" size="xl" onClick={onBuy}>
+            구매하기
           </ButtonComponent>
           {error && <p className="body-sm text-error text-center">{error}</p>}
         </div>
