@@ -5,7 +5,6 @@ import LayoutBox from "@components/common/container/LayoutBox";
 import { SkeletonCard } from "@components/common/skeleton";
 import { PurchaseHistoryType } from "@feature/mypage/types/mypageTypes";
 import { formatDataSize } from "@lib/formatters";
-import { formatDateDivider } from "@lib/time";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
 import dayjs from "dayjs";
