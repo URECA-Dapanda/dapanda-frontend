@@ -47,13 +47,6 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
         return (
           <>
             <Image
-              src="/dpd-logo.svg"
-              className="absolute top-[-35] left-[-35] z-20"
-              alt="logo"
-              width={237}
-              height={0}
-            />
-            <Image
               src="/dpd-main-logo.svg"
               className="absolute top-0 right-0 z-20"
               alt="logo"
@@ -91,7 +84,7 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
       id={id}
       className={cn(
         "fixed top-0 z-50 flex h-[54px] shrink-0 w-[100dvw] lg:w-[375px] border-none transition-opacity mx-auto flex-row justify-between px-16 items-center overflow-x-clip",
-        pathVariant === "base" ? "overflow-y-visible bg-primary2" : "shadow-header bg-white"
+        pathVariant === "base" ? "bg-transparent" : "shadow-header bg-white"
       )}
     >
       {headerContent}
