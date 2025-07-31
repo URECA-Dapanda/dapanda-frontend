@@ -7,6 +7,9 @@ import BackButton from "./BackButton";
 import HeaderTitle from "./HeaderTitle";
 import { usePathname } from "next/navigation";
 import { useHeaderStore } from "@stores/useHeaderStore";
+import { MoreVertical } from "lucide-react";
+import { UserDropdownMenu } from "@/components/common/dropdown/UserDropdownMenu";
+import { chatMenuOptions } from "@/components/common/dropdown/dropdownConfig";
 
 interface AppHeaderProps {
   id?: string;
@@ -25,7 +28,7 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
       case "mypage":
         return pathLen === 2 ? "normal" : "detail";
       case "chat":
-        return pathLen === 2 ? "normal" : "hidden";
+        return pathLen === 2 ? "normal" : "chatDetail";
       default:
         return "normal";
     }
@@ -80,8 +83,22 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
             {children}
           </>
         );
-      case "hidden":
-        return null;
+      case "chatDetail":
+        return (
+          <>
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <BackButton />
+              <HeaderTitle />
+            </div>
+            <div className="flex items-center gap-2">
+              <UserDropdownMenu options={chatMenuOptions(() => {}, undefined)}>
+                <button className="p-2">
+                  <MoreVertical className="w-5 h-5" />
+                </button>
+              </UserDropdownMenu>
+            </div>
+          </>
+        );
     }
   }, [pathVariant]);
   return (

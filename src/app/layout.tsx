@@ -7,6 +7,12 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "DaPanDa",
   description: "URECA final project DaPanDa",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
 };
 
 export default function RootLayout({
