@@ -48,7 +48,12 @@ export function HistoryCard({ data, size = "sm" }: HistoryCardProps) {
             </p>
           )}
           <p className="body-sm text-gray-600">
-            거래 상품: {`${formatDataSize(data.dataAmount)} ${postTypeGuard[data.type]}`}
+            거래 상품:{" "}
+            {`${
+              data.type === "WIFI"
+                ? data?.title
+                : `${formatDataSize(data.dataAmount)} ${postTypeGuard[data.type]}`
+            } `}
           </p>
         </LayoutBox>
       </LayoutBox>

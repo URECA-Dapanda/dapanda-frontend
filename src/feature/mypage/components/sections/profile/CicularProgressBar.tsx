@@ -1,20 +1,24 @@
 "use client";
 
-import { getMyData } from "@feature/mypage/apis/mypageRequest";
-import { useQuery } from "@tanstack/react-query";
+import { MyDataProps } from "@feature/mypage/types/mypageTypes";
 import React, { useEffect, useMemo, useState } from "react";
 
 type DataUsageDonutProps = {
   unit?: string;
+  data?: MyDataProps;
+  color?: string;
+  bgColor?: string;
+  title?: string;
 };
 
-export function DataUsageDonut({ unit = "GB" }: DataUsageDonutProps) {
-  const { data } = useQuery({
-    queryFn: getMyData,
-    queryKey: ["api/plans/my-data"],
-  });
-
-  const radius = 50;
+export function DataUsageDonut({
+  data,
+  unit = "GB",
+  color = "#E6007E",
+  bgColor = "#FDEDF6",
+  title,
+}: DataUsageDonutProps) {
+  const radius = 55;
   const stroke = 15;
   const normalizedRadius = radius - stroke / 2;
   const circumference = normalizedRadius * 2 * Math.PI;
@@ -40,7 +44,7 @@ export function DataUsageDonut({ unit = "GB" }: DataUsageDonutProps) {
     <svg height={radius * 2} width={radius * 2} className="relative shrink-0">
       {/* Background circle */}
       <circle
-        stroke="#FDEDF6"
+        stroke={bgColor}
         fill="transparent"
         strokeWidth={stroke}
         r={normalizedRadius}
@@ -49,7 +53,7 @@ export function DataUsageDonut({ unit = "GB" }: DataUsageDonutProps) {
       />
       {/* Foreground progress */}
       <circle
-        stroke="#E6007E"
+        stroke={color}
         fill="transparent"
         strokeWidth={stroke}
         strokeLinecap="round"
@@ -66,7 +70,7 @@ export function DataUsageDonut({ unit = "GB" }: DataUsageDonutProps) {
       {/* Center Text */}
       <text
         x="50%"
-        y="50%"
+        y="55%"
         textAnchor="middle"
         dominantBaseline="central"
         fontSize="20"
@@ -75,6 +79,16 @@ export function DataUsageDonut({ unit = "GB" }: DataUsageDonutProps) {
       >
         {data?.currentDataAmount ?? "-"}
         {unit}
+      </text>
+      <text
+        x="50%"
+        y="35%"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fontSize="12"
+        fill="#35363f"
+      >
+        {title}
       </text>
     </svg>
   );

@@ -15,6 +15,7 @@ export interface SaleHistoryType {
   remainAmount: number;
   createdAt: string;
   updatedAt: string;
+  title: string;
 }
 
 export interface PurchaseHistoryType extends HistoryType {
@@ -44,4 +45,11 @@ export interface MonthlyCashTotalType {
   totalCharge: number;
   totalRefund: number;
   total: number;
+}
+
+export interface MyDataProps {
+  name?: string;
+  currentDataAmount: number;
+  providingDataAmount: number;
+  monthlyPrice?: number;
 }
