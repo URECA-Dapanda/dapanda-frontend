@@ -12,7 +12,7 @@ interface AvatarProps {
  * @param size 아이콘 사이즈: small: w-4 h-4 // medium: w-8 h-8 // large: w-16 h-16
  * @returns 아바타 아이콘
  */
-function AvatarIcon({ size = "small", avatar = "c" }: Partial<AvatarProps>) {
+function AvatarIcon({ size = "small", avatar }: Partial<AvatarProps>) {
   const avatarImage = avatar;
   const iconSize = useMemo(() => {
     switch (size) {
@@ -27,12 +27,19 @@ function AvatarIcon({ size = "small", avatar = "c" }: Partial<AvatarProps>) {
     }
   }, [size]);
 
-  return avatarImage ? (
+  return (
     <Avatar className={iconSize}>
-      <AvatarImage />
-      <AvatarFallback className="bg-gray-500 text-white z-0">{avatarImage}</AvatarFallback>
+      <AvatarImage
+        src={avatar || "/avatar-default.png"}
+        alt="avatar"
+        onError={() => console.log("Avatar image load failed:", avatar)}
+
+      />
+      <AvatarFallback className="bg-gray-300 text-white z-0">
+        DPD
+      </AvatarFallback>
     </Avatar>
-  ) : null;
+  );
 }
 
 export default memo(AvatarIcon);
