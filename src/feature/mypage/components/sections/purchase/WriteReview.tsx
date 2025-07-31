@@ -1,5 +1,6 @@
 "use client";
 
+import { ButtonComponent } from "@components/common/button";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
 
@@ -11,12 +12,15 @@ function WriteReview({ tradeId }: WriteReviewProps) {
   const router = useRouter();
 
   return (
-    <button
+    <ButtonComponent
       onClick={() => router.push(`/map/review/register?tradeId=${tradeId}`)}
-      className="text-primary border-primary border-1 body-xs rounded-lg py-4 w-full px-12 self-start mt-8"
+      variant={"outlinePrimary"}
+      size={"sm"}
+      className="px-12"
+      // className="text-primary border-primary border-1 body-xs rounded-lg py-4 w-fit px-12 self-start"
     >
-      후기 작성하기
-    </button>
+      리뷰 쓰기
+    </ButtonComponent>
   );
 }
 
