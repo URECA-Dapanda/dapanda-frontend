@@ -1,5 +1,5 @@
 "use client";
-import { PropsWithChildren, useMemo } from "react";
+import { PropsWithChildren, useMemo, Suspense } from "react";
 import HeaderTimer from "./HeaderTimer";
 import Image from "next/image";
 import { cn } from "@lib/utils";
@@ -19,7 +19,7 @@ interface AppHeaderProps {
   variant?: string;
 }
 
-export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderProps>) {
+function AppHeaderContent({ id, children }: PropsWithChildren<AppHeaderProps>) {
   const path = usePathname();
   const isVisible = useHeaderStore((state) => state.isVisible);
   const searchParams = useSearchParams();
@@ -127,5 +127,17 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
         <ReportModal isOpen={isReportOpen} setIsOpen={setIsReportOpen} targetName={senderName} />
       )}
     </header>
+  );
+}
+
+export default function AppHeader(props: PropsWithChildren<AppHeaderProps>) {
+  return (
+    <Suspense
+      fallback={
+        <div className="fixed top-0 z-50 flex h-[54px] shrink-0 w-[100dvw] lg:w-[375px] border-none transition-opacity mx-auto flex-row justify-between px-16 items-center overflow-x-clip shadow-header bg-white" />
+      }
+    >
+      <AppHeaderContent {...props} />
+    </Suspense>
   );
 }
