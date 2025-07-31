@@ -15,7 +15,7 @@ function WriteReview({ tradeId }: WriteReviewProps) {
     <ButtonComponent
       onClick={() => router.push(`/map/review/register?tradeId=${tradeId}`)}
       variant={"outlinePrimary"}
-      size={"sm"}
+      size={"xxs"}
       className="px-12"
       // className="text-primary border-primary border-1 body-xs rounded-lg py-4 w-fit px-12 self-start"
     >
