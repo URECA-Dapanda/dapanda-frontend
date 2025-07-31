@@ -24,7 +24,7 @@ export interface ChatSocketMessage {
   isMine: boolean;
   senderName?: string;
   unreadCount?: number;
-  memberId?: number;
+  senderId?: number;
 }
 
 export interface CursorPageResponse<T> {

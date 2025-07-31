@@ -18,7 +18,8 @@ export default function ChatBubble({
   senderId,
   currentMemberId,
 }: ChatBubbleProps) {
-  const isMine = message.memberId ? message.memberId === currentMemberId : message.isMine;
+  const isMine = message.senderId ? message.senderId === currentMemberId : message.isMine;
+
   const timeText = formatTimeToAmPm(message.createdAt);
 
   const baseClasses =
