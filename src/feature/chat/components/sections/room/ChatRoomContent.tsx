@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { formatDateDivider } from "@/lib/time";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import { useConfigStore } from "@/stores/useConfigStore";
-import ReportModal from "@/components/common/modal/ReportModal";
 import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
 import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
 import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
@@ -31,7 +30,6 @@ interface ProductInfo {
 
 export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomContentProps) {
   const [messages, setMessages] = useState<ChatSocketMessage[]>([]);
-  const [isReportOpen, setIsReportOpen] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [oldestMessageId, setOldestMessageId] = useState<number | undefined>(undefined);
@@ -267,7 +265,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto px-4 pb-20 pt-20" onScroll={handleScroll}>
+      <div className="flex-1 overflow-y-auto px-4 pt-20" onScroll={handleScroll}>
         {loadingMore && (
           <div className="text-center text-sm text-gray-500 py-4">이전 내역을 불러오는 중...</div>
         )}
@@ -288,8 +286,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
       </div>
 
       <ChatInputBar onSend={addMessage} />
-
-      <ReportModal isOpen={isReportOpen} setIsOpen={setIsReportOpen} targetName={senderName} />
     </div>
   );
 }

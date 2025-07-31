@@ -5,11 +5,13 @@ import Image from "next/image";
 import { cn } from "@lib/utils";
 import BackButton from "./BackButton";
 import HeaderTitle from "./HeaderTitle";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useHeaderStore } from "@stores/useHeaderStore";
 import { MoreVertical } from "lucide-react";
 import { UserDropdownMenu } from "@/components/common/dropdown/UserDropdownMenu";
 import { chatMenuOptions } from "@/components/common/dropdown/dropdownConfig";
+import ReportModal from "@/components/common/modal/ReportModal";
+import { useState } from "react";
 
 interface AppHeaderProps {
   id?: string;
@@ -19,6 +21,10 @@ interface AppHeaderProps {
 export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderProps>) {
   const path = usePathname();
   const isVisible = useHeaderStore((state) => state.isVisible);
+  const searchParams = useSearchParams();
+  const senderId = searchParams.get("senderId");
+  const senderName = searchParams.get("senderName") || "상대방";
+  const [isReportOpen, setIsReportOpen] = useState(false);
   const pathVariant = useMemo(() => {
     const pathLen = path.split("/").length;
     switch (path.split("/").at(1)) {
@@ -91,7 +97,12 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
               <HeaderTitle />
             </div>
             <div className="flex items-center gap-2">
-              <UserDropdownMenu options={chatMenuOptions(() => {}, undefined)}>
+              <UserDropdownMenu
+                options={chatMenuOptions(
+                  () => setIsReportOpen(true),
+                  senderId ? parseInt(senderId) : undefined
+                )}
+              >
                 <button className="p-2">
                   <MoreVertical className="w-5 h-5" />
                 </button>
@@ -110,6 +121,9 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
       )}
     >
       {headerContent}
+      {pathVariant === "chatDetail" && (
+        <ReportModal isOpen={isReportOpen} setIsOpen={setIsReportOpen} targetName={senderName} />
+      )}
     </header>
   );
 }
