@@ -2,12 +2,18 @@
 
 import { useEffect, useState } from "react";
 import NotificationList, { NotificationItem } from "@/feature/notification/components/sections/NotificationList";
+import { fetchNotifications, deleteNotification } from "@feature/notification/api/requestNotification";
 
 export default function NotificationPageContent() {
   const [items, setItems] = useState<NotificationItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // TODO: 서버 연동 예정
+    // fetchNotifications().then((res) => {
+    //   setItems(res);
+    //   setIsLoading(false);
+    // });
     const mock: NotificationItem[] = [
       {
         id: "1",
@@ -37,10 +43,14 @@ export default function NotificationPageContent() {
     setTimeout(() => {
       setItems(mock);
       setIsLoading(false);
-    }, 300); // 로딩 시뮬레이션
+    }, 300);
   }, []);
 
   const handleDelete = (id: string) => {
+    // TODO: 서버 연동 예정
+    // deleteNotification(id).then(() => {
+    //   setItems((prev) => prev.filter((item) => item.id !== id));
+    // });
     setItems((prev) => prev.filter((item) => item.id !== id));
   };
 
