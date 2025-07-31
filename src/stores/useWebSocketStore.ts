@@ -41,12 +41,14 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
       webSocketFactory: () => {
         const sock = new SockJS(`${apiBaseUrl}/conn`, null, {
           transports: ["websocket", "xhr-streaming", "xhr-polling"],
-          timeout: 15000,
+          timeout: 30000,
         });
 
         return sock;
       },
       reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
       onConnect: () => {
         set({ isConnected: true });
 
@@ -75,6 +77,13 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
       onStompError: (frame) => {
         console.error("STOMP 오류:", frame.headers["message"]);
         set({ isConnected: false, subscriptionObjects: new Map() });
+
+        setTimeout(() => {
+          const { client } = get();
+          if (client && !client.connected) {
+            client.activate();
+          }
+        }, 5000);
       },
     });
 
