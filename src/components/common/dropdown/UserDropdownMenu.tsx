@@ -1,7 +1,6 @@
 "use client";
 
 import { ReactNode } from "react";
-import { useRef } from "react";
 import Link from "next/link";
 import {
   DropdownMenu,
@@ -32,59 +31,57 @@ export function UserDropdownMenu({
   widthClass = "w-[224px]",
   onSelectLabel,
 }: DropdownProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
       <DropdownMenuContent sideOffset={8} align={align} className={cn(widthClass, "z-105 p-1")}>
         {options.map((opt, idx) => {
           const { action, label, icon, className, disabled, variant, inset } = opt;
-            if (action.type === "separator") {
-              return <DropdownMenuSeparator key={`separator-${idx}`} />;
-            }
+          if (action.type === "separator") {
+            return <DropdownMenuSeparator key={`separator-${idx}`} />;
+          }
 
-            if (action.type === "custom") {
-              return <div key={`custom-${idx}`}>{action.element}</div>;
-            }
+          if (action.type === "custom") {
+            return <div key={`custom-${idx}`}>{action.element}</div>;
+          }
 
-            const content = <DropdownItemContent icon={icon} label={label} />;
-            const itemClass = cn(dropdownVariants({ variant, inset }), className);
+          const content = <DropdownItemContent icon={icon} label={label} />;
+          const itemClass = cn(dropdownVariants({ variant, inset }), className);
 
-            if (action.type === "link") {
-              return (
-                <DropdownMenuItem
-                  asChild
-                  key={`link-${idx}`}
-                  variant={variant}
-                  inset={inset}
-                  disabled={disabled}
-                  className={itemClass}
-                >
-                  <Link href={action.href} className="w-full h-full flex items-center">
-                    {content}
-                  </Link>
-                </DropdownMenuItem>
-              );
-            }
-
+          if (action.type === "link") {
             return (
               <DropdownMenuItem
-                key={`action-${idx}`}
-                onClick={() => {
-                  action.onClick?.();
-                  if (onSelectLabel && label) onSelectLabel(label);
-                }}
-                disabled={disabled}
+                asChild
+                key={`link-${idx}`}
                 variant={variant}
                 inset={inset}
+                disabled={disabled}
                 className={itemClass}
               >
-                {content}
+                <Link href={action.href} className="w-full h-full flex items-center">
+                  {content}
+                </Link>
               </DropdownMenuItem>
             );
-          })}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+          }
+
+          return (
+            <DropdownMenuItem
+              key={`action-${idx}`}
+              onClick={() => {
+                action.onClick?.();
+                if (onSelectLabel && label) onSelectLabel(label);
+              }}
+              disabled={disabled}
+              variant={variant}
+              inset={inset}
+              className={itemClass}
+            >
+              {content}
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
