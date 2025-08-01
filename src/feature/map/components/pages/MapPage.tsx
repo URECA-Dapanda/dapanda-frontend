@@ -10,10 +10,8 @@ import { getMapList } from "@/feature/map/api/mapRequest";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import { createDataSortOptions, sortOptionMap } from "@/components/common/dropdown/dropdownConfig";
 import type { DropdownOption } from "@/components/common/dropdown/dropdown.types";
-import { useMapHeight } from "@hooks/useMapHeight";
 
 export default function MapPage() {
-  const { mapHeight } = useMapHeight();
   const {
     isModalOpen,
     isSnapOpen,

@@ -98,14 +98,14 @@ export default function BaseBottomSheet({
     <>
       {isOpen && variant === "modal" && (
         <div
-          className="fixed inset-0 bg-black-60 z-102 w-[100dvw] lg:w-[375px] h-full mx-auto"
+          className="fixed inset-0 bg-black-60 z-102 w-[100dvw] lg:w-[600px] h-full mx-auto"
           onClick={onClose}
         />
       )}
 
       <motion.div
         className={cn(
-          "fixed bottom-0 w-[100dvw] lg:w-[375px] mx-auto inset-0 flex items-end justify-center z-30 pointer-events-none overflow-y-hidden",
+          "fixed bottom-0 w-[100dvw] lg:w-[600px] mx-auto inset-0 flex items-end justify-center z-30 pointer-events-none overflow-y-hidden",
           isOpen || variant === "snap" ? "" : "hidden"
         )}
         dragConstraints={{ top: 0, bottom: 0 }}
@@ -118,7 +118,7 @@ export default function BaseBottomSheet({
         drag="y"
       >
         <motion.div
-          className={`fixed bottom-0 z-101 bottomSheet w-[100dvw] lg:w-[375px] bg-white pointer-events-auto overflow-y-hidden ${
+          className={`fixed bottom-0 z-101 bottomSheet w-[100dvw] lg:w-[600px] bg-white pointer-events-auto overflow-y-hidden ${
             (variant === "snap" || variant === "hybrid") && sheetY === 0
               ? "rounded-t-0"
               : "rounded-t-50"

@@ -25,15 +25,15 @@ export default function SharedHeader() {
       className={clsx(
         "bg-primary2 border-none overflow-x-clip transition-opacity duration-300 shrink-0",
 
-        "w-[100dvw] lg:w-[375px] mx-auto shadow-header",
+        "w-[100dvw] lg:w-[600px] mx-auto shadow-header",
         isChatRoom && "hidden"
       )}
     >
       <div
         className={clsx(
-          "fixed top-0 z-50 w-[100dvw] lg:w-[375px] mx-auto shadow-header bg-white",
+          "fixed top-0 z-50 w-[100dvw] lg:w-[600px] mx-auto shadow-header bg-white",
           isDataPage && !isVisible && "opacity-0 pointer-events-none",
-          "w-[100dvw] lg:w-[375px] mx-auto shadow-header",
+          "w-[100dvw] lg:w-[600px] mx-auto shadow-header",
           isChatRoom && "hidden"
         )}
       >
@@ -44,11 +44,7 @@ export default function SharedHeader() {
             </div>
             <HeaderTitle />
           </div>
-          <div
-            className={`flex items-center gap-3 ${
-              HeaderCash !== null ? "" : "hidden"
-            }`}
-          >
+          <div className={`flex items-center gap-3 ${HeaderCash !== null ? "" : "hidden"}`}>
             <HeaderTimer />
             <HeaderCash />
             {/* <AvatarIcon /> */}

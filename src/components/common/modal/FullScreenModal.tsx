@@ -15,7 +15,7 @@ export default function FullScreenModal({ isOpen, onClose, children }: FullScree
   return (
     <ModalPortal>
       <div
-        className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center w-[375px] h-[100vh] mx-auto"
+        className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center w-[600px] h-[100vh] mx-auto"
         onClick={onClose}
       >
         <div className="inline-block px-4">{children}</div>
