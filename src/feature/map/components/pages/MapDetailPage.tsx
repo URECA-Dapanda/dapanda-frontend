@@ -83,7 +83,7 @@ export default function MapDetailPage() {
   };
 
   return (
-    <div className="w-full min-h-screen max-w-[600px] mx-auto overflow-y-auto">
+    <div className="w-full h-main-safe pt-safe-top pb-safe-bottom lg:w-[600px] mx-auto overflow-y-auto">
       {/* TopSheet는 고정 위치 */}
       <TopSheet
         type="wifi"
