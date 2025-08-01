@@ -130,11 +130,18 @@ export default function TopSheet({
                       onClick={
                         isDefaultImage(imageUrls[0]) ? undefined : (e) => handleImageClick(0, e)
                       }
-                      width={200}
-                      height={200}
+                      width={140}
+                      height={140}
                       className={`object-cover rounded-12 mx-auto ${
                         isDefaultImage(imageUrls[0]) ? "" : "cursor-zoom-in"
                       }`}
+                      style={{
+                        top: 44,
+                        right: 30,
+                        width: 140,
+                        height: 140,
+                        objectFit: "cover",
+                      }}
                     />
                   )}
                 </div>
@@ -148,6 +155,8 @@ export default function TopSheet({
                   style={{
                     top: 44,
                     right: 30,
+                    width: 140,
+                    height: 140,
                     objectFit: "cover",
                   }}
                   width={140}
