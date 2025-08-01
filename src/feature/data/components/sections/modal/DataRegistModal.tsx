@@ -89,7 +89,7 @@ export default function DataRegistModal({
         />
         {value[0] >= maxAmount && (
           <p className="body-xxs text-error mt-20">
-          이번 달 최대 판매 가능량을 모두 사용하셨습니다.
+            이번 달 최대 판매 가능량을 모두 사용하셨습니다.
           </p>
         )}
       </FlatCard>
@@ -106,12 +106,18 @@ export default function DataRegistModal({
         )}
       </div>
       <InputComponent
-        type="number"
+        type="text"
+        inputMode="numeric"
         placeholder="예: 8000"
         value={price}
-        onChange={(e) => setPrice(e.target.value)}
+        onChange={(e) => {
+          const raw = e.target.value.replace(/[^0-9]/g, "");
+          const numeric = raw === "" ? "" : Math.min(parseInt(raw, 10), 10_000_000).toString();
+          setPrice(numeric);
+        }}
         className="mt-4 w-full"
       />
+
       <div className="flex items-center justify-between mt-4">
         <div>
           <p className="text-black font-medium">분할 판매</p>
