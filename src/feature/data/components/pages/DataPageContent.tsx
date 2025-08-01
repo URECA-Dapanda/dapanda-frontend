@@ -56,9 +56,9 @@ export default function DataPageContent() {
 
   return (
     <>
-      <div className="w-full bg-primary2 datapagecontent h-[100%]">
+      <div className="w-full bg-primary2 datapagecontent h-[100dvh] bg-[url('/dpd-logo.svg')] bg-position-[-35_-37] bg-no-repeat bg-size-[237px]">
         {/* 상단 필터 영역 */}
-        <div className="p-4 pt-60">
+        <div className="p-4 pt-[114px]">
           <DefaultFilterCard onSearch={() => setSheetOpen(true)} />
         </div>
         <div className="absolute bottom-[78px] right-24 z-35">
@@ -88,7 +88,7 @@ export default function DataPageContent() {
           onSnapUp={() => setSheetOpen(true)}
           onSnapDown={handleSnapDown}
           variant="snap"
-          snapHeight={"40%"}
+          snapHeight={"50%"}
         >
           <div className="flex justify-center mt-24">
             <PurchaseModeTabs value={tab} onChange={handleTabChange}>

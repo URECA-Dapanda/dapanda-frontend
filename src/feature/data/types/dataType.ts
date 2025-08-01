@@ -4,6 +4,7 @@ export interface RawDataItem {
   itemId: number;
   mobileDataId: number;
   memberName: string;
+  profileImageUrl: string;
   remainAmount: number;
   purchaseAmount: number;
   pricePer100MB: number;
@@ -17,6 +18,7 @@ export interface DataType {
   title: string;
   purchaseAmount: number;
   memberName: string;
+  profileImageUrl: string;
   price: string;
   pricePer100MB: string;
   date: string;
@@ -50,6 +52,7 @@ export function mapRawToDataType(raw: RawDataItem): DataType {
     title: `${raw.remainAmount}GB`,
     purchaseAmount: raw.purchaseAmount,
     memberName: raw.memberName,
+    profileImageUrl: raw.profileImageUrl,
     price: `${raw.price.toLocaleString()}원`,
     pricePer100MB: `${raw.pricePer100MB}원/100MB`,
     date: raw.updatedAt,

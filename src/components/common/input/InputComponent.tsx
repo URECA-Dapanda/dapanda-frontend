@@ -22,6 +22,8 @@ interface BaseProps {
   disabled?: boolean;
   required?: boolean;
   step?: number;
+  maxLength?: number;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
 }
 
 // input 전용 props
@@ -57,6 +59,8 @@ const InputComponent = forwardRef<HTMLTextAreaElement | HTMLInputElement, InputC
       type = "text",
       rows = 3,
       step = 100,
+      maxLength,
+      inputMode,
     },
     ref
   ) {
@@ -111,6 +115,7 @@ const InputComponent = forwardRef<HTMLTextAreaElement | HTMLInputElement, InputC
           disabled={disabled}
           required={required}
           rows={rows}
+          maxLength={maxLength}
         />
       );
     }
@@ -127,6 +132,8 @@ const InputComponent = forwardRef<HTMLTextAreaElement | HTMLInputElement, InputC
         required={required}
         step={type === "number" ? step : undefined}
         className={cn(inputRadius, inputSize, color, className)}
+        maxLength={maxLength}
+        inputMode={inputMode}
       />
     );
   }

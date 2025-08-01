@@ -13,12 +13,33 @@ export default function TimeRangeField({ form, updateForm, errors }: Props) {
   const handleTimeChange =
     (key: "startTime" | "endTime") =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      let raw = e.target.value.replace(/[^0-9]/g, "").slice(0, 4);
+      const input = e.target.value;
+
+      const raw = input.replace(/[^0-9]/g, "");
+
+      let formatted = raw;
       if (raw.length >= 3) {
-        raw = `${raw.slice(0, 2)}:${raw.slice(2)}`;
+        formatted = `${raw.slice(0, 2)}:${raw.slice(2, 4)}`;
       }
-      updateForm(key, raw);
+
+      if (formatted.length > 5) return;
+
+      const [hh, mm] = formatted.split(":");
+      const hour = Number(hh);
+      const minute = Number(mm);
+
+      const isValid =
+        (!isNaN(hour) &&
+          !isNaN(minute) &&
+          ((hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59) ||
+            (hour === 24 && minute === 0))) ||
+        formatted.length < 5;
+
+      if (isValid) {
+        updateForm(key, formatted);
+      }
     };
+
   return (
     <section className="mb-16">
       <label className="title-sm mb-12 block">이용 시간</label>

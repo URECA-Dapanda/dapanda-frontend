@@ -1,5 +1,6 @@
 "use client";
 import { memo, useMemo } from "react";
+import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface AvatarProps {
@@ -12,8 +13,7 @@ interface AvatarProps {
  * @param size 아이콘 사이즈: small: w-4 h-4 // medium: w-8 h-8 // large: w-16 h-16
  * @returns 아바타 아이콘
  */
-function AvatarIcon({ size = "small", avatar = "c" }: Partial<AvatarProps>) {
-  const avatarImage = avatar;
+function AvatarIcon({ size = "small", avatar }: Partial<AvatarProps>) {
   const iconSize = useMemo(() => {
     switch (size) {
       case "small":
@@ -27,12 +27,27 @@ function AvatarIcon({ size = "small", avatar = "c" }: Partial<AvatarProps>) {
     }
   }, [size]);
 
-  return avatarImage ? (
+  return (
     <Avatar className={iconSize}>
-      <AvatarImage />
-      <AvatarFallback className="bg-gray-500 text-white z-0">{avatarImage}</AvatarFallback>
+      <AvatarImage
+        src={avatar || "/avatar-default.png"}
+        alt="avatar"
+        onError={() => console.log("Avatar image load failed:", avatar)}
+
+      />
+
+      <AvatarFallback className="p-0 bg-transparent relative overflow-hidden">
+        <Image
+          src="/avatar-default.png"
+          alt="default avatar"
+          fill
+          className="object-cover rounded-full"
+          sizes="(max-width: 64px) 100vw, 64px"
+          priority
+        />
+      </AvatarFallback>
     </Avatar>
-  ) : null;
+  );
 }
 
 export default memo(AvatarIcon);

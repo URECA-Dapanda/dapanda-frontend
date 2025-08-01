@@ -10,7 +10,6 @@ import { useMapRefresh } from "@/feature/map/hooks/useMapRefresh";
 import MapItemCard from "@/feature/map/components/sections/product/MapItemCard";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useMapHeight } from "@hooks/useMapHeight";
 
 export default function MapContainer() {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -18,7 +17,6 @@ export default function MapContainer() {
   const storeList = useMapStore((state) => state.storeList);
   const selectedStore = useMapStore((state) => state.selectedStore);
   const setSelectedStore = useMapStore((state) => state.setSelectedStore);
-  const { mapHeight, footerHeight } = useMapHeight();
 
   useMapInitializer();
   useMapRefresh(map);
@@ -36,30 +34,9 @@ export default function MapContainer() {
     }
   }, []);
 
-  useEffect(() => {
-    if (!map) return;
-
-    const updateMapSize = () => {
-      const mapWidth = mapRef.current?.offsetWidth ?? window.innerWidth;
-      const heightValue = parseInt(mapHeight.replace(/\D/g, ""));
-
-      map.setSize(new window.naver.maps.Size(mapWidth, heightValue));
-
-      const fullWidth = window.innerWidth;
-      const offsetX = (fullWidth - mapWidth) / 2;
-
-      const isDesktop = fullWidth > 768;
-      if (isDesktop && offsetX > 0) {
-        map.panBy(new naver.maps.Point(-offsetX, 0));
-      }
-    };
-
-    updateMapSize();
-  }, [map, mapHeight]);
-
   return (
     <>
-      <div ref={mapRef} className="w-full h-full" />
+      <div ref={mapRef} className="w-full h-sheet-safe" />
 
       <AnimatePresence>
         {selectedStore && (
@@ -68,18 +45,17 @@ export default function MapContainer() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
             transition={{ duration: 0.3 }}
-            className="absolute bottom-24 left-0 w-full px-24 z-50"
-            style={{ bottom: footerHeight }}
+            className="fixed bottom-24 pb-safe-bottom left-0 w-full px-24 z-50"
           >
-            <div className="bg-white rounded-2xl shadow-lg pt-32 px-16 pb-16 relative">
+            <div className="flex justify-end mb-8 pr-8">
               <button
-                className="absolute top-8 right-8 text-gray-400"
+                className="bg-white rounded-full shadow-md p-8"
                 onClick={() => setSelectedStore(null)}
               >
-                <X className="w-20 h-20" />
+                <X className="w-20 h-20 text-gray-500" />
               </button>
-              <MapItemCard data={selectedStore} />
             </div>
+            <MapItemCard data={selectedStore} />
           </motion.div>
         )}
       </AnimatePresence>

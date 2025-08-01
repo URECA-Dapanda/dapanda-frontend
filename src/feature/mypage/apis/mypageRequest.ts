@@ -113,3 +113,11 @@ export async function getCashHistoryList({
 
   return { items, nextCursor, monthlyInfo: info };
 }
+
+export async function updateProfileImage(imageUrl: string) {
+  const { data } = await axios.post("/api/members/profile-image", {
+    imageUrl,
+  });
+
+  return data;
+}

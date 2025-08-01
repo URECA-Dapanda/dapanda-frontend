@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="box-border h-[100vh]">
+    <html lang="ko">
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -39,7 +39,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="flex flex-col box-border min-h-screen w-full bg-gray-300 justify-center items-center">
+      <body className="flex flex-col box-border w-full bg-gray-300 justify-center items-center">
         <ProviderWrapper>
           <FcmInitializer />
           <Analytics />

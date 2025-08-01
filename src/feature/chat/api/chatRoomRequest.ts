@@ -41,7 +41,6 @@ export const markMessageAsRead = async (chatMessageId: number | string) => {
       throw new Error(response.data.message || "메시지 읽음 처리 실패");
     }
   } catch (error) {
-    console.error("메시지 읽음 처리 실패:", error);
     throw error;
   }
 };

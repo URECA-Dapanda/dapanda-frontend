@@ -89,7 +89,7 @@ export default function MapDetailPage() {
   };
 
   return (
-    <div className="w-[100dvw] lg:w-[375px] mx-auto relative">
+    <div className="w-[100dvw] lg:w-[600px] mx-auto relative">
       <TopSheet
         type="wifi"
         data={{

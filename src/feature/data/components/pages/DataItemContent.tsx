@@ -6,10 +6,10 @@ import { formatRelativeTime } from "@lib/time";
 import { SkeletonCard } from "@components/common/skeleton";
 export default function DataItemContent({ data }: Partial<ProductItemProps<DataType>>) {
   if (!data) return <SkeletonCard />;
-  const { date, price, pricePer100MB, title, memberName, splitType } = data ?? {};
+  const { date, price, pricePer100MB, title, memberName, splitType, profileImageUrl } = data ?? {};
   return (
     <LayoutBox layout="grid" autoFit gap={32} direction="row" height="full">
-      <AvatarIcon size="large" />
+      <AvatarIcon size="large" avatar={profileImageUrl}/>
       <div className="flex flex-col justify-center h-full">
         <span className="body-lg">{title}</span>
         <span className="body-sm text-gray-500 line-clamp-5">{memberName}</span>

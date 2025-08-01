@@ -1,6 +1,6 @@
-import { Fragment, useCallback } from "react";
+import { Fragment,  useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { ImageIcon, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { ButtonComponent } from "@components/common/button";
 import type { ProductItemProps } from "@/feature/data/types/dataType";
 import type { MapType } from "@/feature/map/types/mapType";
@@ -12,7 +12,9 @@ export default function MapItemCardContent({
   data: { productId, address, price, score, title, startTime, endTime, open, imageUrl },
 }: ProductItemProps<MapType> & { disableUseButton?: boolean }) {
   const router = useRouter();
-  const handleCreateChatRoom = useCallback(
+
+
+ const handleCreateChatRoom = useCallback(
     async (e: React.MouseEvent) => {
       e.stopPropagation();
       try {
@@ -30,7 +32,7 @@ export default function MapItemCardContent({
     },
     [productId, router]
   );
-  console.log(startTime, endTime);
+  
   return (
     <Fragment>
       <div className="grid grid-cols-[auto_1fr_auto] gap-16 items-center">
@@ -38,21 +40,27 @@ export default function MapItemCardContent({
         <div className="w-56 h-56 bg-gray-200 rounded-full flex items-center justify-center">
           {imageUrl ? (
             <Image
-              src={imageUrl || "/default-wifi-image.png"}
+              src={imageUrl}
               alt="대표 이미지"
               width={56}
               height={56}
               className="w-full h-full rounded-full object-cover"
             />
           ) : (
-            <ImageIcon className="text-gray-400" />
+            <Image
+              src="/default-wifi-image.png"
+              alt="기본 이미지"
+              width={56}
+              height={56}
+              className="w-full h-full rounded-full object-cover"
+            />
           )}
         </div>
 
         {/* 가운데 텍스트 */}
         <div className="flex flex-col justify-center">
           <div className="flex flex-col">
-            <span className="body-md">{title}</span>
+            <span className="body-md truncate max-w-[160px]">{title}</span>
             <div className="flex items-center gap-8 mt-4">
               <div className="flex items-center text-yellow-400">
                 <Star className="fill-current" />
