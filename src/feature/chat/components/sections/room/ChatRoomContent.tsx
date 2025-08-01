@@ -384,7 +384,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
                 ? formatMessageDate(group.messages[0].createdAt)
                 : formatDateDivider()}
             </div>
-            <div className="space-y-24 pb-30">
+            <div className="space-y-24 pb-36">
               {group.messages.map((message) => (
                 <ChatBubble
                   key={message.chatMessageId}
