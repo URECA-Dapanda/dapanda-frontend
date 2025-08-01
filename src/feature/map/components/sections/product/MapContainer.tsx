@@ -71,15 +71,15 @@ export default function MapContainer() {
             className="absolute bottom-24 left-0 w-full px-24 z-50"
             style={{ bottom: footerHeight }}
           >
-            <div className="bg-white rounded-2xl shadow-lg pt-32 px-16 pb-16 relative">
+            <div className="flex justify-end mb-8 pr-8">
               <button
-                className="absolute top-8 right-8 text-gray-400"
+                className="bg-white rounded-full shadow-md p-8"
                 onClick={() => setSelectedStore(null)}
               >
-                <X className="w-20 h-20" />
+                <X className="w-20 h-20 text-gray-500" />
               </button>
-              <MapItemCard data={selectedStore} />
             </div>
+            <MapItemCard data={selectedStore} />
           </motion.div>
         )}
       </AnimatePresence>
