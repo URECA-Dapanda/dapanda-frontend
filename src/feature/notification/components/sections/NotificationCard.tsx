@@ -5,17 +5,17 @@ import { motion, useMotionValue, animate } from "framer-motion";
 import { Trash2 } from "lucide-react";
 
 interface NotificationCardProps {
-  id: string;
+  id: number;
   title: string;
-  message: string;
+  body: string;
   createdAt: string;
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void;
 }
 
 export default function NotificationCard({
   id,
   title,
-  message,
+  body,
   createdAt,
   onDelete,
 }: NotificationCardProps) {
@@ -51,7 +51,7 @@ export default function NotificationCard({
         className="relative z-10 bg-white border border-primary-100 p-16 shadow-default rounded-20 cursor-pointer"
       >
         <div className="body-md text-primary-700">{title}</div>
-        <div className="body-sm">{message}</div>
+        <div className="body-sm">{body}</div>
         <div className="body-xs text-gray-400">{createdAt}</div>
       </motion.div>
     </div>

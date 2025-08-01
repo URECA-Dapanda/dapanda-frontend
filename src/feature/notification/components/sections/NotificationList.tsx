@@ -4,15 +4,15 @@ import NotificationCard from "./NotificationCard";
 import { BellOff } from "lucide-react";
 
 export interface NotificationItem {
-  id: string;
+  id: number;
   title: string;
-  message: string;
+  body: string;
   createdAt: string;
 }
 
 interface NotificationListProps {
   items: NotificationItem[];
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void;
 }
 
 export default function NotificationList({ items, onDelete }: NotificationListProps) {
