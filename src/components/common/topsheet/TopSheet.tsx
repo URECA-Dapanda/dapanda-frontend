@@ -17,6 +17,7 @@ import { WifiTopSheetContent } from "./WifiTopSheetContent";
 import { useTopSheetExpanded } from "./useTopSheetExpanded";
 import { useTopSheetImageStyle } from "./useTopSheetImageStyle";
 import ReportTriggerButton from "../button/ReportTriggerButton";
+import clsx from "clsx";
 
 export default function TopSheet({
   type,
@@ -62,8 +63,14 @@ export default function TopSheet({
       </div>
 
       <motion.div
-        className="fixed top-[56px] left-1/2 -translate-x-1/2 w-full max-w-[600px] bg-secondary shadow-default rounded-b-30 overflow-hidden z-30"
-        animate={{ y: expanded ? -10 : 0 }}
+        className={clsx(
+          "fixed left-1/2 -translate-x-1/2 w-full max-w-[600px]",
+          "bg-secondary shadow-default rounded-b-30 overflow-hidden z-30",
+          "top-[calc(56px+env(safe-area-inset-top,0px))]"
+        )}
+        animate={{ y: expanded ? 0 : 0 }}
+        initial={false}
+        transition={{ type: "spring", damping: 20, stiffness: 200 }}
       >
         <motion.div
           className="w-full h-full pt-20"

@@ -6,7 +6,6 @@ import TopSheet from "@/components/common/topsheet/TopSheet";
 import { ButtonComponent } from "@components/common/button";
 import TimeSelectorSection from "@/feature/map/components/sections/product/TimeSelectorSection";
 import SellerSection from "@/feature/map/components/sections/seller/SellerSection";
-// import { usePurchaseTimer } from "@/feature/map/hooks/usePurchaseTimer";
 import { useMapDetailData } from "@/feature/map/hooks/useMapDetailData";
 import { useTimeState } from "@/feature/map/hooks/useTimeState";
 import DeletePostModal from "@/feature/data/components/sections/modal/DeletePostModal";
@@ -25,7 +24,6 @@ export default function MapDetailPage() {
   const { setInfo } = usePaymentStore();
 
   const [topSheetExpanded, setTopSheetExpanded] = useState(false);
-  // const { handlePurchase } = usePurchaseTimer();
   const { data, isLoading, isError } = useMapDetailData(postId);
   const [error, setError] = useState<string | null>(null);
 
@@ -82,14 +80,11 @@ export default function MapDetailPage() {
     setError(null);
 
     setInfo(buildWifiPaymentInfo(data, startTime, endTime));
-
-    // handlePurchase(startTime, endTime, () => {
-    //   router.push("/data");
-    // });
   };
 
   return (
-    <div className="w-[100dvw] lg:w-[600px] mx-auto relative pt-[56px] ">
+    <div className="w-full min-h-screen max-w-[600px] mx-auto overflow-y-auto">
+      {/* TopSheet는 고정 위치 */}
       <TopSheet
         type="wifi"
         data={{
@@ -101,39 +96,46 @@ export default function MapDetailPage() {
         onExpandChange={setTopSheetExpanded}
       />
 
+      {/* 전체 컨텐츠 영역 - TopSheet 높이만큼 패딩 */}
       <div
         className={clsx(
-          "transition-all duration-300 px-24 py-24",
-          topSheetExpanded ? "pt-[450px]" : "pt-[280px]"
+          "w-full transition-all duration-300",
+          // TopSheet 높이만큼 상단 패딩
+          topSheetExpanded ? "pt-[500px]" : "pt-[320px]",
+          // 하단 safe area + 여유 공간
+          "pb-[calc(env(safe-area-inset-bottom,0px)+72px)]"
         )}
       >
-        <div className="mt-12">
-          <TimeSelectorSection
-            startTime={startTime}
-            setStartTime={setStartTime}
-            endTime={endTime}
-            setEndTime={setEndTime}
-            minTime={minTime}
-            maxTime={maxTime}
-            showEditButton={isOwner}
-            onEditClick={() => router.push(`/map/regist/wifi?edit=true&${params.toString()}`)}
-            onDeleteClick={() => setDeleteModalOpen(true)}
+        <div className="px-24 py-24">
+          <div className="mt-12">
+            <TimeSelectorSection
+              startTime={startTime}
+              setStartTime={setStartTime}
+              endTime={endTime}
+              setEndTime={setEndTime}
+              minTime={minTime}
+              maxTime={maxTime}
+              showEditButton={isOwner}
+              onEditClick={() => router.push(`/map/regist/wifi?edit=true&${params.toString()}`)}
+              onDeleteClick={() => setDeleteModalOpen(true)}
+            />
+          </div>
+
+          <SellerSection
+            sellerId={data.memberId}
+            productId={String(data.productId)}
+            isOwner={isOwner}
           />
-        </div>
 
-        <SellerSection
-          sellerId={data.memberId}
-          productId={String(data.productId)}
-          isOwner={isOwner}
-        />
-
-        <div className="px-6 mt-12">
-          <ButtonComponent className="w-full" variant="primary" size="xl" onClick={onBuy}>
-            구매하기
-          </ButtonComponent>
-          {error && <p className="body-sm text-error text-center">{error}</p>}
+          <div className="px-6 mt-12">
+            <ButtonComponent className="w-full" variant="primary" size="xl" onClick={onBuy}>
+              구매하기
+            </ButtonComponent>
+            {error && <p className="body-sm text-error text-center mt-2">{error}</p>}
+          </div>
         </div>
       </div>
+
       <DeletePostModal isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} />
       <UsePaymentModals />
     </div>
