@@ -1,5 +1,4 @@
 import Link from "next/link";
-import AvatarIcon from "@components/common/AvatarIcon";
 import { Rating, RatingButton } from "@components/common/rating/RatingScore";
 import { useQuery } from "@tanstack/react-query";
 import { getMyInfo } from "@feature/mypage/apis/mypageRequest";
