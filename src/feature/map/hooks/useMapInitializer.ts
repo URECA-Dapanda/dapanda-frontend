@@ -16,7 +16,7 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
 
   useEffect(() => {
     let retryCount = 0;
-    const maxRetries = 50;
+    const maxRetries = 5;
 
     const interval = setInterval(() => {
       const naver = window.naver;
@@ -25,7 +25,6 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
         retryCount += 1;
         if (retryCount > maxRetries) {
           clearInterval(interval);
-          console.warn("🛑 Naver Map 로드 실패: window.naver.maps 없음");
         }
         return;
       }
@@ -33,11 +32,10 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
       const mapContainer = document.getElementById(MAP_CONTAINER_ID);
       if (!mapContainer) {
         clearInterval(interval);
-        console.warn("🛑 지도 컨테이너가 존재하지 않음");
         return;
       }
 
-      clearInterval(interval); // ✅ 준비 완료, 더 이상 재시도 필요 없음
+      clearInterval(interval); // 준비 완료, 더 이상 재시도 필요 없음
 
       const center = new naver.maps.LatLng(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng);
       const map = new naver.maps.Map(mapContainer, {
