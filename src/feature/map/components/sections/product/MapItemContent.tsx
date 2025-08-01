@@ -1,6 +1,6 @@
 import { Fragment, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { ImageIcon, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { ButtonComponent } from "@components/common/button";
 import type { ProductItemProps } from "@/feature/data/types/dataType";
 import type { MapType } from "@/feature/map/types/mapType";
@@ -38,21 +38,27 @@ export default function MapItemCardContent({
         <div className="w-56 h-56 bg-gray-200 rounded-full flex items-center justify-center">
           {imageUrl ? (
             <Image
-              src={imageUrl || "/default-wifi-image.png"}
+              src={imageUrl}
               alt="대표 이미지"
               width={56}
               height={56}
               className="w-full h-full rounded-full object-cover"
             />
           ) : (
-            <ImageIcon className="text-gray-400" />
+            <Image
+              src="/default-wifi-image.png"
+              alt="기본 이미지"
+              width={56}
+              height={56}
+              className="w-full h-full rounded-full object-cover"
+            />
           )}
         </div>
 
         {/* 가운데 텍스트 */}
         <div className="flex flex-col justify-center">
           <div className="flex flex-col">
-            <span className="body-md truncate max-w-[115px]">{title}</span>
+            <span className="body-md truncate max-w-[160px]">{title}</span>
             <div className="flex items-center gap-8 mt-4">
               <div className="flex items-center text-yellow-400">
                 <Star className="fill-current" />
