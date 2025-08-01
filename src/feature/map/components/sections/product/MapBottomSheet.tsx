@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { BottomSheetHeader, BaseBottomSheet } from "@components/common/bottomsheet";
+import { BaseBottomSheet } from "@components/common/bottomsheet";
 import { ButtonComponent } from "@components/common/button";
 import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
