@@ -78,7 +78,7 @@ export default function DataPageContent() {
           isOpen={registModalOpen}
           onClose={() => setRegistModalOpen(false)}
           variant="modal"
-          zIndex={102}
+          zIndex={105}
         >
           <DataRegistModal onClose={handleRegistButtonClick} />
         </BaseBottomSheet>
