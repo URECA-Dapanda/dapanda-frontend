@@ -72,7 +72,7 @@ export default function DataDetailContent() {
       <div
         className={clsx(
           "space-y-12 px-24 transition-all duration-300",
-          topSheetExpanded ? "pt-[450px]" : "pt-[300px]"
+          topSheetExpanded ? "pt-[530px]" : "pt-[350px]"
         )}
       />
 
@@ -133,7 +133,7 @@ export default function DataDetailContent() {
           />
 
           {!data.splitType && (
-            <div className="flex justify-center mt-24">
+            <div className="flex justify-center mt-24 mb-32">
               <ButtonComponent
                 variant={"primary"}
                 className="w-full px-60"
