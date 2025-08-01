@@ -129,7 +129,7 @@ export default function BaseBottomSheet({
               variant === "snap" || variant === "hybrid"
                 ? `calc(100vh - ${HEADER_OFFSET + BOTTOM_OFFSET}px)`
                 : `${MODAL_MAX_HEIGHT}px`,
-            marginBottom: variant === "snap" || variant === "hybrid" ? `${BOTTOM_OFFSET}px` : "0px",
+            marginBottom: variant === "snap" ? `${BOTTOM_OFFSET}px` : "0px",
             overflowY: "auto",
             WebkitOverflowScrolling: "touch",
             touchAction: "none",
