@@ -372,7 +372,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   }, [senderName, setTitle]);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col">
       {product && (
         <div
           className="fixed top-13 left-0 right-0 z-40 px-24 pt-12 pb-8
