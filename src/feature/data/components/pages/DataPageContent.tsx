@@ -88,9 +88,9 @@ export default function DataPageContent() {
           onSnapUp={() => setSheetOpen(true)}
           onSnapDown={handleSnapDown}
           variant="snap"
-          snapHeight={"50%"}
+          snapHeight={300}
         >
-          <div className="flex justify-center mt-24">
+          <div className="flex justify-center mt-20">
             <PurchaseModeTabs value={tab} onChange={handleTabChange}>
               <DefaultTabBody isSheetOpen={sheetOpen} onSearchClick={handleSnapDown} />
               <ScrapTabBody />

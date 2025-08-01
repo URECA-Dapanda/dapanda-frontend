@@ -74,8 +74,7 @@ export default function MapBottomSheet({
       snapHeight={300}
       zIndex={101}
     >
-      <BottomSheetHeader />
-      <div className="flex justify-between items-center px-24 mb-12 mt-6">
+      <div className="flex justify-between items-center px-24 mb-12 mt-16">
         <div className="flex items-center gap-12">
           <UserDropdownMenu
             options={sortOptions}
@@ -104,9 +103,9 @@ export default function MapBottomSheet({
       <div
         ref={parentRef}
         className={cn(
-          "overflow-y-auto px-24 mb-[54px]",
+          "overflow-y-auto px-24 pb-[54px]",
           isSnapUp
-            ? "h-sheet-safe"
+            ? "h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-107px-60px)]"
             : "h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-107px-300px)]"
         )}
       >

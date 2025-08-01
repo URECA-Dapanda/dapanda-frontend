@@ -88,7 +88,8 @@ export default function DataDetailContent() {
               <ButtonComponent
                 variant={"outlineGray"}
                 size="xs"
-                onClick={() => setEditModalOpen(true)}>
+                onClick={() => setEditModalOpen(true)}
+              >
                 <Pencil className="w-12 h-12 mr-2" />
                 수정하기
               </ButtonComponent>
@@ -151,7 +152,7 @@ export default function DataDetailContent() {
         isOpen={editModalOpen}
         onClose={() => setEditModalOpen(false)}
         variant="modal"
-        zIndex={100}
+        zIndex={105}
       >
         <DataRegistModal
           mode="edit"
