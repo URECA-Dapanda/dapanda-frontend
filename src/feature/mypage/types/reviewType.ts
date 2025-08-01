@@ -5,7 +5,8 @@ export interface ReviewType {
   createdAt: string;
   updatedAt: string;
   reviewerId: number;
-  reviewerName: string;
+  reviewerName?: string;
+  revieweeName?: string;
   tradeId: number;
   dataAmount: number;
   productId: number;

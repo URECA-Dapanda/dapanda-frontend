@@ -8,6 +8,7 @@ interface ChatHistoryResponse {
     hasNext: boolean;
     size: number;
   };
+  memberId: number;
 }
 
 export async function getChatHistory(
@@ -29,6 +30,7 @@ export async function getChatHistory(
       return {
         data: response.data.data.data,
         pageInfo: response.data.data.pageInfo,
+        memberId: response.data.data.memberId,
       };
     } else {
       throw new Error(response.data.message || "채팅 기록 조회 실패");
