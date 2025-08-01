@@ -45,7 +45,7 @@ export default function ChatItem({
           <AvatarIcon avatar={avatarUrl} size="medium" />
         </button>
         <Link
-          href={`/chat/${chatRoomId}?productId=${productId}&senderName=${encodeURIComponent(
+          href={`/chat/${chatRoomId}?productId=${productId}&memberName=${encodeURIComponent(
             name
           )}&senderId=${senderId || ""}`}
           className="flex-1"

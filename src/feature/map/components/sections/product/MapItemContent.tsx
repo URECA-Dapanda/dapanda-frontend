@@ -1,4 +1,4 @@
-import { Fragment, useCallback } from "react";
+import { Fragment,  useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Star } from "lucide-react";
 import { ButtonComponent } from "@components/common/button";
@@ -12,7 +12,9 @@ export default function MapItemCardContent({
   data: { productId, address, price, score, title, startTime, endTime, open, imageUrl },
 }: ProductItemProps<MapType> & { disableUseButton?: boolean }) {
   const router = useRouter();
-  const handleCreateChatRoom = useCallback(
+
+
+ const handleCreateChatRoom = useCallback(
     async (e: React.MouseEvent) => {
       e.stopPropagation();
       try {
@@ -30,6 +32,7 @@ export default function MapItemCardContent({
     },
     [productId, router]
   );
+  
   return (
     <Fragment>
       <div className="grid grid-cols-[auto_1fr_auto] gap-16 items-center">
