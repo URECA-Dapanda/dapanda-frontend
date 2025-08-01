@@ -43,26 +43,20 @@ export default function MapBottomSheet({
     setIsSnapUp(false);
   }, []);
 
-  const { parentRef, rowVirtualizer, flatItems, hasNextPage } =
-    useVirtualizedInfiniteQuery<MapType>({
-      queryKey: [
-        "mapList",
-        String(myPosition?.lat()),
-        String(myPosition?.lng()),
-        sortLabel,
-      ] as const,
-      queryFn: ({ pageParam }) =>
-        getMapList({
-          cursorId: pageParam as number | undefined,
-          size: 10,
-          latitude: myPosition?.lat() ?? 0,
-          longitude: myPosition?.lng() ?? 0,
-          productSortOption: sortOptionMap[sortLabel],
-        }),
-      enabled: !!myPosition,
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-      estimateSize: () => 160,
-    });
+  const { parentRef, rowVirtualizer, flatItems } = useVirtualizedInfiniteQuery<MapType>({
+    queryKey: ["mapList", String(myPosition?.lat()), String(myPosition?.lng()), sortLabel] as const,
+    queryFn: ({ pageParam }) =>
+      getMapList({
+        cursorId: pageParam as number | undefined,
+        size: 10,
+        latitude: myPosition?.lat() ?? 0,
+        longitude: myPosition?.lng() ?? 0,
+        productSortOption: sortOptionMap[sortLabel],
+      }),
+    enabled: !!myPosition,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    estimateSize: () => 160,
+  });
 
   useEffect(() => {
     rowVirtualizer.scrollToIndex(0);
@@ -135,13 +129,9 @@ export default function MapBottomSheet({
                   transform: `translateY(${virtualRow.start}px)`,
                 }}
               >
-                {item ? (
-                  <div className="mb-24">
-                    <MapItemCard data={item} disableUseButton={!item.open && !availableOnly} />
-                  </div>
-                ) : hasNextPage ? (
-                  <div className="text-center text-gray-400 py-4">불러오는 중...</div>
-                ) : null}
+                <div className="mb-24">
+                  <MapItemCard data={item} disableUseButton={!item?.open && !availableOnly} />
+                </div>
               </div>
             );
           })}
