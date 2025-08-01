@@ -6,6 +6,7 @@ import BaseModal from "@/components/common/modal/BaseModal";
 import ModalHeader from "@/components/common/modal/ModalHeader";
 import { ButtonComponent } from "@/components/common/button/ButtonComponent";
 import { getMyData } from "@feature/mypage/apis/mypageRequest";
+import FullScreenModal from "@components/common/modal/FullScreenModal";
 
 interface PaymentCompleteModalProps {
   isOpen: boolean;
@@ -17,12 +18,7 @@ interface PaymentCompleteModalProps {
   };
 }
 
-const PaymentCompleteModal = ({
-  isOpen,
-  onClose,
-  type,
-  info,
-}: PaymentCompleteModalProps) => {
+const PaymentCompleteModal = ({ isOpen, onClose, type, info }: PaymentCompleteModalProps) => {
   const router = useRouter();
   const [remainingData, setRemainingData] = useState<string | null>(null);
   useEffect(() => {
@@ -47,9 +43,7 @@ const PaymentCompleteModal = ({
 
     return (
       <>
-        <p className="title-sm mb-8">
-          {type === "wifi" ? "와이파이" : "핫스팟"} 구매 완료!
-        </p>
+        <p className="title-sm mb-8">{type === "wifi" ? "와이파이" : "핫스팟"} 구매 완료!</p>
         <p className="text-gray-600 body-sm mb-32">
           {info.title} 상품이 성공적으로 구매되었습니다.
         </p>
@@ -60,18 +54,22 @@ const PaymentCompleteModal = ({
   const handleClick = () => {
     onClose();
     router.push("/data");
-  }
+  };
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose}>
-      <ModalHeader title="결제 완료" onClose={onClose} />
-      <div className="flex flex-col items-center text-center">
-        <div className="w-48 h-48 rounded-full bg-green-500 mb-24 flex items-center justify-center text-white text-xl">
-          ✓
+    <FullScreenModal isOpen={isOpen}>
+      <BaseModal isOpen={isOpen} onClose={onClose}>
+        <ModalHeader title="결제 완료" onClose={onClose} />
+        <div className="flex flex-col items-center text-center">
+          <div className="w-48 h-48 rounded-full bg-green-500 mb-24 flex items-center justify-center text-white text-xl">
+            ✓
+          </div>
+          {getMessage()}
+          <ButtonComponent className="w-[278px]" onClick={handleClick}>
+            홈으로 돌아가기
+          </ButtonComponent>
         </div>
-        {getMessage()}
-        <ButtonComponent className="w-[278px]" onClick={handleClick}>홈으로 돌아가기</ButtonComponent>
-      </div>
-    </BaseModal>
+      </BaseModal>
+    </FullScreenModal>
   );
 };
 
