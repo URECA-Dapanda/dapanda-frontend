@@ -32,6 +32,7 @@ export const usePresignedUpload = () => {
     await Promise.all(
       presignResults.map(async (result, idx) => {
         const file = files[idx];
+
         await fetch(result.url, {
           method: "PUT",
           headers: {
