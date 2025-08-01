@@ -199,12 +199,12 @@ export default function TopSheet({
 
         {isModalOpen && modalImageIndex !== null && (
           <FullScreenModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-            <div className="relative w-screen h-screen">
+            <div className="relative w-[70dvw] lg:w-[420px] h-main-safe justify-center-safe items-start">
               <Image
                 src={imageUrls[modalImageIndex]}
                 alt={`확대 이미지 ${modalImageIndex + 1}`}
                 fill
-                className="object-contain"
+                className="object-contain "
               />
             </div>
           </FullScreenModal>
