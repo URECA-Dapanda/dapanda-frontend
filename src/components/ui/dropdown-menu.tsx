@@ -19,7 +19,7 @@ const DropdownMenuContent = React.forwardRef<
 >(({ className, sideOffset = 8, ...props }, ref) => {
   return (
     <DropdownMenuPrimitive.Portal>
-      <div className="fixed top-0 left-0 z-50">
+      <div className="fixed top-0 left-0 z-101">
         <DropdownMenuPrimitive.Content
           ref={ref}
           sideOffset={sideOffset}
