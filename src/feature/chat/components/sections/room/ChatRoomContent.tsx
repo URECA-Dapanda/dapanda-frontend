@@ -14,6 +14,7 @@ import { getChatHistory } from "@/feature/chat/api/getChatHistory";
 import { markMessageAsRead } from "@/feature/chat/api/chatRoomRequest";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 import { isTemporaryMessage, formatMessageDate } from "@/feature/chat/utils/chatUtils";
+import { getMyInfo } from "@/feature/mypage/apis/mypageRequest";
 
 interface ChatRoomContentProps {
   chatRoomId: number;
@@ -36,6 +37,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const [oldestMessageId, setOldestMessageId] = useState<number | undefined>(undefined);
   const [product, setProduct] = useState<ProductInfo | null>(null);
   const [currentMemberId, setCurrentMemberId] = useState<number | undefined>(undefined);
+  const [senderProfileImage, setSenderProfileImage] = useState<string | undefined>(undefined);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
 
@@ -351,6 +353,18 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const senderName = urlSenderName || product?.memberName || "상대방";
   const senderId = urlSenderId ? parseInt(urlSenderId, 10) : product?.memberId;
 
+  useEffect(() => {
+    if (senderId && !senderProfileImage) {
+      getMyInfo(senderId)
+        .then((userInfo) => {
+          setSenderProfileImage(userInfo.profileImageUrl);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [senderId, senderProfileImage]);
+
   // 헤더 제목 설정
   useEffect(() => {
     setTitle(senderName);
@@ -384,11 +398,12 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
                 ? formatMessageDate(group.messages[0].createdAt)
                 : formatDateDivider()}
             </div>
-            <div className="space-y-24 pb-30">
+            <div className="space-y-24 pb-36">
               {group.messages.map((message) => (
                 <ChatBubble
                   key={message.chatMessageId}
                   message={message}
+                  avatarUrl={senderProfileImage}
                   memberId={senderId}
                   currentMemberId={currentMemberId}
                 />
