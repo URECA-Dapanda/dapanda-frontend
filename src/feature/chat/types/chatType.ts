@@ -23,6 +23,7 @@ export interface ChatSocketMessage {
   createdAt: string;
   isMine: boolean;
   senderName?: string;
+  senderProfileImageUrl?: string;
   unreadCount?: number;
   senderId?: number;
 }
