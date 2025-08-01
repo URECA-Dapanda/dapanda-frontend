@@ -142,77 +142,77 @@ module.exports = {
       const newUtilities = {
         ".title-lg": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "28px",
+          fontSize: "24px",
           fontWeight: "600",
         },
         ".title-md": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "24px",
+          fontSize: "20px",
           fontWeight: "600",
         },
         ".title-sm": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "20px",
+          fontSize: "16px",
           fontWeight: "600",
         },
         ".title-xs": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "18px",
+          fontSize: "14px",
           fontWeight: "600",
         },
         ".h1": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "36px",
+          fontSize: "32px",
           fontWeight: "700",
         },
         ".h2": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "28px",
+          fontSize: "24px",
           fontWeight: "700",
         },
         ".h3": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "24px",
+          fontSize: "20px",
           fontWeight: "700",
         },
         ".body-lg": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "24px",
+          fontSize: "20px",
           fontWeight: "500",
         },
         ".body-md": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "20px",
+          fontSize: "16px",
           fontWeight: "500",
         },
         ".body-sm": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "18px",
+          fontSize: "14px",
           fontWeight: "500",
         },
         ".body-xs": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "16px",
+          fontSize: "12px",
           fontWeight: "500",
         },
         ".body-xxs": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "14px",
+          fontSize: "10px",
           fontWeight: "500",
         },
         ".caption-lg": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "16px",
+          fontSize: "12px",
           fontWeight: "300",
         },
         ".caption-md": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "14px",
+          fontSize: "10px",
           fontWeight: "300",
         },
         ".caption-sm": {
           fontFamily: theme("fontFamily.pretendard").join(", "),
-          fontSize: "12px",
+          fontSize: "8px",
           fontWeight: "300",
         },
       };
