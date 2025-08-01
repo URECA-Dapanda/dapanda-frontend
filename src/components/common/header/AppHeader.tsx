@@ -48,7 +48,7 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
           <>
             <Image
               src="/dpd-main-logo.svg"
-              className="absolute top-0 right-0 z-20"
+              className="absolute top-0 right-0"
               alt="logo"
               width={96}
               height={0}

@@ -118,7 +118,7 @@ export default function BaseBottomSheet({
         drag="y"
       >
         <motion.div
-          className={`bottomSheet bg-white pointer-events-auto overflow-y-hidden ${
+          className={`fixed bottom-0 z-100 bottomSheet bg-white pointer-events-auto overflow-y-hidden ${
             (variant === "snap" || variant === "hybrid") && sheetY === 0
               ? "rounded-t-0"
               : "rounded-t-50"
