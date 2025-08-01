@@ -30,7 +30,6 @@ export default function MapItemCardContent({
     },
     [productId, router]
   );
-  console.log(startTime, endTime);
   return (
     <Fragment>
       <div className="grid grid-cols-[auto_1fr_auto] gap-16 items-center">
