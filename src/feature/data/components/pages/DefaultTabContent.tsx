@@ -108,7 +108,11 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
           mode="scroll"
           parentRef={parentRef}
           rowVirtualizer={rowVirtualizer}
-          height={isSheetOpen ? "calc( 70vh + 5px )" : "calc( 48vh - 54px )"}
+          height={
+            isSheetOpen
+              ? "calc( 100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 83px - 42px - 107px )"
+              : "calc( 100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 107px - 83px - 300px )"
+          }
           items={flatItems}
           isFetchingNextPage={isFetchingNextPage}
           hasNextPage={hasNextPage}
