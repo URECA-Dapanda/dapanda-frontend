@@ -24,7 +24,7 @@ export default function MapSelectedInfoCard({ selected, onNext }: Props) {
         stiffness: 300,
         duration: 0.4,
       }}
-      className="absolute bottom-0 left-0 w-full z-30 bg-white shadow-2xl border-t border-gray-200"
+      className="fixed bottom-0 pb-safe-bottom left-0 w-full z-30 bg-white shadow-2xl border-t border-gray-200"
     >
       <div className="px-24 py-24">
         <motion.div

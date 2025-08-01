@@ -25,7 +25,7 @@ export default function MapHeaderSearchBox({
   }, [isSearchMode]);
 
   return (
-    <div className="absolute top-0 left-0 w-full z-20 bg-white px-24 py-20">
+    <div className="w-full z-20 bg-white px-24 py-[9px]">
       <div className="flex items-center justify-between h-36 rounded-md border border-gray-300 px-16">
         <MapPin className="w-24 h-24 text-gray-400" />
 

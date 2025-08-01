@@ -363,7 +363,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
       {product && (
         <div
           className="fixed top-52 left-0 right-0 z-40 px-24 pt-24 pb-12
-         bg-white w-[100dvw] lg:w-[375px] mx-auto"
+         bg-white w-[100dvw] lg:w-[600px] mx-auto"
         >
           <ChatPostCard
             title={product.title}

@@ -17,7 +17,7 @@ export default function ChatHeader({ senderName, onReport, senderId }: ChatHeade
   };
 
   return (
-    <div className="fixed top-0 z-50 w-[100dvw] lg:w-[375px] mx-auto px-24 bg-white shadow-none">
+    <div className="fixed top-0 z-50 w-[100dvw] lg:w-[600px] mx-auto px-24 bg-white shadow-none">
       <div className="flex items-center justify-between py-3">
         <div className="flex items-center gap-8 flex-1 min-w-0">
           <BackButton />

@@ -34,7 +34,7 @@ export function UserDropdownMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-      <DropdownMenuContent sideOffset={8} align={align} className={cn(widthClass, "p-1")}>
+      <DropdownMenuContent sideOffset={8} align={align} className={cn(widthClass, "z-105 p-1")}>
         {options.map((opt, idx) => {
           const { action, label, icon, className, disabled, variant, inset } = opt;
 
