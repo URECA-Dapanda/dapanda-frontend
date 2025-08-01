@@ -16,13 +16,13 @@ export default function LandingPageContent() {
   }, [isLogin]);
 
   return (
-    <div className="w-full max-w-sm mx-auto min-h-screen bg-gradient-to-b from-[#f5e6f3] via-[#f0e1f1] to-[#ede0f0] flex flex-col items-center justify-center p-32 relative overflow-hidden">
+    <div className="w-full lg:w-[600px] mx-auto h-main-safe bg-gradient-to-b from-[#f5e6f3] via-[#f0e1f1] to-[#ede0f0] flex flex-col items-center justify-center relative overflow-hidden">
       <div className="flex-1 flex flex-col items-center justify-center h-full">
         <div className="mb-32">
           <Image
             src="/dpd-main-logo.png"
             alt="DPD Logo"
-            width={341}
+            width={500}
             height={0}
             className="mx-auto"
             style={{ filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.1))" }}
