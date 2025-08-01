@@ -1,9 +1,9 @@
 import axios from "@/lib/axios";
 
 export interface NotificationItem {
-    id: string;
+    id: number;
     title: string;
-    message: string;
+    body: string;
     createdAt: string;
   }
   
@@ -12,6 +12,6 @@ export interface NotificationItem {
     return res.data.data;
   };
   
-  export const deleteNotification = async (id: string) => {
+  export const deleteNotification = async (id: number) => {
     await axios.delete(`/api/notifications/${id}`);
   };

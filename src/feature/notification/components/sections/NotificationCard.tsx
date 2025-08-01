@@ -3,19 +3,20 @@
 import { useEffect } from "react";
 import { motion, useMotionValue, animate } from "framer-motion";
 import { Trash2 } from "lucide-react";
+import { formatRelativeTime } from "@lib/time";
 
 interface NotificationCardProps {
-  id: string;
+  id: number;
   title: string;
-  message: string;
+  body: string;
   createdAt: string;
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void;
 }
 
 export default function NotificationCard({
   id,
   title,
-  message,
+  body,
   createdAt,
   onDelete,
 }: NotificationCardProps) {
@@ -39,7 +40,7 @@ export default function NotificationCard({
           className="text-red-600 font-bold flex items-center gap-2"
           onClick={() => onDelete(id)}
         >
-          <Trash2 className="w-5 h-5" />
+          <Trash2 className="w-5 h-5 cursor-pointer" />
         </button>
       </div>
 
@@ -47,12 +48,11 @@ export default function NotificationCard({
         drag="x"
         dragDirectionLock
         dragConstraints={{ left: -60, right: 0 }}
-        style={{ x }}
         className="relative z-10 bg-white border border-primary-100 p-16 shadow-default rounded-20 cursor-pointer"
       >
         <div className="body-md text-primary-700">{title}</div>
-        <div className="body-sm">{message}</div>
-        <div className="body-xs text-gray-400">{createdAt}</div>
+        <div className="body-sm">{body}</div>
+        <div className="body-xs text-gray-500">{formatRelativeTime(createdAt)}</div>
       </motion.div>
     </div>
   );

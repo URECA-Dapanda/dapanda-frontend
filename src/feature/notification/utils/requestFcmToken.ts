@@ -16,7 +16,6 @@ export const requestFcmToken = async () => {
       serviceWorkerRegistration: await navigator.serviceWorker.register("/firebase-messaging-sw.js"),
 
     });
-    console.log("FCM TOKEN: ",token)
     if (token) {
       await postFcmToken(token);
     }

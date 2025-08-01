@@ -11,6 +11,13 @@ export const metadata: Metadata = {
   description: "URECA final project DaPanDa",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

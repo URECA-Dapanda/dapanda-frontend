@@ -15,17 +15,30 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
   const { setMap, setStoreList, setMyPosition } = useMapStore();
 
   useEffect(() => {
-    const tryInitMap = () => {
-      if (!window.naver || !window.naver.maps) {
-        setTimeout(tryInitMap, 100);
+    let retryCount = 0;
+    const maxRetries = 5;
+
+    const interval = setInterval(() => {
+      const naver = window.naver;
+
+      if (!naver?.maps) {
+        retryCount += 1;
+        if (retryCount > maxRetries) {
+          clearInterval(interval);
+        }
         return;
       }
 
       const mapContainer = document.getElementById(MAP_CONTAINER_ID);
-      if (!mapContainer) return;
+      if (!mapContainer) {
+        clearInterval(interval);
+        return;
+      }
 
-      const center = new window.naver.maps.LatLng(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng);
-      const map = new window.naver.maps.Map(mapContainer, {
+      clearInterval(interval); // 준비 완료, 더 이상 재시도 필요 없음
+
+      const center = new naver.maps.LatLng(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng);
+      const map = new naver.maps.Map(mapContainer, {
         center,
         zoom: 15,
       });
@@ -36,9 +49,8 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
       navigator.geolocation?.getCurrentPosition(
         async ({ coords }) => {
           const { latitude, longitude } = coords;
-          const current = new window.naver.maps.LatLng(latitude, longitude);
+          const current = new naver.maps.LatLng(latitude, longitude);
           map.setCenter(current);
-
           setMyPosition(current);
 
           try {
@@ -46,7 +58,7 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
               size: 10,
               latitude,
               longitude,
-              productSortOption: "DISTANCE_ASC",
+              productSortOption: options?.initialSort ?? "DISTANCE_ASC",
               open: true,
             });
 
@@ -60,7 +72,8 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
         () => toast.error("위치 정보를 가져올 수 없습니다."),
         { enableHighAccuracy: true }
       );
-    };
-    tryInitMap();
-  }, [options]);
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [options, setMap, setMyPosition, setStoreList]);
 };

@@ -6,7 +6,7 @@ export const buildSplitPaymentInfo = (
   data: DataDetailResponse,
   selectedAmount: number
 ) => {
-  const purchasePrice = Math.floor(selectedAmount * data.pricePer100MB);
+  const purchasePrice = Math.floor(selectedAmount * data.pricePer100MB * 10);
 
   return {
     type: "data" as const,
