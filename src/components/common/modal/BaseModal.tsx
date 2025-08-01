@@ -18,7 +18,7 @@ export default function BaseModal({ isOpen, onClose, children, className = "" }:
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-70 flex items-center justify-center bg-black-60"
+        className="fixed w-full lg:w-[375px] mx-auto inset-0 z-101 flex items-center justify-center bg-black-60"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}

@@ -49,7 +49,7 @@ export default function MapPage() {
   }, [availableOnly]);
 
   return (
-    <div className="relative w-full" style={{ height: mapHeight }}>
+    <div className="relative w-full h-main-safe pt-safe-top pb-safe-bottom">
       <MapContainer />
       <MapFloatingButtons
         onOpenModal={() => setIsModalOpen(true)}

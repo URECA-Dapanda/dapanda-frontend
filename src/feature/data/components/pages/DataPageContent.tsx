@@ -61,7 +61,7 @@ export default function DataPageContent() {
         <div className="p-4 pt-[114px]">
           <DefaultFilterCard onSearch={() => setSheetOpen(true)} />
         </div>
-        <div className="fixed bottom-[78px] right-24 z-35">
+        <div className="absolute bottom-[78px] right-24 z-35">
           <ButtonComponent
             variant="floatingPrimary"
             size="xl"

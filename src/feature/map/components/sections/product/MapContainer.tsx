@@ -68,8 +68,7 @@ export default function MapContainer() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
             transition={{ duration: 0.3 }}
-            className="absolute bottom-24 left-0 w-full px-24 z-50"
-            style={{ bottom: footerHeight }}
+            className="fixed bottom-24 pb-safe-bottom left-0 w-full px-24 z-50"
           >
             <div className="bg-white rounded-2xl shadow-lg pt-32 px-16 pb-16 relative">
               <button

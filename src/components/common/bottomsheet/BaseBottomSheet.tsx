@@ -98,7 +98,7 @@ export default function BaseBottomSheet({
     <>
       {isOpen && variant === "modal" && (
         <div
-          className="fixed inset-0 bg-black-60 z-60 w-[100dvw] lg:w-[375px] h-full mx-auto"
+          className="fixed inset-0 bg-black-60 z-102 w-[100dvw] lg:w-[375px] h-full mx-auto"
           onClick={onClose}
         />
       )}
@@ -112,13 +112,13 @@ export default function BaseBottomSheet({
         style={{
           WebkitOverflowScrolling: "touch",
           touchAction: "none",
-          zIndex: zIndex ?? (variant === "modal" ? 99 : 30),
+          zIndex: zIndex ?? (variant === "modal" ? 103 : 30),
         }}
         onDragEnd={handleDragEnd}
         drag="y"
       >
         <motion.div
-          className={`fixed bottom-0 z-100 bottomSheet bg-white pointer-events-auto overflow-y-hidden ${
+          className={`fixed bottom-0 z-101 bottomSheet w-[100dvw] lg:w-[375px] bg-white pointer-events-auto overflow-y-hidden ${
             (variant === "snap" || variant === "hybrid") && sheetY === 0
               ? "rounded-t-0"
               : "rounded-t-50"
@@ -126,7 +126,6 @@ export default function BaseBottomSheet({
             variant === "snap" || variant === "hybrid" ? `h-sheet-safe` : `${MODAL_MAX_HEIGHT}px`
           }`}
           style={{
-            width: "100dvw",
             marginBottom: variant === "snap" || variant === "hybrid" ? `${BOTTOM_OFFSET}px` : "0px",
             overflowY: "auto",
             WebkitOverflowScrolling: "touch",
