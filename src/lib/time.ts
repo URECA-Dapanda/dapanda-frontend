@@ -200,10 +200,11 @@ export const isTimeInRange = (target: Time, min: Time, max: Time): boolean => {
   return targetMins >= minMins && targetMins <= maxMins;
 };
 
-export function formatDateDivider(isoOrDateString: string): string {
-  const date = new Date(isoOrDateString);
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
+// 기존 함수를 수정 (실제 날짜 데이터를 받도록)
+export function formatDateDivider(date?: string | Date): string {
+  const targetDate = date ? new Date(date) : new Date();
+  const year = targetDate.getFullYear();
+  const month = targetDate.getMonth() + 1;
+  const day = targetDate.getDate();
   return `${year}년 ${month}월 ${day}일`;
 }
