@@ -36,7 +36,7 @@ export default function MapContainer() {
 
   return (
     <>
-      <div ref={mapRef} className="w-full h-sheet-safe" />
+      <div ref={mapRef} className="w-full  h-sheet-safe" />
 
       <AnimatePresence>
         {selectedStore && (
@@ -45,7 +45,7 @@ export default function MapContainer() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
             transition={{ duration: 0.3 }}
-            className="fixed bottom-24 pb-safe-bottom left-0 w-full px-24 z-50"
+            className="fixed bottom-24 lg:w-[600px] mx-auto pb-safe-bottom w-full px-24 z-50"
           >
             <div className="flex justify-end mb-8 pr-8">
               <button
