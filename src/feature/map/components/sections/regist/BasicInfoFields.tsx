@@ -17,7 +17,10 @@ export default function BasicInfoFields({ form, updateForm, errors, type }: Prop
   return (
     <>
       {/* 제목 */}
-      <label className="title-sm mb-8 block">제목</label>
+      <div className="flex justify-between items-center mb-8">
+        <label className="title-sm">제목</label>
+        <p className="text-right text-gray-500 body-xs">{form.title.length} / 30</p>
+      </div>
       <InputComponent
         placeholder="예: 강남역 2번 출구 앞"
         value={form.title}
@@ -25,11 +28,15 @@ export default function BasicInfoFields({ form, updateForm, errors, type }: Prop
         className={cn("w-full mb-12 px-3", errors.title && "border-primary border-[2px]")}
         radius="md"
         size="md"
+        maxLength={30}
       />
       {errors.title && <p className="text-primary body-sm mb-8">제목을 입력해주세요.</p>}
 
       {/* 설명 */}
-      <label className="title-sm mb-8 block">설명</label>
+      <div className="flex justify-between items-center mb-8">
+        <label className="title-sm">설명</label>
+        <p className="text-right text-gray-500 body-xs">{form.description.length} / 63</p>
+      </div>
       <InputComponent
         as="textarea"
         placeholder="위치 설명, 이용 조건 등을 입력해주세요"
@@ -39,6 +46,7 @@ export default function BasicInfoFields({ form, updateForm, errors, type }: Prop
         radius="md"
         size="md"
         rows={3}
+        maxLength={63}
       />
       {errors.description && <p className="text-primary body-sm mb-8">설명을 입력해주세요.</p>}
 
@@ -64,11 +72,16 @@ export default function BasicInfoFields({ form, updateForm, errors, type }: Prop
       <InputComponent
         placeholder="예: 300"
         value={form.price}
-        onChange={(e) => updateForm("price", e.target.value)}
+        onChange={(e) => {
+          const raw = e.target.value.replace(/[^0-9]/g, "");
+          const numericValue = raw === "" ? "" : Math.min(parseInt(raw, 10), 10000000).toString();
+          updateForm("price", numericValue);
+        }}
         className={cn("w-full mb-8 px-3", errors.price && "border-primary border-[2px]")}
         radius="md"
         size="md"
-        type="number"
+        type="text"
+        inputMode="numeric"
       />
       {errors.price && <p className="text-primary body-sm mb-8">가격을 입력해주세요.</p>}
     </>
