@@ -16,7 +16,6 @@ export const usePresignedUpload = () => {
 
     //  S3 presigned URL 요청
     const filenames = renamedFiles.map((file) => file.name);
-    console.log("📦 filenames", filenames);
 
     const { data } = await axiosInstance.post("/api/images/presign", {
       filenames,
@@ -33,6 +32,7 @@ export const usePresignedUpload = () => {
     await Promise.all(
       presignResults.map(async (result, idx) => {
         const file = files[idx];
+
         await fetch(result.url, {
           method: "PUT",
           headers: {

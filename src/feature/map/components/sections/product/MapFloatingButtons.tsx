@@ -3,7 +3,6 @@ import { ButtonComponent } from "@components/common/button";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
-import { useMapHeight } from "@hooks/useMapHeight";
 
 interface Props {
   onOpenModal: () => void;
@@ -13,11 +12,6 @@ interface Props {
 
 export default function MapFloatingButtons({ onOpenModal, onOpenSheet, isSnapOpen }: Props) {
   const { map } = useMapStore();
-
-  const { headerHeight, footerHeight } = useMapHeight();
-
-  const registerTop = `${headerHeight}px`;
-  const bottomButtonsBottom = `${footerHeight}px`;
 
   const handleGoToCurrentLocation = () => {
     if (!map || !window.naver) return;
@@ -36,8 +30,7 @@ export default function MapFloatingButtons({ onOpenModal, onOpenSheet, isSnapOpe
     <AnimatePresence>
       <motion.div
         key="floating-register"
-        style={{ top: registerTop }}
-        className="absolute top-24 right-24 z-50"
+        className="absolute top-24 pt-safe-top right-24 z-50"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={isSnapOpen ? { opacity: 0, scale: 0.95 } : { opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
@@ -51,8 +44,7 @@ export default function MapFloatingButtons({ onOpenModal, onOpenSheet, isSnapOpe
 
       <motion.div
         key="floating-list"
-        style={{ bottom: bottomButtonsBottom }}
-        className="absolute bottom-24 left-1/2 -translate-x-1/2 z-10"
+        className="absolute bottom-24 pb-safe-bottom left-1/2 -translate-x-1/2 z-10"
         initial={{ opacity: 0, y: 20 }}
         animate={isSnapOpen ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
@@ -66,8 +58,7 @@ export default function MapFloatingButtons({ onOpenModal, onOpenSheet, isSnapOpe
 
       <motion.div
         key="floating-location"
-        className="absolute bottom-24 left-1/8 -translate-x-1/2 z-10"
-        style={{ bottom: bottomButtonsBottom }}
+        className="absolute bottom-24 pb-safe-bottom left-1/8 -translate-x-1/2 z-10"
         initial={{ opacity: 0, y: 20 }}
         animate={isSnapOpen ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}

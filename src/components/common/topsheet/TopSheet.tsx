@@ -10,8 +10,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import FullScreenModal from "@/components/common/modal/FullScreenModal";
-import type { TopSheetProps } from "@/components/common/topsheet/topSheet.types";
+import FullScreenModal from "@components/common/modal/FullScreenModal";
+import type { TopSheetProps } from "@components/common/topsheet/topSheet.types";
 import { PostTopSheetContent } from "./PostTopSheetContent";
 import { WifiTopSheetContent } from "./WifiTopSheetContent";
 import { useTopSheetExpanded } from "./useTopSheetExpanded";
@@ -28,7 +28,13 @@ export default function TopSheet({
   const { expanded, setExpanded, handleDragEnd } = useTopSheetExpanded();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState<number | null>(null);
-  const imageUrls: string[] = Array.isArray(data.imageUrl) ? data.imageUrl : [data.imageUrl];
+
+  const imageUrls: string[] =
+    Array.isArray(data.imageUrl) && data.imageUrl.length > 0
+      ? data.imageUrl
+      : ["/default-wifi-image.png"];
+
+  const isDefaultImage = (url: string) => url === "/default-wifi-image.png";
 
   const imageStyle = useTopSheetImageStyle(expanded, type);
 
@@ -56,7 +62,7 @@ export default function TopSheet({
       </div>
 
       <motion.div
-        className="absolute top-0 w-[100dvw] lg:w-[375px] bg-secondary shadow-default rounded-b-30 overflow-hidden"
+        className="absolute top-0 w-[100dvw] lg:w-[600px] bg-secondary shadow-default rounded-b-30 overflow-hidden"
         animate={{ y: expanded ? -10 : 0 }}
         dragConstraints={{ top: 0, bottom: 0 }}
       >
@@ -81,7 +87,7 @@ export default function TopSheet({
         >
           {type === "post" && (
             <motion.img
-              src={data.imageUrl}
+              src={data.imageUrl || "/default-wifi-image.png"}
               alt="대표 이미지"
               className="top-56 absolute rounded-12 z-30"
               style={{ pointerEvents: "none" }}
@@ -104,8 +110,12 @@ export default function TopSheet({
                               alt={`와이파이 이미지 ${idx + 1}`}
                               width={200}
                               height={200}
-                              onClick={(e) => handleImageClick(idx, e)}
-                              className="object-cover rounded-12 mx-auto cursor-zoom-in"
+                              onClick={
+                                isDefaultImage(url) ? undefined : (e) => handleImageClick(idx, e)
+                              }
+                              className={`object-cover rounded-12 mx-auto ${
+                                isDefaultImage(url) ? "" : "cursor-zoom-in"
+                              }`}
                             />
                           </CarouselItem>
                         ))}
@@ -117,10 +127,21 @@ export default function TopSheet({
                     <Image
                       src={imageUrls[0]}
                       alt="와이파이 이미지"
-                      onClick={(e) => handleImageClick(0, e)}
-                      width={200}
-                      height={200}
-                      className="object-cover rounded-12 mx-auto cursor-zoom-in"
+                      onClick={
+                        isDefaultImage(imageUrls[0]) ? undefined : (e) => handleImageClick(0, e)
+                      }
+                      width={140}
+                      height={140}
+                      className={`object-cover rounded-12 mx-auto ${
+                        isDefaultImage(imageUrls[0]) ? "" : "cursor-zoom-in"
+                      }`}
+                      style={{
+                        top: 44,
+                        right: 30,
+                        width: 140,
+                        height: 140,
+                        objectFit: "cover",
+                      }}
                     />
                   )}
                 </div>
@@ -128,16 +149,19 @@ export default function TopSheet({
                 <Image
                   src={imageUrls[0]}
                   alt="와이파이 대표 이미지"
-                  className="cursor-zoom-in absolute rounded-12 z-30"
+                  className={`absolute rounded-12 z-30 ${
+                    isDefaultImage(imageUrls[0]) ? "" : "cursor-zoom-in"
+                  }`}
                   style={{
                     top: 44,
                     right: 30,
-                    position: "absolute",
+                    width: 140,
+                    height: 140,
                     objectFit: "cover",
                   }}
                   width={140}
                   height={140}
-                  onClick={(e) => handleImageClick(0, e)}
+                  onClick={isDefaultImage(imageUrls[0]) ? undefined : (e) => handleImageClick(0, e)}
                 />
               )}
             </>
