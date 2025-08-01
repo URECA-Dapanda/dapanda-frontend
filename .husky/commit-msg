@@ -1,0 +1,40 @@
+#!/bin/sh
+
+COMMIT_MSG_FILE="$1"
+BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD)"
+
+# 브랜치명에서 DP-숫자 패턴 추출
+ISSUE_TAG=$(echo "$BRANCH_NAME" | grep -oE 'DP-[0-9]+')
+
+if [ -z "$ISSUE_TAG" ]; then
+  # 태그 없으면 그냥 검사
+  npx --no-install commitlint --edit "$COMMIT_MSG_FILE"
+  exit $?
+fi
+
+COMMIT_HEADER=$(head -n1 "$COMMIT_MSG_FILE")
+
+if echo "$COMMIT_HEADER" | grep -q "^\[$ISSUE_TAG\]"; then
+  # 이미 태그 붙어 있으면 검사할 때 태그 제거 후 검사
+  FULL_MSG=$(cat "$COMMIT_MSG_FILE")
+else
+  # 태그 없으면 헤더 앞에 붙임
+  COMMIT_BODY=$(tail -n +2 "$COMMIT_MSG_FILE")
+  {
+    printf "[%s] %s\n" "$ISSUE_TAG" "$COMMIT_HEADER"
+    printf "%s\n" "$COMMIT_BODY"
+  } > "$COMMIT_MSG_FILE"
+  FULL_MSG=$(cat "$COMMIT_MSG_FILE")
+fi
+
+# commitlint 검사 시 태그 임시 제거
+MODIFIED_MSG=$(echo "$FULL_MSG" | sed "1 s/^\[$ISSUE_TAG\] //")
+
+TMP_FILE="$(mktemp)"
+echo "$MODIFIED_MSG" > "$TMP_FILE"
+
+npx --no-install commitlint --edit "$TMP_FILE"
+RESULT=$?
+
+rm -f "$TMP_FILE"
+exit $RESULT

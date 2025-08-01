@@ -1,0 +1,24 @@
+import { UserType } from "@/types/User";
+import axios from "@/lib/axios";
+
+/**
+ * 실제 API 연동시 삭제해주세요.
+ */
+const mockInfo = () =>
+  new Promise<Partial<UserType>>((resolve) => {
+    setTimeout(() => {
+      resolve({ name: "판다유저", averageRating: 3.5 });
+    }, 100);
+  });
+
+export const getUserInfo = async () => {
+  const response = await mockInfo();
+
+  return response;
+};
+
+export const logOutRequest = async () => {
+  const { data } = await axios.post(`/api/auth/logout`);
+
+  return data;
+};

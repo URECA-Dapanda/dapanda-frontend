@@ -1,26 +1,98 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css");
+@config "../../tailwind.config.js";
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --radius: 0.75rem;
+    --font-sans: Pretendard, ui-sans-serif, system-ui;
+  }
+
+  * {
+    @apply outline-none;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-white text-black;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  html,
+  body {
+    height: 100%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .mobile-container {
+    @apply w-full max-w-sm mx-auto;
+  }
+
+  .mobile-touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  .mobile-card {
+    @apply rounded-2xl shadow-sm;
+  }
+
+  .mobile-button {
+    @apply h-12 rounded-2xl font-medium;
+  }
+
+  .primary-gradient {
+    background: linear-gradient(135deg, #ffd964 0%, #ffe8c6 100%);
+  }
+
+  .secondary-gradient {
+    background: linear-gradient(135deg, #119c72 0%, #0d7a5a 100%);
+  }
+
+  .accent-bg {
+    background-color: #fefaef;
+  }
+
+  .warm-bg {
+    background-color: #ffe8c6;
+  }
+}
+
+button:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 모바일 키보드 대응 */
+@media screen and (max-height: 600px) {
+  .safe-area-bottom {
+    padding-bottom: 0;
+  }
+}
+
+/* iOS Safari 키보드 대응 */
+@supports (-webkit-touch-callout: none) {
+  .safe-area-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom), 20px);
+  }
 }

@@ -1,0 +1,420 @@
+"use client";
+
+import { useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { formatDateDivider } from "@/lib/time";
+import { useWebSocketStore } from "@/stores/useWebSocketStore";
+import { useConfigStore } from "@/stores/useConfigStore";
+import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
+import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
+import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
+import { groupMessagesByDate } from "@feature/chat/utils/groupMessagesByDate";
+import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
+import { getChatHistory } from "@/feature/chat/api/getChatHistory";
+import { markMessageAsRead } from "@/feature/chat/api/chatRoomRequest";
+import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
+import { isTemporaryMessage, formatMessageDate } from "@/feature/chat/utils/chatUtils";
+import { getMyInfo } from "@/feature/mypage/apis/mypageRequest";
+
+interface ChatRoomContentProps {
+  chatRoomId: number;
+  productId: string | null;
+}
+
+interface ProductInfo {
+  productId: number;
+  itemId: number;
+  title: string;
+  pricePer10min: number;
+  memberName: string;
+  memberId: number;
+}
+
+export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomContentProps) {
+  const [messages, setMessages] = useState<ChatSocketMessage[]>([]);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [oldestMessageId, setOldestMessageId] = useState<number | undefined>(undefined);
+  const [product, setProduct] = useState<ProductInfo | null>(null);
+  const [currentMemberId, setCurrentMemberId] = useState<number | undefined>(undefined);
+  const [senderProfileImage, setSenderProfileImage] = useState<string | undefined>(undefined);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
+
+  // 중복 요청 방지를 위한 ref들
+  const lastReadMessageId = useRef<number | null>(null);
+  const isExiting = useRef(false);
+  const abortRef = useRef<AbortController | null>(null);
+  const lastProductId = useRef<string | null>(null);
+
+  const { subscribe, unsubscribe, sendMessage, setActiveChatRoomId } = useWebSocketStore();
+  const { setTitle } = useConfigStore();
+
+  const addSenderIdToMessages = useCallback((messages: ChatSocketMessage[], memberId: number) => {
+    return messages.map((message) => ({
+      ...message,
+      senderId: message.senderId || (message.isMine ? memberId : undefined),
+    }));
+  }, []);
+
+  const markAsRead = useCallback((messageId: number) => {
+    if (lastReadMessageId.current !== messageId) {
+      markMessageAsRead(messageId)
+        .then(() => {
+          lastReadMessageId.current = messageId;
+        })
+        .catch((error) => {
+          console.error("읽음 처리 실패:", messageId, error);
+        });
+    }
+  }, []);
+
+  const getLatestMessageId = useCallback((messages: ChatSocketMessage[]) => {
+    const realMessages = messages.filter((message) => !isTemporaryMessage(message));
+    if (realMessages.length > 0) {
+      const latestMessage = realMessages[realMessages.length - 1];
+      return Number(latestMessage.chatMessageId);
+    }
+    return null;
+  }, []);
+
+  const sortMessages = useCallback((messages: ChatSocketMessage[]): ChatSocketMessage[] => {
+    return messages.sort((a, b) => {
+      const aIsTemp = isTemporaryMessage(a);
+      const bIsTemp = isTemporaryMessage(b);
+      if (aIsTemp && bIsTemp) {
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      }
+      if (!aIsTemp && !bIsTemp) {
+        return Number(a.chatMessageId) - Number(b.chatMessageId);
+      }
+      if (aIsTemp && !bIsTemp) {
+        return -1;
+      }
+      return 1;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!chatRoomId) return;
+
+    abortRef.current?.abort();
+    abortRef.current = new AbortController();
+
+    setMessages([]);
+    setLoadingMore(false);
+    setHasMore(true);
+    setOldestMessageId(undefined);
+    setCurrentMemberId(undefined);
+    lastReadMessageId.current = null;
+    isExiting.current = false;
+
+    getChatHistory(chatRoomId)
+      .then((response) => {
+        if (abortRef.current?.signal.aborted) return;
+
+        const messagesWithSenderId = addSenderIdToMessages(response.data, response.memberId);
+        setMessages(messagesWithSenderId);
+        setCurrentMemberId(response.memberId || undefined);
+
+        if (response.data.length > 0) {
+          const oldestMessage = response.data[response.data.length - 1];
+          setOldestMessageId(Number(oldestMessage.chatMessageId));
+        }
+        setHasMore(response.pageInfo.hasNext);
+
+        // 채팅방 진입 시 마지막 메시지에 대해 read-status 요청
+        if (response.data.length > 0) {
+          const latestMessage = response.data[0];
+          const latestMessageId = Number(latestMessage.chatMessageId);
+          markAsRead(latestMessageId);
+        }
+      })
+      .catch((err) => {
+        console.error("채팅 기록 불러오기 실패:", err);
+      });
+
+    return () => {
+      abortRef.current?.abort();
+    };
+  }, [chatRoomId]);
+
+  useEffect(() => {
+    if (!productId) {
+      setProduct(null);
+      lastProductId.current = null;
+      return;
+    }
+    if (lastProductId.current === productId) {
+      return;
+    }
+
+    lastProductId.current = productId;
+
+    const abortController = new AbortController();
+
+    const fetchProductInfo = async () => {
+      try {
+        const productData = await getMapDetailById(productId);
+
+        if (abortController.signal.aborted) return;
+
+        setProduct({
+          productId: productData.productId,
+          itemId: productData.itemId,
+          title: productData.title,
+          pricePer10min: productData.price,
+          memberName: productData.memberName,
+          memberId: productData.memberId,
+        });
+      } catch (error) {
+        if (!abortController.signal.aborted) {
+          console.error("상품 정보 가져오기 실패:", error);
+        }
+      }
+    };
+
+    fetchProductInfo();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [productId]);
+
+  useEffect(() => {
+    if (chatRoomId) {
+      setActiveChatRoomId(chatRoomId);
+    }
+
+    return () => {
+      setActiveChatRoomId(null);
+    };
+  }, [chatRoomId, setActiveChatRoomId]);
+
+  const resetUnreadCountOnExit = useCallback(() => {
+    if (isExiting.current) {
+      return;
+    }
+    isExiting.current = true;
+    const latestMessageId = getLatestMessageId(messages);
+    if (latestMessageId) {
+      markAsRead(latestMessageId);
+    }
+  }, [messages, chatRoomId, getLatestMessageId, markAsRead]);
+
+  useEffect(() => {
+    let hasExecuted = false;
+
+    const handleBeforeUnload = () => {
+      if (!hasExecuted) {
+        hasExecuted = true;
+        resetUnreadCountOnExit();
+      }
+    };
+
+    const handlePopState = () => {
+      if (!hasExecuted) {
+        hasExecuted = true;
+        resetUnreadCountOnExit();
+      }
+    };
+
+    // 이벤트 리스너 등록
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      if (!hasExecuted) {
+        hasExecuted = true;
+        resetUnreadCountOnExit();
+      }
+
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [resetUnreadCountOnExit]);
+
+  useEffect(() => {
+    const latestMessageId = getLatestMessageId(messages);
+    if (latestMessageId) {
+      markAsRead(latestMessageId);
+    }
+  }, [messages, markAsRead, getLatestMessageId]);
+
+  const addMessage = async (text: string) => {
+    try {
+      const messagePayload = JSON.stringify({
+        message: text,
+      });
+
+      sendMessage(chatRoomId, messagePayload);
+    } catch (error) {
+      console.error("메시지 전송 실패:", error);
+    }
+  };
+
+  // WebSocket 메시지 수신 핸들러
+  const handleMessage = useCallback(
+    (msg: ChatSocketMessage) => {
+      const data = typeof msg === "string" ? JSON.parse(msg) : msg;
+
+      const incomingMessage: ChatSocketMessage = {
+        chatMessageId: data.chatMessageId,
+        isMine: data.senderId === currentMemberId,
+        message: data.message,
+        createdAt: data.createdAt,
+        senderId: data.senderId,
+      };
+
+      // 중복 방지 로직
+      setMessages((prev) => {
+        if (prev.some((m) => m.chatMessageId === incomingMessage.chatMessageId)) {
+          return prev;
+        }
+
+        const newMessages = [...prev, incomingMessage];
+
+        // 새 메시지가 추가됨
+        const { updateUnreadCount } = useWebSocketStore.getState();
+        updateUnreadCount();
+
+        return newMessages;
+      });
+    },
+    [currentMemberId]
+  );
+
+  useEffect(() => {
+    if (!chatRoomId) return;
+
+    const { isConnected } = useWebSocketStore.getState();
+
+    if (!isConnected) {
+      return;
+    }
+
+    subscribe(chatRoomId, handleMessage);
+
+    return () => {
+      unsubscribe(chatRoomId);
+    };
+  }, [chatRoomId, subscribe, unsubscribe, handleMessage]);
+
+  // 이전 메시지 불러오기
+  const loadMoreMessages = useCallback(async () => {
+    if (loadingMore || !hasMore || !oldestMessageId) return;
+
+    setLoadingMore(true);
+    try {
+      const response = await getChatHistory(chatRoomId, oldestMessageId, 20);
+
+      if (response.data.length > 0) {
+        const messagesWithSenderId = addSenderIdToMessages(response.data, response.memberId);
+        setMessages((prev) => [...prev, ...messagesWithSenderId]);
+
+        const newOldestMessage = response.data[response.data.length - 1];
+        setOldestMessageId(Number(newOldestMessage.chatMessageId));
+
+        setHasMore(response.pageInfo.hasNext);
+
+        if (!currentMemberId && response.memberId) {
+          setCurrentMemberId(response.memberId || undefined);
+        }
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("이전 메시지 불러오기 실패:", error);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [loadingMore, hasMore, oldestMessageId, chatRoomId, currentMemberId]);
+
+  const handleScroll = useCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      const { scrollTop } = e.currentTarget;
+
+      if (scrollTop < 100 && hasMore && !loadingMore) {
+        loadMoreMessages();
+      }
+    },
+    [hasMore, loadingMore, loadMoreMessages]
+  );
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+  }, [messages.length]);
+
+  const sortedMessages = useMemo(() => sortMessages([...messages]), [messages, sortMessages]);
+  const groupedMessages = useMemo(() => groupMessagesByDate(sortedMessages), [sortedMessages]);
+
+  const urlSenderName = searchParams.get("senderName");
+  const urlSenderId = searchParams.get("senderId");
+  const senderName = urlSenderName || product?.memberName || "상대방";
+  const senderId = urlSenderId ? parseInt(urlSenderId, 10) : product?.memberId;
+
+  useEffect(() => {
+    if (senderId && !senderProfileImage) {
+      getMyInfo(senderId)
+        .then((userInfo) => {
+          setSenderProfileImage(userInfo.profileImageUrl);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [senderId, senderProfileImage]);
+
+  // 헤더 제목 설정
+  useEffect(() => {
+    setTitle(senderName);
+    return () => setTitle("DaPanDa");
+  }, [senderName, setTitle]);
+
+  return (
+    <div className="flex flex-col h-screen">
+      {product && (
+        <div
+          className="fixed top-13 left-0 right-0 z-40 px-24 pt-12 pb-8
+         bg-white w-[100dvw] lg:w-[600px] mx-auto"
+        >
+          <ChatPostCard
+            title={product.title}
+            pricePer10min={product.pricePer10min}
+            productId={product.productId}
+          />
+        </div>
+      )}
+
+      <div className="flex-1 overflow-y-auto px-4 pt-20 pb-36" onScroll={handleScroll}>
+        {loadingMore && (
+          <div className="text-center text-sm text-gray-500 py-4">이전 내역을 불러오는 중...</div>
+        )}
+
+        {groupedMessages.map((group) => (
+          <div key={group.date}>
+            <div className="text-center text-xs text-gray-500 my-24">
+              {group.messages.length > 0 && group.messages[0].createdAt
+                ? formatMessageDate(group.messages[0].createdAt)
+                : formatDateDivider()}
+            </div>
+            <div className="space-y-24 pb-36">
+              {group.messages.map((message) => (
+                <ChatBubble
+                  key={message.chatMessageId}
+                  message={message}
+                  avatarUrl={senderProfileImage}
+                  memberId={senderId}
+                  currentMemberId={currentMemberId}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+
+      <ChatInputBar onSend={addMessage} />
+    </div>
+  );
+}
