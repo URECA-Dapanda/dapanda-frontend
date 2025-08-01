@@ -89,7 +89,7 @@ export default function MapDetailPage() {
   };
 
   return (
-    <div className="w-[100dvw] lg:w-[600px] mx-auto relative">
+    <div className="w-[100dvw] lg:w-[600px] mx-auto relative pt-[56px] ">
       <TopSheet
         type="wifi"
         data={{
@@ -104,7 +104,7 @@ export default function MapDetailPage() {
       <div
         className={clsx(
           "transition-all duration-300 px-24 py-24",
-          topSheetExpanded ? "pt-[500px]" : "pt-[280px]"
+          topSheetExpanded ? "pt-[450px]" : "pt-[280px]"
         )}
       >
         <div className="mt-12">
