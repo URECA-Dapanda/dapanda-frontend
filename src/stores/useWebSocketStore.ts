@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
+// import type { AlarmMessage } from "@type/Alarm";
 
 interface WebSocketStore {
   client: Client | null;
@@ -18,6 +19,7 @@ interface WebSocketStore {
   setChatListUpdateCallback: (callback: (() => void) | null) => void;
   setActiveChatRoomId: (chatRoomId: number | null) => void;
   updateUnreadCount: () => void;
+  // subscribeToChannel: (channelId: string, onMessage: (message: AlarmMessage) => void) => void;
 }
 
 export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
@@ -200,4 +202,28 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
       chatListUpdateCallback();
     }
   },
+
+  // subscribeToChannel: (channelId, onMessage) => {
+  //   const { client, subscriptionObjects } = get();
+
+  //   if (!client || !client.connected) {
+  //     console.warn("WebSocket이 연결되지 않았습니다. 연결 후 구독하세요.");
+  //     return;
+  //   }
+
+  //   if (subscriptionObjects.has(channelId as any)) return;
+
+  //   const subscription = client.subscribe(`/sub/${channelId}`, (message) => {
+  //     try {
+  //       const payload: AlarmMessage = JSON.parse(message.body);
+  //       onMessage(payload);
+  //     } catch (error) {
+  //       console.error("알림 메시지 파싱 실패:", error);
+  //     }
+  //   });
+
+  //   const newSubscriptionObjects = new Map(subscriptionObjects);
+  //   newSubscriptionObjects.set(channelId as any, subscription);
+  //   set({ subscriptionObjects: newSubscriptionObjects });
+  // },
 }));
