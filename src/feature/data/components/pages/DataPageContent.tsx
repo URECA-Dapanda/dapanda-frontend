@@ -61,7 +61,7 @@ export default function DataPageContent() {
         <div className="p-4 pt-[114px]">
           <DefaultFilterCard onSearch={() => setSheetOpen(true)} />
         </div>
-        <div className="absolute bottom-[78px] right-24 z-35">
+        <div className="fixed bottom-24 pb-safe-bottom right-24 z-35">
           <ButtonComponent
             variant="floatingPrimary"
             size="xl"
@@ -69,6 +69,7 @@ export default function DataPageContent() {
               console.log("글 등록 버튼 클릭");
               setRegistModalOpen(true);
             }}
+            className={tab === "default" ? "" : "hidden"}
           >
             <PlusIcon className="w-20 h-20" />글 쓰기
           </ButtonComponent>
@@ -77,7 +78,7 @@ export default function DataPageContent() {
           isOpen={registModalOpen}
           onClose={() => setRegistModalOpen(false)}
           variant="modal"
-          zIndex={102}
+          zIndex={105}
         >
           <DataRegistModal onClose={handleRegistButtonClick} />
         </BaseBottomSheet>
