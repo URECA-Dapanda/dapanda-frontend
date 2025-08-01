@@ -32,9 +32,9 @@ export default function MapSelectLocationPage() {
   } = useMapLocationSelector(typeGuard(type) ? type : "wifi");
 
   return (
-    <div className="relative w-full h-[calc(100vh-112px)]">
+    <div className="relative w-full h-main-safe pt-safe-top pb-safe-bottom">
       {/* 헤더 검색 영역 */}
-      <div className="absolute top-0 left-0 w-full z-20 px-24 py-20">
+      <div className=" top-[54px] left-0 w-full z-20">
         <MapHeaderSearchBox
           isSearchMode={isSearchMode}
           searchQuery={searchQuery}
@@ -52,7 +52,7 @@ export default function MapSelectLocationPage() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="absolute left-0 right-0 mt-36 mx-24 border border-gray-300 rounded-md bg-white/90 backdrop-blur-sm shadow-xl max-h-[240px] overflow-y-auto z-[100]"
+              className="absolute left-0 right-0 mt-28 mx-24 border border-gray-300 rounded-md bg-white/90 backdrop-blur-sm shadow-xl max-h-[240px] overflow-y-auto z-[100]"
             >
               {searchResults.map((item, i) => (
                 <motion.li
@@ -75,13 +75,13 @@ export default function MapSelectLocationPage() {
       </div>
 
       {/* 지도 영역 */}
-      <div className="absolute top-0 left-0 w-full h-full">
+      <div className="w-full h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-107px-54px)]">
         <InteractiveMap
           onLocationSelect={handleMapLocationSelect}
           initialLocation={initialLocation}
         />
         {!isSearchMode && (
-          <div className="absolute top-84 left-1/2 -translate-x-1/2 px-16 py-6 bg-black-60 text-white rounded-full body-sm shadow whitespace-nowrap z-50">
+          <div className="absolute top-[120px] left-1/2 -translate-x-1/2 px-16 py-6 bg-black-60 text-white rounded-full body-sm shadow whitespace-nowrap z-50">
             지도를 클릭하여 위치를 지정하세요
           </div>
         )}

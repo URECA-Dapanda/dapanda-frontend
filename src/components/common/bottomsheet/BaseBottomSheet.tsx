@@ -26,7 +26,7 @@ export default function BaseBottomSheet({
   zIndex,
 }: BaseBottomSheetProps) {
   const BOTTOM_OFFSET = 54;
-  const HEADER_OFFSET = 54;
+  // const HEADER_OFFSET = 54;
   const MODAL_MAX_HEIGHT = 602;
   const FULL_HEIGHT = 0;
   const CLOSED_HEIGHT = typeof window !== "undefined" ? window.innerHeight : "100vh";
@@ -98,38 +98,35 @@ export default function BaseBottomSheet({
     <>
       {isOpen && variant === "modal" && (
         <div
-          className="fixed inset-0 bg-black-60 z-60 w-[100dvw] lg:w-[375px] h-full mx-auto"
+          className="fixed inset-0 bg-black-60 z-102 w-[100dvw] lg:w-[600px] h-full mx-auto"
           onClick={onClose}
         />
       )}
 
       <motion.div
         className={cn(
-          "fixed bottom-0 w-[100dvw] lg:w-[375px] mx-auto inset-0 flex items-end justify-center z-30 pointer-events-none overflow-y-hidden",
+          "fixed bottom-0 w-[100dvw] lg:w-[600px] mx-auto inset-0 flex items-end justify-center z-30 pointer-events-none overflow-y-hidden",
           isOpen || variant === "snap" ? "" : "hidden"
         )}
         dragConstraints={{ top: 0, bottom: 0 }}
         style={{
           WebkitOverflowScrolling: "touch",
           touchAction: "none",
-          zIndex: zIndex ?? (variant === "modal" ? 99 : 30),
+          zIndex: zIndex ?? (variant === "modal" ? 103 : 30),
         }}
         onDragEnd={handleDragEnd}
         drag="y"
       >
         <motion.div
-          className={`bottomSheet bg-white pointer-events-auto overflow-y-hidden ${
+          className={`fixed bottom-0 z-101 bottomSheet w-[100dvw] lg:w-[600px] bg-white pointer-events-auto overflow-y-hidden ${
             (variant === "snap" || variant === "hybrid") && sheetY === 0
               ? "rounded-t-0"
               : "rounded-t-50"
+          } ${
+            variant === "snap" || variant === "hybrid" ? `h-sheet-safe` : `${MODAL_MAX_HEIGHT}px`
           }`}
           style={{
-            width: "100dvw",
-            height:
-              variant === "snap" || variant === "hybrid"
-                ? `calc(100vh - ${HEADER_OFFSET + BOTTOM_OFFSET}px)`
-                : `${MODAL_MAX_HEIGHT}px`,
-            marginBottom: variant === "snap" ? `${BOTTOM_OFFSET}px` : "0px",
+            marginBottom: variant === "snap" || variant === "hybrid" ? `${BOTTOM_OFFSET}px` : "0px",
             overflowY: "auto",
             WebkitOverflowScrolling: "touch",
             touchAction: "none",

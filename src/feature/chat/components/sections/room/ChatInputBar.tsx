@@ -54,7 +54,7 @@ export default function ChatInputBar({ onSend }: ChatInputBarProps) {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white w-[100dvw] lg:w-[375px] mx-auto">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white w-[100dvw] lg:w-[600px] mx-auto">
       <div className="flex items-end gap-16 mx-auto max-h-[120px] pb-24 px-24">
         <InputComponent
           as="textarea"

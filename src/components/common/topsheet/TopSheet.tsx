@@ -62,7 +62,7 @@ export default function TopSheet({
       </div>
 
       <motion.div
-        className="absolute top-0 w-[100dvw] lg:w-[375px] bg-secondary shadow-default rounded-b-30 overflow-hidden"
+        className="absolute top-0 w-[100dvw] lg:w-[600px] bg-secondary shadow-default rounded-b-30 overflow-hidden"
         animate={{ y: expanded ? -10 : 0 }}
         dragConstraints={{ top: 0, bottom: 0 }}
       >

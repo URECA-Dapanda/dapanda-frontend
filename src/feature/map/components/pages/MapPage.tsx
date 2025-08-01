@@ -10,12 +10,11 @@ import { getMapList } from "@/feature/map/api/mapRequest";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import { createDataSortOptions, sortOptionMap } from "@/components/common/dropdown/dropdownConfig";
 import type { DropdownOption } from "@/components/common/dropdown/dropdown.types";
-import { useMapHeight } from "@hooks/useMapHeight";
 import { useInitialMapFetch } from "@feature/map/hooks/useMapIntialMapFetch";
 
 export default function MapPage() {
   useInitialMapFetch();
-  const { mapHeight } = useMapHeight();
+
   const {
     isModalOpen,
     isSnapOpen,
@@ -51,7 +50,7 @@ export default function MapPage() {
   }, [availableOnly]);
 
   return (
-    <div className="relative w-full" style={{ height: mapHeight }}>
+    <div className="relative w-full h-main-safe pt-safe-top pb-safe-bottom">
       <MapContainer />
       <MapFloatingButtons
         onOpenModal={() => setIsModalOpen(true)}

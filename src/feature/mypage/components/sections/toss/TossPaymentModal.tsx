@@ -23,8 +23,8 @@ export default function TossPaymentModal() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black-60 w-[375px] h-[100dvh] mx-auto z-60 flex justify-center items-center">
-      <div className="bg-white rounded-lg p-8 w-[375px] max-w-full">
+    <div className="fixed inset-0 bg-black-60 w-[600px] h-[100dvh] mx-auto z-60 flex justify-center items-center">
+      <div className="bg-white rounded-lg p-8 w-[600px] max-w-full">
         <h2 className="title-md mb-4">결제하기</h2>
 
         {/* Toss 위젯 위치 */}

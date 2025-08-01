@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { BottomSheetHeader, BaseBottomSheet } from "@components/common/bottomsheet";
 import { ButtonComponent } from "@components/common/button";
@@ -34,6 +34,14 @@ export default function MapBottomSheet({
   sortOptions,
 }: Props) {
   const { myPosition } = useMapStore();
+  const [isSnapUp, setIsSnapUp] = useState<boolean>(false);
+
+  const handleSnapUp = useCallback(() => {
+    setIsSnapUp(true);
+  }, []);
+  const handleSnapDown = useCallback(() => {
+    setIsSnapUp(false);
+  }, []);
 
   const { parentRef, rowVirtualizer, flatItems } = useVirtualizedInfiniteQuery<MapType>({
     queryKey: ["mapList", String(myPosition?.lat()), String(myPosition?.lng()), sortLabel] as const,
@@ -57,7 +65,15 @@ export default function MapBottomSheet({
   const visibleItems = availableOnly ? flatItems.filter((item) => item.open) : flatItems;
 
   return (
-    <BaseBottomSheet isOpen={open} onClose={onClose} variant="hybrid" snapHeight={300} zIndex={101}>
+    <BaseBottomSheet
+      isOpen={open}
+      onClose={onClose}
+      onSnapDown={handleSnapDown}
+      onSnapUp={handleSnapUp}
+      variant="hybrid"
+      snapHeight={300}
+      zIndex={101}
+    >
       <BottomSheetHeader />
       <div className="flex justify-between items-center px-24 mb-12 mt-6">
         <div className="flex items-center gap-12">
@@ -85,7 +101,15 @@ export default function MapBottomSheet({
       </div>
 
       {/* 가상 리스트 렌더링 영역 */}
-      <div ref={parentRef} className="h-[calc(100vh-200px)] overflow-y-auto px-24">
+      <div
+        ref={parentRef}
+        className={cn(
+          "overflow-y-auto px-24 mb-[54px]",
+          isSnapUp
+            ? "h-sheet-safe"
+            : "h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-107px-300px)]"
+        )}
+      >
         <div
           style={{
             height: `${rowVirtualizer.getTotalSize()}px`,

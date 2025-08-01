@@ -10,14 +10,23 @@ module.exports = {
   ],
   theme: {
     extend: {
+      height: {
+        "main-safe": "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom))",
+        "sheet-safe":
+          "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 107px)",
+      },
+      padding: {
+        "safe-top": "calc(env(safe-area-inset-top) + 54px)",
+        "safe-bottom": "calc(env(safe-area-inset-bottom) + 54px)",
+      },
       animation: {
-        'spin-slow': 'spin 2s linear infinite',
-        'fade-in': 'fadeIn 0.6s ease-out',
+        "spin-slow": "spin 2s linear infinite",
+        "fade-in": "fadeIn 0.6s ease-out",
       },
       keyframes: {
         fadeIn: {
-          '0%': { opacity: 0 },
-          '100%': { opacity: 1 },
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
         },
       },
       colors: {
