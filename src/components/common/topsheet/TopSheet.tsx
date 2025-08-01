@@ -58,10 +58,6 @@ export default function TopSheet({
 
   return (
     <>
-      <div className="absolute top-12 right-12 z-36">
-        <ReportTriggerButton targetName={data.memberName} />
-      </div>
-
       <motion.div
         className={clsx(
           "fixed left-1/2 -translate-x-1/2 w-full max-w-[600px]",
@@ -72,6 +68,9 @@ export default function TopSheet({
         initial={false}
         transition={{ type: "spring", damping: 20, stiffness: 200 }}
       >
+        <div className="absolute top-12 right-12 z-36">
+          <ReportTriggerButton targetName={data.memberName} />
+        </div>
         <motion.div
           className="w-full h-full pt-20"
           drag="y"
