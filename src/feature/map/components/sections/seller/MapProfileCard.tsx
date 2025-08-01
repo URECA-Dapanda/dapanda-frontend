@@ -5,6 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getMyInfo } from "@feature/mypage/apis/mypageRequest";
 import { Rating, RatingButton } from "@components/common/rating/RatingScore";
 import { toast } from "react-toastify";
+import { useCallback } from "react";
+import axiosInstance from "@/lib/axios";
 
 interface MapProfileCardProps {
   sellerId: number;
@@ -24,14 +26,29 @@ export default function MapProfileCard({ sellerId, productId, isOwner }: MapProf
     router.push(`/map/review?id=${sellerId}&tab=review`);
   };
 
-  const goToChat = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (isOwner) {
-      toast.info("내 게시글입니다");
-      return;
-    }
-    router.push(`/chat/${productId}`);
-  };
+  const goToChat = useCallback(
+    async (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (isOwner) {
+        toast.info("내 게시글입니다");
+        return;
+      }
+
+      try {
+        const response = await axiosInstance.post(`/api/products/${productId}/chat-room`);
+        if (response.data.code === 0) {
+          const chatRoomId = response.data.data.chatRoomId;
+          router.push(`/chat/${chatRoomId}?productId=${productId}`);
+        } else {
+          toast.error(response.data.message || "채팅방 생성에 실패했습니다.");
+        }
+      } catch (error) {
+        toast.error("채팅방 생성 중 오류가 발생했습니다.");
+        console.error(error);
+      }
+    },
+    [productId, router, isOwner]
+  );
 
   return (
     <div
