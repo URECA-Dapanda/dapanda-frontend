@@ -52,7 +52,7 @@ export default function MapItemCardContent({
         {/* 가운데 텍스트 */}
         <div className="flex flex-col justify-center">
           <div className="flex flex-col">
-            <span className="body-md">{title}</span>
+            <span className="body-md truncate max-w-[115px]">{title}</span>
             <div className="flex items-center gap-8 mt-4">
               <div className="flex items-center text-yellow-400">
                 <Star className="fill-current" />
