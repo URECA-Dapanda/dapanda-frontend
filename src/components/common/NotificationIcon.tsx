@@ -9,9 +9,9 @@ export default function NotificationIcon() {
   return (
     <button
       onClick={() => router.push("/notification")}
-      className="relative flex items-center justify-center"
+      className="relative flex items-center justify-center cursor-pointer"
     >
-      <Bell className="w-20 h-20 text-black" />
+      <Bell className="w-20 h-20 text-black hover:text-primary transition-colors duration-200"/>
     </button>
   );
 }
