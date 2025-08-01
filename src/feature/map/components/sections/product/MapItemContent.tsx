@@ -1,4 +1,4 @@
-import { Fragment, useCallback } from "react";
+import { Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ImageIcon, Star } from "lucide-react";
 import { ButtonComponent } from "@components/common/button";
@@ -12,24 +12,31 @@ export default function MapItemCardContent({
   data: { productId, address, price, score, title, startTime, endTime, open, imageUrl },
 }: ProductItemProps<MapType> & { disableUseButton?: boolean }) {
   const router = useRouter();
-  const handleCreateChatRoom = useCallback(
-    async (e: React.MouseEvent) => {
-      e.stopPropagation();
-      try {
-        const response = await axiosInstance.post(`/api/products/${productId}/chat-room`);
-        if (response.data.code === 0) {
-          const chatRoomId = response.data.data.chatRoomId;
-          router.push(`/chat/${chatRoomId}?productId=${productId}`);
-        } else {
-          toast.error(response.data.message || "채팅방 생성에 실패했습니다.");
-        }
-      } catch (error) {
-        toast.error("채팅방 생성 중 오류가 발생했습니다.");
-        console.error(error);
+  const [isCreatingChat, setIsCreatingChat] = useState(false);
+
+  const handleCreateChatRoom = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (isCreatingChat) return;
+
+    setIsCreatingChat(true);
+
+    try {
+      const response = await axiosInstance.post(`/api/products/${productId}/chat-room`);
+      if (response.data.code === 0) {
+        const chatRoomId = response.data.data.chatRoomId;
+        router.push(`/chat/${chatRoomId}?productId=${productId}`);
+      } else {
+        toast.error(response.data.message || "채팅방 생성에 실패했습니다.");
       }
-    },
-    [productId, router]
-  );
+    } catch (error) {
+      toast.error("채팅방 생성 중 오류가 발생했습니다.");
+      console.error(error);
+    } finally {
+      setIsCreatingChat(false);
+    }
+  };
+
   console.log(startTime, endTime);
   return (
     <Fragment>
@@ -97,8 +104,9 @@ export default function MapItemCardContent({
           variant="outlineGray"
           className="flex-2"
           onClick={handleCreateChatRoom}
+          disabled={isCreatingChat}
         >
-          채팅하기
+          {isCreatingChat ? "생성중..." : "채팅하기"}
         </ButtonComponent>
       </div>
     </Fragment>

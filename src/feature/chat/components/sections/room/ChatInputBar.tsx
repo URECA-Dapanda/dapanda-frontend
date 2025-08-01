@@ -10,29 +10,46 @@ interface ChatInputBarProps {
 
 export default function ChatInputBar({ onSend }: ChatInputBarProps) {
   const [message, setMessage] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSend = () => {
-    if (!message.trim()) return;
-    onSend(message);
-    setMessage("");
-  };
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
+  const handleSendClick = async () => {
+    const trimmedMessage = message.trim();
+    if (!trimmedMessage || isSending) return;
+
+    setIsSending(true);
+
+    try {
+      await onSend(trimmedMessage);
+      setMessage("");
+      const textarea = textareaRef.current;
+      if (textarea) {
+        textarea.style.height = "auto";
+      }
+    } catch (error) {
+      console.error("메시지 전송 실패:", error);
+    } finally {
+      setIsSending(false);
     }
   };
 
-  const MAX_HEIGHT = 120;
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendClick();
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setMessage(e.target.value);
+    const newValue = e.target.value;
+    setMessage(newValue);
 
-    if (textareaRef.current && e.target instanceof HTMLTextAreaElement) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height =
-        Math.min(textareaRef.current.scrollHeight, MAX_HEIGHT) + "px";
+    const textarea = textareaRef.current;
+    if (textarea && e.target instanceof HTMLTextAreaElement) {
+      textarea.style.height = "auto";
+      const scrollHeight = textarea.scrollHeight;
+      const maxHeight = 120;
+      textarea.style.height = `${Math.min(scrollHeight, maxHeight)}px`;
     }
   };
 
@@ -49,14 +66,15 @@ export default function ChatInputBar({ onSend }: ChatInputBarProps) {
           radius="lg"
           required
           rows={1}
-          className="flex-1 border border-primary-700 bg-primary-50 py-8 text-gray-700 body-sm overflow-y-auto min-h-[36px] max-h-[120px] resize-none"
+          className="flex-1 min-h-[36px] max-h-[120px] resize-none border-primary-700 bg-primary-50 text-gray-700 body-sm"
         />
         <ButtonComponent
           size="xl"
-          onClick={handleSend}
+          onClick={handleSendClick}
+          disabled={isSending || !message.trim()}
           className="bg-primary text-white font-semibold body-md w-52"
         >
-          전송
+          {isSending ? "전송중..." : "전송"}
         </ButtonComponent>
       </div>
     </div>
