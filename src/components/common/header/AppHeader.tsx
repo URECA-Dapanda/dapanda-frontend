@@ -1,12 +1,17 @@
 "use client";
-import { PropsWithChildren, useMemo } from "react";
+import { PropsWithChildren, useMemo, Suspense } from "react";
 import HeaderTimer from "./HeaderTimer";
 import Image from "next/image";
 import { cn } from "@lib/utils";
-import BackButton from "@components/common/header/BackButton";
-import HeaderTitle from "@components/common/header/HeaderTitle";
-import { usePathname } from "next/navigation";
+import BackButton from "./BackButton";
+import HeaderTitle from "./HeaderTitle";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useHeaderStore } from "@stores/useHeaderStore";
+import { MoreVertical } from "lucide-react";
+import { UserDropdownMenu } from "@/components/common/dropdown/UserDropdownMenu";
+import { chatMenuOptions } from "@/components/common/dropdown/dropdownConfig";
+import ReportModal from "@/components/common/modal/ReportModal";
+import { useState } from "react";
 import NotificationIcon from "@components/common/NotificationIcon";
 
 interface AppHeaderProps {
@@ -14,9 +19,13 @@ interface AppHeaderProps {
   variant?: string;
 }
 
-export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderProps>) {
+function AppHeaderContent({ id, children }: PropsWithChildren<AppHeaderProps>) {
   const path = usePathname();
   const isVisible = useHeaderStore((state) => state.isVisible);
+  const searchParams = useSearchParams();
+  const senderId = searchParams.get("senderId");
+  const senderName = searchParams.get("senderName") || "상대방";
+  const [isReportOpen, setIsReportOpen] = useState(false);
   const pathVariant = useMemo(() => {
     const pathLen = path.split("/").length;
     switch (path.split("/").at(1)) {
@@ -26,7 +35,7 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
       case "mypage":
         return pathLen === 2 ? "normal" : "detail";
       case "chat":
-        return pathLen === 2 ? "normal" : "hidden";
+        return pathLen === 2 ? "normal" : "chatDetail";
       default:
         return "normal";
     }
@@ -75,8 +84,27 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
             {children}
           </>
         );
-      case "hidden":
-        return null;
+      case "chatDetail":
+        return (
+          <>
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <BackButton />
+              <HeaderTitle />
+            </div>
+            <div className="flex items-center gap-2">
+              <UserDropdownMenu
+                options={chatMenuOptions(
+                  () => setIsReportOpen(true),
+                  senderId ? parseInt(senderId) : undefined
+                )}
+              >
+                <button className="p-2">
+                  <MoreVertical className="w-5 h-5" />
+                </button>
+              </UserDropdownMenu>
+            </div>
+          </>
+        );
     }
   }, [pathVariant]);
   return (
@@ -88,6 +116,21 @@ export default function AppHeader({ id, children }: PropsWithChildren<AppHeaderP
       )}
     >
       {headerContent}
+      {pathVariant === "chatDetail" && (
+        <ReportModal isOpen={isReportOpen} setIsOpen={setIsReportOpen} targetName={senderName} />
+      )}
     </header>
+  );
+}
+
+export default function AppHeader(props: PropsWithChildren<AppHeaderProps>) {
+  return (
+    <Suspense
+      fallback={
+        <div className="fixed top-0 z-50 flex h-[54px] shrink-0 w-[100dvw] lg:w-[375px] border-none transition-opacity mx-auto flex-row justify-between px-16 items-center overflow-x-clip shadow-header bg-white" />
+      }
+    >
+      <AppHeaderContent {...props} />
+    </Suspense>
   );
 }
