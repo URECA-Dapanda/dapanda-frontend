@@ -96,3 +96,32 @@ button:active {
     padding-bottom: max(env(safe-area-inset-bottom), 20px);
   }
 }
+
+/* 채팅 키보드 대응 */
+.chat-keyboard-active {
+  height: 100vh !important;
+}
+
+.chat-keyboard-active .chat-messages {
+  height: calc(100vh - 200px) !important;
+}
+
+.chat-keyboard-active .chat-header {
+  transform: translateY(0) !important;
+  transition: transform 0.3s ease;
+}
+
+/* 모바일 키보드 대응 추가 */
+@media screen and (max-width: 768px) {
+  .chat-keyboard-active .chat-messages {
+    height: calc(100vh - 150px) !important;
+    padding-bottom: 140px !important;
+  }
+}
+
+/* iOS Safari 키보드 대응 */
+@supports (-webkit-touch-callout: none) {
+  .chat-keyboard-active .chat-messages {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 140px) !important;
+  }
+}
