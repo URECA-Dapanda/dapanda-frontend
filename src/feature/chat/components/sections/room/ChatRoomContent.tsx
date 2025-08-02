@@ -418,9 +418,10 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
       {product && (
         <div
           ref={headerRef}
-          className="fixed top-13 left-0 right-0 z-40 px-24 pt-12 pb-8 chat-header
+          className="fixed left-0 right-0 z-40 px-24 pt-12 pb-8 chat-header
          bg-white w-[100dvw] lg:w-[600px] mx-auto"
           style={{
+            top: "calc(env(safe-area-inset-top) + 54px)",
             transform: "translateY(0)",
             transition: "transform 0.3s ease",
           }}
@@ -437,9 +438,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         className="flex-1 overflow-y-auto px-4 pb-36 chat-messages"
         onScroll={handleScroll}
         style={{
-          paddingTop: isKeyboardVisible
-            ? `${headerHeight + 20}px`
-            : "calc(env(safe-area-inset-top) + 54px + 84px)",
+          paddingTop: isKeyboardVisible ? `${headerHeight + 20}px` : "84px",
           paddingBottom: isKeyboardVisible ? "120px" : "36px",
         }}
       >
