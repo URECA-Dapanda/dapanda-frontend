@@ -12,16 +12,24 @@ export function useAuth() {
 
   useEffect(() => {
     fetch("/api/auth/me")
-      .then((res) => res.json())
+      .then((res) => {
+        return res.json();
+      })
       .then((data) => {
         setIsLogin(data.isLogin);
 
         if (data.isLogin && data.user) {
           setProfile(data.user);
+        } else if (data.isLogin) {
+          console.log("로그인 성공했지만 사용자 데이터 없음");
+        } else {
+          console.log("로그인되지 않음");
         }
       })
-      .catch(() => setIsLogin(false));
-  }, [setProfile]);
+      .catch(() => {
+        setIsLogin(false);
+      });
+  }, [setProfile, token]);
 
   const logout = async () => {
     const res = await logOutRequest();

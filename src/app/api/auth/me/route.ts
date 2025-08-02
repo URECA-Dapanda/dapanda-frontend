@@ -4,15 +4,19 @@ export async function GET(req: NextRequest) {
   const accessToken = req.cookies.get("accessToken");
 
   const isLogin = !!accessToken;
+  console.log("로그인 상태 확인:", { isLogin, hasToken: !!accessToken });
 
   if (isLogin) {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_SSL}/api/members/info`, {
-        headers: {
-          Cookie: `accessToken=${accessToken.value}`,
-        },
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_SSL || "http://localhost:8080"}/api/members/info`,
+        {
+          headers: {
+            Cookie: `accessToken=${accessToken.value}`,
+          },
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         const userData = await response.json();

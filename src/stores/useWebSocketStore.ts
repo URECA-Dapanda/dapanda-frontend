@@ -32,12 +32,18 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
 
   connect: async () => {
     const { client } = get();
-    if (client && client.connected) return;
+    if (client && client.connected) {
+      console.log("이미 웹소켓이 연결되어 있습니다.");
+      return;
+    }
 
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_SSL;
+    console.log("웹소켓 연결 시작");
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE;
     if (!apiBaseUrl) {
       throw new Error("NEXT_PUBLIC_API_BASE_SSL 환경변수가 필요함");
     }
+
+    console.log("웹소켓 URL:", `${apiBaseUrl}/conn`);
 
     const newClient = new Client({
       webSocketFactory: () => {
@@ -52,6 +58,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
       onConnect: () => {
+        console.log("웹소켓 연결 성공");
         set({ isConnected: true });
 
         // 기존 구독들을 다시 등록
@@ -64,6 +71,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
             return;
           }
 
+          console.log(`채팅방 ${chatRoomId} 구독 재등록`);
           const subscription = newClient.subscribe(`/sub/${chatRoomId}`, (message) => {
             const payload: ChatSocketMessage = JSON.parse(message.body);
             callback(payload);
@@ -83,6 +91,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
         setTimeout(() => {
           const { client } = get();
           if (client && !client.connected) {
+            console.log("웹소켓 재연결 시도...");
             client.activate();
           }
         }, 5000);

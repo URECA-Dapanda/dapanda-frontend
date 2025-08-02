@@ -12,6 +12,7 @@ import { useHeaderStore } from "@stores/useHeaderStore";
 import DefaultFilterCard from "@feature/data/components/sections/filter/DefaultFilterCard";
 import DataRegistModal from "@feature/data/components/sections/modal/DataRegistModal";
 import { useDataFilterStore } from "@feature/data/stores/useDataFilterStore";
+import { useAuth } from "@hooks/useAuth";
 
 export default function DataPageContent() {
   const searchParams = useSearchParams();
@@ -21,6 +22,8 @@ export default function DataPageContent() {
   const setIsVisible = useHeaderStore((state) => state.setIsVisible);
   const [registModalOpen, setRegistModalOpen] = useState(false);
   const clearDataAmount = useDataFilterStore((state) => state.clearDataAmount);
+
+  useAuth();
 
   useEffect(() => {
     setIsVisible(sheetOpen);
