@@ -101,13 +101,13 @@ export default function MapDetailPage() {
         className={clsx(
           "w-full transition-all duration-300",
           // TopSheet 높이만큼 상단 패딩
-          topSheetExpanded ? "pt-[500px]" : "pt-[320px]",
+          topSheetExpanded ? "pt-[480px]" : "pt-[300px]",
           // 하단 safe area + 여유 공간
           "pb-[calc(env(safe-area-inset-bottom,0px)+72px)]"
         )}
       >
-        <div className="px-24 py-24">
-          <div className="mt-12">
+        <div className="px-24 pb-24">
+          <div>
             <TimeSelectorSection
               startTime={startTime}
               setStartTime={setStartTime}

@@ -1,5 +1,4 @@
 import AvatarIcon from "@components/common/AvatarIcon";
-import { BadgeComponent } from "@components/common/badge";
 import ItemCard from "@components/common/card/ItemCard";
 import LayoutBox from "@components/common/container/LayoutBox";
 import { SkeletonCard } from "@components/common/skeleton";
@@ -8,7 +7,8 @@ import { formatDataSize } from "@lib/formatters";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
 import dayjs from "dayjs";
-import WriteReview from "./WriteReview";
+import WriteReview from "@feature/mypage/components/sections/purchase/WriteReview";
+import { getTradeImageUrl, TradeType } from "@feature/mypage/utils/getTradeImageUrl";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
@@ -48,17 +48,21 @@ export default function PurchaseHistoryCard({ data }: PurchaseHistoryCardProps) 
         <SkeletonCard />
       </ItemCard>
     );
+
   return (
     <ItemCard size="sm">
       <LayoutBox layout="flex" direction="row" gap={19} height="full">
-        <AvatarIcon size="small" />
+        <AvatarIcon 
+          size="medium" 
+          avatar={getTradeImageUrl({
+            type: data.tradeType as TradeType,
+            productImageUrl: data.productImageUrl,
+          })}
+        />
         <LayoutBox layout="flex" direction="column" gap={0}>
           <div className="flex flex-row items-center justify-between gap-48">
             <p className="title-sm">{tradeMapper[data.tradeType]}</p>
             {data.tradeType === "PURCHASE_WIFI" && <WriteReview tradeId={data.tradeId} />}
-            {data.tradeType === "PURCHASE_MOBILE_COMPOSITE" && (
-              <BadgeComponent variant={"label"}>자투리 구매</BadgeComponent>
-            )}
           </div>
           <p className="body-sm">거래 일자: {dayjs(data.createdAt).fromNow()}</p>
           <p className="body-sm text-gray-600">
