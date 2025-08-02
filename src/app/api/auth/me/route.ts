@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
   if (isLogin) {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_SSL || "http://localhost:8080"}/api/members/info`,
+        `${process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8080"}/api/members/info`,
         {
           headers: {
             Cookie: `accessToken=${accessToken.value}`,
