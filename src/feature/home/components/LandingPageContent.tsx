@@ -13,7 +13,7 @@ export default function LandingPageContent() {
     if (isLogin) {
       router.push("/data");
     }
-  }, [isLogin, router]);
+  }, [isLogin]);
 
   return (
     <div className="w-full lg:w-[600px] mx-auto h-main-safe bg-gradient-to-b from-[#f5e6f3] via-[#f0e1f1] to-[#ede0f0] flex flex-col items-center justify-center relative overflow-hidden">
