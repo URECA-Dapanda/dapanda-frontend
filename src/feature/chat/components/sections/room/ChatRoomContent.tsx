@@ -386,7 +386,10 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto px-4 pt-20 pb-36" onScroll={handleScroll}>
+      <div
+        className="flex-1 overflow-y-auto px-4 pt-[calc(env(safe-area-inset-top) + 54px+84px)] pb-36"
+        onScroll={handleScroll}
+      >
         {loadingMore && (
           <div className="text-center text-sm text-gray-500 py-4">이전 내역을 불러오는 중...</div>
         )}

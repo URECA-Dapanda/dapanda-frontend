@@ -75,7 +75,7 @@ export default function MapSelectLocationPage() {
       </div>
 
       {/* 지도 영역 */}
-      <div className="w-full lg:w-[600px] h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-107px-54px)]">
+      <div className="w-full lg:w-[600px] h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-108px-54px)]">
         <InteractiveMap
           onLocationSelect={handleMapLocationSelect}
           initialLocation={initialLocation}
