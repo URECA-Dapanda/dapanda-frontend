@@ -103,7 +103,13 @@ button:active {
 }
 
 .chat-keyboard-active .chat-messages {
-  height: calc(100vh - 200px) !important;
+  overflow-y: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chat-keyboard-active .chat-messages::-webkit-scrollbar {
+  display: none;
 }
 
 .chat-keyboard-active .chat-header {
