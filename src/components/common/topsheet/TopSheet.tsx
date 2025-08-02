@@ -58,20 +58,19 @@ export default function TopSheet({
 
   return (
     <>
-      <div className="absolute top-12 right-12 z-36">
-        <ReportTriggerButton targetName={data.memberName} />
-      </div>
-
       <motion.div
         className={clsx(
-          "fixed left-1/2 -translate-x-1/2 w-full max-w-[600px]",
+          "fixed left-1/2 -translate-x-1/2 w-full lg:w-[600px]",
           "bg-secondary shadow-default rounded-b-30 overflow-hidden z-30",
-          "top-[calc(56px+env(safe-area-inset-top,0px))]"
+          "top-[calc(54px+env(safe-area-inset-top,0px))]"
         )}
         animate={{ y: expanded ? 0 : 0 }}
         initial={false}
         transition={{ type: "spring", damping: 20, stiffness: 200 }}
       >
+        <div className="absolute top-12 right-12 z-36">
+          <ReportTriggerButton targetName={data.memberName} />
+        </div>
         <motion.div
           className="w-full h-full pt-20"
           drag="y"
@@ -200,12 +199,12 @@ export default function TopSheet({
 
         {isModalOpen && modalImageIndex !== null && (
           <FullScreenModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-            <div className="relative w-screen h-screen">
+            <div className="relative w-[70dvw] lg:w-[420px] h-main-safe justify-center-safe items-start">
               <Image
                 src={imageUrls[modalImageIndex]}
                 alt={`확대 이미지 ${modalImageIndex + 1}`}
                 fill
-                className="object-contain"
+                className="object-contain "
               />
             </div>
           </FullScreenModal>

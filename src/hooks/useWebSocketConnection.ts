@@ -21,6 +21,14 @@ export const useWebSocketConnection = () => {
 
   const disconnectOnLogout = () => {
     disconnect();
+    useProfileStore.getState().setProfile({
+      name: "",
+      profileImageUrl: "",
+      joinedAt: "",
+      averageRating: 0,
+      reviewCount: 0,
+      tradeCount: 0,
+    });
   };
 
   return {

@@ -114,11 +114,11 @@ export default function DataDetailContent() {
           )}
           {!isLimitLoading && (
             <div className="flex flex-wrap gap-8">
-              <BadgeComponent variant="outlined">
+              <BadgeComponent variant="largeOutlined" size="xl">
                 이번 달 구매 가능:{" "}
                 <span className="font-semibold ml-4">{formatDataSize(remainingBuying ?? 0)}</span>
               </BadgeComponent>
-              <BadgeComponent variant="outlined">
+              <BadgeComponent variant="largeOutlined" size="xl">
                 이번 달 판매 가능:{" "}
                 <span className="font-semibold ml-4">{formatDataSize(remainingSelling ?? 0)}</span>
               </BadgeComponent>
