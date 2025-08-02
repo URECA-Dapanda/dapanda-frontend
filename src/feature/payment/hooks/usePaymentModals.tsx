@@ -104,6 +104,9 @@ export default function UsePaymentModals() {
         info={{
           title: info.title,
           remainingData: info.remainingData,
+          startTime: info.startTime,
+          endTime: info.endTime,
+          location: info.location,
         }}
       />
     </>

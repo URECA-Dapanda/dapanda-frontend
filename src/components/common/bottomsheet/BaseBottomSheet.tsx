@@ -3,6 +3,7 @@
 import { cn } from "@lib/utils";
 import { motion, PanInfo } from "framer-motion";
 import { ReactNode, useEffect, useState } from "react";
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
 interface BaseBottomSheetProps {
   isOpen: boolean;
@@ -34,6 +35,8 @@ export default function BaseBottomSheet({
   const [sheetY, setSheetY] = useState<number | string>(
     variant === "snap" ? snapHeight : CLOSED_HEIGHT
   );
+
+  useLockBodyScroll(isOpen && (variant === "modal" || variant === "hybrid"));
 
   useEffect(() => {
     if (variant === "snap") {

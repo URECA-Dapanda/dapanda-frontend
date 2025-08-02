@@ -7,6 +7,7 @@ import ModalHeader from "@/components/common/modal/ModalHeader";
 import { ButtonComponent } from "@/components/common/button/ButtonComponent";
 import { getMyData } from "@feature/mypage/apis/mypageRequest";
 import FullScreenModal from "@components/common/modal/FullScreenModal";
+import { formatIsoToHHMM } from "@lib/time";
 
 interface PaymentCompleteModalProps {
   isOpen: boolean;
@@ -15,6 +16,9 @@ interface PaymentCompleteModalProps {
   info: {
     title: string;
     remainingData?: string;
+    location?: string;
+    startTime?: string;
+    endTime?: string;
   };
 }
 
@@ -41,12 +45,19 @@ const PaymentCompleteModal = ({ isOpen, onClose, type, info }: PaymentCompleteMo
       );
     }
 
+    const timeRange =
+      info.startTime && info.endTime
+        ? `${formatIsoToHHMM(info.startTime)}~${formatIsoToHHMM(info.endTime)}`
+        : "";
+
     return (
       <>
         <p className="title-sm mb-8">{type === "wifi" ? "와이파이" : "핫스팟"} 구매 완료!</p>
-        <p className="text-gray-600 body-sm mb-32">
-          {info.title} 상품이 성공적으로 구매되었습니다.
-        </p>
+        <div className="text-gray-600 body-sm mb-32 space-y-2 text-left">
+          {timeRange && <p>⏱️ 시간: {timeRange}</p>}
+          {info.location && <p>📍 위치: {info.location}</p>}
+          <p>{info.title} 상품이 정상적으로 구매되었습니다.</p>
+        </div>
       </>
     );
   };
