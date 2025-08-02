@@ -11,6 +11,7 @@ import EmptyState from "@components/common/empty/EmptyState";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
 import { formatPriceString } from "@lib/formatters";
+import { mapRawToDataType } from "@feature/data/types/dataType";
 
 export default function ScrapTabContent() {
   const { value, setValue, loading, result, summary, search } = useScrapRecommendation();
@@ -25,17 +26,21 @@ export default function ScrapTabContent() {
     await search();
   };
 
+  // UI용: DataType으로 변환 (문자열로 표시용)
+  const displayItems = result.map(mapRawToDataType);
+
+  // 결제용: 실제 숫자 계산용 데이터
   const transformedCombinations = result.map((item) => ({
     productId: item.productId,
     mobileDataId: item.mobileDataId,
     memberName: item.memberName,
-    price: Number(item.price.replace(/[^0-9]/g, "")),
-    purchasePrice: Number(item.price.replace(/[^0-9]/g, "")),
-    remainAmount: parseFloat(item.title),
-    purchaseAmount: item.purchaseAmount,
-    pricePer100MB: Number(item.pricePer100MB.replace(/[^0-9]/g, "")),
+    price: item.price,
+    pricePer100MB: item.pricePer100MB,
+    purchasePrice: Math.floor(item.purchaseAmount! * item.pricePer100MB * 10),
+    remainAmount: item.remainAmount,
+    purchaseAmount: item.purchaseAmount!,
     splitType: item.splitType,
-    updatedAt: item.date,
+    updatedAt: item.updatedAt,
   }));
 
   console.log("transformedCombinations", transformedCombinations);
@@ -53,13 +58,13 @@ export default function ScrapTabContent() {
       {!loading && result.length > 0 && (
         <>
           <CollapsibleDataList
-            items={result}
+            items={displayItems}
             isExpanded={isExpanded}
             onToggle={() => setIsExpanded((prev) => !prev)}
           />
 
           {(isExpanded || result.length <= 1) && (
-            <div className="px-8 flex justify-between items-center">
+            <div className="px-8 flex justify-between items-center mb-40">
               <div>
                 <p className="title-sm">총 용량 {summary.totalAmount}GB</p>
                 <p className="title-sm">총 가격 {formatPriceString(summary.totalPrice)}</p>
