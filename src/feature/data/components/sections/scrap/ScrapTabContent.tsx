@@ -1,16 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { ButtonComponent } from "@/components/common/button";
 import { Search } from "lucide-react";
 import ScrapFilterCard from "@feature/data/components/sections/filter/ScrapFilterCard";
 import ScrapLoadingState from "@feature/data/components/sections/scrap/ScrapLoadingState";
 import { useScrapRecommendation } from "@feature/data/hooks/useScrapRecommendation";
 import CollapsibleDataList from "@feature/data/components/sections/default/CollapsibleDataList";
 import EmptyState from "@components/common/empty/EmptyState";
-import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
-import { formatPriceString } from "@lib/formatters";
 
 export default function ScrapTabContent() {
   const { value, setValue, loading, result, summary, search } = useScrapRecommendation();
