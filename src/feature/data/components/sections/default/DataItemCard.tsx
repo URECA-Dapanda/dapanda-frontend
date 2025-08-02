@@ -8,7 +8,7 @@ import ItemCard from "@components/common/card/ItemCard";
 
 interface DataItemCardProps extends Partial<ProductItemProps<DataType>> {
   type: "default" | "scrap";
-  size?: string;
+  size?: "sm" | "md";
 }
 
 function DataItemCard({ data, type, size = "md" }: DataItemCardProps) {
