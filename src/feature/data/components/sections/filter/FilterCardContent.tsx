@@ -26,7 +26,7 @@ export default function FilterCardContent({
       className="flex flex-col h-full justify-center items-center text-center p-12"
       style={{ gap: gap }}
     >
-      <h2 className="h1 text-black">{formatDataSize(value[0])}</h2>
+      <h2 className={`${gap === 4 ? "h3" : "h1"} text-black`}>{formatDataSize(value[0])}</h2>
       <p className="body-sm text-gray-600">원하는 용량을 선택하세요</p>
 
       <Slider value={value} onValueChange={onValueChange} max={max} disabled={disabled} />

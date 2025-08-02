@@ -16,7 +16,7 @@ export default function ScrapFilterCard({ value, setValue, onSearch }: ScrapFilt
         onValueChange={setValue}
         onButtonClick={onSearch}
         max={2}
-        gap={0}
+        gap={4}
       />
     </FlatCard>
   );
