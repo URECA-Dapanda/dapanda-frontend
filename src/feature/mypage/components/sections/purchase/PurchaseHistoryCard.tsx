@@ -8,7 +8,8 @@ import { formatDataSize } from "@lib/formatters";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
 import dayjs from "dayjs";
-import WriteReview from "./WriteReview";
+import WriteReview from "@feature/mypage/components/sections/purchase/WriteReview";
+import { getTradeImageUrl, TradeType } from "@feature/mypage/utils/getTradeImageUrl";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
@@ -48,10 +49,17 @@ export default function PurchaseHistoryCard({ data }: PurchaseHistoryCardProps) 
         <SkeletonCard />
       </ItemCard>
     );
+
   return (
     <ItemCard size="sm">
       <LayoutBox layout="flex" direction="row" gap={19} height="full">
-        <AvatarIcon size="small" />
+        <AvatarIcon 
+          size="medium" 
+          avatar={getTradeImageUrl({
+            type: data.tradeType as TradeType,
+            productImageUrl: data.productImageUrl,
+          })}
+        />
         <LayoutBox layout="flex" direction="column" gap={0}>
           <div className="flex flex-row items-center justify-between gap-48">
             <p className="title-sm">{tradeMapper[data.tradeType]}</p>
