@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function SocialButton({ provider }: { provider: "kakao" | "naver" | "google" }) {
   const handleLogin = () => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8080";
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE;
     const kakaoAuthUrl = `${baseUrl}/oauth2/authorization/${provider}`;
     console.log("로그인 URL:", kakaoAuthUrl);
     window.location.href = kakaoAuthUrl;
