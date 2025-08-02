@@ -16,6 +16,7 @@ export interface SaleHistoryType {
   createdAt: string;
   updatedAt: string;
   title: string;
+  productImageUrl: string;
 }
 
 export interface PurchaseHistoryType extends HistoryType {
@@ -24,6 +25,7 @@ export interface PurchaseHistoryType extends HistoryType {
   dataAmount: number;
   title: string;
   createdAt: string;
+  productImageUrl: string;
 }
 
 export interface CashHistoryType {

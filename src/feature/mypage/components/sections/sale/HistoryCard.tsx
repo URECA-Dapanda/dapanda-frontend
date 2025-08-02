@@ -9,6 +9,7 @@ import { formatDataSize } from "@lib/formatters";
 import { formatDateDivider } from "@lib/time";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
+import { getTradeImageUrl, PostType } from "@feature/mypage/utils/getTradeImageUrl";
 
 interface HistoryCardProps {
   data?: SaleHistoryType;
@@ -34,11 +35,17 @@ export function HistoryCard({ data, size = "sm" }: HistoryCardProps) {
         <SkeletonCard />
       </ItemCard>
     );
-
+    
   return (
     <ItemCard size={size} handleClick={handleCardClick}>
       <LayoutBox layout="flex" direction="row" gap={19} height="full">
-        <AvatarIcon size="small" />
+        <AvatarIcon 
+          size="medium" 
+          avatar={getTradeImageUrl({
+            type: data.type as PostType,
+            productImageUrl: data.productImageUrl,
+          })}
+        />
         <LayoutBox layout="flex" direction="column" gap={0}>
           <p className="title-sm">{postTypeGuard[data.type]}</p>
           <p className="body-sm">등록 일자: {formatDateDivider(data.createdAt)}</p>
