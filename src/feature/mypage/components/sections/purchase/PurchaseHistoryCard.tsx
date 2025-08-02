@@ -1,5 +1,4 @@
 import AvatarIcon from "@components/common/AvatarIcon";
-import { BadgeComponent } from "@components/common/badge";
 import ItemCard from "@components/common/card/ItemCard";
 import LayoutBox from "@components/common/container/LayoutBox";
 import { SkeletonCard } from "@components/common/skeleton";
@@ -64,9 +63,6 @@ export default function PurchaseHistoryCard({ data }: PurchaseHistoryCardProps) 
           <div className="flex flex-row items-center justify-between gap-48">
             <p className="title-sm">{tradeMapper[data.tradeType]}</p>
             {data.tradeType === "PURCHASE_WIFI" && <WriteReview tradeId={data.tradeId} />}
-            {data.tradeType === "PURCHASE_MOBILE_COMPOSITE" && (
-              <BadgeComponent variant={"label"}>자투리 구매</BadgeComponent>
-            )}
           </div>
           <p className="body-sm">거래 일자: {dayjs(data.createdAt).fromNow()}</p>
           <p className="body-sm text-gray-600">
