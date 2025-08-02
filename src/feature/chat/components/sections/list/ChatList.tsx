@@ -171,10 +171,7 @@ export default function ChatList() {
         </ButtonComponent>
       </div>
 
-      <div
-        className="overflow-y-auto overflow-x-hidden scrollbar-track-transparent"
-        style={{ height: "calc(-108px + 100vh)" }}
-      >
+      <div className="overflow-y-auto overflow-x-hidden scrollbar-track-transparent h-sheet-safe">
         <div className="py-24 mb-56">
           {chatList.map((chat, index) => (
             <div key={chat.chatRoomId}>

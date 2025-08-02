@@ -18,7 +18,7 @@ interface NotificationListProps {
 export default function NotificationList({ items, onDelete }: NotificationListProps) {
   if (items.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center text-gray-500 h-[calc(100vh-200px)]">
+      <div className="flex flex-col items-center justify-center text-gray-500">
         <BellOff className="w-24 h-24 mb-20" />
         <p className="body-md">받은 알림이 없습니다.</p>
       </div>
@@ -26,7 +26,7 @@ export default function NotificationList({ items, onDelete }: NotificationListPr
   }
 
   return (
-    <ul className="space-y-12">
+    <ul className="space-y-12 py-12 px-12">
       {items.map((item) => (
         <NotificationCard key={item.id} {...item} onDelete={onDelete} />
       ))}
