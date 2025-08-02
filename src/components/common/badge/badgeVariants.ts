@@ -8,7 +8,7 @@ export const badgeVariants = cva("inline-flex items-center justify-center rounde
       label: "px-3 bg-primary text-white",
       meta: "px-3 text-black",
       outlined: "px-3 bg-white border border-primary/20 text-black",
-      largeOutlined: "px-8 py-4 bg-white border border-primary/20 text-black text-body-lg"
+      largeOutlined: "px-8 py-4 bg-white border border-primary/20 text-black title-xs"
     },
     size: {
       sm: "h-[20px]",
