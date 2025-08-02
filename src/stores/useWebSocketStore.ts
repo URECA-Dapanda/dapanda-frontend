@@ -40,7 +40,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     console.log("웹소켓 연결 시작");
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE;
     if (!apiBaseUrl) {
-      throw new Error("NEXT_PUBLIC_API_BASE_SSL 환경변수가 필요함");
+      throw new Error("NEXT_PUBLIC_API_BASE 환경변수가 필요함");
     }
 
     console.log("웹소켓 URL:", `${apiBaseUrl}/conn`);

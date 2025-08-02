@@ -20,9 +20,8 @@ export function useAuth() {
       .then((data) => {
         setIsLogin(data.isLogin);
 
-        if (data.isLogin && data.user) {
-          console.log("프로필 설정:", data.user);
-          setProfile(data.user);
+        if (data.isLogin && data.user && data.user.data) {
+          setProfile(data.user.data);
 
           if (!isConnected) {
             console.log("로그인 성공 - 웹소켓 연결 시작");
