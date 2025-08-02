@@ -8,9 +8,10 @@ import ItemCard from "@components/common/card/ItemCard";
 
 interface DataItemCardProps extends Partial<ProductItemProps<DataType>> {
   type: "default" | "scrap";
+  size?: "sm" | "md";
 }
 
-function DataItemCard({ data, type }: DataItemCardProps) {
+function DataItemCard({ data, type, size = "md" }: DataItemCardProps) {
   const router = useRouter();
 
   const handleClick = useCallback(() => {
@@ -19,7 +20,7 @@ function DataItemCard({ data, type }: DataItemCardProps) {
   }, [data, type, router]);
 
   return (
-    <ItemCard handleClick={handleClick} size="md">
+    <ItemCard handleClick={handleClick} size={size}>
       <DataItemContent data={data} />
     </ItemCard>
   );
