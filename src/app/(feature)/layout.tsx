@@ -10,7 +10,7 @@ export default function FeatureLayout({
   modal: ReactNode;
 }) {
   return (
-    <div className="relative w-[100dvw] lg:w-[600px] overflow-hidden mx-auto bg-white flex flex-col">
+    <div className="relative w-[100dvw] lg:w-[600px] mx-auto bg-white flex flex-col">
       <AppHeader id="appHead" />
       <main className="h-main-safe overflow-y-visible antialiased w-full lg:w-[600px]">
         <Suspense>
