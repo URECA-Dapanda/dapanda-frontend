@@ -438,7 +438,9 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         className="flex-1 overflow-y-auto px-4 pb-36 chat-messages"
         onScroll={handleScroll}
         style={{
-          paddingTop: isKeyboardVisible ? `${headerHeight + 20}px` : "84px",
+          paddingTop: isKeyboardVisible
+            ? `${headerHeight + 20}px`
+            : "calc(env(safe-area-inset-top) + 54px + 84px)",
           paddingBottom: isKeyboardVisible ? "120px" : "36px",
         }}
       >
