@@ -1,4 +1,8 @@
-export type TradeType = "PURCHASE_MOBILE_SINGLE" | "PURCHASE_MOBILE_COMPOSITE" | "PURCHASE_WIFI";
+export type TradeType =
+  | "PURCHASE_MOBILE_SINGLE"
+  | "PURCHASE_MOBILE_COMPOSITE"
+  | "PURCHASE_WIFI";
+
 export type PostType = "MOBILE_DATA" | "WIFI" | "HOTSPOT";
 
 /**
@@ -11,16 +15,17 @@ export function getTradeImageUrl({
   type: TradeType | PostType;
   productImageUrl?: string;
 }): string {
-  if (
-    type === "PURCHASE_MOBILE_SINGLE" ||
-    type === "PURCHASE_MOBILE_COMPOSITE" ||
-    type === "MOBILE_DATA"
-  ) {
+  if (type === "PURCHASE_MOBILE_COMPOSITE") {
+    return "/default-data-scrap.png";
+  }
+
+  if (type === "PURCHASE_MOBILE_SINGLE" || type === "MOBILE_DATA") {
     return "/default-data.png";
   }
 
   if (type === "PURCHASE_WIFI" || type === "WIFI") {
     return productImageUrl?.trim() ? productImageUrl : "/default-wifi.png";
   }
+
   return "/default-data.png";
 }
