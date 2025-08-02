@@ -2,18 +2,18 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import SocialButton from "@components/common/button/SocialButton";
 import LayoutBox from "@components/common/container/LayoutBox";
-import { useAuth } from "@hooks/useAuth";
 import Image from "next/image";
+import Cookies from "js-cookie";
 
 export default function LandingPageContent() {
   const router = useRouter();
-  const { isLogin } = useAuth();
 
   useEffect(() => {
-    if (isLogin) {
+    const token = Cookies.get("accessToken");
+    if (token) {
       router.push("/data");
     }
-  }, [isLogin]);
+  }, [router]);
 
   return (
     <div className="w-full lg:w-[600px] mx-auto h-main-safe bg-gradient-to-b from-[#f5e6f3] via-[#f0e1f1] to-[#ede0f0] flex flex-col items-center justify-center relative overflow-hidden">
