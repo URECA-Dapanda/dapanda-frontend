@@ -9,7 +9,7 @@ interface ScrapFilterCardProps {
 
 export default function ScrapFilterCard({ value, setValue, onSearch }: ScrapFilterCardProps) {
   return (
-    <FlatCard size="md">
+    <FlatCard size="md" color="bg-primary2">
       <FilterCardContent
         buttonText="검색하기"
         value={value}

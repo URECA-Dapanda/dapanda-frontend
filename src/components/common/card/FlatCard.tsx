@@ -14,12 +14,12 @@ export default function FlatCard({ color, size, children }: PropsWithChildren<Fl
       size={size}
       color={`${
         color ??
-        (size !== "xxl" && size !== "xl" && size !== "md"
+        (size !== "xxl" && size !== "xl"
           ? "bg-gradient-to-r from-primary-100 to-[#DCE6FF]"
           : "bg-primary2")
       }`}
     >
-      <CardContentComponent size={"fit"}>{children}</CardContentComponent>
+      <CardContentComponent size={"sm"}>{children}</CardContentComponent>
     </CardComponent>
   );
 }

@@ -32,14 +32,12 @@ export default function ScrapTabContent() {
       {!loading && hasSearched && result.length === 0 && <EmptyState />}
 
       {!loading && result.length > 0 && (
-        <>
-          <CollapsibleDataList
-            items={result}
-            summary={summary}
-            isExpanded={isExpanded}
-            onToggle={() => setIsExpanded((prev) => !prev)}
-          />
-        </>
+        <CollapsibleDataList
+          items={result}
+          summary={summary}
+          isExpanded={isExpanded}
+          onToggle={() => setIsExpanded((prev) => !prev)}
+        />
       )}
 
       {!hasSearched && !loading && result.length === 0 && (
