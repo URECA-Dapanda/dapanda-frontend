@@ -30,8 +30,9 @@ export default function CurrentCashCard({ isInterection }: CurrentCashCardProps)
               </span>
               <Link
                 href={"/mypage/cash-history"}
-                className={`body-xs text-gray-500 hover:underline hover:cursor-pointer ${isInterection ? "" : "hidden"
-                  }`}
+                className={`body-xs text-gray-500 hover:underline hover:cursor-pointer ${
+                  isInterection ? "" : "hidden"
+                }`}
               >
                 내역 보기 &gt;
               </Link>
@@ -57,7 +58,6 @@ export default function CurrentCashCard({ isInterection }: CurrentCashCardProps)
             </Link>
           </div>
         )}
-
       </div>
     </FlatCard>
   );
