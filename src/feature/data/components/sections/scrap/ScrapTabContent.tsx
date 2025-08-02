@@ -17,7 +17,6 @@ export default function ScrapTabContent() {
   const [hasSearched, setHasSearched] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const setPayment = usePaymentStore((state) => state.setInfo);
   const renderModals = UsePaymentModals();
 
   const handleSearch = async () => {
@@ -25,23 +24,8 @@ export default function ScrapTabContent() {
     await search();
   };
 
-  const transformedCombinations = result.map((item) => ({
-    productId: item.productId,
-    mobileDataId: item.mobileDataId,
-    memberName: item.memberName,
-    price: Number(item.price.replace(/[^0-9]/g, "")),
-    purchasePrice: Number(item.price.replace(/[^0-9]/g, "")),
-    remainAmount: parseFloat(item.title),
-    purchaseAmount: item.purchaseAmount,
-    pricePer100MB: Number(item.pricePer100MB.replace(/[^0-9]/g, "")),
-    splitType: item.splitType,
-    updatedAt: item.date,
-  }));
-
-  console.log("transformedCombinations", transformedCombinations);
-
   return (
-    <div className="px-24 space-y-24 h-full">
+    <div className="px-24 space-y-12 h-full">
       {/* 필터 카드 */}
       <ScrapFilterCard value={value} setValue={setValue} onSearch={handleSearch} />
 
@@ -54,36 +38,10 @@ export default function ScrapTabContent() {
         <>
           <CollapsibleDataList
             items={result}
+            summary={summary}
             isExpanded={isExpanded}
             onToggle={() => setIsExpanded((prev) => !prev)}
           />
-
-          {(isExpanded || result.length <= 1) && (
-            <div className="px-8 flex justify-between items-center">
-              <div>
-                <p className="title-sm">총 용량 {summary.totalAmount}GB</p>
-                <p className="title-sm">총 가격 {formatPriceString(summary.totalPrice)}</p>
-              </div>
-              <ButtonComponent
-                variant="secondary"
-                size="3xl"
-                className="w-152"
-                onClick={() =>
-                  setPayment({
-                    type: "data",
-                    badge: "자투리 구매",
-                    title: `${summary.totalAmount}GB`,
-                    price: formatPriceString(summary.totalPrice),
-                    totalAmount: summary.totalAmount,
-                    totalPrice: summary.totalPrice,
-                    combinations: transformedCombinations,
-                  })
-                }
-              >
-                확정하고 결제하기
-              </ButtonComponent>
-            </div>
-          )}
         </>
       )}
 

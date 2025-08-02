@@ -9,13 +9,14 @@ interface ScrapFilterCardProps {
 
 export default function ScrapFilterCard({ value, setValue, onSearch }: ScrapFilterCardProps) {
   return (
-    <FlatCard size="xl">
+    <FlatCard size="md">
       <FilterCardContent
         buttonText="검색하기"
         value={value}
         onValueChange={setValue}
         onButtonClick={onSearch}
         max={2}
+        gap={0}
       />
     </FlatCard>
   );
