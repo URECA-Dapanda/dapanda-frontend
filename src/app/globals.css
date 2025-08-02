@@ -82,7 +82,7 @@ button:active {
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom);
 }
-
+/* 
 /* 모바일 키보드 대응 */
 @media screen and (max-height: 600px) {
   .safe-area-bottom {
@@ -95,4 +95,4 @@ button:active {
   .safe-area-bottom {
     padding-bottom: max(env(safe-area-inset-bottom), 20px);
   }
-}
+} */
