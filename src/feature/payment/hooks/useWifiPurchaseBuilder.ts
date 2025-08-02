@@ -1,4 +1,4 @@
-import { formatToIsoDate, formatToIsoDatePlusOneDay } from "@/lib/time";
+import { formatToIsoDate, formatToIsoDatePlusOneDay, getDurationMinutes } from "@/lib/time";
 import type { MapDetailItem } from "@/feature/map/types/mapType";
 import type { PaymentInfo } from "@/feature/payment/types/paymentTypes";
 import { Time } from "@type/Time";
@@ -8,10 +8,13 @@ export const buildWifiPaymentInfo = (
   startTime: Time,
   endTime: Time
 ): PaymentInfo => {
+  const duration = getDurationMinutes(startTime, endTime);
+  const totalPrice = Math.ceil(duration / 10) * data.pricePer10min;
+
   return {
     type: "wifi",
     title: data.place,
-    price: `${data.pricePer10min.toLocaleString()}원`,
+    price: `${totalPrice.toLocaleString()}원`,
     seller: data.memberName,
     location: data.address,
     duration: `${startTime} ~ ${endTime}`,
