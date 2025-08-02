@@ -2,7 +2,7 @@
 
 import { cn } from "@lib/utils";
 import { motion, PanInfo } from "framer-motion";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
 interface BaseBottomSheetProps {
@@ -27,15 +27,17 @@ export default function BaseBottomSheet({
   zIndex,
 }: BaseBottomSheetProps) {
   const BOTTOM_OFFSET = 54;
-  // const HEADER_OFFSET = 54;
   const MODAL_MAX_HEIGHT = 602;
   const FULL_HEIGHT = 0;
   const CLOSED_HEIGHT = typeof window !== "undefined" ? window.innerHeight : "100vh";
 
+  const sheetRef = useRef<HTMLDivElement>(null);
   const [sheetY, setSheetY] = useState<number | string>(
     variant === "snap" ? snapHeight : CLOSED_HEIGHT
   );
+  const [enableDrag, setEnableDrag] = useState(true);
 
+  const isMobile = typeof window !== "undefined" && /Mobi|Android/i.test(navigator.userAgent);
   useLockBodyScroll(isOpen && (variant === "modal" || variant === "hybrid"));
 
   useEffect(() => {
@@ -55,19 +57,15 @@ export default function BaseBottomSheet({
     const offset = info.offset.y;
     const velocity = info.velocity.y;
 
-    if (!variant) return;
-
     const shouldClose = offset > threshold && velocity > 300;
     const shouldOpenFull = offset < -threshold || velocity < -300;
 
     switch (variant) {
-      case "modal": {
+      case "modal":
         if (shouldClose) onClose?.();
         else setSheetY(FULL_HEIGHT);
         break;
-      }
-
-      case "snap": {
+      case "snap":
         if (shouldClose) {
           setSheetY(snapHeight);
           onSnapDown?.();
@@ -76,9 +74,7 @@ export default function BaseBottomSheet({
           onSnapUp?.();
         }
         break;
-      }
-
-      case "hybrid": {
+      case "hybrid":
         if (shouldClose) {
           setSheetY(screenHeight);
           onClose?.();
@@ -90,11 +86,37 @@ export default function BaseBottomSheet({
           onSnapDown?.();
         }
         break;
-      }
-
       default:
         break;
     }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    const el = sheetRef.current;
+    if (!el) return;
+
+    const scrollTop = el.scrollTop;
+    const startY = e.touches?.[0]?.clientY ?? 0;
+
+    const handleTouchMove = (moveEvent: TouchEvent) => {
+      const currentY = moveEvent.touches?.[0]?.clientY ?? 0;
+      const deltaY = currentY - startY;
+      const isPullingDown = deltaY > 0;
+
+      if (scrollTop === 0 && isPullingDown) {
+        setEnableDrag(true);
+      } else {
+        setEnableDrag(false);
+      }
+    };
+
+    const handleTouchEnd = () => {
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+    };
+
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("touchend", handleTouchEnd);
   };
 
   return (
@@ -117,17 +139,20 @@ export default function BaseBottomSheet({
           touchAction: "none",
           zIndex: zIndex ?? (variant === "modal" ? 103 : 30),
         }}
+        drag={isMobile && enableDrag ? "y" : false}
+        dragElastic={0.1}
         onDragEnd={handleDragEnd}
-        drag="y"
       >
         <motion.div
-          className={`fixed bottom-0 z-101 bottomSheet w-[100dvw] lg:w-[600px] bg-white pointer-events-auto overflow-y-hidden ${
+          ref={sheetRef}
+          onTouchStart={handleTouchStart}
+          className={cn(
+            "fixed bottom-0 z-101 bottomSheet w-[100dvw] lg:w-[600px] bg-white pointer-events-auto",
             (variant === "snap" || variant === "hybrid") && sheetY === 0
               ? "rounded-t-0"
-              : "rounded-t-50"
-          } ${
-            variant === "snap" || variant === "hybrid" ? `h-sheet-safe` : `${MODAL_MAX_HEIGHT}px`
-          }`}
+              : "rounded-t-50",
+            variant === "snap" || variant === "hybrid" ? "h-sheet-safe" : `${MODAL_MAX_HEIGHT}px`
+          )}
           style={{
             marginBottom: variant === "snap" || variant === "hybrid" ? `${BOTTOM_OFFSET}px` : "0px",
             overflowY: "auto",
