@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Pencil } from "lucide-react";
 import AvatarIcon from "@components/common/AvatarIcon";
 import { usePresignedUpload } from "@hooks/usePresignedUpload";
@@ -15,13 +15,19 @@ interface AvatarUploaderProps {
 export default function AvatarUploader({ avatarUrl }: AvatarUploaderProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const queryClient = useQueryClient();
+    const [currentAvatarUrl, setCurrentAvatarUrl] = useState<string | undefined>(avatarUrl);
+
+    useEffect(() => {
+        setCurrentAvatarUrl(avatarUrl);
+    }, [avatarUrl]);
 
     const { uploadFiles } = usePresignedUpload();
 
     const { mutate } = useMutation({
         mutationFn: updateProfileImage,
-        onSuccess: () => {
+        onSuccess: (_, newAvatarUrl) => {
             queryClient.invalidateQueries({ queryKey: ["/api/members/info"] });
+            setCurrentAvatarUrl(newAvatarUrl);
             toast.success("프로필 이미지가 변경되었습니다!");
         },
         onError: (e: unknown) => {
@@ -49,7 +55,7 @@ export default function AvatarUploader({ avatarUrl }: AvatarUploaderProps) {
 
     return (
         <div className="relative w-fit">
-            <AvatarIcon size="large" avatar={avatarUrl} />
+            <AvatarIcon size="large" avatar={currentAvatarUrl} />
             <button
                 onClick={() => inputRef.current?.click()}
                 className="absolute bottom-0 right-0 w-24 h-24 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition"
