@@ -8,15 +8,12 @@ export async function GET(req: NextRequest) {
 
   if (isLogin) {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8080"}/api/members/info`,
-        {
-          headers: {
-            Cookie: `accessToken=${accessToken.value}`,
-          },
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/members/info`, {
+        headers: {
+          Cookie: `accessToken=${accessToken.value}`,
+        },
+        credentials: "include",
+      });
 
       if (response.ok) {
         const userData = await response.json();
