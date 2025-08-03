@@ -8,11 +8,7 @@ export const useWebSocketConnection = () => {
 
   useEffect(() => {
     if (!userId) return;
-    console.log("WebSocket 연결 시도 시작");
-    console.log("🧪 userId:", userId);
-    console.log("🧪 isConnected:", isConnected);
     if (!isConnected) {
-      console.log("🧪 WebSocket 연결 시도 시작");
       connect().catch((error) => {
         console.error("WebSocket 연결 실패:", error);
       });
