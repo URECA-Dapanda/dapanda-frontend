@@ -95,7 +95,7 @@ export default function BaseBottomSheet({
     const el = sheetRef.current;
     if (!el) return;
 
-    // const scrollTop = el.scrollTop;
+    const scrollTop = el.scrollTop;
     const startY = e.touches?.[0]?.clientY ?? 0;
 
     const handleTouchMove = (moveEvent: TouchEvent) => {
@@ -103,7 +103,7 @@ export default function BaseBottomSheet({
       const deltaY = currentY - startY;
       const isPullingDown = deltaY > 0;
 
-      if (isPullingDown) {
+      if (scrollTop === 0 && isPullingDown) {
         setEnableDrag(true);
       } else {
         setEnableDrag(false);
@@ -139,7 +139,11 @@ export default function BaseBottomSheet({
           touchAction: "none",
           zIndex: zIndex ?? (variant === "modal" ? 103 : 30),
         }}
+<<<<<<< HEAD
         drag={isMobile ? (enableDrag ? "y" : false) : "y"}
+=======
+        drag={isMobile && enableDrag ? "y" : false}
+>>>>>>> main
         dragElastic={0.1}
         onDragEnd={handleDragEnd}
       >
