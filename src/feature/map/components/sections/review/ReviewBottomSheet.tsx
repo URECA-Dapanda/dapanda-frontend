@@ -46,7 +46,7 @@ export default function ReviewBottomSheet({ isOpen, onClose, tradeId }: ReviewBo
     <BaseBottomSheet
       isOpen={isOpen}
       onClose={handleClose}
-      variant="hybrid"
+      variant="modal"
       snapHeight={250}
       zIndex={105}
     >

@@ -47,7 +47,7 @@ export default function ChatItem({
         <Link
           href={`/chat/${chatRoomId}?productId=${productId}&memberName=${encodeURIComponent(
             name
-          )}&senderId=${senderId || ""}`}
+          )}&senderId=${senderId || ""}&avatarUrl=${encodeURIComponent(avatarUrl || "")}`}
           className="flex-1"
         >
           <div className="flex flex-col gap-2 cursor-pointer">

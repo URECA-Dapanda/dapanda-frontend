@@ -1,6 +1,6 @@
-import { useEffect } from "react";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import { useProfileStore } from "@/stores/useProfileStore";
+import { useEffect } from "react";
 
 export const useWebSocketConnection = () => {
   const { connect, disconnect, isConnected } = useWebSocketStore();

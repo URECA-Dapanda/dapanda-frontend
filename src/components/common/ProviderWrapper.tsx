@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useSubscribeTimer } from "@hooks/useSubscribeTimer";
 import { useInitializeTimerFromServer } from "@hooks/useInitializeTimerFormServer";
 import { useSubscribeTimerOnce } from "@hooks/subscribeToTimerOnce";
+import { useWebSocketConnection } from "@/hooks/useWebSocketConnection";
 
 export default function ProviderWrapper({ children }: PropsWithChildren) {
   const queryClient = new QueryClient();
@@ -16,6 +17,9 @@ export default function ProviderWrapper({ children }: PropsWithChildren) {
   useSubscribeTimerOnce(userId);
   useSubscribeTimer(userId, isLoading);
   useInitializeTimerFromServer();
+
+  useAuth();
+  useWebSocketConnection();
 
   return (
     <QueryClientProvider client={queryClient}>
