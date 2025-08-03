@@ -103,11 +103,11 @@ export default function BaseBottomSheet({
       const deltaY = currentY - startY;
       const isPullingDown = deltaY > 0;
 
-      if (scrollTop === 0 && isPullingDown) {
-        setEnableDrag(true);
-      } else {
-        setEnableDrag(false);
-      }
+      // if (scrollTop === 0 && isPullingDown) {
+      //   setEnableDrag(true);
+      // } else {
+      //   setEnableDrag(false);
+      // }
     };
 
     const handleTouchEnd = () => {

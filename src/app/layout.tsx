@@ -49,7 +49,7 @@ export default function RootLayout({
 
         <ToastContainer
           position="top-center"
-          autoClose={4000}
+          autoClose={40000}
           hideProgressBar
           newestOnTop={false}
           closeOnClick
@@ -59,9 +59,6 @@ export default function RootLayout({
           pauseOnHover={false}
           theme="light"
           transition={Slide}
-          toastStyle={{
-            maxHeight: "10px",
-          }}
           closeButton={false}
           stacked
         />
