@@ -26,12 +26,18 @@ export default function MapItemCardContent({
           try {
             const productData = await getMapDetailById(productId.toString());
 
-            const url = `/chat/${chatRoomId}?productId=${productId}&memberName=${encodeURIComponent(
-              productData.memberName
-            )}&senderId=${productData.memberId}`;
+            const params = new URLSearchParams({
+              productId: productId.toString(),
+              memberName: productData.memberName,
+              senderId: productData.memberId.toString(),
+            });
+            const url = `/chat/${chatRoomId}?${params.toString()}`;
             router.push(url);
           } catch {
-            const url = `/chat/${chatRoomId}?productId=${productId}`;
+            const params = new URLSearchParams({
+              productId: productId.toString(),
+            });
+            const url = `/chat/${chatRoomId}?${params.toString()}`;
             router.push(url);
           }
         } else {
