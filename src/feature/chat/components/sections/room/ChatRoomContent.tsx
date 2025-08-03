@@ -47,10 +47,67 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const lastReadMessageId = useRef<number | null>(null);
   const isExiting = useRef(false);
   const abortRef = useRef<AbortController | null>(null);
-  const lastProductId = useRef<string | null>(null);
+  const productCache = useRef<Map<string, ProductInfo>>(new Map());
+  const isFetchingProduct = useRef(false);
 
   const { subscribe, unsubscribe, sendMessage, setActiveChatRoomId } = useWebSocketStore();
   const { setTitle } = useConfigStore();
+
+  const createProductInfo = useCallback(
+    (productData: {
+      productId: number;
+      itemId: number;
+      title: string;
+      price: number;
+      memberName: string;
+      memberId: number;
+    }): ProductInfo => ({
+      productId: productData.productId,
+      itemId: productData.itemId,
+      title: productData.title,
+      pricePer10min: productData.price,
+      memberName: productData.memberName,
+      memberId: productData.memberId,
+    }),
+    []
+  );
+
+  const fetchProductWithCache = useCallback(
+    async (productIdStr: string, abortController?: AbortController) => {
+      if (productCache.current.has(productIdStr)) {
+        const cachedProduct = productCache.current.get(productIdStr)!;
+        setProduct(cachedProduct);
+        setIsLoadingProduct(false);
+        return;
+      }
+
+      if (isFetchingProduct.current) {
+        return;
+      }
+
+      isFetchingProduct.current = true;
+      setIsLoadingProduct(true);
+
+      try {
+        const productData = await getMapDetailById(productIdStr);
+
+        if (abortController?.signal.aborted) return;
+
+        const productInfo = createProductInfo(productData);
+
+        productCache.current.set(productIdStr, productInfo);
+        setProduct(productInfo);
+      } catch (error) {
+        if (!abortController?.signal.aborted) {
+          console.error("상품 정보 가져오기 실패:", error);
+        }
+      } finally {
+        setIsLoadingProduct(false);
+        isFetchingProduct.current = false;
+      }
+    },
+    [createProductInfo]
+  );
 
   // 키보드 감지
   useEffect(() => {
@@ -97,10 +154,8 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         let senderId: number | undefined;
 
         if (message.isMine) {
-          // 내 메시지
           senderId = memberId;
         } else {
-          // 상대방 메시지 - URL 파라미터 우선 사용
           const urlSenderId = searchParams.get("senderId");
           senderId = urlSenderId ? parseInt(urlSenderId, 10) : product?.memberId;
         }
@@ -113,18 +168,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     },
     [product?.memberId, searchParams]
   );
-
-  const markAsRead = useCallback((messageId: number) => {
-    if (lastReadMessageId.current !== messageId) {
-      markMessageAsRead(messageId)
-        .then(() => {
-          lastReadMessageId.current = messageId;
-        })
-        .catch((error) => {
-          console.error("읽음 처리 실패:", messageId, error);
-        });
-    }
-  }, []);
 
   const sortMessages = useCallback((messages: ChatSocketMessage[]): ChatSocketMessage[] => {
     return messages.sort((a, b) => {
@@ -175,7 +218,13 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         if (response.data.length > 0) {
           const latestMessage = response.data[0];
           const latestMessageId = Number(latestMessage.chatMessageId);
-          markAsRead(latestMessageId);
+          if (lastReadMessageId.current !== latestMessageId) {
+            markMessageAsRead(latestMessageId)
+              .then(() => {
+                lastReadMessageId.current = latestMessageId;
+              })
+              .catch(() => {});
+          }
         }
       })
       .catch((err) => {
@@ -189,20 +238,12 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
   useEffect(() => {
     if (!productId) {
-      // productId가 없을 때 채팅방 정보에서 상품 정보를 가져오기 시도
       const fetchChatRoomInfo = async () => {
         try {
           const chatRoomInfo = await getChatRoomList(chatRoomId);
           if (chatRoomInfo.productId) {
-            const productData = await getMapDetailById(chatRoomInfo.productId.toString());
-            setProduct({
-              productId: productData.productId,
-              itemId: productData.itemId,
-              title: productData.title,
-              pricePer10min: productData.price,
-              memberName: productData.memberName,
-              memberId: productData.memberId,
-            });
+            const productIdStr = chatRoomInfo.productId.toString();
+            await fetchProductWithCache(productIdStr);
           }
         } catch (error) {
           console.error("채팅방 정보에서 상품 정보 가져오기 실패:", error);
@@ -211,42 +252,16 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
       };
 
       fetchChatRoomInfo();
-      lastProductId.current = null;
       return;
     }
 
     const abortController = new AbortController();
-
-    const fetchProductInfo = async () => {
-      setIsLoadingProduct(true);
-      try {
-        const productData = await getMapDetailById(productId);
-
-        if (abortController.signal.aborted) return;
-
-        setProduct({
-          productId: productData.productId,
-          itemId: productData.itemId,
-          title: productData.title,
-          pricePer10min: productData.price,
-          memberName: productData.memberName,
-          memberId: productData.memberId,
-        });
-      } catch (error) {
-        if (!abortController.signal.aborted) {
-          console.error("상품 정보 가져오기 실패:", error);
-        }
-      } finally {
-        setIsLoadingProduct(false);
-      }
-    };
-
-    fetchProductInfo();
+    fetchProductWithCache(productId, abortController);
 
     return () => {
       abortController.abort();
     };
-  }, [productId, chatRoomId]);
+  }, [productId, fetchProductWithCache]);
 
   useEffect(() => {
     if (chatRoomId) {
@@ -442,11 +457,9 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
   // URL 파라미터에서 상대방 정보 가져오기
   const urlMemberName = searchParams.get("memberName");
-  // const urlSenderId = searchParams.get("senderId");
   const urlAvatarUrl = searchParams.get("avatarUrl");
 
   const senderName = urlMemberName || product?.memberName || "상대방";
-  const finalSenderProfileImage = urlAvatarUrl || undefined;
 
   // 헤더 제목 설정
   useEffect(() => {
@@ -517,7 +530,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
                   <ChatBubble
                     key={message.chatMessageId}
                     message={message}
-                    avatarUrl={finalSenderProfileImage}
+                    avatarUrl={urlAvatarUrl || undefined}
                     memberId={message.senderId}
                     currentMemberId={currentMemberId}
                     productId={product?.productId}
