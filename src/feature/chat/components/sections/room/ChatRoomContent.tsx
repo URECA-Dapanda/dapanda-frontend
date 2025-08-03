@@ -278,11 +278,9 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
     // 채팅방을 나갈 때만 최신 메시지 ID로 읽음 처리
     if (latestMessageId && lastReadMessageId.current !== latestMessageId) {
-      console.log("채팅방 나가기 - 읽음 처리:", latestMessageId);
       try {
         await markMessageAsRead(latestMessageId);
         lastReadMessageId.current = latestMessageId;
-        console.log("읽음 처리 완료:", latestMessageId);
       } catch (error) {
         console.error("읽음 처리 실패:", latestMessageId, error);
       }
@@ -428,10 +426,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     (e: React.UIEvent<HTMLDivElement>) => {
       const { scrollTop } = e.currentTarget;
 
-      console.log("스크롤 이벤트:", { scrollTop, hasMore, loadingMore, oldestMessageId });
-
       if (scrollTop < 100 && hasMore && !loadingMore) {
-        console.log("이전 내역 불러오기 시작");
         loadMoreMessages();
       }
     },

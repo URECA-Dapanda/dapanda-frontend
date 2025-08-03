@@ -28,9 +28,8 @@ export default function MapItemCardContent({
 
             const url = `/chat/${chatRoomId}?productId=${productId}&senderId=${productData.memberId}`;
             router.push(url);
-          } catch (productError) {
+          } catch {
             // 상품 정보 가져오기 실패 시 기본 파라미터만 전달
-            console.error("상품 정보 가져오기 실패:", productError);
             const url = `/chat/${chatRoomId}?productId=${productId}`;
             router.push(url);
           }
