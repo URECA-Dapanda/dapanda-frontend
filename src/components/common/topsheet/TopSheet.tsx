@@ -68,7 +68,7 @@ export default function TopSheet({
         initial={false}
         transition={{ type: "spring", damping: 20, stiffness: 200 }}
       >
-        {type === "post" && !data.isOwner && (
+        {!data.isOwner && (
           <div className="absolute top-12 right-12 z-36">
             <ReportTriggerButton targetName={data.memberName} />
           </div>

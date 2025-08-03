@@ -24,6 +24,7 @@ export interface WifiData {
   recentPrice?: number;
   averagePrice?: number;
   memberName: string;
+  isOwner?: boolean;
 }
 
 export type CommonTopSheetProps = {
