@@ -13,17 +13,13 @@ export const useSubscribeTimer = (userId?: number, isLoading?: boolean) => {
     if (isLoading) return;
 
     if (userId) {
-      console.log("✅ userId 확인됨. WebSocket 연결 시도");
       connect().catch((err) => console.error("WebSocket 연결 실패:", err));
-    } else {
-      console.warn("⚠️ userId 없음. WebSocket 연결 안 함");
     }
   }, [isLoading, userId, connect]);
 
   useEffect(() => {
     if (userId && isConnected) {
       const channelId = `alarm${userId}`;
-      console.log("🔔 타이머 WebSocket 채널 구독 시작:", channelId);
 
       subscribeToChannel(channelId, (msg: AlarmMessage) => {
         try {
@@ -42,13 +38,10 @@ export const useSubscribeTimer = (userId?: number, isLoading?: boolean) => {
           const remainingSec = Math.floor((end.getTime() - now.getTime()) / 1000);
 
           if (remainingSec > 0) {
-            console.log("⏱ 타이머 시작:", { remainingSec, tradeId: msg.tradeId });
             startTimer(remainingSec, msg.tradeId, msg.startTime, msg.endTime);
-          } else {
-            console.warn("⛔ 이미 종료된 타이머입니다. 시작하지 않음");
           }
         } catch (e) {
-          console.error("⛔ 알림 수신 처리 중 오류:", e);
+          console.error("알림 수신 처리 중 오류:", e);
         }
       });
     }

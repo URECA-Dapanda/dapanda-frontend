@@ -13,7 +13,6 @@ export const useSubscribeTimerOnce = (userId?: number) => {
     if (!userId) return;
 
     const channelId = `alarm${userId}`;
-    console.log("🔔 타이머 WebSocket 채널 구독:", channelId);
 
     subscribeToChannel(channelId, (msg: AlarmMessage) => {
       try {
@@ -22,13 +21,10 @@ export const useSubscribeTimerOnce = (userId?: number) => {
         const remainingSec = Math.floor((end.getTime() - now.getTime()) / 1000);
 
         if (remainingSec > 0) {
-          console.log("⏱ 시작:", remainingSec, msg);
           startTimer(remainingSec, msg.tradeId, msg.startTime, msg.endTime);
-        } else {
-          console.warn("⛔ 이미 끝난 타이머입니다.");
         }
       } catch (e) {
-        console.error("⛔ 알림 처리 실패:", e);
+        console.error("알림 처리 실패:", e);
       }
     });
   }, [userId, subscribeToChannel, startTimer]);
