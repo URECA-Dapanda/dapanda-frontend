@@ -68,9 +68,11 @@ export default function TopSheet({
         initial={false}
         transition={{ type: "spring", damping: 20, stiffness: 200 }}
       >
-        <div className="absolute top-12 right-12 z-36">
-          <ReportTriggerButton targetName={data.memberName} />
-        </div>
+        {type === "post" && !data.isOwner && (
+          <div className="absolute top-12 right-12 z-36">
+            <ReportTriggerButton targetName={data.memberName} />
+          </div>
+        )}
         <motion.div
           className="w-full h-full pt-20"
           drag="y"
@@ -118,9 +120,8 @@ export default function TopSheet({
                               onClick={
                                 isDefaultImage(url) ? undefined : (e) => handleImageClick(idx, e)
                               }
-                              className={`object-cover rounded-12 mx-auto ${
-                                isDefaultImage(url) ? "" : "cursor-zoom-in"
-                              }`}
+                              className={`object-cover rounded-12 mx-auto ${isDefaultImage(url) ? "" : "cursor-zoom-in"
+                                }`}
                             />
                           </CarouselItem>
                         ))}
@@ -137,9 +138,8 @@ export default function TopSheet({
                       }
                       width={140}
                       height={140}
-                      className={`object-cover rounded-12 mx-auto ${
-                        isDefaultImage(imageUrls[0]) ? "" : "cursor-zoom-in"
-                      }`}
+                      className={`object-cover rounded-12 mx-auto ${isDefaultImage(imageUrls[0]) ? "" : "cursor-zoom-in"
+                        }`}
                       style={{
                         top: 44,
                         right: 30,
@@ -154,9 +154,8 @@ export default function TopSheet({
                 <Image
                   src={imageUrls[0]}
                   alt="와이파이 대표 이미지"
-                  className={`absolute rounded-12 z-30 ${
-                    isDefaultImage(imageUrls[0]) ? "" : "cursor-zoom-in"
-                  }`}
+                  className={`absolute rounded-12 z-30 ${isDefaultImage(imageUrls[0]) ? "" : "cursor-zoom-in"
+                    }`}
                   style={{
                     top: 44,
                     right: 30,

@@ -65,6 +65,7 @@ export default function DataDetailContent() {
           averagePrice: avgPrice != null ? data.remainAmount * 10 * avgPrice : undefined,
           hasReported: false,
           memberName: data.memberName,
+          isOwner,
         }}
         onImageClick={() => {}}
         onExpandChange={setTopSheetExpanded}
