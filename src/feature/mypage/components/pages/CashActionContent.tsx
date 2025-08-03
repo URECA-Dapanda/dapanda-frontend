@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useChargeStore } from "@feature/mypage/stores/useChargeStore";
 import { useTossModalStore } from "@feature/mypage/stores/useTossModalStore";
 import { useCashSuccessModalStore } from "@feature/mypage/stores/useCashSuccessModalStore";
@@ -21,11 +21,18 @@ interface CashActionContentProps {
 
 export default function CashActionContent({ mode, buttonText }: CashActionContentProps) {
     const chargeAmount = useChargeStore((state) => state.charge);
+    const setChargeAmount = useChargeStore((state) => state.setCharge);
     const openToss = useTossModalStore((state) => state.open);
     const { isOpen, close, open } = useCashSuccessModalStore();
 
+    useEffect(() => {
+        return () => {
+            setChargeAmount("");
+        };
+    }, [setChargeAmount]);
+    
     const handleClick = useCallback(async () => {
-        if (!chargeAmount) {
+        if (!chargeAmount || chargeAmount === "0") {
             toast.error(mode === "charge" ? "충전 금액을 입력해주세요." : "환불 금액을 입력해주세요.");
             return;
         }
@@ -38,11 +45,12 @@ export default function CashActionContent({ mode, buttonText }: CashActionConten
                 const res = await requestRefund(requestId, Number(chargeAmount));
                 toast.success(`${res.data.data.refundPrice.toLocaleString()}원 환불 완료`);
                 open("refund");
+                setChargeAmount("");
             } catch {
                 toast.error("환불에 실패했습니다.");
             }
         }
-    }, [chargeAmount, mode, openToss, open]);
+    }, [chargeAmount, mode, openToss, open, setChargeAmount]);
 
     return (
         <>
