@@ -1,4 +1,4 @@
-import { Fragment,  useCallback } from "react";
+import { Fragment, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Star } from "lucide-react";
 import { ButtonComponent } from "@components/common/button";
@@ -7,21 +7,37 @@ import type { MapType } from "@/feature/map/types/mapType";
 import axiosInstance from "@/lib/axios";
 import { toast } from "react-toastify";
 import Image from "next/image";
+import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 
 export default function MapItemCardContent({
   data: { productId, address, price, score, title, startTime, endTime, open, imageUrl },
 }: ProductItemProps<MapType> & { disableUseButton?: boolean }) {
   const router = useRouter();
 
-
- const handleCreateChatRoom = useCallback(
+  const handleCreateChatRoom = useCallback(
     async (e: React.MouseEvent) => {
       e.stopPropagation();
       try {
         const response = await axiosInstance.post(`/api/products/${productId}/chat-room`);
         if (response.data.code === 0) {
           const chatRoomId = response.data.data.chatRoomId;
-          router.push(`/chat/${chatRoomId}?productId=${productId}`);
+
+          // 상품 정보를 가져와서 URL 파라미터에 추가
+          try {
+            console.log("채팅방 생성 시 상품 정보 가져오기 시작:", productId);
+            const productData = await getMapDetailById(productId.toString());
+            console.log("채팅방 생성 시 상품 정보 가져오기 성공:", productData);
+
+            const url = `/chat/${chatRoomId}?productId=${productId}&senderId=${productData.memberId}`;
+            console.log("생성될 URL:", url);
+            router.push(url);
+          } catch (productError) {
+            // 상품 정보 가져오기 실패 시 기본 파라미터만 전달
+            console.error("상품 정보 가져오기 실패:", productError);
+            const url = `/chat/${chatRoomId}?productId=${productId}`;
+            console.log("fallback URL:", url);
+            router.push(url);
+          }
         } else {
           toast.error(response.data.message || "채팅방 생성에 실패했습니다.");
         }
@@ -32,7 +48,7 @@ export default function MapItemCardContent({
     },
     [productId, router]
   );
-  
+
   return (
     <Fragment>
       <div className="grid grid-cols-[auto_1fr_auto] gap-16 items-center">
