@@ -24,18 +24,14 @@ export default function MapItemCardContent({
 
           // 상품 정보를 가져와서 URL 파라미터에 추가
           try {
-            console.log("채팅방 생성 시 상품 정보 가져오기 시작:", productId);
             const productData = await getMapDetailById(productId.toString());
-            console.log("채팅방 생성 시 상품 정보 가져오기 성공:", productData);
 
             const url = `/chat/${chatRoomId}?productId=${productId}&senderId=${productData.memberId}`;
-            console.log("생성될 URL:", url);
             router.push(url);
           } catch (productError) {
             // 상품 정보 가져오기 실패 시 기본 파라미터만 전달
             console.error("상품 정보 가져오기 실패:", productError);
             const url = `/chat/${chatRoomId}?productId=${productId}`;
-            console.log("fallback URL:", url);
             router.push(url);
           }
         } else {
