@@ -31,8 +31,13 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
   activeChatRoomId: null,
 
   connect: async () => {
+    console.log("🧪 connect 함수 내부 진입");
     const { client } = get();
-    if (client && client.connected) return;
+    if (client && client.connected) {
+      console.log("기존 클라이언트 상태", client, client?.connected);
+      return;
+    }
+    console.log("🌍 apiBaseUrl:", process.env.NEXT_PUBLIC_API_BASE_SSL);
 
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_SSL;
     if (!apiBaseUrl) {
@@ -40,56 +45,43 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     }
 
     const newClient = new Client({
+      brokerURL: undefined, // 반드시 undefined로!
+      connectHeaders: {
+        login: "guest",
+        passcode: "guest",
+      },
+      debug: (str) => {
+        console.log("[STOMP DEBUG]:", str);
+      },
       webSocketFactory: () => {
         const sock = new SockJS(`${apiBaseUrl}/conn`, null, {
           transports: ["websocket", "xhr-streaming", "xhr-polling"],
           timeout: 30000,
         });
-
+        console.log("✅ SockJS 연결 시도");
         return sock;
       },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
       onConnect: () => {
+        console.log("✅ WebSocket 연결 성공");
         set({ isConnected: true });
-
-        // 기존 구독들을 다시 등록
-        const { subscriptions, subscriptionObjects } = get();
-        const newSubscriptionObjects = new Map(subscriptionObjects);
-
-        subscriptions.forEach((callback, chatRoomId) => {
-          // 이미 구독 객체가 있으면 건너뛰기
-          if (newSubscriptionObjects.has(chatRoomId)) {
-            return;
-          }
-
-          const subscription = newClient.subscribe(`/sub/${chatRoomId}`, (message) => {
-            const payload: ChatSocketMessage = JSON.parse(message.body);
-            callback(payload);
-          });
-          newSubscriptionObjects.set(chatRoomId, subscription);
-        });
-
-        set({ subscriptionObjects: newSubscriptionObjects });
-      },
-      onDisconnect: () => {
-        set({ isConnected: false, subscriptionObjects: new Map() });
       },
       onStompError: (frame) => {
-        console.error("STOMP 오류:", frame.headers["message"]);
-        set({ isConnected: false, subscriptionObjects: new Map() });
-
-        setTimeout(() => {
-          const { client } = get();
-          if (client && !client.connected) {
-            client.activate();
-          }
-        }, 5000);
+        console.error("❌ STOMP 오류:", frame.headers["message"]);
+        console.error("❗ BODY:", frame.body);
+      },
+      onWebSocketError: (event) => {
+        console.error("❌ WebSocket 에러:", event);
+      },
+      onWebSocketClose: (event) => {
+        console.warn("⚠️ WebSocket 연결 종료됨:", event);
       },
     });
 
     newClient.activate();
+    console.log("🚀 STOMP 클라이언트 activate 호출됨");
     set({ client: newClient });
   },
 
@@ -211,14 +203,19 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
       return;
     }
 
-    if (subscriptionObjects.has(channelId)) return;
+    if (subscriptionObjects.has(channelId)) {
+      console.log("이미 구독된 채널입니다:", channelId);
+      return;
+    }
 
     const subscription = client.subscribe(`/sub/${channelId}`, (message) => {
       try {
+        console.log("📩 수신된 메시지 원문:", message.body); // ✅ 추가
         const payload: AlarmMessage = JSON.parse(message.body);
+        console.log("🛎 알림 수신된 파싱된 객체:", payload); // ✅ 추가
         onMessage(payload);
       } catch (error) {
-        console.error("알림 메시지 파싱 실패:", error);
+        console.error("알림 메시지 파싱 실패:", error); // ✅ 이미 있었음
       }
     });
 
