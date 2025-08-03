@@ -34,7 +34,7 @@ export function useAuth() {
     };
 
     checkAuthStatus();
-  }, [isConnected, connect, setProfile]);
+  }, [connect, setProfile]);
 
   const logout = async () => {
     await logOutRequest();
