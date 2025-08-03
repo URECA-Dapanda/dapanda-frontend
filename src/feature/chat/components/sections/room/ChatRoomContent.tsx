@@ -11,22 +11,17 @@ import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
 import { groupMessagesByDate } from "@feature/chat/utils/groupMessagesByDate";
 import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
 import { getChatHistory } from "@/feature/chat/api/getChatHistory";
-import { getChatRoomList, markMessageAsRead } from "@/feature/chat/api/chatRoomRequest";
-import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
-import { isTemporaryMessage, formatMessageDate } from "@/feature/chat/utils/chatUtils";
+import { getChatRoomList } from "@/feature/chat/api/chatRoomRequest";
+import { formatMessageDate } from "@/feature/chat/utils/chatUtils";
+import { useKeyboardDetection } from "@/feature/chat/utils/keyboardDetection";
+import { useHeaderHeightDetection } from "@/feature/chat/utils/headerHeightDetection";
+import { useMessageProcessing } from "@/feature/chat/utils/messageProcessing";
+import { useProductCache } from "@/feature/chat/utils/productCache";
+import { useReadStatusHandler } from "@/feature/chat/utils/readStatusHandler";
 
 interface ChatRoomContentProps {
   chatRoomId: number;
   productId: string | null;
-}
-
-interface ProductInfo {
-  productId: number;
-  itemId: number;
-  title: string;
-  pricePer10min: number;
-  memberName: string;
-  memberId: number;
 }
 
 export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomContentProps) {
@@ -34,157 +29,24 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [oldestMessageId, setOldestMessageId] = useState<number | undefined>(undefined);
-  const [product, setProduct] = useState<ProductInfo | null>(null);
-  const [isLoadingProduct, setIsLoadingProduct] = useState(false);
   const [currentMemberId, setCurrentMemberId] = useState<number | undefined>(undefined);
-  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
-  const [headerHeight, setHeaderHeight] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
-
-  // 중복 요청 방지를 위한 ref들
-  const lastReadMessageId = useRef<number | null>(null);
-  const isExiting = useRef(false);
   const abortRef = useRef<AbortController | null>(null);
-  const productCache = useRef<Map<string, ProductInfo>>(new Map());
-  const isFetchingProduct = useRef(false);
+
+  const isKeyboardVisible = useKeyboardDetection();
+  const { product, setProduct, isLoadingProduct, fetchProductWithCache, clearCache } =
+    useProductCache();
+  const headerHeight = useHeaderHeightDetection(
+    headerRef as React.RefObject<HTMLDivElement>,
+    product
+  );
+  const { addSenderIdToMessages, sortMessages } = useMessageProcessing(product);
+  const { handleRealTimeReadStatus, resetExitFlag } = useReadStatusHandler(messages);
 
   const { subscribe, unsubscribe, sendMessage, setActiveChatRoomId } = useWebSocketStore();
   const { setTitle } = useConfigStore();
-
-  const createProductInfo = useCallback(
-    (productData: {
-      productId: number;
-      itemId: number;
-      title: string;
-      price: number;
-      memberName: string;
-      memberId: number;
-    }): ProductInfo => ({
-      productId: productData.productId,
-      itemId: productData.itemId,
-      title: productData.title,
-      pricePer10min: productData.price,
-      memberName: productData.memberName,
-      memberId: productData.memberId,
-    }),
-    []
-  );
-
-  const fetchProductWithCache = useCallback(
-    async (productIdStr: string, abortController?: AbortController) => {
-      if (productCache.current.has(productIdStr)) {
-        const cachedProduct = productCache.current.get(productIdStr)!;
-        setProduct(cachedProduct);
-        setIsLoadingProduct(false);
-        return;
-      }
-
-      if (isFetchingProduct.current) {
-        return;
-      }
-
-      isFetchingProduct.current = true;
-      setIsLoadingProduct(true);
-
-      try {
-        const productData = await getMapDetailById(productIdStr);
-
-        if (abortController?.signal.aborted) return;
-
-        const productInfo = createProductInfo(productData);
-
-        productCache.current.set(productIdStr, productInfo);
-        setProduct(productInfo);
-      } catch (error) {
-        if (!abortController?.signal.aborted) {
-          console.error("상품 정보 가져오기 실패:", error);
-        }
-      } finally {
-        setIsLoadingProduct(false);
-        isFetchingProduct.current = false;
-      }
-    },
-    [createProductInfo]
-  );
-
-  // 키보드 감지
-  useEffect(() => {
-    let initialHeight = window.innerHeight;
-
-    const handleResize = () => {
-      const currentHeight = window.innerHeight;
-      const threshold = window.innerWidth <= 768 ? 0.7 : 0.8;
-      const isKeyboard = currentHeight < initialHeight * threshold;
-      setIsKeyboardVisible(isKeyboard);
-    };
-
-    // 초기 높이 설정
-    initialHeight = window.innerHeight;
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  // 헤더 높이 측정
-  useEffect(() => {
-    const measureHeaderHeight = () => {
-      if (headerRef.current) {
-        const height = headerRef.current.offsetHeight;
-        setHeaderHeight(height);
-      }
-    };
-
-    measureHeaderHeight();
-
-    window.addEventListener("resize", measureHeaderHeight);
-
-    return () => {
-      window.removeEventListener("resize", measureHeaderHeight);
-    };
-  }, [product]);
-
-  const addSenderIdToMessages = useCallback(
-    (messages: ChatSocketMessage[], memberId: number) => {
-      return messages.map((message) => {
-        let senderId: number | undefined;
-
-        if (message.isMine) {
-          senderId = memberId;
-        } else {
-          const urlSenderId = searchParams.get("senderId");
-          senderId = urlSenderId ? parseInt(urlSenderId, 10) : product?.memberId;
-        }
-
-        return {
-          ...message,
-          senderId: message.senderId || senderId,
-        };
-      });
-    },
-    [product?.memberId, searchParams]
-  );
-
-  const sortMessages = useCallback((messages: ChatSocketMessage[]): ChatSocketMessage[] => {
-    return messages.sort((a, b) => {
-      const aIsTemp = isTemporaryMessage(a);
-      const bIsTemp = isTemporaryMessage(b);
-      if (aIsTemp && bIsTemp) {
-        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-      }
-      if (!aIsTemp && !bIsTemp) {
-        return Number(a.chatMessageId) - Number(b.chatMessageId);
-      }
-      if (aIsTemp && !bIsTemp) {
-        return -1;
-      }
-      return 1;
-    });
-  }, []);
 
   useEffect(() => {
     if (!chatRoomId) return;
@@ -197,11 +59,8 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     setHasMore(true);
     setOldestMessageId(undefined);
     setCurrentMemberId(undefined);
-    lastReadMessageId.current = null;
-    isExiting.current = false;
-
-    productCache.current.clear();
-    isFetchingProduct.current = false;
+    clearCache();
+    resetExitFlag();
 
     getChatHistory(chatRoomId)
       .then((response) => {
@@ -221,13 +80,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         if (response.data.length > 0) {
           const latestMessage = response.data[0];
           const latestMessageId = Number(latestMessage.chatMessageId);
-          if (lastReadMessageId.current !== latestMessageId) {
-            markMessageAsRead(latestMessageId)
-              .then(() => {
-                lastReadMessageId.current = latestMessageId;
-              })
-              .catch(() => {});
-          }
+          handleRealTimeReadStatus(latestMessageId);
         }
       })
       .catch((err) => {
@@ -276,67 +129,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     };
   }, [chatRoomId, setActiveChatRoomId]);
 
-  const resetUnreadCountOnExit = useCallback(async () => {
-    if (isExiting.current) {
-      return;
-    }
-    isExiting.current = true;
-
-    // 현재 메시지 목록에서 최신 메시지 ID 가져오기
-    const realMessages = messages.filter(
-      (message: ChatSocketMessage) => !isTemporaryMessage(message)
-    );
-    let latestMessageId: number | null = null;
-
-    if (realMessages.length > 0) {
-      // 최신 메시지 (마지막 메시지)
-      const latestMessage = realMessages[realMessages.length - 1];
-      latestMessageId = Number(latestMessage.chatMessageId);
-    }
-
-    // 채팅방을 나갈 때만 최신 메시지 ID로 읽음 처리
-    if (latestMessageId && lastReadMessageId.current !== latestMessageId) {
-      try {
-        await markMessageAsRead(latestMessageId);
-        lastReadMessageId.current = latestMessageId;
-      } catch (error) {
-        console.error("읽음 처리 실패:", latestMessageId, error);
-      }
-    }
-  }, [messages]);
-
-  useEffect(() => {
-    let hasExecuted = false;
-
-    const handleBeforeUnload = async () => {
-      if (!hasExecuted) {
-        hasExecuted = true;
-        await resetUnreadCountOnExit();
-      }
-    };
-
-    const handlePopState = async () => {
-      if (!hasExecuted) {
-        hasExecuted = true;
-        await resetUnreadCountOnExit();
-      }
-    };
-
-    // 이벤트 리스너 등록
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    window.addEventListener("popstate", handlePopState);
-
-    return () => {
-      if (!hasExecuted) {
-        hasExecuted = true;
-        resetUnreadCountOnExit();
-      }
-
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, [resetUnreadCountOnExit]);
-
   const addMessage = async (text: string) => {
     try {
       const messagePayload = JSON.stringify({
@@ -370,22 +162,12 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
         const newMessages = [...prev, incomingMessage];
 
-        // 새 메시지가 추가됨
         const { updateUnreadCount } = useWebSocketStore.getState();
         updateUnreadCount();
 
-        // 실시간 읽음 처리 (내가 받은 메시지인 경우)
         if (!incomingMessage.isMine) {
           const messageId = Number(incomingMessage.chatMessageId);
-          if (lastReadMessageId.current !== messageId) {
-            markMessageAsRead(messageId)
-              .then(() => {
-                lastReadMessageId.current = messageId;
-              })
-              .catch((error) => {
-                console.error("실시간 읽음 처리 실패:", messageId, error);
-              });
-          }
+          handleRealTimeReadStatus(messageId);
         }
 
         return newMessages;
@@ -410,7 +192,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     };
   }, [chatRoomId, subscribe, unsubscribe, handleMessage]);
 
-  // 이전 메시지 불러오기
   const loadMoreMessages = useCallback(async () => {
     if (loadingMore || !hasMore || !oldestMessageId) return;
 
@@ -458,13 +239,11 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const sortedMessages = useMemo(() => sortMessages([...messages]), [messages, sortMessages]);
   const groupedMessages = useMemo(() => groupMessagesByDate(sortedMessages), [sortedMessages]);
 
-  // URL 파라미터에서 상대방 정보 가져오기
   const urlMemberName = searchParams.get("memberName");
   const urlAvatarUrl = searchParams.get("avatarUrl");
 
   const senderName = urlMemberName || product?.memberName || "상대방";
 
-  // 헤더 제목 설정
   useEffect(() => {
     setTitle(senderName);
     return () => setTitle("DaPanDa");
