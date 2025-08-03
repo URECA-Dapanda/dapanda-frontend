@@ -81,30 +81,10 @@ export async function getMapList({
   };
 
   try {
-    // const res = await axiosInstance.get<ApiResponse>("/api/products/wifi", { params });
-    // const json = res.data;
+    const res = await axiosInstance.get<ApiResponse>("/api/products/wifi", { params });
+    const json = res.data;
 
-    const mockMapListResponse = {
-      items: Array.from({ length: 20 }).map((_, i) => ({
-        productId: i + 1,
-        title: `테스트 와이파이 ${i + 1}`,
-        price: `${(i + 1) * 1000}원`,
-        address: `서울특별시 테스트구 테스트동 ${i + 1}번지`,
-        open: i % 2 === 0,
-        location: `${37.56 + i * 0.001},${126.97 + i * 0.001}`,
-        score: (Math.random() * 5).toFixed(1),
-        type: "와이파이",
-        startTime: "09:00",
-        latitude: "",
-        longitude: "",
-        averageRate: 5,
-        endTime: "18:00",
-        imageUrl: `/0.1.png`,
-      })),
-      nextCursor: 21,
-    };
-
-    const items: MapType[] = mockMapListResponse.items.map((item) => ({
+    const items: MapType[] = json.data.data.map((item) => ({
       productId: item.productId,
       title: item.title,
       price: `${item.price}원`,
@@ -120,7 +100,7 @@ export async function getMapList({
 
     return {
       items,
-      nextCursor: items.length ?? undefined,
+      nextCursor: json.data.pageInfo.nextCursorId ?? undefined,
     };
   } catch (e) {
     console.error("getMapList error:", e);
