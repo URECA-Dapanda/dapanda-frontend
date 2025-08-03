@@ -9,10 +9,11 @@ import SellerSection from "@/feature/map/components/sections/seller/SellerSectio
 import { useMapDetailData } from "@/feature/map/hooks/useMapDetailData";
 import { useTimeState } from "@/feature/map/hooks/useTimeState";
 import DeletePostModal from "@/feature/data/components/sections/modal/DeletePostModal";
-import { isValidTimeRange, parseHHMMToTime, isTimeInRange } from "@/lib/time";
+import { parseHHMMToTime, isWithinOperatingHours } from "@/lib/time";
 import { useWifiPriceRecommendation } from "@/feature/map/hooks/useWifiPriceRecommendation";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 import { toast } from "react-toastify";
+import { getDurationMinutes } from "@/lib/time";
 
 import clsx from "clsx";
 import { buildWifiPaymentInfo } from "@feature/payment/hooks/useWifiPurchaseBuilder";
@@ -25,7 +26,6 @@ export default function MapDetailPage() {
 
   const [topSheetExpanded, setTopSheetExpanded] = useState(false);
   const { data, isLoading, isError } = useMapDetailData(postId);
-  const [error, setError] = useState<string | null>(null);
 
   const { recentPrice, avgPrice } = useWifiPriceRecommendation();
 
@@ -63,21 +63,16 @@ export default function MapDetailPage() {
       return;
     }
 
-    if (!isValidTimeRange(startTime, endTime)) {
-      setError("종료 시간은 시작 시간보다 늦어야 합니다.");
+    if (!isWithinOperatingHours(startTime, endTime, minTime, maxTime)) {
+      toast.warning("선택한 시간이 매장의 운영시간 범위를 벗어납니다.");
       return;
     }
 
-    if (!isTimeInRange(startTime, minTime, maxTime)) {
-      setError("시작 시간이 매장의 이용 가능 시간보다 이릅니다.");
+    const duration = getDurationMinutes(startTime, endTime);
+    if (duration % 10 !== 0) {
+      toast.warning("이용 시간은 10분 단위로 선택해야 합니다.");
       return;
     }
-    if (!isTimeInRange(endTime, minTime, maxTime)) {
-      setError("종료 시간이 매장의 이용 가능 시간보다 늦습니다.");
-      return;
-    }
-
-    setError(null);
 
     setInfo(buildWifiPaymentInfo(data, startTime, endTime));
   };
@@ -131,7 +126,6 @@ export default function MapDetailPage() {
             <ButtonComponent className="w-full" variant="primary" size="xl" onClick={onBuy}>
               구매하기
             </ButtonComponent>
-            {error && <p className="body-sm text-error text-center mt-2">{error}</p>}
           </div>
         </div>
       </div>

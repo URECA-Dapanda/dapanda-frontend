@@ -48,17 +48,12 @@ export const parseTimeToMinutes = (hour: string, minute: string, period: "AM" | 
   return h * 60 + parseInt(minute, 10);
 };
 
-export const getDurationMinutes = (start: Time, end: Time): number => {
-  const startMins = parseTimeToMinutes(start.hour, start.minute, start.period);
-  let endMins = parseTimeToMinutes(end.hour, end.minute, end.period);
-
-  // 자정을 넘긴 경우 다음 날로 간주
-  if (endMins <= startMins) {
-    endMins += 24 * 60;
-  }
-
-  return endMins - startMins;
+export const getDurationMinutes = (start: Time, end: Time) => {
+  const s = parseTimeToMinutes(start.hour, start.minute, start.period);
+  const e = parseTimeToMinutes(end.hour, end.minute, end.period);
+  return (e - s + 1440) % 1440;
 };
+
 
 export const isValidTimeRange = (start: Time, end: Time): boolean => {
   const startMins = parseTimeToMinutes(start.hour, start.minute, start.period);
@@ -71,6 +66,27 @@ export const isValidTimeRange = (start: Time, end: Time): boolean => {
   const duration = (endMins - startMins + 1440) % 1440;
   return duration > 0;
 };
+
+export const isWithinOperatingHours = (
+  start: Time,
+  end: Time,
+  storeStart: Time,
+  storeEnd: Time
+): boolean => {
+  const s = parseTimeToMinutes(start.hour, start.minute, start.period);
+  const e = parseTimeToMinutes(end.hour, end.minute, end.period);
+  const opS = parseTimeToMinutes(storeStart.hour, storeStart.minute, storeStart.period);
+  const opE = parseTimeToMinutes(storeEnd.hour, storeEnd.minute, storeEnd.period);
+
+  const inStart =
+    (opS <= opE && s >= opS && s < opE) || // 같은 날
+    (opS > opE && (s >= opS || s < opE)); // 자정 넘어감
+
+  const inEnd = (opS <= opE && e > opS && e <= opE) || (opS > opE && (e > opS || e <= opE));
+
+  return inStart && inEnd;
+};
+
 
 export const formatToIsoTime = (time: Time): string => {
   const minutes = parseTimeToMinutes(time.hour, time.minute, time.period);

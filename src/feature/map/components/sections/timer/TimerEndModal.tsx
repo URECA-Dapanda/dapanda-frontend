@@ -40,7 +40,12 @@ export default function TimerEndModal({ open, onClose }: Props) {
           홈으로 돌아가기
         </button>
         <button
-          onClick={() => router.push(`/review?tradeId=${tradeId}`)}
+          onClick={() => {
+            onClose();
+            setTimeout(() => {
+              router.push(`/review?tradeId=${tradeId}`);
+            }, 0);
+          }}
           className="bg-primary text-white font-semibold rounded-lg py-12"
         >
           후기 작성하기
