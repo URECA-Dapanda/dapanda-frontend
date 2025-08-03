@@ -38,7 +38,14 @@ export default function MapProfileCard({ sellerId, productId, isOwner }: MapProf
         const response = await axiosInstance.post(`/api/products/${productId}/chat-room`);
         if (response.data.code === 0) {
           const chatRoomId = response.data.data.chatRoomId;
-          router.push(`/chat/${chatRoomId}?productId=${productId}`);
+          const memberName = data?.name || "알 수 없음";
+          const params = new URLSearchParams({
+            productId: productId.toString(),
+            memberName: memberName,
+            senderId: sellerId.toString(),
+          });
+          const url = `/chat/${chatRoomId}?${params.toString()}`;
+          router.push(url);
         } else {
           toast.error(response.data.message || "채팅방 생성에 실패했습니다.");
         }

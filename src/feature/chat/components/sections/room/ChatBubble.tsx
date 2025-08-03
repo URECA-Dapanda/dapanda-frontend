@@ -10,6 +10,7 @@ interface ChatBubbleProps {
   avatarUrl?: string;
   memberId?: number;
   currentMemberId?: number;
+  productId?: number;
 }
 
 export default function ChatBubble({
@@ -17,6 +18,7 @@ export default function ChatBubble({
   avatarUrl,
   memberId,
   currentMemberId,
+  productId,
 }: ChatBubbleProps) {
   const isMine =
     message.senderId !== undefined ? message.senderId === currentMemberId : message.isMine;
@@ -29,13 +31,21 @@ export default function ChatBubble({
 
   const bubble = <div className={cn(baseClasses, bubbleClasses)}>{message.message}</div>;
 
+  // 상대방 프로필 클릭 시 이동할 URL
+  const getProfileUrl = () => {
+    if (memberId) {
+      return `/data/review?id=${memberId}&tab=review`;
+    } else if (productId) {
+      return `/data/${productId}`;
+    } else {
+      return "/data/review";
+    }
+  };
+
   return (
     <div className={cn("flex items-end gap-2", isMine ? "justify-end" : "justify-start")}>
       {!isMine && (
-        <Link
-          href={memberId ? `/data/review?id=${memberId}&tab=review` : "/data/review"}
-          className="cursor-pointer"
-        >
+        <Link href={getProfileUrl()} className="cursor-pointer">
           <AvatarIcon avatar={avatarUrl} size="small" />
         </Link>
       )}
