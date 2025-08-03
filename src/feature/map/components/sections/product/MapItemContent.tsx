@@ -26,10 +26,11 @@ export default function MapItemCardContent({
           try {
             const productData = await getMapDetailById(productId.toString());
 
-            const url = `/chat/${chatRoomId}?productId=${productId}&senderId=${productData.memberId}`;
+            const url = `/chat/${chatRoomId}?productId=${productId}&memberName=${encodeURIComponent(
+              productData.memberName
+            )}&senderId=${productData.memberId}`;
             router.push(url);
           } catch {
-            // 상품 정보 가져오기 실패 시 기본 파라미터만 전달
             const url = `/chat/${chatRoomId}?productId=${productId}`;
             router.push(url);
           }

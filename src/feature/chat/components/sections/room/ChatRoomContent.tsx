@@ -200,6 +200,9 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     lastReadMessageId.current = null;
     isExiting.current = false;
 
+    productCache.current.clear();
+    isFetchingProduct.current = false;
+
     getChatHistory(chatRoomId)
       .then((response) => {
         if (abortRef.current?.signal.aborted) return;
