@@ -15,6 +15,26 @@ export default function HeaderTimer() {
   const timerId = useTimerStore((state) => state.timerId);
 
   useEffect(() => {
+    const startTime = useTimerStore.getState().startTime;
+    const endTime = useTimerStore.getState().endTime;
+    const isActive = useTimerStore.getState().isActive;
+
+    if (startTime && endTime && isActive) {
+      const now = new Date();
+      const today = now.toISOString().split("T")[0]; // '2025-08-03'
+      const end = new Date(`${today}T${endTime}`);
+
+      const newRemaining = Math.floor((end.getTime() - now.getTime()) / 1000);
+
+      if (newRemaining <= 0) {
+        endTimer();
+      } else {
+        useTimerStore.setState({ remainingTime: newRemaining });
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (!isActive) return;
     if (isActive && remainingTime > 0 && !timerId) {
       const interval = setInterval(() => decrement(), 1000);

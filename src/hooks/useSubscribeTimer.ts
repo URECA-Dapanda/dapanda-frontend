@@ -24,14 +24,29 @@ export const useSubscribeTimer = (userId?: number, isLoading?: boolean) => {
     if (userId && isConnected) {
       const channelId = `alarm${userId}`;
       console.log("🔔 타이머 WebSocket 채널 구독 시작:", channelId);
+
       subscribeToChannel(channelId, (msg: AlarmMessage) => {
         try {
-          const start = new Date(`1970-01-01T${msg.startTime}`);
-          const end = new Date(`1970-01-01T${msg.endTime}`);
-          const durationSec = (end.getTime() - start.getTime()) / 1000;
+          const now = new Date();
 
-          console.log("⏱ 수신된 타이머 duration(sec):", durationSec);
-          startTimer(durationSec, msg.tradeId);
+          // startTime, endTime 파싱 (오늘 날짜 기준)
+          const [startHour, startMinute] = msg.startTime.split(":").map(Number);
+          const [endHour, endMinute] = msg.endTime.split(":").map(Number);
+
+          const start = new Date(now);
+          start.setHours(startHour, startMinute, 0, 0);
+
+          const end = new Date(now);
+          end.setHours(endHour, endMinute, 0, 0);
+
+          const remainingSec = Math.floor((end.getTime() - now.getTime()) / 1000);
+
+          if (remainingSec > 0) {
+            console.log("⏱ 타이머 시작:", { remainingSec, tradeId: msg.tradeId });
+            startTimer(remainingSec, msg.tradeId, msg.startTime, msg.endTime);
+          } else {
+            console.warn("⛔ 이미 종료된 타이머입니다. 시작하지 않음");
+          }
         } catch (e) {
           console.error("⛔ 알림 수신 처리 중 오류:", e);
         }

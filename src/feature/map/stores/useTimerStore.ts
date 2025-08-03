@@ -9,8 +9,10 @@ interface TimerStore {
   hasEnded: boolean;
   timerId: NodeJS.Timeout | null;
   tradeId: number | null;
+  startTime: string | null;
+  endTime: string | null;
 
-  startTimer: (duration: number, tradeId?: number) => void;
+  startTimer: (duration: number, tradeId?: number, startTime?: string, endTime?: string) => void;
   decrement: () => void;
   stopTimer: () => void;
   setOpenModal: (open: boolean) => void;
@@ -28,8 +30,10 @@ export const useTimerStore = create<TimerStore>()(
       hasEnded: false,
       timerId: null,
       tradeId: null,
+      startTime: null,
+      endTime: null,
 
-      startTimer: (duration, tradeId) => {
+      startTimer: (duration, tradeId, startTime, endTime) => {
         const interval = setInterval(() => {
           get().decrement();
         }, 1000);
@@ -42,6 +46,8 @@ export const useTimerStore = create<TimerStore>()(
           openModal: false,
           timerId: interval,
           tradeId: tradeId ?? null,
+          startTime: startTime ?? null,
+          endTime: endTime ?? null,
         });
       },
 
@@ -81,6 +87,9 @@ export const useTimerStore = create<TimerStore>()(
           openModal: false,
           hasEnded: false,
           timerId: null,
+          tradeId: null,
+          startTime: null,
+          endTime: null,
         });
       },
 
@@ -103,6 +112,9 @@ export const useTimerStore = create<TimerStore>()(
         duration: state.duration,
         isActive: state.isActive,
         hasEnded: state.hasEnded,
+        startTime: state.startTime,
+        endTime: state.endTime,
+        tradeId: state.tradeId,
       }),
     }
   )

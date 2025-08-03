@@ -44,7 +44,7 @@ export default function TimerEndModal({ open, onClose }: Props) {
             onClose();
             setTimeout(() => {
               router.push(`/review?tradeId=${tradeId}`);
-            }, 0);
+            }, 100);
           }}
           className="bg-primary text-white font-semibold rounded-lg py-12"
         >
