@@ -12,12 +12,15 @@ export default function HeaderTimer() {
   const hasEnded = useTimerStore((state) => state.hasEnded);
   const reset = useTimerStore((state) => state.reset);
   const endTimer = useTimerStore((state) => state.endTimer);
-  console.log("⏰ Timer 상태", { isActive, remainingTime, hasEnded });
+  const timerId = useTimerStore((state) => state.timerId);
+
   useEffect(() => {
     if (!isActive) return;
-    const interval = setInterval(() => decrement(), 1000);
-    return () => clearInterval(interval);
-  }, [isActive, decrement]);
+    if (isActive && remainingTime > 0 && !timerId) {
+      const interval = setInterval(() => decrement(), 1000);
+      return () => clearInterval(interval);
+    }
+  }, [isActive, decrement, timerId]);
 
   useEffect(() => {
     if (remainingTime === 0 && isActive) {
@@ -25,15 +28,13 @@ export default function HeaderTimer() {
     }
   }, [remainingTime, isActive, endTimer]);
 
-  if (hasEnded) {
-    return <EndOfUseModal open={true} onClose={reset} />;
+  if (!isActive || remainingTime <= 0) {
+    return hasEnded ? <EndOfUseModal open={true} onClose={reset} /> : null;
   }
-
-  if (!isActive || remainingTime <= 0) return null;
 
   const minutes = String(Math.floor(remainingTime / 60)).padStart(2, "0");
   const seconds = String(remainingTime % 60).padStart(2, "0");
-  console.log("HeaderTimer mounted");
+
   return (
     <button
       onClick={() => setOpenModal(true)}

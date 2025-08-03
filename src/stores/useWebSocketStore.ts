@@ -31,57 +31,74 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
   activeChatRoomId: null,
 
   connect: async () => {
-    console.log("🧪 connect 함수 내부 진입");
-    const { client } = get();
-    if (client && client.connected) {
-      console.log("기존 클라이언트 상태", client, client?.connected);
+    const { client, isConnected } = get();
+
+    if (client?.connected || isConnected) {
       return;
     }
-    console.log("🌍 apiBaseUrl:", process.env.NEXT_PUBLIC_API_BASE_SSL);
 
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_SSL;
-    if (!apiBaseUrl) {
-      throw new Error("NEXT_PUBLIC_API_BASE_SSL 환경변수가 필요함");
+    let apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_SSL;
+
+    // 로컬 개발 환경에서는 HTTP 사용
+    if (apiBaseUrl && apiBaseUrl.includes("localhost")) {
+      apiBaseUrl = apiBaseUrl.replace("https://", "http://");
+    } else if (!apiBaseUrl) {
+      apiBaseUrl = "http://localhost:8080";
     }
 
     const newClient = new Client({
-      brokerURL: undefined, // 반드시 undefined로!
-      connectHeaders: {
-        login: "guest",
-        passcode: "guest",
-      },
-      debug: (str) => {
-        console.log("[STOMP DEBUG]:", str);
-      },
       webSocketFactory: () => {
         const sock = new SockJS(`${apiBaseUrl}/conn`, null, {
           transports: ["websocket", "xhr-streaming", "xhr-polling"],
           timeout: 30000,
         });
-        console.log("✅ SockJS 연결 시도");
+
         return sock;
       },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
       onConnect: () => {
-        console.log("✅ WebSocket 연결 성공");
         set({ isConnected: true });
+
+        // 기존 구독들을 다시 등록
+        const { subscriptions, subscriptionObjects } = get();
+        const newSubscriptionObjects = new Map(subscriptionObjects);
+
+        subscriptions.forEach((callback, chatRoomId) => {
+          // 이미 구독 객체가 있으면 건너뛰기
+          if (newSubscriptionObjects.has(chatRoomId)) {
+            return;
+          }
+
+          const subscription = newClient.subscribe(`/sub/${chatRoomId}`, (message) => {
+            const payload: ChatSocketMessage = JSON.parse(message.body);
+            callback(payload);
+          });
+          newSubscriptionObjects.set(chatRoomId, subscription);
+        });
+
+        set({ subscriptionObjects: newSubscriptionObjects });
+      },
+      onDisconnect: () => {
+        set({ isConnected: false, subscriptionObjects: new Map() });
       },
       onStompError: (frame) => {
-        console.error("❌ STOMP 오류:", frame.headers["message"]);
-        console.error("❗ BODY:", frame.body);
-      },
-      onWebSocketError: (event) => {
-        console.error("❌ WebSocket 에러:", event);
-      },
-      onWebSocketClose: (event) => {
-        console.warn("⚠️ WebSocket 연결 종료됨:", event);
+        set({ isConnected: false, subscriptionObjects: new Map() });
+
+        // 재연결 시도는 에러가 심각하지 않을 때만
+        if (frame.headers["message"] !== "Authentication failed") {
+          setTimeout(() => {
+            const { client } = get();
+            if (client && !client.connected) {
+              client.activate();
+            }
+          }, 5000);
+        }
       },
     });
 
     newClient.activate();
-    console.log("🚀 STOMP 클라이언트 activate 호출됨");
     set({ client: newClient });
   },
 
@@ -175,8 +192,6 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
       } catch (error) {
         console.error("메시지 전송 중 오류:", error);
       }
-    } else {
-      console.error("WebSocket이 연결되지 않았습니다.");
     }
   },
 
@@ -195,27 +210,24 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     }
   },
 
+  /**
+   * 타이머 알림(WebSocket) 구독용 - 알람 채널 ex) alarm123
+   */
   subscribeToChannel: (channelId, onMessage) => {
     const { client, subscriptionObjects } = get();
 
     if (!client || !client.connected) {
-      console.warn("WebSocket이 연결되지 않았습니다. 연결 후 구독하세요.");
       return;
     }
 
-    if (subscriptionObjects.has(channelId)) {
-      console.log("이미 구독된 채널입니다:", channelId);
-      return;
-    }
+    if (subscriptionObjects.has(channelId)) return;
 
     const subscription = client.subscribe(`/sub/${channelId}`, (message) => {
       try {
-        console.log("📩 수신된 메시지 원문:", message.body); // ✅ 추가
         const payload: AlarmMessage = JSON.parse(message.body);
-        console.log("🛎 알림 수신된 파싱된 객체:", payload); // ✅ 추가
         onMessage(payload);
       } catch (error) {
-        console.error("알림 메시지 파싱 실패:", error); // ✅ 이미 있었음
+        console.error("알림 메시지 파싱 실패:", error);
       }
     });
 

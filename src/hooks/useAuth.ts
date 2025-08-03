@@ -13,19 +13,17 @@ export function useAuth() {
   const { setProfile } = useProfileStore();
 
   useEffect(() => {
-    console.log("🧪 /api/auth/me 요청 시작");
     fetch("/api/auth/me")
       .then((res) => res.json())
       .then((data) => {
-        console.log("🎯 /api/auth/me 응답:", data);
         setIsLogin(data.isLogin);
         if (data.isLogin && data.user) {
-          setUser(data.user.data); // ✅ 상태 저장
-          setProfile(data.user); // 기존 유지
+          setUser(data.user.data);
+          setProfile(data.user);
         }
       })
       .catch((e) => {
-        console.error("❌ /api/auth/me 실패:", e);
+        console.error("/api/auth/me 실패:", e);
         setIsLogin(false);
       });
   }, [setProfile]);
