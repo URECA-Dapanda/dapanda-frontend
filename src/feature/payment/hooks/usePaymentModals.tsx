@@ -7,8 +7,10 @@ import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 import { postDefaultTrade, postWifiTrade } from "@feature/payment/api/paymentRequest";
 import { postScrapTrade } from "@feature/payment/api/paymentRequest";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function UsePaymentModals() {
+  const router = useRouter();
   const { step, info, setStep, reset } = usePaymentStore();
   if (!info) return null;
 
@@ -87,8 +89,24 @@ export default function UsePaymentModals() {
             setStep("complete");
           } catch (e: unknown) {
             if (e && typeof e === "object" && "response" in e) {
-              const error = e as { response?: { data?: { message?: string } } };
-              toast.error("결제 실패: " + (error.response?.data?.message ?? "알 수 없는 에러"));
+              const error = e as {
+                response?: {
+                  data?: {
+                    code?: number;
+                    message?: string;
+                  };
+                };
+              };
+              const code = error.response?.data?.code;
+
+              if (code === 4004) {
+                toast.error("보유 캐시가 부족합니다. 캐시를 충전해주세요!");
+                setTimeout(() => {
+                  router.push("/mypage/charge");
+                }, 1500);
+              } else {
+                toast.error("결제 실패: " + (error.response?.data?.message ?? "알 수 없는 에러"));
+              }
             } else {
               toast.error("결제 실패: " + (e as Error).message);
             }

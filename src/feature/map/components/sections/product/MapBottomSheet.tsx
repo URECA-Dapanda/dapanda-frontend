@@ -49,11 +49,10 @@ export default function MapBottomSheet({
       getMapList({
         cursorId: pageParam as number | undefined,
         size: 10,
-        latitude: myPosition?.lat() ?? 0,
-        longitude: myPosition?.lng() ?? 0,
+        latitude: myPosition?.lat() ?? 37.5665,
+        longitude: myPosition?.lng() ?? 126.978,
         productSortOption: sortOptionMap[sortLabel],
       }),
-    enabled: !!myPosition,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     estimateSize: () => 160,
   });

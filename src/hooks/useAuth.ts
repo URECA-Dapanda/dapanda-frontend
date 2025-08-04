@@ -18,9 +18,11 @@ export function useAuth() {
         const userData = await getUserInfo();
 
         if (userData && userData.data) {
-          setUser(userData.user.data);
+
+          setUser(userData.data);
           setIsLogin(true);
-          setProfile(userData.user);
+          setProfile(userData.data);
+
           if (!isConnected) {
             connect().catch((error) => {
               console.error("웹소켓 연결 실패:", error);
