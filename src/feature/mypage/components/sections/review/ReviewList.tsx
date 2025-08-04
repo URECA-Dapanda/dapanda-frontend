@@ -50,7 +50,7 @@ export default function ReviewList({ type }: { type?: "receive" | "post" }) {
           hasNextPage={hasNextPage}
           fetchNextPage={fetchNextPage}
           renderItem={(index, item) => (
-            <ReviewItem data={item} key={item ? item.reviewId : index} handleClick={handleClick} />
+            <ReviewItem data={item} key={item ? item.reviewId : index} handleClick={handleClick} type={type} />
           )}
           mode="button"
         />

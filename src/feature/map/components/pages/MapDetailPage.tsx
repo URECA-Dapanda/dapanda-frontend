@@ -86,6 +86,7 @@ export default function MapDetailPage() {
           ...data,
           recentPrice,
           averagePrice: avgPrice,
+          isOwner,
         }}
         onImageClick={() => {}}
         onExpandChange={setTopSheetExpanded}

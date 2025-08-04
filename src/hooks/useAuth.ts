@@ -1,14 +1,14 @@
-import { logOutRequest } from "@apis/userProfile";
-import Cookies from "js-cookie";
+import { logOutRequest, getUserInfo } from "@apis/userProfile";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useProfileStore } from "@/stores/useProfileStore";
 import type { UserType } from "@/types/User";
+import { useWebSocketStore } from "@/stores/useWebSocketStore";
 
 export function useAuth() {
   const router = useRouter();
-  const token = Cookies.get("accessToken");
   const [isLogin, setIsLogin] = useState<boolean | null>(null);
+  const { connect, isConnected } = useWebSocketStore();
   const [user, setUser] = useState<UserType | null>(null);
   const { setProfile } = useProfileStore();
 
@@ -28,15 +28,39 @@ export function useAuth() {
       });
   }, [setProfile]);
 
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const userData = await getUserInfo();
+
+        if (userData && userData.data) {
+          setIsLogin(true);
+          setProfile(userData.data);
+
+          if (!isConnected) {
+            connect().catch((error) => {
+              console.error("웹소켓 연결 실패:", error);
+            });
+          }
+        } else {
+          setIsLogin(false);
+        }
+      } catch (error) {
+        console.error("인증 상태 확인 실패:", error);
+        setIsLogin(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, [connect, setProfile]);
+
   const logout = async () => {
-    const res = await logOutRequest();
-    console.log("ee", res.code);
+    await logOutRequest();
     router.replace("/");
   };
 
   return {
     isLogin: isLogin,
-    token,
     isLoading: isLogin === null,
     logout: logout,
     user,
