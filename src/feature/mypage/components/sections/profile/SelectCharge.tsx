@@ -18,9 +18,22 @@ export default function SelectCharge({ title = "충전 금액 선택" }: SelectC
   const setSelectValue = useChargeStore((state) => state.setCharge);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setSelectValue(e.currentTarget.value);
-  };
+    const rawValue = e.currentTarget.value;
 
+    const numericValue = rawValue.replace(/[^0-9]/g, "");
+  
+    if (numericValue === "") {
+      setSelectValue("");
+      return;
+    }
+  
+    const num = Number(numericValue);
+  
+    if (num >= 0 && num <= 10000000) {
+      setSelectValue(numericValue);
+    }
+  };
+  
   const handleButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
     setSelectValue(e.currentTarget.value);
   };
