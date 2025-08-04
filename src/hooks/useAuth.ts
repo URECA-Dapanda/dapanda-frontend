@@ -13,29 +13,14 @@ export function useAuth() {
   const { setProfile } = useProfileStore();
 
   useEffect(() => {
-    fetch("/api/auth/me")
-      .then((res) => res.json())
-      .then((data) => {
-        setIsLogin(data.isLogin);
-        if (data.isLogin && data.user) {
-          setUser(data.user.data);
-          setProfile(data.user);
-        }
-      })
-      .catch((e) => {
-        console.error("/api/auth/me 실패:", e);
-        setIsLogin(false);
-      });
-  }, [setProfile]);
-
-  useEffect(() => {
     const checkAuthStatus = async () => {
       try {
         const userData = await getUserInfo();
 
         if (userData && userData.data) {
+          setUser(userData.user.data);
           setIsLogin(true);
-          setProfile(userData.data);
+          setProfile(userData.user);
 
           if (!isConnected) {
             connect().catch((error) => {
