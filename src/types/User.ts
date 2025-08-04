@@ -1,5 +1,5 @@
 export interface UserType {
-  id: number;
+  memberId: number;
   name: string;
   profileImageUrl: string;
   joinedAt: string;

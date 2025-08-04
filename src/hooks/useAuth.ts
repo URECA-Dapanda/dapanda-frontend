@@ -2,12 +2,14 @@ import { logOutRequest, getUserInfo } from "@apis/userProfile";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useProfileStore } from "@/stores/useProfileStore";
+import type { UserType } from "@/types/User";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 
 export function useAuth() {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState<boolean | null>(null);
   const { connect, isConnected } = useWebSocketStore();
+  const [user, setUser] = useState<UserType | null>(null);
   const { setProfile } = useProfileStore();
 
   useEffect(() => {
@@ -16,9 +18,9 @@ export function useAuth() {
         const userData = await getUserInfo();
 
         if (userData && userData.data) {
+          setUser(userData.user.data);
           setIsLogin(true);
-          setProfile(userData.data);
-
+          setProfile(userData.user);
           if (!isConnected) {
             connect().catch((error) => {
               console.error("웹소켓 연결 실패:", error);
@@ -34,7 +36,7 @@ export function useAuth() {
     };
 
     checkAuthStatus();
-  }, [connect, setProfile]);
+  }, [connect, isConnected, setProfile]);
 
   const logout = async () => {
     await logOutRequest();
@@ -45,5 +47,6 @@ export function useAuth() {
     isLogin: isLogin,
     isLoading: isLogin === null,
     logout: logout,
+    user,
   };
 }

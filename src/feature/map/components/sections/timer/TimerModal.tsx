@@ -14,6 +14,7 @@ export default function TimerModal() {
   return (
     <Dialog.Root open={openModal} onOpenChange={setOpenModal}>
       <Dialog.Portal>
+        <Dialog.Description>타이머</Dialog.Description>
         <Dialog.Overlay className="fixed inset-0 bg-black-60 z-[9998]" />
         <Dialog.Content
           className="fixed z-[9999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2

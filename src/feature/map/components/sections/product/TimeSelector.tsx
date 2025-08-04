@@ -71,9 +71,9 @@ export default function TimeSelector({
     return (
       <div
         ref={dropdownRef}
-        className="absolute top-full left-0 bg-white border border-gray-300 rounded-12 shadow-lg z-0 mt-4 min-w-[120px]"
+        className="absolute top-full left-0 bg-white border border-gray-300 rounded-12 shadow-lg z-[9999] mt-4 min-w-[120px] max-h-144 overflow-y-auto scroll-visible"
       >
-        <div className="max-h-144 overflow-y-auto p-4 space-y-4">
+        <div className="p-4 space-y-4">
           {items.map((item, idx) => {
             const itemStr = typeof item === "number" ? String(item).padStart(2, "0") : item;
 

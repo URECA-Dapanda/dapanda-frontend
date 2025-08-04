@@ -210,6 +210,9 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     }
   },
 
+  /**
+   * 타이머 알림(WebSocket) 구독용 - 알람 채널 ex) alarm123
+   */
   subscribeToChannel: (channelId, onMessage) => {
     const { client, subscriptionObjects } = get();
 
