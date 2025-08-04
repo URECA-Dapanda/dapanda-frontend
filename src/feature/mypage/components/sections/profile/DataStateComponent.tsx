@@ -16,7 +16,7 @@ export default function DataStateComponent() {
 
   const { data: sellingData } = useQuery({
     queryFn: getSellingDataAmount,
-    queryKey: ["api/members/selling-data"],
+    queryKey: ["api/members/selling-data/sold"],
   });
 
   return (

@@ -121,6 +121,7 @@ export default function MapDetailPage() {
             sellerId={data.memberId}
             productId={String(data.productId)}
             isOwner={isOwner}
+            memberName={data.memberName}
           />
 
           <div className="px-6 mt-12">
