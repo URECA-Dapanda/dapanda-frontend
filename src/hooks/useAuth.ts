@@ -21,7 +21,6 @@ export function useAuth() {
           setUser(userData.user.data);
           setIsLogin(true);
           setProfile(userData.user);
-
           if (!isConnected) {
             connect().catch((error) => {
               console.error("웹소켓 연결 실패:", error);
@@ -37,7 +36,7 @@ export function useAuth() {
     };
 
     checkAuthStatus();
-  }, [connect, setProfile]);
+  }, [connect, isConnected, setProfile]);
 
   const logout = async () => {
     await logOutRequest();

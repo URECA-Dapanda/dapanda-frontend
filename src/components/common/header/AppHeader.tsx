@@ -43,7 +43,6 @@ function AppHeaderContent({ id, children }: PropsWithChildren<AppHeaderProps>) {
 
   const defaultItems = (
     <div className="flex items-center gap-16">
-      {" "}
       <HeaderTimer />
       <NotificationIcon />
     </div>
