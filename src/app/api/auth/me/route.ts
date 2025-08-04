@@ -4,6 +4,7 @@ export async function GET(req: NextRequest) {
   const accessToken = req.cookies.get("accessToken");
 
   const isLogin = !!accessToken;
+  console.log("로그인 상태 확인:", { isLogin, hasToken: !!accessToken });
 
   if (isLogin) {
     try {

@@ -31,12 +31,19 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
   activeChatRoomId: null,
 
   connect: async () => {
-    const { client } = get();
-    if (client && client.connected) return;
+    const { client, isConnected } = get();
 
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_SSL;
-    if (!apiBaseUrl) {
-      throw new Error("NEXT_PUBLIC_API_BASE_SSL 환경변수가 필요함");
+    if (client?.connected || isConnected) {
+      return;
+    }
+
+    let apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_SSL;
+
+    // 로컬 개발 환경에서는 HTTP 사용
+    if (apiBaseUrl && apiBaseUrl.includes("localhost")) {
+      apiBaseUrl = apiBaseUrl.replace("https://", "http://");
+    } else if (!apiBaseUrl) {
+      apiBaseUrl = "http://localhost:8080";
     }
 
     const newClient = new Client({
@@ -77,15 +84,17 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
         set({ isConnected: false, subscriptionObjects: new Map() });
       },
       onStompError: (frame) => {
-        console.error("STOMP 오류:", frame.headers["message"]);
         set({ isConnected: false, subscriptionObjects: new Map() });
 
-        setTimeout(() => {
-          const { client } = get();
-          if (client && !client.connected) {
-            client.activate();
-          }
-        }, 5000);
+        // 재연결 시도는 에러가 심각하지 않을 때만
+        if (frame.headers["message"] !== "Authentication failed") {
+          setTimeout(() => {
+            const { client } = get();
+            if (client && !client.connected) {
+              client.activate();
+            }
+          }, 5000);
+        }
       },
     });
 
@@ -183,8 +192,6 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
       } catch (error) {
         console.error("메시지 전송 중 오류:", error);
       }
-    } else {
-      console.error("WebSocket이 연결되지 않았습니다.");
     }
   },
 
@@ -207,7 +214,6 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     const { client, subscriptionObjects } = get();
 
     if (!client || !client.connected) {
-      console.warn("WebSocket이 연결되지 않았습니다. 연결 후 구독하세요.");
       return;
     }
 

@@ -1,4 +1,5 @@
 export interface UserType {
+  id: number;
   name: string;
   profileImageUrl: string;
   joinedAt: string;

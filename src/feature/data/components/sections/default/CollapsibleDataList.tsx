@@ -86,7 +86,7 @@ export default function CollapsibleDataList({
         </div>
       )}
       {(isExpanded || displayItems.length <= 1) && (
-        <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+72px)] w-[calc(100%-48px)] bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-xl shadow-lg shadow-gray-500 p-6 px-8 flex justify-between items-center">
+        <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+72px)] w-[calc(100%-48px)] lg:w-[552px] bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-xl shadow-lg shadow-gray-500 p-6 px-8 flex justify-between items-center">
           <div>
             <p className="title-sm">총 용량 {summary.totalAmount}GB</p>
             <p className="title-sm">총 가격 {formatPriceString(summary.totalPrice)}</p>

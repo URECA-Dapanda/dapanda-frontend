@@ -42,8 +42,8 @@ export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }:
     mutationFn: () => registReport(target, reportReason, targetCategory),
     mutationKey: ["/api/report", target],
     onSuccess: () => {
-      setIsOpen(false);
       setIsNext(true);
+      setIsOpen(false);
     },
     onError: (e: AxiosError) => {
       switch (e.status) {
@@ -70,7 +70,7 @@ export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }:
   }, [reportMutation, reportReason]);
 
   return (
-    <FullScreenModal isOpen={isOpen}>
+    <FullScreenModal isOpen={isOpen || isNext}>
       <BaseModal isOpen={isOpen} onClose={handleClose}>
         <ModalHeader title="상대방 신고하기" onClose={handleClose} />
         <div className="flex flex-col justify-center items-center gap-[25px] w-full">
