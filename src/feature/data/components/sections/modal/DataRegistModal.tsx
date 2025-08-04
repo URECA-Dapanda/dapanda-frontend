@@ -12,6 +12,8 @@ import { useMonthlyDataLimit } from "@feature/data/hooks/useMonthlyDataLimit";
 import { Switch } from "@ui/switch";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { ButtonComponent } from "@components/common/button";
+import { useMutation } from "@tanstack/react-query";
 
 interface DataRegistModalProps {
   onClose: () => void;
@@ -41,6 +43,16 @@ export default function DataRegistModal({
   const { register } = useRegisterDataProduct();
   const { update } = useUpdateDataProduct();
 
+  const { mutate: registMutation, isPending: isRegistPending } = useMutation({
+    mutationKey: [""],
+    mutationFn: register,
+  });
+
+  const { mutate: updateMtation, isPending: isUpdatePending } = useMutation({
+    mutationKey: [""],
+    mutationFn: update,
+  });
+
   const handleSubmit = () => {
     const priceInt = parseInt(price, 10);
 
@@ -50,7 +62,7 @@ export default function DataRegistModal({
     }
 
     if (mode === "edit" && defaultValues?.productId) {
-      update({
+      updateMtation({
         productId: defaultValues.productId,
         changedAmount: dataAmount,
         price: priceInt,
@@ -62,7 +74,7 @@ export default function DataRegistModal({
         },
       });
     } else {
-      register({
+      registMutation({
         dataAmount,
         price: priceInt,
         isSplitType: isSplit,
@@ -130,8 +142,9 @@ export default function DataRegistModal({
         />
       </div>
       <button
-        className={buttonVariants({ variant: "secondary", size: "4xl" }) + " w-full mt-6"}
+        className={buttonVariants({ variant: "secondary", size: "4xl" }) + " w-full mt-6 body-md"}
         onClick={handleSubmit}
+        disabled={isRegistPending || isUpdatePending}
       >
         {mode === "edit" ? "수정하기" : "등록하기"}
       </button>
