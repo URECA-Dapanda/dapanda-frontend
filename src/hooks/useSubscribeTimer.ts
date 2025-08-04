@@ -22,6 +22,7 @@ export const useSubscribeTimer = (userId?: number, isLoading?: boolean) => {
       const channelId = `alarm${userId}`;
 
       subscribeToChannel(channelId, (msg: AlarmMessage) => {
+        console.log("🔥 WebSocket 메시지 수신됨:", msg);
         try {
           const now = new Date();
 

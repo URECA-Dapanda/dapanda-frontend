@@ -8,6 +8,7 @@ import axiosInstance from "@/lib/axios";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
+import { formatIsoToHHMM } from "@lib/time";
 
 export default function MapItemCardContent({
   data: { productId, address, price, score, title, startTime, endTime, open, imageUrl },
@@ -85,7 +86,7 @@ export default function MapItemCardContent({
                 <span className="body-xs text-black ml-4">({score})</span>
               </div>
               <span className="caption-lg text-gray-500">
-                {startTime}~{endTime}
+                {formatIsoToHHMM(startTime)}~{formatIsoToHHMM(endTime)}
               </span>
             </div>
           </div>
