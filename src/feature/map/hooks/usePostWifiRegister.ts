@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { postWifiRegister, putWifiUpdate } from "@/feature/map/api/mapRequest";
 import type { RegisterFormValues, RegisterFormData } from "@/feature/map/types/registerForm";
 import { formatToIsoDate, formatToIsoDatePlusOneYear, parseHHMMToTime } from "@lib/time";
+import { throttle } from "lodash";
 
 interface UsePostWifiRegisterOptions {
   form: RegisterFormValues;
@@ -43,9 +44,17 @@ export const usePostWifiRegister = ({ form, onSuccess, onSubmit }: UsePostWifiRe
 
       if (isEditMode) {
         if (!productId) throw new Error("수정할 상품 ID가 없습니다.");
-        await putWifiUpdate({ productId: Number(productId), ...payload });
+        const throttledPutWifiUpdate = throttle(
+          async () => await putWifiUpdate({ productId: Number(productId), ...payload }),
+          500
+        );
+        await throttledPutWifiUpdate();
       } else {
-        await postWifiRegister(payload);
+        const throttledPostWifiRegister = throttle(
+          async () => await postWifiRegister(payload),
+          500
+        );
+        await throttledPostWifiRegister();
       }
     },
     onSuccess: () => {
@@ -67,5 +76,6 @@ export const usePostWifiRegister = ({ form, onSuccess, onSubmit }: UsePostWifiRe
   return {
     submit: mutation.mutate,
     isError: mutation.isError,
+    isPending: mutation.isPending,
   };
 };

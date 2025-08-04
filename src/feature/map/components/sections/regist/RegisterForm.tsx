@@ -80,7 +80,7 @@ export default function RegisterForm({
     submit();
   };
 
-  const { submit } = usePostWifiRegister({
+  const { submit, isPending } = usePostWifiRegister({
     form,
     onSuccess: () => setIsCompleteModalOpen(true),
     onSubmit,
@@ -102,7 +102,13 @@ export default function RegisterForm({
         onChange={handleImageChange}
       />
 
-      <ButtonComponent className="w-full" variant="secondary" size="4xl" onClick={handleSubmit}>
+      <ButtonComponent
+        className="w-full"
+        variant={isPending ? "loading" : "secondary"}
+        size="4xl"
+        onClick={handleSubmit}
+        disabled={isPending}
+      >
         {isEditMode ? "수정 완료" : "등록하기"}
       </ButtonComponent>
 
