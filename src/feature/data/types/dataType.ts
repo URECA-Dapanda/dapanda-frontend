@@ -43,7 +43,7 @@ export interface DataDetailResponse {
   myProduct: boolean;
   splitType: boolean;
   updatedAt: string;
-  state: "ACTIVE" | "SOLD_OUT"
+  productState: "ACTIVE" | "SOLD_OUT"
 }
 
 export function mapRawToDataType(raw: RawDataItem): DataType {

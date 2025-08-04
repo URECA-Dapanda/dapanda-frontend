@@ -80,7 +80,7 @@ export default function DataDetailContent() {
       <div className="space-y-28">
         <div className="flex items-center justify-between mx-24 mb-16">
           <div className="title-md">판매자</div>
-          {!!isOwner && data.state === "ACTIVE" && (
+          {isOwner && data.productState === "ACTIVE" && (
             <div className="flex flex-row gap-4">
               <ButtonComponent variant={"outlineGray"} size="xs" onClick={handleDeleteModalOpen}>
                 <Trash2 className="w-12 h-12 mr-2" />
