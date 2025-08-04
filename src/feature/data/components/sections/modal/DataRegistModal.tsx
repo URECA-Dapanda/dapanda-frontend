@@ -142,7 +142,12 @@ export default function DataRegistModal({
         />
       </div>
       <button
-        className={buttonVariants({ variant: "secondary", size: "4xl" }) + " w-full mt-6 body-md"}
+        className={
+          buttonVariants({
+            variant: isRegistPending || isUpdatePending ? "loading" : "secondary",
+            size: "4xl",
+          }) + " w-full mt-6 body-md"
+        }
         onClick={handleSubmit}
         disabled={isRegistPending || isUpdatePending}
       >
