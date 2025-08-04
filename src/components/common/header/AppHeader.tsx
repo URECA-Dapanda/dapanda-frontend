@@ -41,14 +41,11 @@ function AppHeaderContent({ id, children }: PropsWithChildren<AppHeaderProps>) {
     }
   }, [path, isVisible]);
 
-  const defaultItems = useMemo(
-    () => (
-      <>
-        <HeaderTimer />
-        <NotificationIcon />
-      </>
-    ),
-    []
+  const defaultItems = (
+    <div className="flex items-center gap-16">
+      <HeaderTimer />
+      <NotificationIcon />
+    </div>
   );
   const headerContent = useMemo(() => {
     switch (pathVariant) {

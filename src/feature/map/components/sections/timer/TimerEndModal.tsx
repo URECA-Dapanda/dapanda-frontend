@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { TimerIcon } from "lucide-react";
 import BaseModal from "@/components/common/modal/BaseModal";
 import ModalHeader from "@/components/common/modal/ModalHeader";
+import { useTimerStore } from "@/feature/map/stores/useTimerStore";
 
 interface Props {
   open: boolean;
@@ -12,6 +13,7 @@ interface Props {
 
 export default function TimerEndModal({ open, onClose }: Props) {
   const router = useRouter();
+  const tradeId = useTimerStore((state) => state.tradeId);
 
   return (
     <BaseModal isOpen={open} onClose={onClose}>
@@ -38,7 +40,12 @@ export default function TimerEndModal({ open, onClose }: Props) {
           홈으로 돌아가기
         </button>
         <button
-          onClick={() => router.push("/map/review/regist")}
+          onClick={() => {
+            onClose();
+            setTimeout(() => {
+              router.push(`/review?tradeId=${tradeId}`);
+            }, 100);
+          }}
           className="bg-primary text-white font-semibold rounded-lg py-12"
         >
           후기 작성하기
