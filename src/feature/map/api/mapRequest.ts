@@ -69,8 +69,8 @@ export async function getMapList({
   cursorId,
   size,
   productSortOption = "DISTANCE_ASC",
-  latitude,
-  longitude,
+  latitude = 37.5665,
+  longitude = 126.978,
 }: FetchMapListParams): Promise<{ items: MapType[]; nextCursor?: number }> {
   const params = {
     size,
