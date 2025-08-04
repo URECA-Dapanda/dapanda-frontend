@@ -60,7 +60,7 @@ export default function CashActionContent({ mode, buttonText }: CashActionConten
                 <ChargeInfoCard />
                 <ButtonComponent
                     variant={"primary"}
-                    className="w-full mt-120"
+                    className="w-full mt-24"
                     onClick={handleClick}
                 >
                     {buttonText ?? (mode === "charge" ? "결제하기" : "현금으로 전환하기")}
