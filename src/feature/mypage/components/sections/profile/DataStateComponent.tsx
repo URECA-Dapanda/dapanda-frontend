@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { DataUsageDonut } from "./CicularProgressBar";
-import { getMyData } from "@feature/mypage/apis/mypageRequest";
-import { getBuyingDataAmount, getSellingDataAmount } from "@feature/data/api/dataRequest";
+import { getMyData, getSellingDataAmount } from "@feature/mypage/apis/mypageRequest";
+import { getBuyingDataAmount } from "@feature/data/api/dataRequest";
 
 export default function DataStateComponent() {
   const { data: myData } = useQuery({

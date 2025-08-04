@@ -121,3 +121,8 @@ export async function updateProfileImage(imageUrl: string) {
 
   return data;
 }
+
+export async function getSellingDataAmount(): Promise<number> {
+  const res = await axios.get("/api/members/selling-data/sold");
+  return res.data.data.data;
+}
