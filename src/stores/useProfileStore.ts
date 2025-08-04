@@ -2,7 +2,6 @@ import { UserType } from "@/types/User";
 import { create } from "zustand";
 
 interface ProfileStoreProps extends Partial<UserType> {
-  id?: number;
   setUserName: (newName: string) => void;
   setRecommend: (newScore: number) => void;
   setProfile: (profile: UserType) => void;
@@ -13,7 +12,6 @@ interface ProfileStoreProps extends Partial<UserType> {
  * @param showAvatar 추후 default value => undefined로 수정해야 함
  */
 export const useProfileStore = create<ProfileStoreProps>((set) => ({
-  id: undefined,
   setUserName: (newName) => {
     set({ name: newName });
   },

@@ -139,7 +139,7 @@ export default function BaseBottomSheet({
           touchAction: "none",
           zIndex: zIndex ?? (variant === "modal" ? 103 : 30),
         }}
-        drag={isMobile ? (enableDrag ? "y" : false) : "y"}
+        drag={isMobile && enableDrag ? "y" : false}
         dragElastic={0.1}
         onDragEnd={handleDragEnd}
       >
