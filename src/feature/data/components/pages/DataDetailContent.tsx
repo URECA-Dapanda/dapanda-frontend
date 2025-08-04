@@ -120,7 +120,7 @@ export default function DataDetailContent() {
                 <span className="font-semibold ml-4">{formatDataSize(remainingBuying ?? 0)}</span>
               </BadgeComponent>
               <BadgeComponent variant="largeOutlined" size="xl">
-                이번 달 판매 가능:{" "}
+                이번 달 등록 가능:{" "}
                 <span className="font-semibold ml-4">{formatDataSize(remainingSelling ?? 0)}</span>
               </BadgeComponent>
             </div>
