@@ -90,6 +90,6 @@ export async function getBuyingDataAmount(): Promise<number> {
 }
 
 export async function getSellingDataAmount(): Promise<number> {
-  const res = await axios.get("/api/members/selling-data/sold");
+  const res = await axios.get("/api/members/selling-data");
   return res.data.data.data;
 }

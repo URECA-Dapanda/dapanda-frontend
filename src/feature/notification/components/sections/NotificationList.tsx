@@ -11,14 +11,14 @@ export interface NotificationItem {
 }
 
 interface NotificationListProps {
-  items: NotificationItem[];
+  items?: NotificationItem[];
   onDelete: (id: number) => void;
 }
 
 export default function NotificationList({ items, onDelete }: NotificationListProps) {
-  if (items.length === 0) {
+  if (!items || items.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center text-gray-500">
+      <div className="pt-safe-top pb-safe-bottom h-main-safe flex flex-col items-center justify-center text-gray-500">
         <BellOff className="w-24 h-24 mb-20" />
         <p className="body-md">받은 알림이 없습니다.</p>
       </div>
