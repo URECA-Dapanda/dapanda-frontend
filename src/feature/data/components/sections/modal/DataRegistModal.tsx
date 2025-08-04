@@ -12,7 +12,6 @@ import { useMonthlyDataLimit } from "@feature/data/hooks/useMonthlyDataLimit";
 import { Switch } from "@ui/switch";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { ButtonComponent } from "@components/common/button";
 import { useMutation } from "@tanstack/react-query";
 
 interface DataRegistModalProps {

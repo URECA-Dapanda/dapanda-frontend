@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import { throttle } from "lodash";
-import { putMobileDataProduct, ResponsePost } from "../api/dataRequest";
+import { putMobileDataProduct } from "../api/dataRequest";
 
 export const useUpdateDataProduct = () => {
   const queryClient = useQueryClient();
