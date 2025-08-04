@@ -12,6 +12,9 @@ import { useHeaderStore } from "@stores/useHeaderStore";
 import DefaultFilterCard from "@feature/data/components/sections/filter/DefaultFilterCard";
 import DataRegistModal from "@feature/data/components/sections/modal/DataRegistModal";
 import { useDataFilterStore } from "@feature/data/stores/useDataFilterStore";
+import { OnboardingLayout, onboardingPages } from "@/components/common/onboarding";
+import ModalPortal from "@/lib/ModalPortal";
+import { updateMemberRole } from "@/apis/userProfile";
 
 export default function DataPageContent() {
   const searchParams = useSearchParams();
@@ -21,6 +24,22 @@ export default function DataPageContent() {
   const setIsVisible = useHeaderStore((state) => state.setIsVisible);
   const [registModalOpen, setRegistModalOpen] = useState(false);
   const clearDataAmount = useDataFilterStore((state) => state.clearDataAmount);
+
+  const [onboardingModalOpen, setOnboardingModalOpen] = useState(false);
+  const [currentOnboardingPage, setCurrentOnboardingPage] = useState(0);
+  const [isOnboardingLoading, setIsOnboardingLoading] = useState(false);
+
+  useEffect(() => {
+    const onboardingParam = searchParams.get("on-boarding");
+
+    if (onboardingParam === "true") {
+      setOnboardingModalOpen(true);
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("on-boarding");
+      const newUrl = params.toString() ? `?${params.toString()}` : "/data";
+      router.replace(newUrl);
+    }
+  }, [searchParams, router]);
 
   useEffect(() => {
     setIsVisible(sheetOpen);
@@ -54,6 +73,31 @@ export default function DataPageContent() {
     router.refresh();
   }, []);
 
+  const handleOnboardingNext = () => {
+    if (currentOnboardingPage < onboardingPages.length - 1) {
+      setCurrentOnboardingPage(currentOnboardingPage + 1);
+    }
+  };
+
+  const handleOnboardingPrevious = () => {
+    if (currentOnboardingPage > 0) {
+      setCurrentOnboardingPage(currentOnboardingPage - 1);
+    }
+  };
+
+  const handleOnboardingComplete = async () => {
+    try {
+      setIsOnboardingLoading(true);
+      await updateMemberRole();
+    } catch (error) {
+      console.error("온보딩 완료 - API 요청 실패:", error);
+    } finally {
+      setIsOnboardingLoading(false);
+      setOnboardingModalOpen(false);
+      setCurrentOnboardingPage(0);
+    }
+  };
+
   return (
     <>
       <div className="w-full bg-primary2 datapagecontent h-[100dvh] bg-[url('/dpd-logo.svg')] bg-position-[-35_-37] bg-no-repeat bg-size-[237px]">
@@ -66,7 +110,6 @@ export default function DataPageContent() {
             variant="floatingPrimary"
             size="xl"
             onClick={() => {
-              console.log("글 등록 버튼 클릭");
               setRegistModalOpen(true);
             }}
             className={tab === "default" ? "" : "hidden"}
@@ -97,11 +140,23 @@ export default function DataPageContent() {
               <ScrapTabBody />
             </PurchaseModeTabs>
           </div>
-
-          {/* 탭에 따른 내용만 분기 */}
-          {/* {tab === "scrap" ? <ScrapTabBody /> : <DefaultTabBody isSheetOpen={sheetOpen} />} */}
         </BaseBottomSheet>
       </div>
+
+      {onboardingModalOpen && (
+        <ModalPortal>
+          <div className="fixed inset-0 z-106 bg-white">
+            <OnboardingLayout
+              pages={onboardingPages}
+              currentPage={currentOnboardingPage}
+              onNext={handleOnboardingNext}
+              onPrevious={handleOnboardingPrevious}
+              onComplete={handleOnboardingComplete}
+              isLoading={isOnboardingLoading}
+            />
+          </div>
+        </ModalPortal>
+      )}
     </>
   );
 }
