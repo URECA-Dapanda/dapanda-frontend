@@ -42,18 +42,17 @@ export default function ReviewItem({ data, handleClick, type }: ReviewItemProps)
             <p className="body-sm text-gray-700 truncate w-[220px]">거래상품: {data.itemType}</p>
           </LayoutBox>
         </LayoutBox>
-        {
-          <ButtonComponent
-            variant={"primary2"}
-            size={"xxs"}
-            className={cn("absolute bottom-20 right-20 caption-md", type === "post" && "hidden")}
-            onClick={handleClick}
-            value={data.reviewId}
-            data-name={data.reviewerName}
-          >
-            리뷰 신고하기
-          </ButtonComponent>
-        }
+
+        <ButtonComponent
+          variant={"primary2"}
+          size={"xxs"}
+          className={cn("absolute bottom-20 right-20 caption-md", type === "post" && "hidden")}
+          onClick={handleClick}
+          value={data.reviewId}
+          data-name={data.reviewerName}
+        >
+          리뷰 신고하기
+        </ButtonComponent>
       </CardContentComponent>
     </CardComponent>
   );
