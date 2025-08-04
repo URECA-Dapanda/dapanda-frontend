@@ -10,6 +10,7 @@ export interface MapType {
   score: number;
   price: string;
   imageUrl?: string;
+  memberName: string;
 }
 
 export type MapDetailItem = {
