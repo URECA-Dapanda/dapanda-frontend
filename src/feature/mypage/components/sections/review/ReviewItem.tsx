@@ -6,14 +6,16 @@ import LayoutBox from "@components/common/container/LayoutBox";
 import { Rating, RatingButton } from "@components/common/rating/RatingScore";
 import { SkeletonCard } from "@components/common/skeleton";
 import { ReviewType } from "@feature/mypage/types/reviewType";
+import { cn } from "@lib/utils";
 import { MouseEventHandler } from "react";
 
 interface ReviewItemProps {
   data?: ReviewType;
   handleClick: MouseEventHandler;
+  type?: "post" | "receive";
 }
 
-export default function ReviewItem({ data, handleClick }: ReviewItemProps) {
+export default function ReviewItem({ data, handleClick, type }: ReviewItemProps) {
   if (!data)
     return (
       <CardComponent variant="outlined" color={"border-gray-200"} size="sm">
@@ -25,10 +27,10 @@ export default function ReviewItem({ data, handleClick }: ReviewItemProps) {
   return (
     <CardComponent variant="outlined" color={"border-gray-200"} size="sm">
       <CardContentComponent size={"sm"}>
-        <LayoutBox layout="flex" direction="row" width="fit" height="full" gap={8}>
+        <LayoutBox layout="flex" direction="row" width="full" height="full" gap={8}>
           <AvatarIcon size="medium" />
-          <LayoutBox layout="flex" direction="column" gap={2} width="fit">
-            <div className="flex flex-row justify-between gap-12 w-full">
+          <LayoutBox layout="flex" direction="column" gap={2} width="full">
+            <div className="flex flex-row justify-between gap-12 w-full pr-8">
               <p className="title-sm truncate w-[200px]">
                 {data.reviewerName ?? data.revieweeName}
               </p>
@@ -40,16 +42,18 @@ export default function ReviewItem({ data, handleClick }: ReviewItemProps) {
             <p className="body-sm text-gray-700 truncate w-[220px]">거래상품: {data.itemType}</p>
           </LayoutBox>
         </LayoutBox>
-        <ButtonComponent
-          variant={"primary2"}
-          size={"xxs"}
-          className="absolute bottom-20 right-20 caption-md"
-          onClick={handleClick}
-          value={data.reviewId}
-          data-name={data.reviewerName}
-        >
-          리뷰 신고하기
-        </ButtonComponent>
+        {
+          <ButtonComponent
+            variant={"primary2"}
+            size={"xxs"}
+            className={cn("absolute bottom-20 right-20 caption-md", type === "post" && "hidden")}
+            onClick={handleClick}
+            value={data.reviewId}
+            data-name={data.reviewerName}
+          >
+            리뷰 신고하기
+          </ButtonComponent>
+        }
       </CardContentComponent>
     </CardComponent>
   );
