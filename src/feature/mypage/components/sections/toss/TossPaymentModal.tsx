@@ -13,12 +13,15 @@ export default function TossPaymentModal() {
   const rendered = useRef(false);
 
   useEffect(() => {
-    if (isOpen && !rendered.current && charge) {
+    if (!isOpen) {
+      rendered.current = false;
+    } else if (!rendered.current && charge) {
       rendered.current = true;
       renderTossPayment(charge);
       console.log("호출됨: renderTossPayment with charge =", charge);
     }
   }, [isOpen, charge]);
+  
 
   if (!isOpen) return null;
 
