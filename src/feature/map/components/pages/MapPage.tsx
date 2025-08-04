@@ -36,8 +36,8 @@ export default function MapPage() {
 
     const result = await getMapList({
       size: 20,
-      latitude: myPosition.lat(),
-      longitude: myPosition.lng(),
+      latitude: myPosition.lat() ?? 37.5665,
+      longitude: myPosition.lng() ?? 126.978,
       productSortOption: sortOption,
       open: availableOnly,
     });

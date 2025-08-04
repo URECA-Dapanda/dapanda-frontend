@@ -83,6 +83,20 @@ button:active {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+.scroll-visible::-webkit-scrollbar {
+  display: initial !important;
+  width: 8px;
+}
+
+.scroll-visible::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.scroll-visible::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
 /* 모바일 키보드 대응 */
 @media screen and (max-height: 600px) {
   .safe-area-bottom {
@@ -103,7 +117,13 @@ button:active {
 }
 
 .chat-keyboard-active .chat-messages {
-  height: calc(100vh - 200px) !important;
+  overflow-y: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chat-keyboard-active .chat-messages::-webkit-scrollbar {
+  display: none;
 }
 
 .chat-keyboard-active .chat-header {
@@ -123,5 +143,40 @@ button:active {
 @supports (-webkit-touch-callout: none) {
   .chat-keyboard-active .chat-messages {
     padding-bottom: calc(env(safe-area-inset-bottom) + 140px) !important;
+  }
+}
+.Toastify__toast-container[data-stacked="true"] {
+  width: 100dvw !important;
+  margin: 0 auto;
+}
+.toast-container {
+  width: 100dvw;
+  margin: 0 auto;
+}
+
+.Toastify__toast-container--top-center {
+  width: 100dvw;
+  margin: 0 auto;
+}
+
+.Toastify__toast-container {
+  width: 100dvw;
+  margin: 0 auto;
+}
+
+.Toastify__toast {
+  width: 100dvw;
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 481px) {
+  .Toastify__toast {
+    width: 320px;
+  }
+  .Toastify__toast-container--top-center {
+    width: 320px;
+  }
+  .Toastify__toast-container {
+    width: 320px;
   }
 }

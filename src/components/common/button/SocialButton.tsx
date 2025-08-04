@@ -2,11 +2,12 @@ import Image from "next/image";
 
 export default function SocialButton({ provider }: { provider: "kakao" | "naver" | "google" }) {
   const handleLogin = () => {
-    const kakaoAuthUrl = `${
+    const baseUrl =
       provider === "google"
         ? process.env.NEXT_PUBLIC_API_BASE
-        : process.env.NEXT_PUBLIC_API_BASE_SSL
-    }/oauth2/authorization/${provider}`;
+        : process.env.NEXT_PUBLIC_API_BASE_SSL;
+    const kakaoAuthUrl = `${baseUrl}/oauth2/authorization/${provider}`;
+    console.log("로그인 URL:", kakaoAuthUrl);
     window.location.href = kakaoAuthUrl;
   };
 

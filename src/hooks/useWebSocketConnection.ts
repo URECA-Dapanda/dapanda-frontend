@@ -1,12 +1,18 @@
-import { useEffect } from "react";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import { useProfileStore } from "@/stores/useProfileStore";
+import { useEffect } from "react";
 
 export const useWebSocketConnection = () => {
   const { connect, disconnect, isConnected } = useWebSocketStore();
   const { id: userId } = useProfileStore();
 
   useEffect(() => {
+    if (!userId) return;
+    if (!isConnected) {
+      connect().catch((error) => {
+        console.error("WebSocket 연결 실패:", error);
+      });
+    }
     if (userId && !isConnected) {
       connect().catch((error) => {
         console.error("WebSocket 연결 실패:", error);
@@ -22,6 +28,7 @@ export const useWebSocketConnection = () => {
   const disconnectOnLogout = () => {
     disconnect();
     useProfileStore.getState().setProfile({
+      memberId: 0,
       name: "",
       profileImageUrl: "",
       joinedAt: "",

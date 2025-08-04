@@ -9,6 +9,7 @@ export interface PostData {
   hasReported?: boolean;
   memberName: string;
   splitType?: boolean;
+  isOwner?: boolean;
 }
 
 export interface WifiData {
@@ -23,6 +24,7 @@ export interface WifiData {
   recentPrice?: number;
   averagePrice?: number;
   memberName: string;
+  isOwner?: boolean;
 }
 
 export type CommonTopSheetProps = {
@@ -30,5 +32,5 @@ export type CommonTopSheetProps = {
 };
 
 export type TopSheetProps =
-  | (CommonTopSheetProps & { type: "post"; data: PostData })
+  | (CommonTopSheetProps & { type: "post"; data: PostData & { isOwner?: boolean }})
   | (CommonTopSheetProps & { type: "wifi"; data: WifiData });

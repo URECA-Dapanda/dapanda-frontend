@@ -1,7 +1,7 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import { formatDateDivider } from "@/lib/time";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import { useConfigStore } from "@/stores/useConfigStore";
@@ -11,23 +11,17 @@ import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
 import { groupMessagesByDate } from "@feature/chat/utils/groupMessagesByDate";
 import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
 import { getChatHistory } from "@/feature/chat/api/getChatHistory";
-import { markMessageAsRead } from "@/feature/chat/api/chatRoomRequest";
-import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
-import { isTemporaryMessage, formatMessageDate } from "@/feature/chat/utils/chatUtils";
-import { getMyInfo } from "@/feature/mypage/apis/mypageRequest";
+import { getChatRoomList } from "@/feature/chat/api/chatRoomRequest";
+import { formatMessageDate } from "@/feature/chat/utils/chatUtils";
+import { useKeyboardDetection } from "@/feature/chat/utils/keyboardDetection";
+import { useHeaderHeightDetection } from "@/feature/chat/utils/headerHeightDetection";
+import { useMessageProcessing } from "@/feature/chat/utils/messageProcessing";
+import { useProductCache } from "@/feature/chat/utils/productCache";
+import { useReadStatusHandler } from "@/feature/chat/utils/readStatusHandler";
 
 interface ChatRoomContentProps {
   chatRoomId: number;
   productId: string | null;
-}
-
-interface ProductInfo {
-  productId: number;
-  itemId: number;
-  title: string;
-  pricePer10min: number;
-  memberName: string;
-  memberId: number;
 }
 
 export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomContentProps) {
@@ -35,107 +29,24 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [oldestMessageId, setOldestMessageId] = useState<number | undefined>(undefined);
-  const [product, setProduct] = useState<ProductInfo | null>(null);
   const [currentMemberId, setCurrentMemberId] = useState<number | undefined>(undefined);
-  const [senderProfileImage, setSenderProfileImage] = useState<string | undefined>(undefined);
-  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
-  const [headerHeight, setHeaderHeight] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
-
-  // 중복 요청 방지를 위한 ref들
-  const lastReadMessageId = useRef<number | null>(null);
-  const isExiting = useRef(false);
   const abortRef = useRef<AbortController | null>(null);
-  const lastProductId = useRef<string | null>(null);
+
+  const isKeyboardVisible = useKeyboardDetection();
+  const { product, setProduct, isLoadingProduct, fetchProductWithCache, clearCache } =
+    useProductCache();
+  const headerHeight = useHeaderHeightDetection(
+    headerRef as React.RefObject<HTMLDivElement>,
+    product
+  );
+  const { addSenderIdToMessages, sortMessages } = useMessageProcessing(product);
+  const { handleRealTimeReadStatus, resetExitFlag } = useReadStatusHandler(messages);
 
   const { subscribe, unsubscribe, sendMessage, setActiveChatRoomId } = useWebSocketStore();
   const { setTitle } = useConfigStore();
-
-  // 키보드 감지
-  useEffect(() => {
-    let initialHeight = window.innerHeight;
-
-    const handleResize = () => {
-      const currentHeight = window.innerHeight;
-      const threshold = window.innerWidth <= 768 ? 0.7 : 0.8;
-      const isKeyboard = currentHeight < initialHeight * threshold;
-      setIsKeyboardVisible(isKeyboard);
-    };
-
-    // 초기 높이 설정
-    initialHeight = window.innerHeight;
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  // 헤더 높이 측정
-  useEffect(() => {
-    const measureHeaderHeight = () => {
-      if (headerRef.current) {
-        const height = headerRef.current.offsetHeight;
-        setHeaderHeight(height);
-      }
-    };
-
-    measureHeaderHeight();
-
-    window.addEventListener("resize", measureHeaderHeight);
-
-    return () => {
-      window.removeEventListener("resize", measureHeaderHeight);
-    };
-  }, [product]);
-
-  const addSenderIdToMessages = useCallback((messages: ChatSocketMessage[], memberId: number) => {
-    return messages.map((message) => ({
-      ...message,
-      senderId: message.senderId || (message.isMine ? memberId : undefined),
-    }));
-  }, []);
-
-  const markAsRead = useCallback((messageId: number) => {
-    if (lastReadMessageId.current !== messageId) {
-      markMessageAsRead(messageId)
-        .then(() => {
-          lastReadMessageId.current = messageId;
-        })
-        .catch((error) => {
-          console.error("읽음 처리 실패:", messageId, error);
-        });
-    }
-  }, []);
-
-  const getLatestMessageId = useCallback((messages: ChatSocketMessage[]) => {
-    const realMessages = messages.filter((message) => !isTemporaryMessage(message));
-    if (realMessages.length > 0) {
-      const latestMessage = realMessages[realMessages.length - 1];
-      return Number(latestMessage.chatMessageId);
-    }
-    return null;
-  }, []);
-
-  const sortMessages = useCallback((messages: ChatSocketMessage[]): ChatSocketMessage[] => {
-    return messages.sort((a, b) => {
-      const aIsTemp = isTemporaryMessage(a);
-      const bIsTemp = isTemporaryMessage(b);
-      if (aIsTemp && bIsTemp) {
-        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-      }
-      if (!aIsTemp && !bIsTemp) {
-        return Number(a.chatMessageId) - Number(b.chatMessageId);
-      }
-      if (aIsTemp && !bIsTemp) {
-        return -1;
-      }
-      return 1;
-    });
-  }, []);
 
   useEffect(() => {
     if (!chatRoomId) return;
@@ -148,8 +59,8 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     setHasMore(true);
     setOldestMessageId(undefined);
     setCurrentMemberId(undefined);
-    lastReadMessageId.current = null;
-    isExiting.current = false;
+    clearCache();
+    resetExitFlag();
 
     getChatHistory(chatRoomId)
       .then((response) => {
@@ -169,7 +80,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         if (response.data.length > 0) {
           const latestMessage = response.data[0];
           const latestMessageId = Number(latestMessage.chatMessageId);
-          markAsRead(latestMessageId);
+          handleRealTimeReadStatus(latestMessageId);
         }
       })
       .catch((err) => {
@@ -183,45 +94,30 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
   useEffect(() => {
     if (!productId) {
-      setProduct(null);
-      lastProductId.current = null;
-      return;
-    }
-    if (lastProductId.current === productId) {
-      return;
-    }
+      const fetchChatRoomInfo = async () => {
+        try {
+          const chatRoomInfo = await getChatRoomList(chatRoomId);
+          if (chatRoomInfo.productId) {
+            const productIdStr = chatRoomInfo.productId.toString();
+            await fetchProductWithCache(productIdStr);
+          }
+        } catch (error) {
+          console.error("채팅방 정보에서 상품 정보 가져오기 실패:", error);
+          setProduct(null);
+        }
+      };
 
-    lastProductId.current = productId;
+      fetchChatRoomInfo();
+      return;
+    }
 
     const abortController = new AbortController();
-
-    const fetchProductInfo = async () => {
-      try {
-        const productData = await getMapDetailById(productId);
-
-        if (abortController.signal.aborted) return;
-
-        setProduct({
-          productId: productData.productId,
-          itemId: productData.itemId,
-          title: productData.title,
-          pricePer10min: productData.price,
-          memberName: productData.memberName,
-          memberId: productData.memberId,
-        });
-      } catch (error) {
-        if (!abortController.signal.aborted) {
-          console.error("상품 정보 가져오기 실패:", error);
-        }
-      }
-    };
-
-    fetchProductInfo();
+    fetchProductWithCache(productId, abortController);
 
     return () => {
       abortController.abort();
     };
-  }, [productId]);
+  }, [productId, fetchProductWithCache]);
 
   useEffect(() => {
     if (chatRoomId) {
@@ -232,56 +128,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
       setActiveChatRoomId(null);
     };
   }, [chatRoomId, setActiveChatRoomId]);
-
-  const resetUnreadCountOnExit = useCallback(() => {
-    if (isExiting.current) {
-      return;
-    }
-    isExiting.current = true;
-    const latestMessageId = getLatestMessageId(messages);
-    if (latestMessageId) {
-      markAsRead(latestMessageId);
-    }
-  }, [messages, chatRoomId, getLatestMessageId, markAsRead]);
-
-  useEffect(() => {
-    let hasExecuted = false;
-
-    const handleBeforeUnload = () => {
-      if (!hasExecuted) {
-        hasExecuted = true;
-        resetUnreadCountOnExit();
-      }
-    };
-
-    const handlePopState = () => {
-      if (!hasExecuted) {
-        hasExecuted = true;
-        resetUnreadCountOnExit();
-      }
-    };
-
-    // 이벤트 리스너 등록
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    window.addEventListener("popstate", handlePopState);
-
-    return () => {
-      if (!hasExecuted) {
-        hasExecuted = true;
-        resetUnreadCountOnExit();
-      }
-
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, [resetUnreadCountOnExit]);
-
-  useEffect(() => {
-    const latestMessageId = getLatestMessageId(messages);
-    if (latestMessageId) {
-      markAsRead(latestMessageId);
-    }
-  }, [messages, markAsRead, getLatestMessageId]);
 
   const addMessage = async (text: string) => {
     try {
@@ -316,9 +162,13 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
         const newMessages = [...prev, incomingMessage];
 
-        // 새 메시지가 추가됨
         const { updateUnreadCount } = useWebSocketStore.getState();
         updateUnreadCount();
+
+        if (!incomingMessage.isMine) {
+          const messageId = Number(incomingMessage.chatMessageId);
+          handleRealTimeReadStatus(messageId);
+        }
 
         return newMessages;
       });
@@ -342,7 +192,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     };
   }, [chatRoomId, subscribe, unsubscribe, handleMessage]);
 
-  // 이전 메시지 불러오기
   const loadMoreMessages = useCallback(async () => {
     if (loadingMore || !hasMore || !oldestMessageId) return;
 
@@ -370,7 +219,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     } finally {
       setLoadingMore(false);
     }
-  }, [loadingMore, hasMore, oldestMessageId, chatRoomId, currentMemberId]);
+  }, [loadingMore, hasMore, oldestMessageId, chatRoomId, currentMemberId, addSenderIdToMessages]);
 
   const handleScroll = useCallback(
     (e: React.UIEvent<HTMLDivElement>) => {
@@ -380,7 +229,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         loadMoreMessages();
       }
     },
-    [hasMore, loadingMore, loadMoreMessages]
+    [hasMore, loadingMore, loadMoreMessages, oldestMessageId]
   );
 
   useEffect(() => {
@@ -390,31 +239,18 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const sortedMessages = useMemo(() => sortMessages([...messages]), [messages, sortMessages]);
   const groupedMessages = useMemo(() => groupMessagesByDate(sortedMessages), [sortedMessages]);
 
-  const urlSenderName = searchParams.get("senderName");
-  const urlSenderId = searchParams.get("senderId");
-  const senderName = urlSenderName || product?.memberName || "상대방";
-  const senderId = urlSenderId ? parseInt(urlSenderId, 10) : product?.memberId;
+  const urlMemberName = searchParams.get("memberName");
+  const urlAvatarUrl = searchParams.get("avatarUrl");
 
-  useEffect(() => {
-    if (senderId && !senderProfileImage) {
-      getMyInfo(senderId)
-        .then((userInfo) => {
-          setSenderProfileImage(userInfo.profileImageUrl);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }, [senderId, senderProfileImage]);
+  const senderName = urlMemberName || product?.memberName || "상대방";
 
-  // 헤더 제목 설정
   useEffect(() => {
     setTitle(senderName);
     return () => setTitle("DaPanDa");
   }, [senderName, setTitle]);
 
   return (
-    <div className={`flex flex-col ${isKeyboardVisible ? "chat-keyboard-active" : ""}`}>
+    <div className={`flex flex-col h-screen ${isKeyboardVisible ? "chat-keyboard-active" : ""}`}>
       {product && (
         <div
           ref={headerRef}
@@ -433,41 +269,60 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
           />
         </div>
       )}
+      {!product && productId && isLoadingProduct && (
+        <div
+          className="fixed left-0 right-0 z-40 px-24 pt-12 pb-8 chat-header bg-white w-[100dvw] lg:w-[600px] mx-auto"
+          style={{ top: "calc(env(safe-area-inset-top) + 54px)" }}
+        >
+          <div className="flex border border-primary-200 rounded-20 h-64 px-16 py-8 bg-white">
+            <div className="animate-pulse bg-gray-200 w-40 h-40 rounded-full mr-12"></div>
+            <div className="flex flex-col justify-center flex-1">
+              <div className="animate-pulse bg-gray-200 h-4 rounded mb-2"></div>
+              <div className="animate-pulse bg-gray-200 h-3 rounded w-20"></div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div
-        className="flex-1 overflow-y-auto px-4 pb-36 chat-messages"
+        className="flex-1 overflow-y-auto px-4 chat-messages"
         onScroll={handleScroll}
         style={{
-          paddingTop: isKeyboardVisible
-            ? `${headerHeight + 20}px`
-            : "calc(env(safe-area-inset-top) + 54px + 84px)",
-          paddingBottom: isKeyboardVisible ? "120px" : "36px",
+          paddingTop: isKeyboardVisible ? `${headerHeight + 20}px` : "144px",
+          paddingBottom: isKeyboardVisible ? "120px" : "12px",
+          height: isKeyboardVisible
+            ? `calc(100vh - ${headerHeight + 140}px)`
+            : "calc(100vh - 84px - 120px)",
+
         }}
       >
         {loadingMore && (
           <div className="text-center text-sm text-gray-500 py-4">이전 내역을 불러오는 중...</div>
         )}
 
-        {groupedMessages.map((group) => (
-          <div key={group.date}>
-            <div className="text-center text-xs text-gray-500 my-24">
-              {group.messages.length > 0 && group.messages[0].createdAt
-                ? formatMessageDate(group.messages[0].createdAt)
-                : formatDateDivider()}
+        <div className="flex flex-col justify-end min-h-full pt-36">
+          {groupedMessages.map((group) => (
+            <div key={group.date}>
+              <div className="text-center text-xs text-gray-500 my-24">
+                {group.messages.length > 0 && group.messages[0].createdAt
+                  ? formatMessageDate(group.messages[0].createdAt)
+                  : formatDateDivider()}
+              </div>
+              <div className="space-y-24 pt-8 pb-12">
+                {group.messages.map((message) => (
+                  <ChatBubble
+                    key={message.chatMessageId}
+                    message={message}
+                    avatarUrl={urlAvatarUrl || undefined}
+                    memberId={message.senderId}
+                    currentMemberId={currentMemberId}
+                    productId={product?.productId}
+                  />
+                ))}
+              </div>
             </div>
-            <div className="space-y-24 pb-36">
-              {group.messages.map((message) => (
-                <ChatBubble
-                  key={message.chatMessageId}
-                  message={message}
-                  avatarUrl={senderProfileImage}
-                  memberId={senderId}
-                  currentMemberId={currentMemberId}
-                />
-              ))}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
         <div ref={messagesEndRef} />
       </div>
 

@@ -13,18 +13,21 @@ export default function TossPaymentModal() {
   const rendered = useRef(false);
 
   useEffect(() => {
-    if (isOpen && !rendered.current && charge) {
+    if (!isOpen) {
+      rendered.current = false;
+    } else if (!rendered.current && charge) {
       rendered.current = true;
       renderTossPayment(charge);
       console.log("호출됨: renderTossPayment with charge =", charge);
     }
   }, [isOpen, charge]);
+  
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black-60 w-full lg:w-[600px] h-[100dvh] mx-auto z-102 flex justify-center items-center">
-      <div className="bg-white rounded-lg p-8 w-[600px] max-w-full">
+      <div className="bg-white rounded-lg w-full max-w-[600px] max-h-sheet-safe overflow-y-auto p-8">
         <h2 className="title-md mb-4">결제하기</h2>
 
         {/* Toss 위젯 위치 */}

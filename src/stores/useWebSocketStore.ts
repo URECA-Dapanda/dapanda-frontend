@@ -2,13 +2,13 @@ import { create } from "zustand";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
-// import type { AlarmMessage } from "@type/Alarm";
+import type { AlarmMessage } from "@type/Alarm";
 
 interface WebSocketStore {
   client: Client | null;
   isConnected: boolean;
   subscriptions: Map<number, (message: ChatSocketMessage) => void>;
-  subscriptionObjects: Map<number, { unsubscribe: () => void }>;
+  subscriptionObjects: Map<number | string, { unsubscribe: () => void }>;
   chatListUpdateCallback: (() => void) | null;
   activeChatRoomId: number | null;
   connect: () => Promise<void>;
@@ -19,7 +19,7 @@ interface WebSocketStore {
   setChatListUpdateCallback: (callback: (() => void) | null) => void;
   setActiveChatRoomId: (chatRoomId: number | null) => void;
   updateUnreadCount: () => void;
-  // subscribeToChannel: (channelId: string, onMessage: (message: AlarmMessage) => void) => void;
+  subscribeToChannel: (channelId: string, onMessage: (message: AlarmMessage) => void) => void;
 }
 
 export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
@@ -31,12 +31,19 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
   activeChatRoomId: null,
 
   connect: async () => {
-    const { client } = get();
-    if (client && client.connected) return;
+    const { client, isConnected } = get();
 
-    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_SSL;
-    if (!apiBaseUrl) {
-      throw new Error("NEXT_PUBLIC_API_BASE_SSL 환경변수가 필요함");
+    if (client?.connected || isConnected) {
+      return;
+    }
+
+    let apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_SSL;
+
+    // 로컬 개발 환경에서는 HTTP 사용
+    if (apiBaseUrl && apiBaseUrl.includes("localhost")) {
+      apiBaseUrl = apiBaseUrl.replace("https://", "http://");
+    } else if (!apiBaseUrl) {
+      apiBaseUrl = "http://localhost:8080";
     }
 
     const newClient = new Client({
@@ -77,15 +84,17 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
         set({ isConnected: false, subscriptionObjects: new Map() });
       },
       onStompError: (frame) => {
-        console.error("STOMP 오류:", frame.headers["message"]);
         set({ isConnected: false, subscriptionObjects: new Map() });
 
-        setTimeout(() => {
-          const { client } = get();
-          if (client && !client.connected) {
-            client.activate();
-          }
-        }, 5000);
+        // 재연결 시도는 에러가 심각하지 않을 때만
+        if (frame.headers["message"] !== "Authentication failed") {
+          setTimeout(() => {
+            const { client } = get();
+            if (client && !client.connected) {
+              client.activate();
+            }
+          }, 5000);
+        }
       },
     });
 
@@ -183,8 +192,6 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
       } catch (error) {
         console.error("메시지 전송 중 오류:", error);
       }
-    } else {
-      console.error("WebSocket이 연결되지 않았습니다.");
     }
   },
 
@@ -203,27 +210,29 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     }
   },
 
-  // subscribeToChannel: (channelId, onMessage) => {
-  //   const { client, subscriptionObjects } = get();
+  /**
+   * 타이머 알림(WebSocket) 구독용 - 알람 채널 ex) alarm123
+   */
+  subscribeToChannel: (channelId, onMessage) => {
+    const { client, subscriptionObjects } = get();
 
-  //   if (!client || !client.connected) {
-  //     console.warn("WebSocket이 연결되지 않았습니다. 연결 후 구독하세요.");
-  //     return;
-  //   }
+    if (!client || !client.connected) {
+      return;
+    }
 
-  //   if (subscriptionObjects.has(channelId as any)) return;
+    if (subscriptionObjects.has(channelId)) return;
 
-  //   const subscription = client.subscribe(`/sub/${channelId}`, (message) => {
-  //     try {
-  //       const payload: AlarmMessage = JSON.parse(message.body);
-  //       onMessage(payload);
-  //     } catch (error) {
-  //       console.error("알림 메시지 파싱 실패:", error);
-  //     }
-  //   });
+    const subscription = client.subscribe(`/sub/${channelId}`, (message) => {
+      try {
+        const payload: AlarmMessage = JSON.parse(message.body);
+        onMessage(payload);
+      } catch (error) {
+        console.error("알림 메시지 파싱 실패:", error);
+      }
+    });
 
-  //   const newSubscriptionObjects = new Map(subscriptionObjects);
-  //   newSubscriptionObjects.set(channelId as any, subscription);
-  //   set({ subscriptionObjects: newSubscriptionObjects });
-  // },
+    const newSubscriptionObjects = new Map(subscriptionObjects);
+    newSubscriptionObjects.set(channelId, subscription);
+    set({ subscriptionObjects: newSubscriptionObjects });
+  },
 }));
