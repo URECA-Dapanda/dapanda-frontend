@@ -35,6 +35,7 @@ export default function DataRegistModal({
   const maxAmount = remainingSelling ?? 2;
   const [value, setValue] = useState([Math.min(defaultValues?.amount ?? 1, maxAmount)]);
   const [price, setPrice] = useState(defaultValues?.price?.toString() ?? "");
+  const [isFin, setIsFin] = useState<boolean>(false);
   const [isSplit, setIsSplit] = useState(defaultValues?.isSplitType ?? false);
   const dataAmount = Math.round(value[0] * 10) / 10;
 
@@ -67,7 +68,7 @@ export default function DataRegistModal({
         price: priceInt,
         isSplitType: isSplit,
         onSuccess: () => {
-          toast.success("수정 완료!");
+          setIsFin(true);
           onClose();
           router.refresh();
         },
@@ -78,6 +79,7 @@ export default function DataRegistModal({
         price: priceInt,
         isSplitType: isSplit,
         onSuccess: () => {
+          setIsFin(true);
           setPrice("");
           setValue([1]);
           setIsSplit(false);
@@ -148,7 +150,7 @@ export default function DataRegistModal({
           }) + " w-full mt-6 body-md"
         }
         onClick={handleSubmit}
-        disabled={isRegistPending || isUpdatePending}
+        disabled={isRegistPending || isUpdatePending || isFin}
       >
         {mode === "edit" ? "수정하기" : "등록하기"}
       </button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ButtonComponent } from "@components/common/button";
 import BasicInfoFields from "@/feature/map/components/sections/regist/BasicInfoFields";
@@ -24,6 +24,7 @@ export default function RegisterForm({
   const router = useRouter();
   const searchParams = useSearchParams();
   const isEditMode = searchParams.get("edit") === "true";
+  const [isFin, setIsFin] = useState<boolean>(false);
   const productId = searchParams.get("id");
 
   const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
@@ -80,9 +81,19 @@ export default function RegisterForm({
     submit();
   };
 
+  const handleClose = useCallback(() => {
+    setIsCompleteModalOpen(false);
+    router.replace("/map");
+  }, [router]);
+
+  const handleSuccess = useCallback(() => {
+    setIsFin(true);
+    setIsCompleteModalOpen(true);
+  }, []);
+
   const { submit, isPending } = usePostWifiRegister({
     form,
-    onSuccess: () => setIsCompleteModalOpen(true),
+    onSuccess: handleSuccess,
     onSubmit,
   });
 
@@ -107,17 +118,17 @@ export default function RegisterForm({
         variant={isPending ? "loading" : "secondary"}
         size="4xl"
         onClick={handleSubmit}
-        disabled={isPending}
+        disabled={isPending || isFin}
       >
         {isEditMode ? "수정 완료" : "등록하기"}
       </ButtonComponent>
 
       <RegisterSuccessModal
         isOpen={isCompleteModalOpen}
-        onClose={() => setIsCompleteModalOpen(false)}
+        onClose={handleClose}
         type={type}
         isEdit={isEditMode}
-        onGoHome={() => router.push("/map")}
+        onGoHome={handleClose}
       />
     </div>
   );

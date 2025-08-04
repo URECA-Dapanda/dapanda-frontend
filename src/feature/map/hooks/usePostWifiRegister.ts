@@ -39,19 +39,27 @@ export const usePostWifiRegister = ({ form, onSuccess, onSubmit }: UsePostWifiRe
         startTime: formatToIsoDate(parseHHMMToTime(form.startTime)),
         endTime: formatToIsoDatePlusOneYear(form.endTime),
         address,
-        images: form.images ?? [],
       };
 
       if (isEditMode) {
         if (!productId) throw new Error("수정할 상품 ID가 없습니다.");
+        const updatePayload = {
+          productId: Number(productId),
+          ...payload,
+          imageUrls: form.images ?? [],
+        };
         const throttledPutWifiUpdate = throttle(
-          async () => await putWifiUpdate({ productId: Number(productId), ...payload }),
+          async () => await putWifiUpdate(updatePayload),
           500
         );
         await throttledPutWifiUpdate();
       } else {
+        const registerPayload = {
+          ...payload,
+          images: form.images ?? [],
+        };
         const throttledPostWifiRegister = throttle(
-          async () => await postWifiRegister(payload),
+          async () => await postWifiRegister(registerPayload),
           500
         );
         await throttledPostWifiRegister();
