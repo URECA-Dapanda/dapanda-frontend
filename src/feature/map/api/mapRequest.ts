@@ -96,6 +96,7 @@ export async function getMapList({
       startTime: item.startTime.slice(0, 5),
       endTime: item.endTime.slice(0, 5),
       imageUrl: item.imageUrl ?? "",
+      memberName: item.memberName,
     }));
 
     return {

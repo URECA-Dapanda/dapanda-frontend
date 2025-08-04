@@ -12,15 +12,23 @@ interface MapProfileCardProps {
   sellerId: number;
   productId: string;
   isOwner?: boolean;
+  memberName?: string;
 }
 
-export default function MapProfileCard({ sellerId, productId, isOwner }: MapProfileCardProps) {
+export default function MapProfileCard({
+  sellerId,
+  productId,
+  isOwner,
+  memberName,
+}: MapProfileCardProps) {
   const router = useRouter();
 
   const { data } = useQuery({
     queryFn: () => getMyInfo(sellerId),
     queryKey: ["api/plans/info", sellerId],
   });
+
+  const displayName = memberName || data?.name || "알 수 없음";
 
   const goToProfile = () => {
     router.push(`/map/review?id=${sellerId}&tab=review`);
@@ -38,10 +46,9 @@ export default function MapProfileCard({ sellerId, productId, isOwner }: MapProf
         const response = await axiosInstance.post(`/api/products/${productId}/chat-room`);
         if (response.data.code === 0) {
           const chatRoomId = response.data.data.chatRoomId;
-          const memberName = data?.name || "알 수 없음";
           const params = new URLSearchParams({
             productId: productId.toString(),
-            memberName: memberName,
+            memberName: memberName || "",
             senderId: sellerId.toString(),
           });
           const url = `/chat/${chatRoomId}?${params.toString()}`;
@@ -54,7 +61,7 @@ export default function MapProfileCard({ sellerId, productId, isOwner }: MapProf
         console.error(error);
       }
     },
-    [productId, router, isOwner]
+    [productId, router, isOwner, displayName]
   );
 
   return (
@@ -65,7 +72,7 @@ export default function MapProfileCard({ sellerId, productId, isOwner }: MapProf
       <AvatarIcon size="medium" avatar={data?.profileImageUrl ?? undefined} />
 
       <div className="flex flex-col gap-4 flex-1 px-16">
-        <span className="title-sm text-black">{data?.name ?? "알 수 없음"}</span>
+        <span className="title-sm text-black">{displayName}</span>
         <Rating readOnly value={data?.averageRating} defaultValue={data?.averageRating}>
           <RatingButton className="text-primary" />
         </Rating>
