@@ -28,14 +28,6 @@ export default function CurrentCashCard({ isInterection }: CurrentCashCardProps)
               <span className="title-lg text-gray-900">
                 {data ? formatPriceString(data.cash) : "-원"}
               </span>
-              <Link
-                href={"/mypage/cash-history"}
-                className={`body-xs text-gray-500 hover:underline hover:cursor-pointer ${
-                  isInterection ? "" : "hidden"
-                }`}
-              >
-                내역 보기 &gt;
-              </Link>
             </div>
           </div>
 
