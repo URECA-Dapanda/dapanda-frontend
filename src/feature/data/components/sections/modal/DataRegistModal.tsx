@@ -48,7 +48,7 @@ export default function DataRegistModal({
     mutationFn: register,
   });
 
-  const { mutate: updateMtation, isPending: isUpdatePending } = useMutation({
+  const { mutate: updateMutation, isPending: isUpdatePending } = useMutation({
     mutationKey: ["/api/products/mobile-data"],
     mutationFn: update,
   });
@@ -62,7 +62,7 @@ export default function DataRegistModal({
     }
 
     if (mode === "edit" && defaultValues?.productId) {
-      updateMtation({
+      updateMutation({
         productId: defaultValues.productId,
         changedAmount: dataAmount,
         price: priceInt,

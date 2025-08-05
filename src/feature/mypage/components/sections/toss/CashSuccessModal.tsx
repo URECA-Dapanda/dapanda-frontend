@@ -12,11 +12,7 @@ interface CashSuccessModalProps {
   mode: "charge" | "refund";
 }
 
-export default function CashSuccessModal({
-  isOpen,
-  onClose,
-  mode,
-}: CashSuccessModalProps) {
+export default function CashSuccessModal({ isOpen, onClose, mode }: CashSuccessModalProps) {
   const queryClient = useQueryClient();
   const router = useRouter();
   const setCharge = useChargeStore((state) => state.setCharge);
@@ -33,7 +29,7 @@ export default function CashSuccessModal({
   const actionText = mode === "charge" ? "충전" : "환불";
 
   return (
-    <div className="fixed inset-0 bg-black-60 z-70 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black-60 z-105 flex items-center justify-center">
       <div className="bg-white w-[327px] h-[300px] rounded-20 p-6 text-center shadow-lg flex flex-col justify-center items-center gap-40">
         <CheckCircle2 size={64} className="text-green-500" />
         <h2 className="body-lg">

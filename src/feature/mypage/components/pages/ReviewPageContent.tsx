@@ -7,8 +7,8 @@ export default function ReviewPageContent() {
     <div
       className={`
         reviewPageContainer w-full h-full flex flex-col gap-24
-        pt-[calc(60px+env(safe-area-inset-top,0px))]
-        pb-[calc(56px+env(safe-area-inset-bottom,0px))]
+        pt-[calc(54px+env(safe-area-inset-top,0px))]
+        pb-[calc(55px+env(safe-area-inset-bottom,0px))]
       `}
     >
       <div className="px-24">
