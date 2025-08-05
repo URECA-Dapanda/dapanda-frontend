@@ -2,43 +2,48 @@ import { useCallback } from "react";
 import { postMobileDataProduct } from "@feature/data/api/dataRequest";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
+import { throttle } from "lodash";
 
 export const useRegisterDataProduct = () => {
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
-    const register = useCallback(
-        async ({
-            dataAmount,
-            price,
-            isSplitType,
-            onSuccess,
-        }: {
-            dataAmount: number;
-            price: number;
-            isSplitType: boolean;
-            onSuccess?: () => void;
-        }) => {
-            if (isNaN(price) || price <= 0) {
-                toast.error("유효한 가격을 입력해주세요.");
-                return;
-            }
+  const register = useCallback(
+    async ({
+      dataAmount,
+      price,
+      isSplitType,
+      onSuccess,
+    }: {
+      dataAmount: number;
+      price: number;
+      isSplitType: boolean;
+      onSuccess?: () => void;
+    }) => {
+      if (isNaN(price) || price <= 0) {
+        toast.error("유효한 가격을 입력해주세요.");
+        return;
+      }
 
-            try {
-                console.log("등록 요청 파라미터", { price, dataAmount, isSplitType });
-                const res = await postMobileDataProduct(dataAmount, price, isSplitType);
+      try {
+        const throttledPostMobileDataProduct = throttle(
+          async () => await postMobileDataProduct(dataAmount, price, isSplitType),
+          500
+        );
+        console.log("등록 요청 파라미터", { price, dataAmount, isSplitType });
+        const res = await throttledPostMobileDataProduct();
 
-                if (res.code === 0) {
-                    toast.success("등록 완료!");
-                    queryClient.invalidateQueries({ queryKey: ["dataItems"] });
-                    onSuccess?.();
-                }
-            } catch (e) {
-                console.error(e);
-                toast.error("등록 중 오류가 발생했습니다.");
-            }
-        },
-        [queryClient]
-    );
+        if (res.code === 0) {
+          toast.success("등록 완료!");
+          queryClient.invalidateQueries({ queryKey: ["dataItems"] });
+          onSuccess?.();
+        }
+      } catch (e) {
+        console.error(e);
+        toast.error("등록 중 오류가 발생했습니다.");
+      }
+    },
+    [queryClient]
+  );
 
-    return { register };
+  return { register };
 };

@@ -40,12 +40,23 @@ export default function CashHistoryContent() {
       </Suspense>
       <MonthPicker value={currentDate} onChange={handleDate} />
       <Suspense>
-        <div ref={parentRef} className="overflow-auto h-[50dvh] px-24 space-y-6 w-full">
+        <div
+          ref={parentRef}
+          className="overflow-auto h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-108px-219px-48px-32px)] px-24 space-y-6 w-full"
+        >
           {pages.map((page, i) => (
             <div key={i} className="space-y-6">
-              {Object.entries(page.items).map(
-                ([date, items]) =>
-                  items && <CashHistoryDateBox key={`${date}-${i}`} date={date} dataList={items} />
+              {Object.entries(page.items).length !== 0 ? (
+                Object.entries(page.items).map(
+                  ([date, items]) =>
+                    items && (
+                      <CashHistoryDateBox key={`${date}-${i}`} date={date} dataList={items} />
+                    )
+                )
+              ) : (
+                <div className="h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-108px-219px-48px-32px)] items-center flex justify-center">
+                  <p className="text-center body-md text-gray-500">내역이 없습니다.</p>
+                </div>
               )}
             </div>
           ))}

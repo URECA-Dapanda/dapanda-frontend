@@ -32,7 +32,7 @@ export async function getPurchaseHistoryList({
 }
 
 export async function getSaleHistoryList({
-  size = 2,
+  size = 5,
   pageParam,
   productState,
   id,

@@ -24,7 +24,6 @@ export default function MapDetailPage() {
   const { postId } = useParams<{ postId: string }>();
   const { setInfo } = usePaymentStore();
 
-  const [topSheetExpanded, setTopSheetExpanded] = useState(false);
   const { data, isLoading, isError } = useMapDetailData(postId);
 
   const { recentPrice, avgPrice } = useWifiPriceRecommendation();
@@ -89,15 +88,13 @@ export default function MapDetailPage() {
           isOwner,
         }}
         onImageClick={() => {}}
-        onExpandChange={setTopSheetExpanded}
       />
 
       {/* 전체 컨텐츠 영역 - TopSheet 높이만큼 패딩 */}
       <div
         className={clsx(
-          "w-full transition-all duration-300",
+          "w-full transition-all duration-300 pt-12",
           // TopSheet 높이만큼 상단 패딩
-          topSheetExpanded ? "pt-[480px]" : "pt-[300px]",
           // 하단 safe area + 여유 공간
           "pb-[calc(env(safe-area-inset-bottom,0px)+72px)]"
         )}
