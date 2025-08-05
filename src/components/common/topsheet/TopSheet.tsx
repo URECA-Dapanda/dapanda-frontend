@@ -60,7 +60,7 @@ export default function TopSheet({
     <>
       <motion.div
         className={clsx(
-          "h-sa w-full lg:w-[600px] ",
+          "w-full lg:w-[600px] ",
           "bg-secondary shadow-default rounded-b-30 overflow-hidden"
         )}
         animate={{ y: expanded ? 0 : 0 }}
@@ -68,7 +68,7 @@ export default function TopSheet({
         transition={{ type: "spring", damping: 20, stiffness: 200 }}
       >
         {!data.isOwner && (
-          <div className="absolute top-12 right-12">
+          <div className="absolute top-12 right-12 z-10">
             <ReportTriggerButton targetName={data.memberName} />
           </div>
         )}
