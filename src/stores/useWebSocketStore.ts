@@ -186,6 +186,10 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     const { client } = get();
     if (client?.connected) {
       try {
+        if (!message || typeof message !== "string") {
+          return;
+        }
+
         client.publish({
           destination: `/pub/${chatRoomId}`,
           body: message,
@@ -193,6 +197,8 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
       } catch (e) {
         console.error("채팅 메시지 전송 실패:", e);
       }
+    } else {
+      console.warn("WebSocket이 연결되지 않았습니다.");
     }
   },
 
