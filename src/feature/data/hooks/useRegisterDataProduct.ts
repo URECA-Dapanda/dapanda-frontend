@@ -34,7 +34,7 @@ export const useRegisterDataProduct = () => {
                 }
             } catch (e) {
                 console.error(e);
-                toast.error("등록 중 오류가 발생했습니다.");
+                toast.error((e as Error).message);
             }
         },
         [queryClient]

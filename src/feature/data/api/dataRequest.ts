@@ -53,13 +53,19 @@ export const postMobileDataProduct = async (
   price: number,
   isSplitType: boolean
 ) => {
-  const res = await axios.post("/api/products/mobile-data", {
-    price,
-    dataAmount,
-    isSplitType,
-  });
+  try {
+    const res = await axios.post("/api/products/mobile-data", {
+      price,
+      dataAmount,
+      isSplitType,
+    });
 
-  return res.data;
+    return res.data;
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message ?? "데이터 상품 등록에 실패했습니다.";
+    throw new Error(message);
+  }
 };
 
 export const getPriceRecommendation = async () => {
