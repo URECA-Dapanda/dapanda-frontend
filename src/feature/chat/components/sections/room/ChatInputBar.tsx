@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import InputComponent from "@/components/common/input/InputComponent";
 import { ButtonComponent } from "@/components/common/button";
 
@@ -13,7 +13,7 @@ export default function ChatInputBar({ onSend }: ChatInputBarProps) {
   const [isSending, setIsSending] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSendClick = async () => {
+  const handleSendClick = useCallback(async () => {
     const trimmedMessage = message.trim();
     if (!trimmedMessage || isSending) return;
 
@@ -21,37 +21,49 @@ export default function ChatInputBar({ onSend }: ChatInputBarProps) {
 
     try {
       await onSend(trimmedMessage);
-      setMessage("");
+
       const textarea = textareaRef.current;
       if (textarea) {
         textarea.style.height = "auto";
+        textarea.focus();
       }
     } catch (error) {
       console.error("메시지 전송 실패:", error);
     } finally {
       setIsSending(false);
     }
-  };
+  }, [message, isSending, onSend]);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSendClick();
-    }
-  };
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        e.stopPropagation();
+        const currentMessage = message.trim();
+        if (currentMessage && !isSending) {
+          setMessage("");
+          handleSendClick();
+        }
+      }
+    },
+    [message, isSending, handleSendClick]
+  );
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setMessage(newValue);
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+      const newValue = e.target.value;
+      setMessage(newValue);
 
-    const textarea = textareaRef.current;
-    if (textarea && e.target instanceof HTMLTextAreaElement) {
-      textarea.style.height = "auto";
-      const scrollHeight = textarea.scrollHeight;
-      const maxHeight = 120;
-      textarea.style.height = `${Math.min(scrollHeight, maxHeight)}px`;
-    }
-  };
+      const textarea = textareaRef.current;
+      if (textarea && e.target instanceof HTMLTextAreaElement) {
+        textarea.style.height = "auto";
+        const scrollHeight = textarea.scrollHeight;
+        const maxHeight = 120;
+        textarea.style.height = `${Math.min(scrollHeight, maxHeight)}px`;
+      }
+    },
+    []
+  );
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-white w-[100dvw] lg:w-[600px] mx-auto safe-area-bottom">

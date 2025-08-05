@@ -18,6 +18,8 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
         "disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none",
         className
       )}
+      autoComplete="off"
+      spellCheck="false"
       {...props}
     />
   );

@@ -116,6 +116,8 @@ const InputComponent = forwardRef<HTMLTextAreaElement | HTMLInputElement, InputC
           required={required}
           rows={rows}
           maxLength={maxLength}
+          autoComplete="off"
+          spellCheck="false"
         />
       );
     }
@@ -134,6 +136,8 @@ const InputComponent = forwardRef<HTMLTextAreaElement | HTMLInputElement, InputC
         className={cn(inputRadius, inputSize, color, className)}
         maxLength={maxLength}
         inputMode={inputMode}
+        autoComplete="off"
+        spellCheck="false"
       />
     );
   }
