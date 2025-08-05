@@ -36,7 +36,9 @@ export default function SoldoutTabContent() {
           <HistoryCard data={item} key={item ? item.productId : index} size="lg" />
         )}
         mode="button"
-        height="63dvh"
+        height={
+          "calc( 100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 108px - 102px - 8px - 12px - 44px - 24px )"
+        }
       />
     </div>
   );

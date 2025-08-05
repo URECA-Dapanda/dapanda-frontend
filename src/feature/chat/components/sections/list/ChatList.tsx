@@ -78,7 +78,7 @@ export default function ChatList() {
           updatedAt: item.lastMessageAt,
           productId: item.productId,
           senderName: item.senderName,
-          avatarUrl: item.senderProfileImageUrl || "c",
+          avatarUrl: item.senderProfileImageUrl,
           senderId: item.senderId,
           lastMessage: item.lastMessage || "",
           unreadCount: item.unreadCount || 0,

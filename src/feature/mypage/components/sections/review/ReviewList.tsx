@@ -45,12 +45,17 @@ export default function ReviewList({ type }: { type?: "receive" | "post" }) {
           parentRef={parentRef}
           rowVirtualizer={rowVirtualizer}
           items={flatItems}
-          height="400px"
+          height="calc( 100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 108px - 152px - 24px - 36px - 24px )"
           isFetchingNextPage={isFetchingNextPage}
           hasNextPage={hasNextPage}
           fetchNextPage={fetchNextPage}
           renderItem={(index, item) => (
-            <ReviewItem data={item} key={item ? item.reviewId : index} handleClick={handleClick} type={type} />
+            <ReviewItem
+              data={item}
+              key={item ? item.reviewId : index}
+              handleClick={handleClick}
+              type={type}
+            />
           )}
           mode="button"
         />

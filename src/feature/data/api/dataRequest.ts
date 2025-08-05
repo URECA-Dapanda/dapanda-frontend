@@ -5,6 +5,7 @@ import {
   RawDataItem,
   DataDetailResponse,
   mapRawToDataType,
+  ResponsePost,
 } from "@feature/data/types/dataType";
 
 export async function getDataList({
@@ -52,14 +53,13 @@ export const postMobileDataProduct = async (
   dataAmount: number,
   price: number,
   isSplitType: boolean
-) => {
+): Promise<ResponsePost> => {
   const res = await axios.post("/api/products/mobile-data", {
     price,
     dataAmount,
     isSplitType,
   });
-
-  return res.data;
+    return res.data;
 };
 
 export const getPriceRecommendation = async () => {
@@ -79,7 +79,7 @@ export async function putMobileDataProduct(data: {
   changedAmount: number;
   price: number;
   isSplitType: boolean;
-}) {
+}): Promise<ResponsePost> {
   const response = await axios.put("/api/products/mobile-data", data);
   return response.data;
 }

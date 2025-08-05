@@ -6,7 +6,7 @@ import AvatarIcon from "@components/common/AvatarIcon";
 import { usePresignedUpload } from "@hooks/usePresignedUpload";
 import { updateProfileImage } from "@feature/mypage/apis/mypageRequest";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { showErrorToast, showSuccessToast } from "@lib/toast";
 
 interface AvatarUploaderProps {
     avatarUrl?: string;
@@ -28,13 +28,13 @@ export default function AvatarUploader({ avatarUrl }: AvatarUploaderProps) {
         onSuccess: (_, newAvatarUrl) => {
             queryClient.invalidateQueries({ queryKey: ["/api/members/info"] });
             setCurrentAvatarUrl(newAvatarUrl);
-            toast.success("프로필 이미지가 변경되었습니다!");
+            showSuccessToast("프로필 이미지가 변경되었습니다!");
         },
         onError: (e: unknown) => {
             if (e instanceof Error) {
-                toast.error(e.message);
+                showErrorToast(e.message);
             } else {
-                toast.error("프로필 이미지 변경 실패");
+                showErrorToast("프로필 이미지 변경 실패");
             }
         },
     });
@@ -49,7 +49,7 @@ export default function AvatarUploader({ avatarUrl }: AvatarUploaderProps) {
                 mutate(urls[0]);
             }
         } catch {
-            toast.error("업로드 중 오류가 발생했습니다");
+            showErrorToast("업로드 중 오류가 발생했습니다");
         }
     };
 
