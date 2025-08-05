@@ -11,8 +11,8 @@ import SelectCharge from "@feature/mypage/components/sections/profile/SelectChar
 import ChargeInfoCard from "@feature/mypage/components/sections/profile/ChargeInfoCard";
 import TossPaymentModal from "@feature/mypage/components/sections/toss/TossPaymentModal";
 import CashSuccessModal from "@feature/mypage/components/sections/toss/CashSuccessModal";
-import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
+import { showErrorToast, showSuccessToast } from "@lib/toast";
 import { useMutation } from "@tanstack/react-query";
 import { throttle } from "lodash";
 
@@ -32,12 +32,12 @@ export default function CashActionContent({ mode, buttonText }: CashActionConten
     mutationKey: ["/api/payments/refund"],
     onSuccess: (res) => {
       setIsFin(true);
-      toast.success(`${res.data.data.refundPrice.toLocaleString()}원 환불 완료`);
+      showSuccessToast(`${res.data.data.refundPrice.toLocaleString()}원 환불 완료`);
       open("refund");
       setChargeAmount("");
     },
     onError: () => {
-      toast.error("환불에 실패했습니다.");
+      showErrorToast("환불에 실패했습니다.");
     },
   });
 
@@ -49,7 +49,7 @@ export default function CashActionContent({ mode, buttonText }: CashActionConten
 
   const handleClick = useCallback(async () => {
     if (!chargeAmount || chargeAmount === "0") {
-      toast.error(mode === "charge" ? "충전 금액을 입력해주세요." : "환불 금액을 입력해주세요.");
+      showErrorToast(mode === "charge" ? "충전 금액을 입력해주세요." : "환불 금액을 입력해주세요.");
       return;
     }
 

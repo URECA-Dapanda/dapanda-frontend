@@ -3,7 +3,7 @@ import VirtualizedInfiniteList from "@/components/common/list/VirtualizedInfinit
 import MapItemCard from "@/feature/map/components/sections/product/MapItemCard";
 import { useMapInfiniteQuery } from "@/feature/map/hooks/useMapInfiniteQuery";
 import type { MapType } from "@/feature/map/types/mapType";
-import { toast } from "react-toastify";
+import { showErrorToast } from "@lib/toast";
 
 export default function MapListVirtual() {
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
@@ -13,7 +13,7 @@ export default function MapListVirtual() {
       ({ coords }) => {
         setCoords({ lat: coords.latitude, lng: coords.longitude });
       },
-      () => toast.error("위치 정보를 가져올 수 없습니다.")
+      () => showErrorToast("위치 정보를 가져올 수 없습니다.")
     );
   }, []);
 

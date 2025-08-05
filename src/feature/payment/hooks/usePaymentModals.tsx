@@ -6,8 +6,8 @@ import {
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 import { postDefaultTrade, postWifiTrade } from "@feature/payment/api/paymentRequest";
 import { postScrapTrade } from "@feature/payment/api/paymentRequest";
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { showErrorToast } from "@lib/toast";
 
 export default function UsePaymentModals() {
   const router = useRouter();
@@ -100,15 +100,15 @@ export default function UsePaymentModals() {
               const code = error.response?.data?.code;
 
               if (code === 4004) {
-                toast.error("보유 캐시가 부족합니다. 캐시를 충전해주세요!");
+                showErrorToast("보유 캐시가 부족합니다. 캐시를 충전해주세요!");
                 setTimeout(() => {
                   router.push("/mypage/charge");
                 }, 1500);
               } else {
-                toast.error("결제 실패: " + (error.response?.data?.message ?? "알 수 없는 에러"));
+                showErrorToast("결제 실패: " + (error.response?.data?.message ?? "알 수 없는 에러"));
               }
             } else {
-              toast.error("결제 실패: " + (e as Error).message);
+              showErrorToast("결제 실패: " + (e as Error).message);
             }
           }
         }}

@@ -19,7 +19,7 @@ export default function OverLimitAlert({
   if (!isSplitType && remainAmount > remainingBuying) {
     return (
       <p className="body-xxs text-error">
-        ⚠️ 구매 가능 용량을 초과했습니다. 최대 {formatDataSize(remainingBuying)}까지 구매할 수 있어요.
+        ⚠️ 최대 구매 가능 용량을 초과했습니다. 최대 {formatDataSize(remainingBuying)}까지 구매할 수 있어요.
       </p>
     );
   }
@@ -28,7 +28,7 @@ export default function OverLimitAlert({
   if (isSplitType && selectedAmount >= remainingBuying) {
     return (
       <p className="body-xxs text-error text-left mt-8">
-        ⚠️ 구매 가능 용량을 초과했습니다. 최대 {formatDataSize(remainingBuying)}까지 선택할 수 있어요.
+        ⚠️ 이번 달 최대 구매 가능 용량에 도달했습니다. 최대 {formatDataSize(remainingBuying)}까지 선택할 수 있어요.
       </p>
     );
   }

@@ -5,9 +5,9 @@ import { ButtonComponent } from "@components/common/button";
 import type { ProductItemProps } from "@/feature/data/types/dataType";
 import type { MapType } from "@/feature/map/types/mapType";
 import axiosInstance from "@/lib/axios";
-import { toast } from "react-toastify";
 import Image from "next/image";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
+import { showErrorToast } from "@lib/toast";
 import { useMapStore } from "@feature/map/stores/useMapStore";
 
 export default function MapItemCardContent({
@@ -53,10 +53,10 @@ export default function MapItemCardContent({
             router.push(url);
           }
         } else {
-          toast.error(response.data.message || "채팅방 생성에 실패했습니다.");
+          showErrorToast(response.data.message || "채팅방 생성에 실패했습니다.");
         }
       } catch (error) {
-        toast.error("채팅방 생성 중 오류가 발생했습니다.");
+        showErrorToast("채팅방 생성 중 오류가 발생했습니다.");
         console.error(error);
       }
     },
