@@ -21,11 +21,20 @@ export default function ChatInputBar({ onSend }: ChatInputBarProps) {
 
     try {
       await onSend(trimmedMessage);
+      setMessage("");
 
       const textarea = textareaRef.current;
       if (textarea) {
         textarea.style.height = "auto";
-        textarea.focus();
+        setTimeout(() => {
+          textarea.focus();
+        }, 10);
+        setTimeout(() => {
+          textarea.focus();
+        }, 50);
+        setTimeout(() => {
+          textarea.focus();
+        }, 100);
       }
     } catch (error) {
       console.error("메시지 전송 실패:", error);
@@ -33,6 +42,15 @@ export default function ChatInputBar({ onSend }: ChatInputBarProps) {
       setIsSending(false);
     }
   }, [message, isSending, onSend]);
+
+  const handleButtonClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      handleSendClick();
+    },
+    [handleSendClick]
+  );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -78,13 +96,15 @@ export default function ChatInputBar({ onSend }: ChatInputBarProps) {
           radius="lg"
           required
           rows={1}
-          className="flex-1 min-h-[36px] max-h-[120px] resize-none border-primary-700 bg-primary-50 text-gray-700 body-sm"
+          className="flex-1 min-h-[36px] max-h-[120px] resize-none border-primary-700 bg-primary-50 text-gray-700 body-sm py-6"
         />
         <ButtonComponent
           size="xl"
-          onClick={handleSendClick}
+          onClick={handleButtonClick}
           disabled={isSending || !message.trim()}
           className="bg-primary text-white font-semibold body-md w-52"
+          type="button"
+          style={{ touchAction: "manipulation" }}
         >
           {isSending ? "전송중..." : "전송"}
         </ButtonComponent>
