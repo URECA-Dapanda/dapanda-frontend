@@ -1,5 +1,6 @@
 import axiosInstance from "@/lib/axios";
 import { MapType } from "@/feature/map/types/mapType";
+import { WifiRegisterRequest, WifiUpdateRequest } from "../types/registerForm";
 
 interface FetchMapListParams {
   cursorId?: number;
@@ -27,30 +28,6 @@ interface WifiItemResponse {
   endTime: string;
 }
 
-interface WifiRegisterRequest {
-  price: number;
-  title: string;
-  content: string;
-  latitude: number;
-  longitude: number;
-  startTime: string;
-  endTime: string;
-  address: string;
-  images: string[];
-}
-
-export interface WifiUpdateRequest {
-  productId: number;
-  price: number;
-  title: string;
-  content: string;
-  latitude: number;
-  longitude: number;
-  address: string;
-  startTime: string;
-  endTime: string;
-  images: string[];
-}
 
 interface ApiResponse {
   code: number;

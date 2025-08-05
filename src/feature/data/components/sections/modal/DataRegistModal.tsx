@@ -12,6 +12,7 @@ import { useMonthlyDataLimit } from "@feature/data/hooks/useMonthlyDataLimit";
 import { Switch } from "@ui/switch";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 
 interface DataRegistModalProps {
   onClose: () => void;
@@ -34,12 +35,23 @@ export default function DataRegistModal({
   const maxAmount = remainingSelling ?? 2;
   const [value, setValue] = useState([Math.min(defaultValues?.amount ?? 1, maxAmount)]);
   const [price, setPrice] = useState(defaultValues?.price?.toString() ?? "");
+  const [isFin, setIsFin] = useState<boolean>(false);
   const [isSplit, setIsSplit] = useState(defaultValues?.isSplitType ?? false);
   const dataAmount = Math.round(value[0] * 10) / 10;
 
   const { recentPrice, avgPrice } = usePriceRecommendation();
   const { register } = useRegisterDataProduct();
   const { update } = useUpdateDataProduct();
+
+  const { mutate: registMutation, isPending: isRegistPending } = useMutation({
+    mutationKey: ["/api/products/mobile-data"],
+    mutationFn: register,
+  });
+
+  const { mutate: updateMutation, isPending: isUpdatePending } = useMutation({
+    mutationKey: ["/api/products/mobile-data"],
+    mutationFn: update,
+  });
 
   const handleSubmit = () => {
     const priceInt = parseInt(price, 10);
@@ -50,23 +62,24 @@ export default function DataRegistModal({
     }
 
     if (mode === "edit" && defaultValues?.productId) {
-      update({
+      updateMutation({
         productId: defaultValues.productId,
         changedAmount: dataAmount,
         price: priceInt,
         isSplitType: isSplit,
         onSuccess: () => {
-          toast.success("수정 완료!");
+          setIsFin(true);
           onClose();
           router.refresh();
         },
       });
     } else {
-      register({
+      registMutation({
         dataAmount,
         price: priceInt,
         isSplitType: isSplit,
         onSuccess: () => {
+          setIsFin(true);
           setPrice("");
           setValue([1]);
           setIsSplit(false);
@@ -130,8 +143,14 @@ export default function DataRegistModal({
         />
       </div>
       <button
-        className={buttonVariants({ variant: "secondary", size: "4xl" }) + " w-full mt-6"}
+        className={
+          buttonVariants({
+            variant: isRegistPending || isUpdatePending ? "loading" : "secondary",
+            size: "4xl",
+          }) + " w-full mt-6 body-md"
+        }
         onClick={handleSubmit}
+        disabled={isRegistPending || isUpdatePending || isFin}
       >
         {mode === "edit" ? "수정하기" : "등록하기"}
       </button>

@@ -13,33 +13,29 @@ export function useAuth() {
   const { setProfile } = useProfileStore();
 
   useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        const userData = await getUserInfo();
-
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then(async (data) => {
+        setIsLogin(data.isLogin);
+        return getUserInfo();
+      })
+      .then((userData) => {
         if (userData && userData.data) {
           setUser(userData.data);
-          setIsLogin(true);
           setProfile(userData.data);
           if (!isConnected) {
             connect().catch((error) => {
               console.error("웹소켓 연결 실패:", error);
             });
           }
-        } else {
-          setIsLogin(false);
         }
-      } catch (error) {
-        console.error("인증 상태 확인 실패:", error);
-        setIsLogin(false);
-      }
-    };
-
-    checkAuthStatus();
-  }, [connect, isConnected, setProfile]);
+      })
+      .catch(() => setIsLogin(false));
+  }, []);
 
   const logout = async () => {
     await logOutRequest();
+    setUser(null);
     router.replace("/");
   };
 

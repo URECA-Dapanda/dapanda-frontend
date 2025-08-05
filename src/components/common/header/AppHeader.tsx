@@ -13,6 +13,7 @@ import { chatMenuOptions } from "@/components/common/dropdown/dropdownConfig";
 import ReportModal from "@/components/common/modal/ReportModal";
 import { useState } from "react";
 import NotificationIcon from "@components/common/NotificationIcon";
+import Link from "next/link";
 
 interface AppHeaderProps {
   id?: string;
@@ -76,7 +77,9 @@ function AppHeaderContent({ id, children }: PropsWithChildren<AppHeaderProps>) {
       case "normal":
         return (
           <>
-            <Image src={"/dpd-main-logo.svg"} alt="DPD Logo" width={86} height={40} />
+            <Link href={"/data"}>
+              <Image src={"/dpd-main-logo.svg"} alt="DPD Logo" width={86} height={40} />
+            </Link>
             {defaultItems}
             {children}
           </>

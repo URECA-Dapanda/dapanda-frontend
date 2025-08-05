@@ -131,7 +131,7 @@ export function useMapLocationSelector(type: "wifi" | "hotspot") {
     const query = `lat=${lat}&lng=${lng}&address=${encodeURIComponent(roadAddress)}`;
     const editParams = edit === "true" && productId ? `&edit=true&id=${productId}` : "";
 
-    router.push(`${baseUrl}?${query}${editParams}`);
+    router.replace(`${baseUrl}?${query}${editParams}`);
   };
 
   const initialLocation = useMemo(
