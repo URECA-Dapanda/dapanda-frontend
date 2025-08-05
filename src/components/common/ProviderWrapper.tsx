@@ -19,10 +19,10 @@ export default function ProviderWrapper({ children }: PropsWithChildren) {
   const userId = user?.memberId;
   const setChatList = useChatStore((state) => state.setChatList);
 
-  useAuth();
   useWebSocketConnection();
-  useSubscribeTimerOnce(userId);
   useSubscribeTimer(userId, isLoading);
+  useSubscribeTimerOnce(userId);
+
   useInitializeTimerFromServer();
 
   useEffect(() => {

@@ -12,12 +12,12 @@ import DeletePostModal from "@/feature/data/components/sections/modal/DeletePost
 import { parseHHMMToTime, isWithinOperatingHours } from "@/lib/time";
 import { useWifiPriceRecommendation } from "@/feature/map/hooks/useWifiPriceRecommendation";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
-import { toast } from "react-toastify";
 import { getDurationMinutes } from "@/lib/time";
 
 import clsx from "clsx";
 import { buildWifiPaymentInfo } from "@feature/payment/hooks/useWifiPurchaseBuilder";
 import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
+import { showErrorToast, showInfoToast } from "@lib/toast";
 
 export default function MapDetailPage() {
   const router = useRouter();
@@ -58,18 +58,18 @@ export default function MapDetailPage() {
 
   const onBuy = () => {
     if (isOwner) {
-      toast.info("내 게시글입니다");
+      showInfoToast("내 게시글입니다");
       return;
     }
 
     if (!isWithinOperatingHours(startTime, endTime, minTime, maxTime)) {
-      toast.warning("선택한 시간이 매장의 운영시간 범위를 벗어납니다.");
+      showErrorToast("선택한 시간이 매장의 운영시간 범위를 벗어납니다.");
       return;
     }
 
     const duration = getDurationMinutes(startTime, endTime);
     if (duration % 10 !== 0) {
-      toast.warning("이용 시간은 10분 단위로 선택해야 합니다.");
+      showErrorToast("이용 시간은 10분 단위로 선택해야 합니다.");
       return;
     }
 

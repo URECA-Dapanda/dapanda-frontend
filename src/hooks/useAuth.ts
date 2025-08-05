@@ -23,6 +23,7 @@ export function useAuth() {
         if (userData && userData.data) {
           setUser(userData.data);
           setProfile(userData.data);
+
           if (!isConnected) {
             connect().catch((error) => {
               console.error("웹소켓 연결 실패:", error);

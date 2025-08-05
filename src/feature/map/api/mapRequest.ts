@@ -70,8 +70,8 @@ export async function getMapList({
       location: `${item.latitude},${item.longitude}`,
       score: item.averageRate,
       type: "와이파이",
-      startTime: item.startTime.slice(0, 5),
-      endTime: item.endTime.slice(0, 5),
+      startTime: item.startTime,
+      endTime: item.endTime,
       imageUrl: item.imageUrl ?? "",
       memberName: item.memberName,
     }));

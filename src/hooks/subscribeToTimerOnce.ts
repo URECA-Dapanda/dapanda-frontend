@@ -12,7 +12,7 @@ export const useSubscribeTimerOnce = (userId?: number) => {
   useEffect(() => {
     if (!userId) return;
 
-    const channelId = `alarm${userId}`;
+    const channelId = `alarm/${userId}`;
 
     subscribeToChannel(channelId, (msg: AlarmMessage) => {
       try {
