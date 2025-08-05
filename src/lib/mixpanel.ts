@@ -17,7 +17,7 @@ export const initMixpanel = () => {
   isInitialized = true;
 };
 
-export const trackEvent = (eventName: string, properties?: Record<string, any>) => {
+export const trackEvent = (eventName: string, properties?: Record<string, unknown>) => {
   if (!isInitialized) {
     console.warn("❗️Mixpanel is not initialized yet. Event skipped:", eventName);
     return;
