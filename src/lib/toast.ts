@@ -1,6 +1,16 @@
-import { toast, Id, ToastContent } from "react-toastify";
+import { toast, Id, ToastContent, ToastOptions, ToastPosition } from "react-toastify";
 
-const defaultOption = {
+interface DefaultOptionType {
+  position: ToastPosition;
+  autoClose: number;
+  hideProgressBar: true;
+  closeOnClick: true;
+  pauseOnHover: false;
+  draggable: false;
+  closeButton: false;
+}
+
+const defaultOption: DefaultOptionType = {
   position: "top-center",
   autoClose: 3000,
   hideProgressBar: true,
@@ -10,19 +20,26 @@ const defaultOption = {
   closeButton: false,
 };
 
+interface OptionType extends ToastOptions {
+  toastClassName: string;
+  bodyClassName: string;
+}
+
 let lastToastId: Id | null = null;
+toast.error("hellp", { containerId: "a" });
 
 const showOnce = (
-  fn: (content: ToastContent, options?: any) => Id,
+  fn: (content: ToastContent, options?: ToastOptions) => Id,
   msg: string,
   toastClassName: string
 ) => {
   if (lastToastId) toast.dismiss(lastToastId);
-  lastToastId = fn(msg, {
+  const customOption: OptionType = {
     ...defaultOption,
-    toastClassName,
+    toastClassName: toastClassName,
     bodyClassName: "text-sm font-medium",
-  });
+  };
+  lastToastId = fn(msg, customOption);
 };
 
 export const showErrorToast = (msg: string) => showOnce(toast.error, msg, "toast-error");
