@@ -19,6 +19,8 @@ import { useTopSheetImageStyle } from "./useTopSheetImageStyle";
 import ReportTriggerButton from "../button/ReportTriggerButton";
 import clsx from "clsx";
 
+const MotionImage = motion(Image);
+
 export default function TopSheet({
   type,
   data,
@@ -92,12 +94,17 @@ export default function TopSheet({
           }}
         >
           {type === "post" && (
-            <motion.img
+            <MotionImage
               src={data.imageUrl || "/default-wifi-image.png"}
               alt="대표 이미지"
               className="top-56 absolute rounded-12"
               style={{ pointerEvents: "none" }}
               animate={imageStyle}
+              width={240}
+              height={240}
+              priority={true}
+              placeholder="blur"
+              blurDataURL={data.imageUrl || "/default-wifi-image.png"}
               transition={{ type: "spring", damping: 20, stiffness: 200 }}
             />
           )}
