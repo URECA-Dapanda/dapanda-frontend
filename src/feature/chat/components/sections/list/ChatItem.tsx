@@ -42,7 +42,7 @@ export default function ChatItem({
     <div className="flex justify-between items-start gap-12 py-12 rounded-8 hover:bg-gray-50 transition-colors">
       <div className="flex items-center gap-12 flex-1">
         <button onClick={handleAvatarClick} className="cursor-pointer">
-          <AvatarIcon avatar={avatarUrl} size="medium" />
+          <AvatarIcon avatar={avatarUrl === null ? undefined : avatarUrl} size="medium" />
         </button>
         <Link
           href={`/chat/${chatRoomId}?productId=${productId}&memberName=${encodeURIComponent(
