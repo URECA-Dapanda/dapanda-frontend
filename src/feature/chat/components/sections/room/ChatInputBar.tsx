@@ -96,13 +96,15 @@ export default function ChatInputBar({ onSend }: ChatInputBarProps) {
           radius="lg"
           required
           rows={1}
-          className="flex-1 min-h-[36px] max-h-[120px] resize-none border-primary-700 bg-primary-50 text-gray-700 body-sm py-6"
+          className="flex-1 min-h-[36px] max-h-[120px] resize-none border-primary-700 bg-primary-50 text-gray-700 body-xs py-6"
         />
         <ButtonComponent
           size="xl"
           onClick={handleButtonClick}
           disabled={isSending || !message.trim()}
-          className="bg-primary text-white font-semibold body-md w-52"
+          className={` body-md w-52 ${
+            isSending ? "bg-gray-400 text-white opacity-60" : "bg-primary text-white"
+          }`}
           type="button"
           style={{ touchAction: "manipulation" }}
         >
