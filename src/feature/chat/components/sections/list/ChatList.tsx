@@ -10,6 +10,7 @@ import { ApiChatRoom, ChatSocketMessage } from "@feature/chat/types/chatType";
 import { ButtonComponent } from "@/components/common/button/ButtonComponent";
 import { formatRelativeTime } from "@/lib/time";
 import type { ChatRoomPreview } from "@feature/chat/stores/useChatStore";
+import EmptyState from "@/components/common/empty/EmptyState";
 
 const productCache = new Map<
   number,
@@ -173,25 +174,32 @@ export default function ChatList() {
 
       <div className="overflow-y-auto overflow-x-hidden scrollbar-track-transparent h-sheet-safe">
         <div className="py-24 mb-56">
-          {chatList.map((chat, index) => (
-            <div key={chat.chatRoomId}>
-              <ChatItem
-                chatRoomId={String(chat.chatRoomId)}
-                name={chat.name}
-                updatedAt={formatRelativeTime(chat.updatedAt)}
-                productId={chat.productId}
-                place={chat.title}
-                pricePer10min={chat.price}
-                avatarUrl={chat.avatarUrl}
-                senderId={chat.senderId}
-                lastMessage={chat.lastMessage}
-                unreadCount={chat.unreadCount}
-              />
-              {index < chatList.length - 1 && (
-                <div className="border-b border-gray-200 mx-24"></div>
-              )}
-            </div>
-          ))}
+          {chatList.length === 0 ? (
+            <EmptyState
+              message="참여중인 채팅방이 없어요"
+              subMessage="새로운 거래를 시작해보세요"
+            />
+          ) : (
+            chatList.map((chat, index) => (
+              <div key={chat.chatRoomId}>
+                <ChatItem
+                  chatRoomId={String(chat.chatRoomId)}
+                  name={chat.name}
+                  updatedAt={formatRelativeTime(chat.updatedAt)}
+                  productId={chat.productId}
+                  place={chat.title}
+                  pricePer10min={chat.price}
+                  avatarUrl={chat.avatarUrl}
+                  senderId={chat.senderId}
+                  lastMessage={chat.lastMessage}
+                  unreadCount={chat.unreadCount}
+                />
+                {index < chatList.length - 1 && (
+                  <div className="border-b border-gray-200 mx-24"></div>
+                )}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
