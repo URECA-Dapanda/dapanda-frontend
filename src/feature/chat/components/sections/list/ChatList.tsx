@@ -23,9 +23,11 @@ export default function ChatList() {
   const setChatListUpdateCallback = useWebSocketStore((state) => state.setChatListUpdateCallback);
   const { subscribe, unsubscribe } = useWebSocketStore();
   const [selectedFilter, setSelectedFilter] = useState<"ALL" | "BUYER" | "SELLER">("ALL");
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchChatRooms = useCallback(async () => {
     try {
+      setIsLoading(true);
       const apiList = await getChatRoomList(10, selectedFilter);
 
       // 메시지가 있는 채팅방만 필터링
@@ -89,6 +91,8 @@ export default function ChatList() {
       setChatList(chatList);
     } catch (e) {
       console.error("채팅방 목록 가져오기 실패:", e);
+    } finally {
+      setIsLoading(false);
     }
   }, [selectedFilter, setChatList]);
 
@@ -174,7 +178,12 @@ export default function ChatList() {
 
       <div className="overflow-y-auto overflow-x-hidden scrollbar-track-transparent h-sheet-safe">
         <div className="py-24 mb-56">
-          {chatList.length === 0 ? (
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-40">
+              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+              <p className="text-gray-500 mt-16">채팅방 목록을 불러오는 중...</p>
+            </div>
+          ) : chatList.length === 0 ? (
             <EmptyState
               message="참여중인 채팅방이 없어요"
               subMessage="새로운 거래를 시작해보세요"
