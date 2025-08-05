@@ -26,6 +26,8 @@ export interface PurchaseHistoryType extends HistoryType {
   title: string;
   createdAt: string;
   productImageUrl: string;
+  reviewed: boolean;
+  timeAmount: number;
 }
 
 export interface CashHistoryType {
