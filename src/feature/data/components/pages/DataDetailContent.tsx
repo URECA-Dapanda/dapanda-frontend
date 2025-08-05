@@ -70,14 +70,8 @@ export default function DataDetailContent() {
         onImageClick={() => {}}
         onExpandChange={setTopSheetExpanded}
       />
-      <div
-        className={clsx(
-          "space-y-12 px-24 transition-all duration-300",
-          topSheetExpanded ? "pt-[480px]" : "pt-[300px]"
-        )}
-      />
 
-      <div className="space-y-28">
+      <div className="space-y-28 pt-16">
         <div className="flex items-center justify-between mx-24 mb-16">
           <div className="title-md">판매자</div>
           {isOwner && data.productState === "ACTIVE" && (
