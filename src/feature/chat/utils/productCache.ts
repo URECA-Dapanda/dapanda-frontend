@@ -8,6 +8,7 @@ interface ProductInfo {
   pricePer10min: number;
   memberName: string;
   memberId: number;
+  imageUrls?: string[];
 }
 
 export const useProductCache = () => {
@@ -24,6 +25,7 @@ export const useProductCache = () => {
       price: number;
       memberName: string;
       memberId: number;
+      imageUrls?: string[];
     }): ProductInfo => ({
       productId: productData.productId,
       itemId: productData.itemId,
@@ -31,6 +33,7 @@ export const useProductCache = () => {
       pricePer10min: productData.price,
       memberName: productData.memberName,
       memberId: productData.memberId,
+      imageUrls: productData.imageUrls,
     }),
     []
   );

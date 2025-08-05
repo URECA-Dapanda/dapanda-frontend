@@ -271,6 +271,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
             title={product.title}
             pricePer10min={product.pricePer10min}
             productId={product.productId}
+            imageUrls={product.imageUrls}
           />
         </div>
       )}

@@ -7,17 +7,17 @@ interface ChatPostCardProps {
   title: string;
   pricePer10min?: number;
   productId?: number;
+  imageUrls?: string[];
 }
 
-export default function ChatPostCard({ title, pricePer10min, productId }: ChatPostCardProps) {
-  const match = title.match(/(\d+)GB/);
-  const imageFile = match ? `/${match[1]}.png` : "/dpd-main-logo.png";
+export default function ChatPostCard({ title, pricePer10min, productId, imageUrls }: ChatPostCardProps) {
+  const imageFile = imageUrls && imageUrls.length > 0 ? imageUrls[0] : "/dpd-main-logo.png";
 
   const cardContent = (
     <div className="flex border border-primary-200 rounded-20 h-64 px-16 py-8 bg-white cursor-pointer hover:bg-gray-50 transition-colors">
       <Image
         src={imageFile}
-        alt={`${match?.[1]}GB 이미지`}
+        alt={`${title} 이미지`}
         width={40}
         height={40}
         className="object-contain mr-12 shrink-0"

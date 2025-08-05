@@ -42,7 +42,7 @@ export default function ChatList() {
 
       const productDetailsMap: Record<
         number,
-        { title: string; price: number; memberId: number; memberName: string }
+        { title: string; price: number; memberId: number; memberName: string; imageUrls?: string[] }
       > = {};
 
       for (const productId of uniqueProductIds) {
