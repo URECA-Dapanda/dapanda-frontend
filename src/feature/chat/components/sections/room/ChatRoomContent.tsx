@@ -298,6 +298,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
           height: isKeyboardVisible
             ? `calc(100vh - ${headerHeight + 140}px)`
             : "calc(100vh - 84px - 120px)",
+
         }}
       >
         {loadingMore && (
