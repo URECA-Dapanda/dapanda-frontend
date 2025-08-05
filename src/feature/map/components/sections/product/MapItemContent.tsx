@@ -15,7 +15,7 @@ export default function MapItemCardContent({
 }: ProductItemProps<MapType> & { disableUseButton?: boolean }) {
   const router = useRouter();
   const { setMapCenter } = useMapStore();
-
+  console.log(startTime, endTime);
   const [lat, lng] = location.split(",").map(Number);
 
   const handleCardClick = () => {
@@ -99,7 +99,7 @@ export default function MapItemCardContent({
                   <span className="body-xs text-black ml-4">({score})</span>
                 </div>
                 <span className="caption-lg text-gray-500">
-                  {startTime}~{endTime}
+                  {startTime?.slice?.(11, 16) ?? "--:--"}~{endTime?.slice?.(11, 16) ?? "--:--"}
                 </span>
               </div>
             </div>
