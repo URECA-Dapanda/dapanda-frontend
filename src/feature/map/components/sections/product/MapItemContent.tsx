@@ -7,7 +7,7 @@ import type { MapType } from "@/feature/map/types/mapType";
 import axiosInstance from "@/lib/axios";
 import Image from "next/image";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
-import { showErrorToast, showInfoToast } from "@lib/toast";
+import { showErrorToast } from "@lib/toast";
 import { useMapStore } from "@feature/map/stores/useMapStore";
 
 export default function MapItemCardContent({
