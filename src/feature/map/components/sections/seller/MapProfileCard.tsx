@@ -38,7 +38,7 @@ export default function MapProfileCard({
     async (e: React.MouseEvent) => {
       e.stopPropagation();
       if (isOwner) {
-        toast.info("내 게시글입니다");
+        toast.info("본인 게시글은 생성 안됩니다.");
         return;
       }
 

@@ -41,10 +41,15 @@ export default function MapItemCardContent({
             router.push(url);
           }
         } else {
-          toast.error(response.data.message || "채팅방 생성에 실패했습니다.");
+          toast.info(response.data.message || "채팅방 생성에 실패했습니다.");
         }
       } catch (error) {
-        toast.error("채팅방 생성 중 오류가 발생했습니다.");
+        const errorResponse = error as { response?: { data?: { message?: string } } };
+        if (errorResponse.response?.data?.message) {
+          toast.info("본인 게시글은 생성 안됩니다.");
+        } else {
+          toast.info("채팅방 생성 중 오류가 발생했습니다.");
+        }
         console.error(error);
       }
     },
