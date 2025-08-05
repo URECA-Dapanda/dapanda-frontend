@@ -89,7 +89,7 @@ export default function DataRegistModal({
         />
         {value[0] >= maxAmount && (
           <p className="body-xxs text-error mt-20">
-            이번 달 최대 판매 가능량을 모두 사용하셨습니다.
+            이번 달 최대 판매 가능량을 등록하시겠습니까?
           </p>
         )}
       </FlatCard>
