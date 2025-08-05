@@ -17,7 +17,6 @@ import {
 import { useDataDetail } from "@feature/data/hooks/useDataDetail";
 import { usePriceRecommendation } from "@feature/data/hooks/usePriceRecommendation";
 import { useMonthlyDataLimit } from "@feature/data/hooks/useMonthlyDataLimit";
-import clsx from "clsx";
 import DeletePostModal from "@feature/data/components/sections/modal/DeletePostModal";
 import DataRegistModal from "@feature/data/components/sections/modal/DataRegistModal";
 import { BadgeComponent } from "@components/common/badge";
@@ -33,7 +32,6 @@ export default function DataDetailContent() {
   const isOwner = data?.myProduct;
   const renderModals = UsePaymentModals();
   const [selectedAmount, setSelectedAmount] = useState(0);
-  const [topSheetExpanded, setTopSheetExpanded] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { recentPrice, avgPrice } = usePriceRecommendation();
   const handleDeleteModalOpen = useCallback(() => setIsOpen(true), []);
@@ -68,7 +66,6 @@ export default function DataDetailContent() {
           isOwner,
         }}
         onImageClick={() => {}}
-        onExpandChange={setTopSheetExpanded}
       />
 
       <div className="space-y-28 pt-16">
