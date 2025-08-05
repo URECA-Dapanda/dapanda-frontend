@@ -3,7 +3,7 @@ import axios from "@/lib/axios";
 
 export async function getReviewList({
   pageParam,
-  size = 2,
+  size = 5,
   id,
   type,
 }: {

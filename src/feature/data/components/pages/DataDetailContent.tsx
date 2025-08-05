@@ -17,7 +17,6 @@ import {
 import { useDataDetail } from "@feature/data/hooks/useDataDetail";
 import { usePriceRecommendation } from "@feature/data/hooks/usePriceRecommendation";
 import { useMonthlyDataLimit } from "@feature/data/hooks/useMonthlyDataLimit";
-import clsx from "clsx";
 import DeletePostModal from "@feature/data/components/sections/modal/DeletePostModal";
 import DataRegistModal from "@feature/data/components/sections/modal/DataRegistModal";
 import { BadgeComponent } from "@components/common/badge";
@@ -33,7 +32,6 @@ export default function DataDetailContent() {
   const isOwner = data?.myProduct;
   const renderModals = UsePaymentModals();
   const [selectedAmount, setSelectedAmount] = useState(0);
-  const [topSheetExpanded, setTopSheetExpanded] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { recentPrice, avgPrice } = usePriceRecommendation();
   const handleDeleteModalOpen = useCallback(() => setIsOpen(true), []);
@@ -68,16 +66,9 @@ export default function DataDetailContent() {
           isOwner,
         }}
         onImageClick={() => {}}
-        onExpandChange={setTopSheetExpanded}
-      />
-      <div
-        className={clsx(
-          "space-y-12 px-24 transition-all duration-300",
-          topSheetExpanded ? "pt-[480px]" : "pt-[300px]"
-        )}
       />
 
-      <div className="space-y-28">
+      <div className="space-y-28 pt-16">
         <div className="flex items-center justify-between mx-24 mb-16">
           <div className="title-md">판매자</div>
           {isOwner && data.productState === "ACTIVE" && (
@@ -120,7 +111,7 @@ export default function DataDetailContent() {
                 <span className="font-semibold ml-4">{formatDataSize(remainingBuying ?? 0)}</span>
               </BadgeComponent>
               <BadgeComponent variant="largeOutlined" size="xl">
-                이번 달 판매 가능:{" "}
+                이번 달 등록 가능:{" "}
                 <span className="font-semibold ml-4">{formatDataSize(remainingSelling ?? 0)}</span>
               </BadgeComponent>
             </div>

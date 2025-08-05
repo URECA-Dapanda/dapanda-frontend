@@ -24,6 +24,7 @@ export default function LandingPageContent() {
             alt="DPD Logo"
             width={350}
             height={0}
+            priority={true}
             className="mx-auto mb-[-32px]"
             style={{ filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.1))" }}
           />
