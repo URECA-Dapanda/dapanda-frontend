@@ -9,6 +9,7 @@ interface WebSocketStore {
   isConnected: boolean;
   subscriptions: Map<number, (message: ChatSocketMessage) => void>;
   subscriptionObjects: Map<number | string, { unsubscribe: () => void }>;
+  alarmSubscriptions: Map<string, (message: AlarmMessage) => void>;
   chatListUpdateCallback: (() => void) | null;
   activeChatRoomId: number | null;
   connect: () => Promise<void>;
@@ -27,66 +28,88 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
   isConnected: false,
   subscriptions: new Map(),
   subscriptionObjects: new Map(),
+  alarmSubscriptions: new Map(),
   chatListUpdateCallback: null,
   activeChatRoomId: null,
 
   connect: async () => {
     const { client, isConnected } = get();
-
-    if (client?.connected || isConnected) {
-      return;
-    }
+    if (client?.connected || isConnected) return;
 
     let apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_SSL;
-
-    // 로컬 개발 환경에서는 HTTP 사용
-    if (apiBaseUrl && apiBaseUrl.includes("localhost")) {
+    if (apiBaseUrl?.includes("localhost")) {
       apiBaseUrl = apiBaseUrl.replace("https://", "http://");
     } else if (!apiBaseUrl) {
       apiBaseUrl = "http://localhost:8080";
     }
 
     const newClient = new Client({
-      webSocketFactory: () => {
-        const sock = new SockJS(`${apiBaseUrl}/conn`, null, {
+      webSocketFactory: () =>
+        new SockJS(`${apiBaseUrl}/conn`, null, {
           transports: ["websocket", "xhr-streaming", "xhr-polling"],
           timeout: 30000,
-        });
-
-        return sock;
-      },
+        }),
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
+
       onConnect: () => {
         set({ isConnected: true });
 
-        // 기존 구독들을 다시 등록
-        const { subscriptions, subscriptionObjects } = get();
-        const newSubscriptionObjects = new Map(subscriptionObjects);
+        const { subscriptions, subscriptionObjects, alarmSubscriptions } = get();
 
+        const mergedSubscriptions = new Map(subscriptionObjects);
+
+        // 채팅 채널 재구독
         subscriptions.forEach((callback, chatRoomId) => {
-          // 이미 구독 객체가 있으면 건너뛰기
-          if (newSubscriptionObjects.has(chatRoomId)) {
-            return;
+          if (!mergedSubscriptions.has(chatRoomId)) {
+            const subscription = newClient.subscribe(`/sub/${chatRoomId}`, (message) => {
+              const payload: ChatSocketMessage = JSON.parse(message.body);
+              callback(payload);
+            });
+            mergedSubscriptions.set(chatRoomId, subscription);
           }
-
-          const subscription = newClient.subscribe(`/sub/${chatRoomId}`, (message) => {
-            const payload: ChatSocketMessage = JSON.parse(message.body);
-            callback(payload);
-          });
-          newSubscriptionObjects.set(chatRoomId, subscription);
         });
 
-        set({ subscriptionObjects: newSubscriptionObjects });
+        // 알람 채널 재구독
+        alarmSubscriptions.forEach((callback, channelId) => {
+          // ❗구독 객체가 있든 없든 무조건 다시 subscribe (기존 구독 해제 후 재등록)
+          const oldSub = mergedSubscriptions.get(channelId);
+          if (oldSub) {
+            oldSub.unsubscribe(); // 기존 구독 해제
+          }
+
+          const subscription = newClient.subscribe(`/sub/${channelId}`, (message) => {
+            try {
+              const raw = JSON.parse(message.body);
+
+              const payload: AlarmMessage = {
+                tradeId: raw.tradeId,
+                memberId: raw.memberId,
+                startTime: raw.startTime,
+                endTime: raw.endTime,
+                eventState: raw.eventState,
+              };
+
+              callback(payload);
+            } catch (e) {
+              console.error("🚨 WebSocket 메시지 파싱 오류:", e, message.body);
+            }
+          });
+
+          mergedSubscriptions.set(channelId, subscription);
+        });
+
+        set({ subscriptionObjects: mergedSubscriptions });
       },
+
       onDisconnect: () => {
         set({ isConnected: false, subscriptionObjects: new Map() });
       },
+
       onStompError: (frame) => {
         set({ isConnected: false, subscriptionObjects: new Map() });
 
-        // 재연결 시도는 에러가 심각하지 않을 때만
         if (frame.headers["message"] !== "Authentication failed") {
           setTimeout(() => {
             const { client } = get();
@@ -105,53 +128,33 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
   disconnect: () => {
     const { client, subscriptionObjects } = get();
     if (client) {
-      subscriptionObjects.forEach((subscription) => {
-        subscription.unsubscribe();
-      });
-
+      subscriptionObjects.forEach((subscription) => subscription.unsubscribe());
       client.deactivate();
-      set({
-        client: null,
-        isConnected: false,
-        subscriptions: new Map(),
-        subscriptionObjects: new Map(),
-      });
     }
+
+    set({
+      client: null,
+      isConnected: false,
+      subscriptions: new Map(),
+      subscriptionObjects: new Map(),
+    });
   },
 
-  subscribe: (chatRoomId: number, onMessage: (message: ChatSocketMessage) => void) => {
+  subscribe: (chatRoomId, onMessage) => {
     const { client, subscriptions, subscriptionObjects } = get();
 
-    // 이미 구독 중인지 확인 (구독 정보와 구독 객체 모두 확인)
-    if (subscriptions.has(chatRoomId) && subscriptionObjects.has(chatRoomId)) {
-      const newSubscriptions = new Map(subscriptions);
-      newSubscriptions.set(chatRoomId, onMessage);
-      set({ subscriptions: newSubscriptions });
-      return;
-    }
-
-    // WebSocket이 연결되지 않은 경우 구독 정보만 저장
-    if (!client || !client.connected) {
-      const newSubscriptions = new Map(subscriptions);
-      newSubscriptions.set(chatRoomId, onMessage);
-      set({ subscriptions: newSubscriptions });
-      return;
-    }
-
-    // 구독 정보 저장
     const newSubscriptions = new Map(subscriptions);
     newSubscriptions.set(chatRoomId, onMessage);
     set({ subscriptions: newSubscriptions });
 
-    // STOMP 구독 생성
-    const subscriptionPath = `/sub/${chatRoomId}`;
+    if (!client || !client.connected || subscriptionObjects.has(chatRoomId)) return;
 
-    const subscription = client.subscribe(subscriptionPath, (message) => {
+    const subscription = client.subscribe(`/sub/${chatRoomId}`, (message) => {
       try {
         const payload: ChatSocketMessage = JSON.parse(message.body);
         onMessage(payload);
-      } catch (error) {
-        console.error("메시지 파싱 오류:", error);
+      } catch (e) {
+        console.error("채팅 메시지 파싱 오류:", e);
       }
     });
 
@@ -160,10 +163,9 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     set({ subscriptionObjects: newSubscriptionObjects });
   },
 
-  unsubscribe: (chatRoomId: number) => {
+  unsubscribe: (chatRoomId) => {
     const { subscriptions, subscriptionObjects } = get();
 
-    // 구독 정보와 구독 객체 모두 정리
     const newSubscriptions = new Map(subscriptions);
     newSubscriptions.delete(chatRoomId);
 
@@ -180,59 +182,76 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     });
   },
 
-  sendMessage: (chatRoomId: number, message: string) => {
+  sendMessage: (chatRoomId, message) => {
     const { client } = get();
-
-    if (client && client.connected) {
+    if (client?.connected) {
       try {
         client.publish({
           destination: `/pub/${chatRoomId}`,
           body: message,
         });
-      } catch (error) {
-        console.error("메시지 전송 중 오류:", error);
+      } catch (e) {
+        console.error("채팅 메시지 전송 실패:", e);
       }
     }
   },
 
-  setChatListUpdateCallback: (callback: (() => void) | null) => {
+  setChatListUpdateCallback: (callback) => {
     set({ chatListUpdateCallback: callback });
   },
 
-  setActiveChatRoomId: (chatRoomId: number | null) => {
+  setActiveChatRoomId: (chatRoomId) => {
     set({ activeChatRoomId: chatRoomId });
   },
 
   updateUnreadCount: () => {
     const { chatListUpdateCallback } = get();
-    if (chatListUpdateCallback) {
-      chatListUpdateCallback();
-    }
+    chatListUpdateCallback?.();
   },
 
-  /**
-   * 타이머 알림(WebSocket) 구독용 - 알람 채널 ex) alarm123
-   */
   subscribeToChannel: (channelId, onMessage) => {
-    const { client, subscriptionObjects } = get();
+    const { client, subscriptionObjects, alarmSubscriptions } = get();
+    const fullPath = `/sub/${channelId}`;
 
-    if (!client || !client.connected) {
+    const newSubscriptionObjects = new Map(subscriptionObjects);
+    const newAlarmSubscriptions = new Map(alarmSubscriptions);
+
+    const oldSub = newSubscriptionObjects.get(channelId);
+    if (oldSub) {
+      oldSub.unsubscribe();
+      newSubscriptionObjects.delete(channelId);
+    }
+
+    if (!client?.connected) {
+      newAlarmSubscriptions.set(channelId, onMessage);
+      set({ alarmSubscriptions: newAlarmSubscriptions });
       return;
     }
 
-    if (subscriptionObjects.has(channelId)) return;
-
-    const subscription = client.subscribe(`/sub/${channelId}`, (message) => {
+    const subscription = client.subscribe(fullPath, (message) => {
       try {
-        const payload: AlarmMessage = JSON.parse(message.body);
+        const raw = JSON.parse(message.body);
+
+        const payload: AlarmMessage = {
+          tradeId: raw.tradeId,
+          memberId: raw.memberId,
+          startTime: raw.startTime,
+          endTime: raw.endTime,
+          eventState: raw.eventState,
+        };
+
         onMessage(payload);
-      } catch (error) {
-        console.error("알림 메시지 파싱 실패:", error);
+      } catch (e) {
+        console.error("🚨 WebSocket 메시지 파싱 오류:", e, message.body);
       }
     });
 
-    const newSubscriptionObjects = new Map(subscriptionObjects);
     newSubscriptionObjects.set(channelId, subscription);
-    set({ subscriptionObjects: newSubscriptionObjects });
+    newAlarmSubscriptions.set(channelId, onMessage);
+
+    set({
+      subscriptionObjects: newSubscriptionObjects,
+      alarmSubscriptions: newAlarmSubscriptions,
+    });
   },
 }));

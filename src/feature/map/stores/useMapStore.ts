@@ -12,9 +12,10 @@ interface MapState {
   setSelectedStore: (store: MapType | null) => void;
   isManualPan: boolean;
   setIsManualPan: (v: boolean) => void;
+  setMapCenter: (lat: number, lng: number) => void;
 }
 
-export const useMapStore = create<MapState>((set) => ({
+export const useMapStore = create<MapState>((set, get) => ({
   map: null,
   storeList: [],
   myPosition: null,
@@ -25,4 +26,21 @@ export const useMapStore = create<MapState>((set) => ({
   setSelectedStore: (store) => set({ selectedStore: store }),
   isManualPan: false,
   setIsManualPan: (v) => set({ isManualPan: v }),
+  setMapCenter: (lat, lng) => {
+    const map = get().map;
+    if (map) {
+      const currentZoom = map.getZoom();
+      const originalCenter = new naver.maps.LatLng(lat, lng);
+
+      const projection = map.getProjection();
+      if (!projection) return;
+
+      const point = projection.fromCoordToPoint(originalCenter);
+      const offsetY = 100 / Math.pow(2, currentZoom);
+      const adjustedPoint = new naver.maps.Point(point.x, point.y + offsetY);
+      const adjustedLatLng = projection.fromPointToCoord(adjustedPoint);
+
+      map.panTo(adjustedLatLng);
+    }
+  },
 }));

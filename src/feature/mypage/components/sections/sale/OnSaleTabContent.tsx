@@ -43,7 +43,11 @@ export default function OnSaleTabContent() {
           <HistoryCard data={item} key={item ? item.productId : index} />
         )}
         mode="button"
-        height={id ? "53dvh" : "63dvh"}
+        height={
+          id
+            ? "calc( 100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 108px - 152px - 24px - 36px - 30px - 12px )"
+            : "calc( 100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 108px - 102px - 8px - 12px - 44px - 24px )"
+        }
       />
     </div>
   );

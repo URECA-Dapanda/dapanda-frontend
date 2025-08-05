@@ -2,9 +2,10 @@ import { useCallback } from "react";
 import { postMobileDataProduct } from "@feature/data/api/dataRequest";
 import { useQueryClient } from "@tanstack/react-query";
 import { showErrorToast, showSuccessToast } from "@lib/toast";
+import { throttle } from "lodash";
 
 export const useRegisterDataProduct = () => {
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
     const register = useCallback(
         async ({
@@ -23,9 +24,13 @@ export const useRegisterDataProduct = () => {
                 return;
             }
 
-            try {
-                console.log("등록 요청 파라미터", { price, dataAmount, isSplitType });
-                const res = await postMobileDataProduct(dataAmount, price, isSplitType);
+      try {
+        const throttledPostMobileDataProduct = throttle(
+          async () => await postMobileDataProduct(dataAmount, price, isSplitType),
+          500
+        );
+        console.log("등록 요청 파라미터", { price, dataAmount, isSplitType });
+        const res = await throttledPostMobileDataProduct();
 
                 if (res.code === 0) {
                     showSuccessToast("등록 완료!");
@@ -40,5 +45,5 @@ export const useRegisterDataProduct = () => {
         [queryClient]
     );
 
-    return { register };
+  return { register };
 };
