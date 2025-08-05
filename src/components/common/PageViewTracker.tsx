@@ -2,15 +2,25 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { trackEvent } from "@/lib/mixpanel";
+import { trackEvent, isInitialized } from "@/lib/mixpanel";
 
 export default function PageViewTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
-    trackEvent("Page View", {
-      path: pathname,
-    });
+    if (!isInitialized) {
+      const timer = setTimeout(() => {
+        if (isInitialized) {
+          trackEvent("Page View", { path: pathname });
+        } else {
+          console.warn("PageView skipped: Mixpanel still not initialized.");
+        }
+      }, 300);
+
+      return () => clearTimeout(timer);
+    } else {
+      trackEvent("Page View", { path: pathname });
+    }
   }, [pathname]);
 
   return null;
