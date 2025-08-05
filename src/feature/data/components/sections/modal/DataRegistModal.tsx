@@ -44,12 +44,12 @@ export default function DataRegistModal({
   const { update } = useUpdateDataProduct();
 
   const { mutate: registMutation, isPending: isRegistPending } = useMutation({
-    mutationKey: [""],
+    mutationKey: ["/api/products/mobile-data"],
     mutationFn: register,
   });
 
   const { mutate: updateMtation, isPending: isUpdatePending } = useMutation({
-    mutationKey: [""],
+    mutationKey: ["/api/products/mobile-data"],
     mutationFn: update,
   });
 
