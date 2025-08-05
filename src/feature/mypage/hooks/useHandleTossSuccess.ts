@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { confirmPayment, verifyPaymentAmount } from "@/feature/mypage/apis/payment";
-import { toast } from "react-toastify";
+import { showErrorToast } from "@lib/toast";
 
 export const useHandleTossSuccess = () => {
   const searchParams = useSearchParams();
@@ -16,7 +16,7 @@ export const useHandleTossSuccess = () => {
 
     const handle = async () => {
       if (!paymentKey || !orderId || !amount) {
-        toast.error("잘못된 결제 정보입니다.");
+        showErrorToast("잘못된 결제 정보입니다.");
         router.replace("/mypage?error=invalid");
         return;
       }
@@ -24,20 +24,20 @@ export const useHandleTossSuccess = () => {
       try {
         const verifyRes = await verifyPaymentAmount(orderId, amount);
         if (verifyRes.data.code !== 0) {
-          toast.error("결제 금액 검증 실패");
+          showErrorToast("결제 금액 검증 실패");
           router.replace("/mypage?error=verify");
           return;
         }
 
         const confirmRes = await confirmPayment(paymentKey, orderId, amount);
         if (confirmRes.data.code !== 0) {
-          toast.error("결제 승인 실패");
+          showErrorToast("결제 승인 실패");
           router.replace("/mypage?error=confirm");
           return;
         }
         router.replace("/mypage?payment=success");
       } catch {
-        toast.error("결제 처리 중 오류 발생");
+        showErrorToast("결제 처리 중 오류 발생");
         router.replace("/mypage?error=unknown");
       }
     };

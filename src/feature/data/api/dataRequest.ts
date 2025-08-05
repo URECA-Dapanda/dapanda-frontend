@@ -59,8 +59,7 @@ export const postMobileDataProduct = async (
     dataAmount,
     isSplitType,
   });
-
-  return res.data;
+    return res.data;
 };
 
 export const getPriceRecommendation = async () => {

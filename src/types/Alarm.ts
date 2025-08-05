@@ -3,4 +3,5 @@ export interface AlarmMessage {
   memberId: number;
   startTime: string;
   endTime: string;
+  eventState?: "START" | "END";
 }
