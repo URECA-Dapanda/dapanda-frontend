@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { postMobileDataProduct } from "@feature/data/api/dataRequest";
-import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
+import { showErrorToast, showSuccessToast } from "@lib/toast";
 
 export const useRegisterDataProduct = () => {
     const queryClient = useQueryClient();
@@ -19,7 +19,7 @@ export const useRegisterDataProduct = () => {
             onSuccess?: () => void;
         }) => {
             if (isNaN(price) || price <= 0) {
-                toast.error("유효한 가격을 입력해주세요.");
+                showErrorToast("유효한 가격을 입력해주세요.");
                 return;
             }
 
@@ -28,13 +28,13 @@ export const useRegisterDataProduct = () => {
                 const res = await postMobileDataProduct(dataAmount, price, isSplitType);
 
                 if (res.code === 0) {
-                    toast.success("등록 완료!");
+                    showSuccessToast("등록 완료!");
                     queryClient.invalidateQueries({ queryKey: ["dataItems"] });
                     onSuccess?.();
                 }
             } catch (e) {
                 console.error(e);
-                toast.error((e as Error).message);
+                showErrorToast((e as Error).message);
             }
         },
         [queryClient]

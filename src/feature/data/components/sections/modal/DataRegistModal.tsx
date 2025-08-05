@@ -10,8 +10,8 @@ import { useRegisterDataProduct } from "@feature/data/hooks/useRegisterDataProdu
 import { useUpdateDataProduct } from "@feature/data/hooks/useUpdateDataProduct";
 import { useMonthlyDataLimit } from "@feature/data/hooks/useMonthlyDataLimit";
 import { Switch } from "@ui/switch";
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { showErrorToast, showSuccessToast } from "@lib/toast";
 
 interface DataRegistModalProps {
   onClose: () => void;
@@ -45,7 +45,7 @@ export default function DataRegistModal({
     const priceInt = parseInt(price, 10);
 
     if (isNaN(priceInt) || priceInt <= 0) {
-      toast.error("유효한 가격을 입력해주세요.");
+      showErrorToast("유효한 가격을 입력해주세요.");
       return;
     }
 
@@ -56,7 +56,7 @@ export default function DataRegistModal({
         price: priceInt,
         isSplitType: isSplit,
         onSuccess: () => {
-          toast.success("수정 완료!");
+          showSuccessToast("수정 완료!");
           onClose();
           router.refresh();
         },
