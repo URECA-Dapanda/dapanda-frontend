@@ -56,7 +56,12 @@ export default function MapItemCardContent({
           showErrorToast(response.data.message || "채팅방 생성에 실패했습니다.");
         }
       } catch (error) {
-        showErrorToast("채팅방 생성 중 오류가 발생했습니다.");
+        const errorResponse = error as { response?: { data?: { message?: string } } };
+        if (errorResponse.response?.data?.message) {
+          showErrorToast("본인 게시글은 생성 안됩니다.");
+        } else {
+          showErrorToast("채팅방 생성 중 오류가 발생했습니다.");
+        }
         console.error(error);
       }
     },
