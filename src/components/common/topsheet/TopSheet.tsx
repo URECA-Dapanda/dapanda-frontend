@@ -58,6 +58,11 @@ export default function TopSheet({
 
   return (
     <>
+      {!data.isOwner && (
+        <div className="absolute top-12 right-12 z-1">
+          <ReportTriggerButton targetName={data.memberName} />
+        </div>
+      )}
       <motion.div
         className={clsx(
           "w-full lg:w-[600px] ",
@@ -67,11 +72,6 @@ export default function TopSheet({
         initial={false}
         transition={{ type: "spring", damping: 20, stiffness: 200 }}
       >
-        {!data.isOwner && (
-          <div className="absolute top-12 right-12 z-10">
-            <ReportTriggerButton targetName={data.memberName} />
-          </div>
-        )}
         <motion.div
           className="relative w-full h-full pt-20"
           drag="y"
@@ -160,7 +160,7 @@ export default function TopSheet({
           )}
 
           <motion.div
-            className="relative z-10 pl-30 px-4 space-y-1 mb-20"
+            className="relative pl-30 px-4 space-y-1 mb-20"
             animate={{
               paddingTop: type === "wifi" ? 20 : expanded ? 200 : 90,
             }}
