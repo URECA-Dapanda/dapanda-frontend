@@ -22,7 +22,13 @@ export const confirmPayment = (paymentKey: string, orderId: string, amount: numb
 };
 
 // 캐시 환불
-export const requestRefund = (requestId: string, refundAmount: number) => {
+export const requestRefund = ({
+  requestId,
+  refundAmount,
+}: {
+  requestId: string;
+  refundAmount: number;
+}) => {
   console.log("requestRefund 호출:", { requestId, refundAmount });
   return axios.post("/api/payments/refund", {
     requestId,
