@@ -19,11 +19,11 @@ export const useSubscribeTimer = (userId?: number, isLoading?: boolean) => {
 
   useEffect(() => {
     if (userId && isConnected) {
-      const channelId = `alarm${userId}`;
+      const channelId = `alarm/${userId}`;
 
       subscribeToChannel(channelId, (msg: AlarmMessage) => {
-        console.log("🔥 WebSocket 메시지 수신됨:", msg);
         try {
+          if (msg.eventState !== "START") return;
           const now = new Date();
 
           // startTime, endTime 파싱 (오늘 날짜 기준)
@@ -38,7 +38,7 @@ export const useSubscribeTimer = (userId?: number, isLoading?: boolean) => {
 
           const remainingSec = Math.floor((end.getTime() - now.getTime()) / 1000);
 
-          if (remainingSec > 0) {
+          if (msg.eventState === "START" && remainingSec > 0) {
             startTimer(remainingSec, msg.tradeId, msg.startTime, msg.endTime);
           }
         } catch (e) {

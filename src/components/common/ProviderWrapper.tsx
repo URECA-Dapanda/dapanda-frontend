@@ -14,11 +14,10 @@ export default function ProviderWrapper({ children }: PropsWithChildren) {
   const { user, isLoading } = useAuth();
   const userId = user?.memberId;
 
-  console.log("🧪 ProviderWrapper 유저 ID:", userId);
-  useAuth();
   useWebSocketConnection();
-  useSubscribeTimerOnce(userId);
   useSubscribeTimer(userId, isLoading);
+  useSubscribeTimerOnce(userId);
+
   useInitializeTimerFromServer();
 
   return (

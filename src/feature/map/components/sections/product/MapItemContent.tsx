@@ -15,7 +15,6 @@ export default function MapItemCardContent({
 }: ProductItemProps<MapType> & { disableUseButton?: boolean }) {
   const router = useRouter();
   const { setMapCenter } = useMapStore();
-  console.log(startTime, endTime);
   const [lat, lng] = location.split(",").map(Number);
 
   const handleCardClick = () => {

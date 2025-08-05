@@ -16,7 +16,6 @@ export function useAuth() {
     const checkAuthStatus = async () => {
       try {
         const userData = await getUserInfo();
-        console.log("✅ 유저 정보", userData.data);
         if (userData && userData.data) {
           setUser(userData.data);
           setIsLogin(true);
