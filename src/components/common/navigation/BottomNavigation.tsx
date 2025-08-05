@@ -32,7 +32,7 @@ export default function BottomNavigation({ id }: PropsWithChildren<BottomNavigat
         <NavigationButton target={"/map"}>
           <Fragment>
             <MapPin className="w-5 h-5 mb-1" />
-            <span className="body-xs">위치기반</span>
+            <span className="body-xs">와이파이</span>
           </Fragment>
         </NavigationButton>
         <NavigationButton target={"/chat"}>
