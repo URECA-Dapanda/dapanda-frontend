@@ -8,7 +8,6 @@ export async function GET(req: NextRequest) {
 
   if (isLogin) {
     try {
-      console.log("why it in", isLogin);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_SSL}/api/members/info`, {
         headers: {
           Cookie: `accessToken=${accessToken.value}`,

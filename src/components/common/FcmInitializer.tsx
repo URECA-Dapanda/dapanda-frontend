@@ -8,13 +8,12 @@ import { useAuth } from "@hooks/useAuth";
 
 export default function FcmInitializer() {
   const { isLogin } = useAuth();
-  const { data } = useQuery({
+  useQuery({
     queryFn: requestFcmToken,
     queryKey: ["requestFcmToken"],
     enabled: !!isLogin,
   });
   useEffect(() => {
-    console.log("Fcmdata", data);
     onForegroundMessage(); // 알림 수신 리스너 등록
   }, []);
 
