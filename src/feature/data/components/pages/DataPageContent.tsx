@@ -145,7 +145,7 @@ export default function DataPageContent() {
 
       {onboardingModalOpen && (
         <ModalPortal>
-          <div className="fixed inset-0 z-106 bg-white">
+          <div className="fixed inset-0 w-full lg:w-[600px] mx-auto z-106 bg-white">
             <OnboardingLayout
               pages={onboardingPages}
               currentPage={currentOnboardingPage}
