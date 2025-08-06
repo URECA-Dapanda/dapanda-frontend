@@ -155,7 +155,7 @@ export default function TopSheet({
                 <Image
                   src={imageUrls[0]}
                   alt="와이파이 대표 이미지"
-                  className={`absolute top-1/2 -translate-y-[calc(50%-25px)] right-24 rounded-12 ${
+                  className={`absolute top-1/2 -translate-y-[calc(50%-15px)] right-24 rounded-12 ${
                     isDefaultImage(imageUrls[0]) ? "" : "cursor-zoom-in"
                   }`}
                   width={140}
