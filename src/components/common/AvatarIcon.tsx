@@ -35,6 +35,8 @@ function AvatarIcon({ size = "small", avatar }: Partial<AvatarProps>) {
           alt="avatar"
           className="aspect-square size-full"
           fill
+          priority={size === "medium" || size === "large"}
+          sizes="(max-width: 768px) 48px, 64px"
           onError={() => console.log("Avatar image load failed:", avatar)}
           placeholder="blur"
           blurDataURL={avatar || "/avatar-default.png"}
