@@ -68,6 +68,7 @@ export function OnboardingLayout({
             alt={currentPageData.imageAlt}
             width={350}
             height={450}
+            priority
             className="w-full h-auto object-contain max-h-[36vh]"
           />
         </div>
