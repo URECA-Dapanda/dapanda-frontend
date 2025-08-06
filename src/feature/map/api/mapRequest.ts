@@ -1,33 +1,7 @@
 import axiosInstance from "@/lib/axios";
-import { MapType } from "@/feature/map/types/mapType";
-import { WifiRegisterRequest, WifiUpdateRequest } from "../types/registerForm";
-
-interface FetchMapListParams {
-  cursorId?: number;
-  size: number;
-  productSortOption?: "PRICE_ASC" | "AVERAGE_RATE_DESC" | "DISTANCE_ASC";
-  open?: boolean;
-  latitude: number;
-  longitude: number;
-}
-
-interface WifiItemResponse {
-  productId: number;
-  price: number;
-  itemId: number;
-  address: string;
-  memberName: string;
-  title: string;
-  latitude: number;
-  longitude: number;
-  imageUrl: string | null;
-  averageRate: number;
-  distanceKm: number;
-  open: boolean;
-  startTime: string;
-  endTime: string;
-}
-
+import type { MapType } from "@/feature/map/types/mapType";
+import type { WifiItemResponse, FetchMapListParams } from "@/feature/map/types/mapApiTypes";
+import type { WifiRegisterRequest, WifiUpdateRequest } from "@/feature/map/types/registerForm";
 
 interface ApiResponse {
   code: number;
@@ -74,6 +48,8 @@ export async function getMapList({
       endTime: item.endTime,
       imageUrl: item.imageUrl ?? "",
       memberName: item.memberName,
+      latitude: item.latitude,
+      longitude: item.longitude,
     }));
 
     return {
