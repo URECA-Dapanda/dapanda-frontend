@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { PlusIcon } from "lucide-react";
@@ -12,9 +13,16 @@ import { useHeaderStore } from "@stores/useHeaderStore";
 import DefaultFilterCard from "@feature/data/components/sections/filter/DefaultFilterCard";
 import DataRegistModal from "@feature/data/components/sections/modal/DataRegistModal";
 import { useDataFilterStore } from "@feature/data/stores/useDataFilterStore";
-import { OnboardingLayout, onboardingPages } from "@/components/common/onboarding";
+import { onboardingPages } from "@/components/common/onboarding";
 import ModalPortal from "@/lib/ModalPortal";
 import { updateMemberRole } from "@/apis/userProfile";
+
+const OnboardingLayout = dynamic(
+  () => import("@/components/common/onboarding").then((mod) => mod.OnboardingLayout),
+  {
+    ssr: false,
+  }
+);
 
 export default function DataPageContent() {
   const searchParams = useSearchParams();
