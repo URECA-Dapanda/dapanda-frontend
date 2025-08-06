@@ -57,8 +57,15 @@ export default function DataPageContent() {
   const [isOnboardingLoading, setIsOnboardingLoading] = useState(false);
 
   useEffect(() => {
-    router.prefetch("/data?tab=scrap");
-    router.prefetch("/data?tab=default");
+    if ("requestIdleCallback" in window) {
+      router.prefetch("/data?tab=scrap");
+      router.prefetch("/data?tab=default");
+    } else {
+      setTimeout(() => {
+        router.prefetch("/data?tab=scrap");
+        router.prefetch("/data?tab=default");
+      }, 200);
+    }
   }, []);
 
   useEffect(() => {
@@ -134,7 +141,7 @@ export default function DataPageContent() {
     <>
       <div className="w-full bg-primary2 datapagecontent h-[100dvh] ">
         <Image
-          src="/dpd-logo.svg"
+          src="/dpd-logo.png"
           alt="배경 로고"
           width={237}
           height={237}
