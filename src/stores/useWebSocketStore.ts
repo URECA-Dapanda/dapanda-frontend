@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { Client } from "@stomp/stompjs";
-import SockJS from "sockjs-client";
 import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
 import type { AlarmMessage } from "@type/Alarm";
 
@@ -37,18 +36,14 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     if (client?.connected || isConnected) return;
 
     let apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_SSL;
-    if (apiBaseUrl?.includes("localhost")) {
-      apiBaseUrl = apiBaseUrl.replace("https://", "http://");
-    } else if (!apiBaseUrl) {
+    if (!apiBaseUrl) {
       apiBaseUrl = "http://localhost:8080";
     }
 
+    const wsUrl = apiBaseUrl.replace(/^http/, "ws") + "/conn";
+
     const newClient = new Client({
-      webSocketFactory: () =>
-        new SockJS(`${apiBaseUrl}/conn`, null, {
-          transports: ["websocket", "xhr-streaming", "xhr-polling"],
-          timeout: 30000,
-        }),
+      brokerURL: wsUrl,
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
@@ -57,7 +52,6 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
         set({ isConnected: true });
 
         const { subscriptions, subscriptionObjects, alarmSubscriptions } = get();
-
         const mergedSubscriptions = new Map(subscriptionObjects);
 
         // 채팅 채널 재구독
@@ -73,16 +67,14 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
 
         // 알람 채널 재구독
         alarmSubscriptions.forEach((callback, channelId) => {
-          // ❗구독 객체가 있든 없든 무조건 다시 subscribe (기존 구독 해제 후 재등록)
           const oldSub = mergedSubscriptions.get(channelId);
           if (oldSub) {
-            oldSub.unsubscribe(); // 기존 구독 해제
+            oldSub.unsubscribe();
           }
 
           const subscription = newClient.subscribe(`/sub/${channelId}`, (message) => {
             try {
               const raw = JSON.parse(message.body);
-
               const payload: AlarmMessage = {
                 tradeId: raw.tradeId,
                 memberId: raw.memberId,
@@ -90,7 +82,6 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
                 endTime: raw.endTime,
                 eventState: raw.eventState,
               };
-
               callback(payload);
             } catch (e) {
               console.error("🚨 WebSocket 메시지 파싱 오류:", e, message.body);
@@ -237,7 +228,6 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     const subscription = client.subscribe(fullPath, (message) => {
       try {
         const raw = JSON.parse(message.body);
-
         const payload: AlarmMessage = {
           tradeId: raw.tradeId,
           memberId: raw.memberId,
@@ -248,7 +238,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
 
         onMessage(payload);
       } catch (e) {
-        console.error("🚨 WebSocket 메시지 파싱 오류:", e, message.body);
+        console.error("WebSocket 메시지 파싱 오류:", e, message.body);
       }
     });
 

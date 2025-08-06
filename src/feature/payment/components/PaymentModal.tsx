@@ -25,9 +25,10 @@ interface PaymentModalProps {
     startTime?: string;
     endTime?: string;
   };
+  isPending: boolean;
 }
 
-const PaymentModal = ({ isOpen, onClose, onPay, type, info }: PaymentModalProps) => {
+const PaymentModal = ({ isOpen, onClose, onPay, type, info, isPending }: PaymentModalProps) => {
   const [selected, setSelected] = useState(false);
 
   return (
@@ -74,7 +75,12 @@ const PaymentModal = ({ isOpen, onClose, onPay, type, info }: PaymentModalProps)
           </div>
 
           {/* 결제 버튼 */}
-          <ButtonComponent disabled={!selected} onClick={onPay} className="w-full">
+          <ButtonComponent
+            variant={isPending ? "loading" : undefined}
+            disabled={!selected || isPending}
+            onClick={onPay}
+            className="w-full"
+          >
             {selected ? `${info.price} 결제하기` : `결제 수단을 선택해주세요`}
           </ButtonComponent>
         </div>

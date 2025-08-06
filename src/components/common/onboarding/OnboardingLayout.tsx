@@ -35,7 +35,7 @@ export function OnboardingLayout({
   return (
     <div
       className={cn(
-        "flex flex-col w-full h-full bg-white px-24 py-60 max-w-[600px] mx-auto",
+        "flex flex-col w-full h-full bg-white px-24 py-60 lg:w-[600px] mx-auto",
         className
       )}
     >

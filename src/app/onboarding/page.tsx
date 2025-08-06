@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { updateMemberRole } from "@/apis/userProfile";
 import { OnboardingLayout, onboardingPages } from "@/components/common/onboarding";
 
@@ -10,19 +10,19 @@ export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentPage < onboardingPages.length - 1) {
       setCurrentPage(currentPage + 1);
     }
-  };
+  }, []);
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
     }
-  };
+  }, []);
 
-  const handleComplete = async () => {
+  const handleComplete = useCallback(async () => {
     try {
       setIsLoading(true);
       await updateMemberRole();
@@ -33,7 +33,7 @@ export default function OnboardingPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   return (
     <div className="relative w-[100dvw] lg:w-[600px] overflow-hidden mx-auto bg-white flex flex-col">
