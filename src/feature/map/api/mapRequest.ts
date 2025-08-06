@@ -22,6 +22,7 @@ export async function getMapList({
   productSortOption = "DISTANCE_ASC",
   latitude = 37.5665,
   longitude = 126.978,
+  open,
 }: FetchMapListParams): Promise<{ items: MapType[]; nextCursor?: number }> {
   const params = {
     size,
@@ -29,6 +30,7 @@ export async function getMapList({
     longitude,
     ...(cursorId !== undefined && { cursorId }),
     ...(productSortOption && { productSortOption }),
+    ...(open !== undefined && { open }),
   };
 
   try {
