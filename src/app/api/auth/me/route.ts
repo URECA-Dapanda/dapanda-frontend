@@ -8,6 +8,7 @@ export async function GET(req: NextRequest) {
 
   if (isLogin) {
     try {
+      console.log("why it in", isLogin);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_SSL}/api/members/info`, {
         headers: {
           Cookie: `accessToken=${accessToken.value}`,
@@ -18,7 +19,7 @@ export async function GET(req: NextRequest) {
       if (response.ok) {
         const userData = await response.json();
         return NextResponse.json({
-          isLogin: true,
+          isLogin: !!accessToken,
           user: userData,
         });
       }
@@ -27,5 +28,5 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  return NextResponse.json({ isLogin: false });
+  return NextResponse.json({ isLogin: !!accessToken });
 }

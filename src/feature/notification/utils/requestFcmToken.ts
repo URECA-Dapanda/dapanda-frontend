@@ -4,17 +4,18 @@ import { postFcmToken } from "@feature/notification/api/postFcmToken";
 
 export const requestFcmToken = async () => {
   // SSR 방지용: window 없는 경우 return
-  if (typeof window === "undefined" || !("Notification" in window)) return;
+  if (typeof window === "undefined" || !("Notification" in window)) return "error";
 
   const permission = await Notification.requestPermission();
-  if (permission !== "granted") return;
+  if (permission !== "granted") return "error";
 
   try {
     const messaging = getMessaging(app);
     const token = await getToken(messaging, {
       vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY!,
-      serviceWorkerRegistration: await navigator.serviceWorker.register("/firebase-messaging-sw.js"),
-
+      serviceWorkerRegistration: await navigator.serviceWorker.register(
+        "/firebase-messaging-sw.js"
+      ),
     });
     if (token) {
       await postFcmToken(token);
@@ -22,4 +23,6 @@ export const requestFcmToken = async () => {
   } catch (error) {
     console.error("FCM 토큰 요청 실패", error);
   }
+
+  return "success";
 };

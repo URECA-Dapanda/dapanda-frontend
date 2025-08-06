@@ -3,11 +3,19 @@
 import { useEffect } from "react";
 import { requestFcmToken } from "@feature/notification/utils/requestFcmToken";
 import { onForegroundMessage } from "@feature/notification/utils/onForegroundMessage";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@hooks/useAuth";
 
 export default function FcmInitializer() {
+  const { isLogin } = useAuth();
+  const { data } = useQuery({
+    queryFn: requestFcmToken,
+    queryKey: ["requestFcmToken"],
+    enabled: !!isLogin,
+  });
   useEffect(() => {
-    requestFcmToken();         // 권한 요청 + 토큰 저장
-    onForegroundMessage();     // 알림 수신 리스너 등록
+    console.log("Fcmdata", data);
+    onForegroundMessage(); // 알림 수신 리스너 등록
   }, []);
 
   return null;

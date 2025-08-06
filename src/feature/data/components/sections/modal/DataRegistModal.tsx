@@ -39,7 +39,7 @@ export default function DataRegistModal({
   const [isSplit, setIsSplit] = useState(defaultValues?.isSplitType ?? false);
   const dataAmount = Math.round(value[0] * 10) / 10;
 
-  const { recentPrice, avgPrice } = usePriceRecommendation();
+  const { recentPrice, averagePrice } = usePriceRecommendation();
   const { register } = useRegisterDataProduct();
   const { update } = useUpdateDataProduct();
 
@@ -110,9 +110,9 @@ export default function DataRegistModal({
             최근 거래가: {(dataAmount * 10 * recentPrice).toLocaleString()}원
           </span>
         )}
-        {avgPrice !== null && (
+        {averagePrice !== null && (
           <span className={badgeVariants({ variant: "outlined", size: "sm" })}>
-            평균 거래가: {(dataAmount * 10 * avgPrice).toLocaleString()}원
+            평균 거래가: {(dataAmount * 10 * averagePrice).toLocaleString()}원
           </span>
         )}
       </div>
