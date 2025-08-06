@@ -1,11 +1,15 @@
 import axios from "@lib/axios";
 import type { ScrapCombination } from "@feature/payment/types/paymentTypes";
 // 통합/분할 구매
-export const postDefaultTrade = async (
-  productId: number,
-  mobileDataId: number,
-  dataAmount?: number
-) => {
+export const postDefaultTrade = async ({
+  productId,
+  mobileDataId,
+  dataAmount,
+}: {
+  productId: number;
+  mobileDataId: number;
+  dataAmount?: number;
+}) => {
   const payload = {
     productId,
     mobileDataId,
@@ -16,11 +20,15 @@ export const postDefaultTrade = async (
   return res.data.data.tradeId;
 };
 // 자투리 구매
-export const postScrapTrade = async (
-  totalAmount: number,
-  totalPrice: number,
-  combinations: ScrapCombination[]
-) => {
+export const postScrapTrade = async ({
+  totalAmount,
+  totalPrice,
+  combinations,
+}: {
+  totalAmount: number;
+  totalPrice: number;
+  combinations: ScrapCombination[];
+}) => {
   const res = await axios.post("/api/trades/mobile-data/scrap", {
     totalAmount,
     totalPrice,
@@ -31,12 +39,17 @@ export const postScrapTrade = async (
 };
 
 // 와이파이 구매
-export const postWifiTrade = async (
-  productId: number,
-  wifiId: number,
-  startTime: string,
-  endTime: string
-): Promise<number> => {
+export const postWifiTrade = async ({
+  productId,
+  wifiId,
+  startTime,
+  endTime,
+}: {
+  productId: number;
+  wifiId: number;
+  startTime: string;
+  endTime: string;
+}): Promise<number> => {
   const res = await axios.post("/api/trades/wifi", {
     productId,
     wifiId,

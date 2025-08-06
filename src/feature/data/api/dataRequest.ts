@@ -94,6 +94,6 @@ export async function getBuyingDataAmount(): Promise<number> {
 }
 
 export async function getSellingDataAmount(): Promise<number> {
-  const res = await axios.get("/api/members/selling-data");
+  const res = await axios.get("/api/members/selling-data/sold");
   return res.data.data.data;
 }

@@ -1,20 +1,47 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { PlusIcon } from "lucide-react";
 import { ButtonComponent } from "@/components/common/button";
 import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
-import DefaultTabBody from "@feature/data/components/pages/DefaultTabContent";
-import ScrapTabBody from "@feature/data/components/sections/scrap/ScrapTabContent";
 import { PurchaseModeTabs } from "@/components/common/tabs";
 import { useHeaderStore } from "@stores/useHeaderStore";
 import DefaultFilterCard from "@feature/data/components/sections/filter/DefaultFilterCard";
-import DataRegistModal from "@feature/data/components/sections/modal/DataRegistModal";
 import { useDataFilterStore } from "@feature/data/stores/useDataFilterStore";
-import { OnboardingLayout, onboardingPages } from "@/components/common/onboarding";
+import { onboardingPages } from "@/components/common/onboarding";
 import ModalPortal from "@/lib/ModalPortal";
 import { updateMemberRole } from "@/apis/userProfile";
+import Image from "next/image";
+
+const DefaultTabBody = dynamic(() => import("@feature/data/components/pages/DefaultTabContent"), {
+  ssr: false,
+  loading: () => null,
+});
+
+const ScrapTabBody = dynamic(
+  () => import("@feature/data/components/sections/scrap/ScrapTabContent"),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
+
+const OnboardingLayout = dynamic(
+  () => import("@/components/common/onboarding").then((mod) => mod.OnboardingLayout),
+  {
+    ssr: false,
+  }
+);
+
+const DataRegistModal = dynamic(
+  () => import("@feature/data/components/sections/modal/DataRegistModal"),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
 
 export default function DataPageContent() {
   const searchParams = useSearchParams();
@@ -28,6 +55,18 @@ export default function DataPageContent() {
   const [onboardingModalOpen, setOnboardingModalOpen] = useState(false);
   const [currentOnboardingPage, setCurrentOnboardingPage] = useState(0);
   const [isOnboardingLoading, setIsOnboardingLoading] = useState(false);
+
+  useEffect(() => {
+    if ("requestIdleCallback" in window) {
+      router.prefetch("/data?tab=scrap");
+      router.prefetch("/data?tab=default");
+    } else {
+      setTimeout(() => {
+        router.prefetch("/data?tab=scrap");
+        router.prefetch("/data?tab=default");
+      }, 200);
+    }
+  }, []);
 
   useEffect(() => {
     const onboardingParam = searchParams.get("on-boarding");
@@ -100,7 +139,16 @@ export default function DataPageContent() {
 
   return (
     <>
-      <div className="w-full bg-primary2 datapagecontent h-[100dvh] bg-[url('/dpd-logo.svg')] bg-position-[-35_-37] bg-no-repeat bg-size-[237px]">
+      <div className="w-full bg-primary2 datapagecontent h-[100dvh] ">
+        <Image
+          src="/dpd-logo.png"
+          alt="배경 로고"
+          width={237}
+          height={237}
+          className="absolute"
+          style={{ top: -37, left: -35 }}
+          priority
+        />
         {/* 상단 필터 영역 */}
         <div className="p-4 pt-[114px]">
           <DefaultFilterCard onSearch={() => setSheetOpen(true)} />
@@ -145,7 +193,7 @@ export default function DataPageContent() {
 
       {onboardingModalOpen && (
         <ModalPortal>
-          <div className="fixed inset-0 z-106 bg-white">
+          <div className="fixed inset-0 w-full lg:w-[600px] mx-auto z-106 bg-white">
             <OnboardingLayout
               pages={onboardingPages}
               currentPage={currentOnboardingPage}

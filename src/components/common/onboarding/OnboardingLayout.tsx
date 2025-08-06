@@ -35,7 +35,7 @@ export function OnboardingLayout({
   return (
     <div
       className={cn(
-        "flex flex-col w-full h-full bg-white px-24 py-60 max-w-[600px] mx-auto",
+        "flex flex-col w-full h-full bg-white px-24 py-60 lg:w-[600px] mx-auto",
         className
       )}
     >
@@ -68,6 +68,7 @@ export function OnboardingLayout({
             alt={currentPageData.imageAlt}
             width={350}
             height={450}
+            priority
             className="w-full h-auto object-contain max-h-[36vh]"
           />
         </div>

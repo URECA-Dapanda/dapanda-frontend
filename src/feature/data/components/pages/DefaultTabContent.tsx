@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useDataFilterStore } from "@feature/data/stores/useDataFilterStore";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import { getDataList } from "@feature/data/api/dataRequest";
@@ -54,74 +54,76 @@ export default function DefaultTabContent({ isSheetOpen, onSearchClick }: Defaul
     });
 
   return (
-    <div className="bottomSheetContents space-y-4">
-      {isSheetOpen && (
-        <div className="flex items-center justify-between gap-8 mb-12 px-24">
-          {/* 왼쪽: 뱃지 (조건부) */}
-          <div className="flex items-center gap-4">
-            {dataAmount !== null && (
-              <Pill>
-                {dataAmount}GB
-                <PillButton onClick={clearDataAmount}>
-                  <X size={12} />
-                </PillButton>
-              </Pill>
-            )}
-          </div>
+    <Suspense>
+      <div className="bottomSheetContents space-y-4">
+        {isSheetOpen && (
+          <div className="flex items-center justify-between gap-8 mb-12 px-24">
+            {/* 왼쪽: 뱃지 (조건부) */}
+            <div className="flex items-center gap-4">
+              {dataAmount !== null && (
+                <Pill>
+                  {dataAmount}GB
+                  <PillButton onClick={clearDataAmount}>
+                    <X size={12} />
+                  </PillButton>
+                </Pill>
+              )}
+            </div>
 
-          {/* 오른쪽: 드롭다운 + 검색 버튼 */}
-          <div className="flex gap-8 ml-auto">
-            <UserDropdownMenu
-              options={dataSortOptions(setSortLabel)}
-              selectedLabel={sortLabel}
-              onSelectLabel={setSortLabel}
-            >
-              <ButtonComponent variant="withIcon" size="sm" className="p-6 body-xs">
-                {sortLabel}
-                <ChevronDown className="w-20 h-20" />
+            {/* 오른쪽: 드롭다운 + 검색 버튼 */}
+            <div className="flex gap-8 ml-auto">
+              <UserDropdownMenu
+                options={dataSortOptions(setSortLabel)}
+                selectedLabel={sortLabel}
+                onSelectLabel={setSortLabel}
+              >
+                <ButtonComponent variant="withIcon" size="sm" className="p-6 body-xs">
+                  {sortLabel}
+                  <ChevronDown className="w-20 h-20" />
+                </ButtonComponent>
+              </UserDropdownMenu>
+
+              <ButtonComponent
+                variant="withIcon"
+                size="sm"
+                className="p-6 body-xs"
+                onClick={() => {
+                  onSearchClick?.();
+                }}
+              >
+                SEARCH
+                <SlidersHorizontal className="w-20 h-20" />
               </ButtonComponent>
-            </UserDropdownMenu>
-
-            <ButtonComponent
-              variant="withIcon"
-              size="sm"
-              className="p-6 body-xs"
-              onClick={() => {
-                onSearchClick?.();
-              }}
-            >
-              SEARCH
-              <SlidersHorizontal className="w-20 h-20" />
-            </ButtonComponent>
+            </div>
           </div>
-        </div>
-      )}
-      {/* 검색 결과 없을 때 EmptyState, 있으면 list 렌더링 */}
-      {flatItems.length === 0 && !isFetchingNextPage ? (
-        <EmptyState
-          message="검색 결과가 없어요."
-          subMessage="조건을 다시 설정해 보시겠어요?"
-          className="mt-144"
-        />
-      ) : (
-        <VirtualizedInfiniteList
-          mode="scroll"
-          parentRef={parentRef}
-          rowVirtualizer={rowVirtualizer}
-          height={
-            isSheetOpen
-              ? "calc( 100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 83px - 42px - 107px )"
-              : "calc( 100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 107px - 83px - 300px )"
-          }
-          items={flatItems}
-          isFetchingNextPage={isFetchingNextPage}
-          hasNextPage={hasNextPage}
-          fetchNextPage={fetchNextPage}
-          renderItem={(index, item?: DataType) => (
-            <DataItemCard data={item} key={index} type="default" />
-          )}
-        />
-      )}
-    </div>
+        )}
+        {/* 검색 결과 없을 때 EmptyState, 있으면 list 렌더링 */}
+        {flatItems.length === 0 && !isFetchingNextPage ? (
+          <EmptyState
+            message="검색 결과가 없어요."
+            subMessage="조건을 다시 설정해 보시겠어요?"
+            className="mt-144"
+          />
+        ) : (
+          <VirtualizedInfiniteList
+            mode="scroll"
+            parentRef={parentRef}
+            rowVirtualizer={rowVirtualizer}
+            height={
+              isSheetOpen
+                ? "calc( 100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 83px - 42px - 107px )"
+                : "calc( 100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 107px - 83px - 300px )"
+            }
+            items={flatItems}
+            isFetchingNextPage={isFetchingNextPage}
+            hasNextPage={hasNextPage}
+            fetchNextPage={fetchNextPage}
+            renderItem={(index, item?: DataType) => (
+              <DataItemCard data={item} key={index} type="default" />
+            )}
+          />
+        )}
+      </div>
+    </Suspense>
   );
 }
