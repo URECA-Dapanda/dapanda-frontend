@@ -36,7 +36,15 @@ export interface WifiRegisterRequest {
   images: string[];
 }
 
-export interface WifiUpdateRequest extends WifiRegisterRequest {
+export interface WifiUpdateRequest {
   productId: number;
+  price: number;
+  title: string;
+  content: string;
+  latitude: number;
+  longitude: number;
+  address: string;
+  startTime: string;
+  endTime: string;
   imageUrls: string[];
 }

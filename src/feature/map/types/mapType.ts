@@ -7,11 +7,14 @@ export interface MapType extends BaseProduct {
   price: string;
   imageUrl?: string;
   memberName: string;
+  title: string;
 }
 
 export interface MapDetailItem extends BaseProduct {
+  itemId: number;
   wifiId: number;
   type: string;
+  title: string;
   imageUrl: string[];
   place: string;
   description: string;

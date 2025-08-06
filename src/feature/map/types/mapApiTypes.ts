@@ -7,9 +7,11 @@ export interface WifiItemResponse extends BaseProduct {
   imageUrl: string | null;
   averageRate: number;
   distanceKm: number;
+  title: string;
 }
 
 export interface WifiDetailResponse extends BaseProduct {
+  title: string;
   itemId: number;
   price: number;
   memberId: number;

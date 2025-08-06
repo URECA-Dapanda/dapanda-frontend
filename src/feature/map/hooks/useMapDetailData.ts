@@ -28,6 +28,7 @@ export const useMapDetailData = (id: string): UseMapDetailDataResult => {
         address: detail.address,
         imageUrl: detail.imageUrls ?? [],
         place: detail.title,
+        title: detail.title,
         startTime: detail.startTime.slice(11, 16),
         endTime: detail.endTime.slice(11, 16),
         pricePer10min: detail.price,
