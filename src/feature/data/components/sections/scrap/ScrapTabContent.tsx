@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Search } from "lucide-react";
 import ScrapFilterCard from "@feature/data/components/sections/filter/ScrapFilterCard";
 import ScrapLoadingState from "@feature/data/components/sections/scrap/ScrapLoadingState";
@@ -22,32 +22,34 @@ export default function ScrapTabContent() {
   };
 
   return (
-    <div className="px-24 space-y-12 h-full">
-      {/* 필터 카드 */}
-      <ScrapFilterCard value={value} setValue={setValue} onSearch={handleSearch} />
+    <Suspense>
+      <div className="px-24 space-y-12 h-full">
+        {/* 필터 카드 */}
+        <ScrapFilterCard value={value} setValue={setValue} onSearch={handleSearch} />
 
-      {/* 상태별 렌더링 */}
-      {loading && <ScrapLoadingState />}
+        {/* 상태별 렌더링 */}
+        {loading && <ScrapLoadingState />}
 
-      {!loading && hasSearched && result.length === 0 && <EmptyState />}
+        {!loading && hasSearched && result.length === 0 && <EmptyState />}
 
-      {!loading && result.length > 0 && (
-        <CollapsibleDataList
-          items={result}
-          summary={summary}
-          isExpanded={isExpanded}
-          onToggle={() => setIsExpanded((prev) => !prev)}
-        />
-      )}
+        {!loading && result.length > 0 && (
+          <CollapsibleDataList
+            items={result}
+            summary={summary}
+            isExpanded={isExpanded}
+            onToggle={() => setIsExpanded((prev) => !prev)}
+          />
+        )}
 
-      {!hasSearched && !loading && result.length === 0 && (
-        <div className="flex flex-col items-center justify-center text-center mt-32">
-          <Search className="w-64 h-64 mb-16" />
-          <p className="body-md">가장 저렴한 자투리 조합을 찾아드릴게요!</p>
-        </div>
-      )}
+        {!hasSearched && !loading && result.length === 0 && (
+          <div className="flex flex-col items-center justify-center text-center mt-32">
+            <Search className="w-64 h-64 mb-16" />
+            <p className="body-md">가장 저렴한 자투리 조합을 찾아드릴게요!</p>
+          </div>
+        )}
 
-      {renderModals}
-    </div>
+        {renderModals}
+      </div>
+    </Suspense>
   );
 }

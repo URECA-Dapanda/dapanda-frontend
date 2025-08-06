@@ -21,6 +21,7 @@ export function useAuth() {
       })
       .then((userData) => {
         if (userData && userData.data) {
+
           setUser(userData.data);
           setProfile(userData.data);
 

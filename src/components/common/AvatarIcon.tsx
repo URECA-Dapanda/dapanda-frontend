@@ -26,15 +26,30 @@ function AvatarIcon({ size = "small", avatar }: Partial<AvatarProps>) {
         return size;
     }
   }, [size]);
+  const imageSize = useMemo(() => {
+    switch (size) {
+      case "small":
+        return 32;
+      case "medium":
+        return 48;
+      case "large":
+        return 64;
+      default:
+        return 32;
+    }
+  }, [size]);
 
   return (
     <Avatar className={iconSize}>
-      <AvatarFallback className="p-0 bg-transparent relative overflow-hidden">
+      <AvatarFallback className="p-0 bg-transparent overflow-hidden">
         <Image
           src={avatar || "/avatar-default.png"}
           alt="avatar"
           className="aspect-square size-full"
-          fill
+          width={imageSize}
+          height={imageSize}
+          priority={size === "medium" || size === "large"}
+          sizes="(max-width: 768px) 48px, 64px"
           onError={() => console.log("Avatar image load failed:", avatar)}
           placeholder="blur"
           blurDataURL={avatar || "/avatar-default.png"}
