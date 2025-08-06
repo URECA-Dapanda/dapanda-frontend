@@ -27,17 +27,23 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <script
+          defer
           dangerouslySetInnerHTML={{
-            __html: `(function(h,o,t,j,a,r){
-              h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-              h._hjSettings={hjid:6480256,hjsv:6};
-              a=o.getElementsByTagName('head')[0];
-              r=o.createElement('script');r.async=1;
-              r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-              a.appendChild(r);
-          })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`,
+            __html: `
+              window.addEventListener('load', function() {
+                (function(h,o,t,j,a,r){
+                  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                  h._hjSettings={hjid:6480256,hjsv:6};
+                  a=o.getElementsByTagName('head')[0];
+                  r=o.createElement('script');r.async=1;
+                  r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                  a.appendChild(r);
+                })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+              });
+            `,
           }}
         />
+        <link rel="preload" href="/dpd-logo.svg" as="image" type="image/svg+xml" />
       </head>
       <body className="flex flex-col box-border w-full bg-gray-300 justify-center items-center">
         <ProviderWrapper>

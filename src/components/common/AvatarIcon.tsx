@@ -1,7 +1,7 @@
 "use client";
 import { memo, useMemo } from "react";
 import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface AvatarProps {
   size: "small" | "medium" | "large" | string;
@@ -26,24 +26,33 @@ function AvatarIcon({ size = "small", avatar }: Partial<AvatarProps>) {
         return size;
     }
   }, [size]);
+  const imageSize = useMemo(() => {
+    switch (size) {
+      case "small":
+        return 32;
+      case "medium":
+        return 48;
+      case "large":
+        return 64;
+      default:
+        return 32;
+    }
+  }, [size]);
 
   return (
     <Avatar className={iconSize}>
-      <AvatarImage
-        src={avatar || "/avatar-default.png"}
-        alt="avatar"
-        onError={() => console.log("Avatar image load failed:", avatar)}
-
-      />
-
-      <AvatarFallback className="p-0 bg-transparent relative overflow-hidden">
+      <AvatarFallback className="p-0 bg-transparent overflow-hidden">
         <Image
-          src="/avatar-default.png"
-          alt="default avatar"
-          fill
-          className="object-cover rounded-full"
-          sizes="(max-width: 64px) 100vw, 64px"
-          priority
+          src={avatar || "/avatar-default.png"}
+          alt="avatar"
+          className="aspect-square size-full"
+          width={imageSize}
+          height={imageSize}
+          priority={size === "medium" || size === "large"}
+          sizes="(max-width: 768px) 48px, 64px"
+          onError={() => console.log("Avatar image load failed:", avatar)}
+          placeholder="blur"
+          blurDataURL={avatar || "/avatar-default.png"}
         />
       </AvatarFallback>
     </Avatar>

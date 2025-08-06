@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { toast } from "react-toastify";
 import { Check, Star, X } from "lucide-react";
 import { AxiosError } from "axios";
 import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
@@ -10,6 +9,7 @@ import { useReviewMutation } from "@/feature/map/hooks/useReviewMutation";
 import InputComponent from "@components/common/input/InputComponent";
 import { ReviewResponse } from "@/feature/map/types/reviewType";
 import { useRouter } from "next/navigation";
+import { showErrorToast } from "@lib/toast";
 
 export interface ReviewBottomSheetProps {
   isOpen: boolean;
@@ -28,7 +28,7 @@ export default function ReviewBottomSheet({ isOpen, onClose, tradeId }: ReviewBo
     () => setStep("complete"),
     (e: AxiosError<unknown>) => {
       const message = (e.response?.data as ReviewResponse)?.message;
-      toast.error(message || "리뷰 등록에 실패했습니다.");
+      showErrorToast(message || "리뷰 등록에 실패했습니다.");
     }
   );
 

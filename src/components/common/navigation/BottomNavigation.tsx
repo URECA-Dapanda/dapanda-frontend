@@ -6,6 +6,7 @@ import NavigationButton from "@components/common/navigation/NavigationButton";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@lib/utils";
+import { useChatStore } from "@feature/chat/stores/useChatStore";
 
 interface BottomNavigationProps {
   id?: string;
@@ -14,6 +15,8 @@ interface BottomNavigationProps {
 export default function BottomNavigation({ id }: PropsWithChildren<BottomNavigationProps>) {
   const path = usePathname();
   const isHidden = path.startsWith("/chat") && path.split("/").length > 2;
+  const chatList = useChatStore((state) => state.chatList);
+  const totalUnreadCount = chatList.reduce((sum, chat) => sum + (chat.unreadCount || 0), 0);
   return (
     <div
       id={id}
@@ -32,11 +35,18 @@ export default function BottomNavigation({ id }: PropsWithChildren<BottomNavigat
         <NavigationButton target={"/map"}>
           <Fragment>
             <MapPin className="w-5 h-5 mb-1" />
-            <span className="body-xs">위치기반</span>
+            <span className="body-xs">와이파이</span>
           </Fragment>
         </NavigationButton>
         <NavigationButton target={"/chat"}>
-          <MessageCircle className="w-5 h-5 mb-1" />
+          <div className="relative">
+            <MessageCircle className="w-5 h-5 mb-1" />
+            {totalUnreadCount > 0 && (
+              <span className="absolute -top-2 -right-2 min-w-[5px] h-[14px] px-1 flex items-center justify-center rounded-full bg-primary text-white caption-sm font-bold border border-white">
+                {totalUnreadCount > 99 ? "99+" : totalUnreadCount}
+              </span>
+            )}
+          </div>
           <span className="body-xs">채팅</span>
         </NavigationButton>
         <NavigationButton target={"/mypage"}>

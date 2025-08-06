@@ -19,6 +19,8 @@ import { useTopSheetImageStyle } from "./useTopSheetImageStyle";
 import ReportTriggerButton from "../button/ReportTriggerButton";
 import clsx from "clsx";
 
+const MotionImage = motion(Image);
+
 export default function TopSheet({
   type,
   data,
@@ -58,23 +60,22 @@ export default function TopSheet({
 
   return (
     <>
+      {!data.isOwner && (
+        <div className="absolute top-12 right-12 z-1">
+          <ReportTriggerButton targetName={data.memberName} />
+        </div>
+      )}
       <motion.div
         className={clsx(
-          "fixed left-1/2 -translate-x-1/2 w-full lg:w-[600px]",
-          "bg-secondary shadow-default rounded-b-30 overflow-hidden z-30",
-          "top-[calc(54px+env(safe-area-inset-top,0px))]"
+          "w-full lg:w-[600px] ",
+          "bg-secondary shadow-default rounded-b-30 overflow-hidden"
         )}
         animate={{ y: expanded ? 0 : 0 }}
         initial={false}
         transition={{ type: "spring", damping: 20, stiffness: 200 }}
       >
-        {!data.isOwner && (
-          <div className="absolute top-12 right-12 z-36">
-            <ReportTriggerButton targetName={data.memberName} />
-          </div>
-        )}
         <motion.div
-          className="w-full h-full pt-20"
+          className="relative w-full h-full pt-20"
           drag="y"
           transition={{ type: "decay", damping: 20, stiffness: 200 }}
           dragConstraints={{ top: 0, bottom: 0 }}
@@ -93,12 +94,17 @@ export default function TopSheet({
           }}
         >
           {type === "post" && (
-            <motion.img
+            <MotionImage
               src={data.imageUrl || "/default-wifi-image.png"}
               alt="대표 이미지"
-              className="top-56 absolute rounded-12 z-30"
+              className="top-56 absolute rounded-12"
               style={{ pointerEvents: "none" }}
               animate={imageStyle}
+              width={240}
+              height={240}
+              priority={true}
+              placeholder="blur"
+              blurDataURL={data.imageUrl || "/default-wifi-image.png"}
               transition={{ type: "spring", damping: 20, stiffness: 200 }}
             />
           )}
@@ -111,7 +117,7 @@ export default function TopSheet({
                     <Carousel className="w-full max-w-[280px]" opts={{ watchDrag: true }}>
                       <CarouselContent>
                         {imageUrls.map((url, idx) => (
-                          <CarouselItem key={idx} className="basis-[100%]">
+                          <CarouselItem key={idx} className="basis-[100%] items-center flex">
                             <Image
                               src={url}
                               alt={`와이파이 이미지 ${idx + 1}`}
@@ -120,8 +126,9 @@ export default function TopSheet({
                               onClick={
                                 isDefaultImage(url) ? undefined : (e) => handleImageClick(idx, e)
                               }
-                              className={`object-cover rounded-12 mx-auto ${isDefaultImage(url) ? "" : "cursor-zoom-in"
-                                }`}
+                              className={`object-cover rounded-12 mx-auto ${
+                                isDefaultImage(url) ? "" : "cursor-zoom-in"
+                              }`}
                             />
                           </CarouselItem>
                         ))}
@@ -138,15 +145,9 @@ export default function TopSheet({
                       }
                       width={140}
                       height={140}
-                      className={`object-cover rounded-12 mx-auto ${isDefaultImage(imageUrls[0]) ? "" : "cursor-zoom-in"
-                        }`}
-                      style={{
-                        top: 44,
-                        right: 30,
-                        width: 140,
-                        height: 140,
-                        objectFit: "cover",
-                      }}
+                      className={`object-cover rounded-12 mx-auto ${
+                        isDefaultImage(imageUrls[0]) ? "" : "cursor-zoom-in"
+                      }`}
                     />
                   )}
                 </div>
@@ -154,15 +155,9 @@ export default function TopSheet({
                 <Image
                   src={imageUrls[0]}
                   alt="와이파이 대표 이미지"
-                  className={`absolute rounded-12 z-30 ${isDefaultImage(imageUrls[0]) ? "" : "cursor-zoom-in"
-                    }`}
-                  style={{
-                    top: 44,
-                    right: 30,
-                    width: 140,
-                    height: 140,
-                    objectFit: "cover",
-                  }}
+                  className={`absolute top-1/2 -translate-y-[calc(50%-25px)] right-24 rounded-12 ${
+                    isDefaultImage(imageUrls[0]) ? "" : "cursor-zoom-in"
+                  }`}
                   width={140}
                   height={140}
                   onClick={isDefaultImage(imageUrls[0]) ? undefined : (e) => handleImageClick(0, e)}
@@ -172,7 +167,7 @@ export default function TopSheet({
           )}
 
           <motion.div
-            className="relative z-10 pl-30 px-4 space-y-1 mb-20"
+            className="relative pl-30 px-4 space-y-1 mb-20"
             animate={{
               paddingTop: type === "wifi" ? 20 : expanded ? 200 : 90,
             }}

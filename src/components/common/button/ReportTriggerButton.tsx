@@ -19,7 +19,7 @@ export default function ReportTriggerButton({ targetName }: ReportTriggerButtonP
     <>
       <button
         className={cn(
-          "rounded-full w-[25px] h-[25px] flex justify-center items-center",
+          "rounded-full w-[25px] h-[25px] flex justify-center items-center hover:cursor-pointer",
           "bg-white text-error"
         )}
         onClick={handleReportOpen}

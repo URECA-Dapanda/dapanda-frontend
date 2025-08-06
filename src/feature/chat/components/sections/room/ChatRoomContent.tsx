@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { formatDateDivider } from "@/lib/time";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import { useConfigStore } from "@/stores/useConfigStore";
@@ -12,11 +13,11 @@ import { groupMessagesByDate } from "@feature/chat/utils/groupMessagesByDate";
 import ChatInputBar from "@feature/chat/components/sections/room/ChatInputBar";
 import { getChatHistory } from "@/feature/chat/api/getChatHistory";
 import { getChatRoomList } from "@/feature/chat/api/chatRoomRequest";
+import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 import { formatMessageDate } from "@/feature/chat/utils/chatUtils";
 import { useKeyboardDetection } from "@/feature/chat/utils/keyboardDetection";
 import { useHeaderHeightDetection } from "@/feature/chat/utils/headerHeightDetection";
 import { useMessageProcessing } from "@/feature/chat/utils/messageProcessing";
-import { useProductCache } from "@/feature/chat/utils/productCache";
 import { useReadStatusHandler } from "@/feature/chat/utils/readStatusHandler";
 
 interface ChatRoomContentProps {
@@ -35,18 +36,62 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const searchParams = useSearchParams();
   const abortRef = useRef<AbortController | null>(null);
 
-  const isKeyboardVisible = useKeyboardDetection();
-  const { product, setProduct, isLoadingProduct, fetchProductWithCache, clearCache } =
-    useProductCache();
-  const headerHeight = useHeaderHeightDetection(
-    headerRef as React.RefObject<HTMLDivElement>,
-    product
-  );
-  const { addSenderIdToMessages, sortMessages } = useMessageProcessing(product);
-  const { handleRealTimeReadStatus, resetExitFlag } = useReadStatusHandler(messages);
-
   const { subscribe, unsubscribe, sendMessage, setActiveChatRoomId } = useWebSocketStore();
   const { setTitle } = useConfigStore();
+
+  // React Query를 사용한 상품 정보 가져오기
+  const { data: productData, isLoading: isLoadingProduct } = useQuery({
+    queryKey: ["product", productId],
+    queryFn: () => getMapDetailById(productId!),
+    enabled: !!productId,
+    staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
+    gcTime: 10 * 60 * 1000, // 10분간 메모리에 유지
+  });
+
+  // productId가 없을 때 채팅방 정보에서 가져오기
+  const { data: chatRoomInfo } = useQuery({
+    queryKey: ["chatRoom", chatRoomId],
+    queryFn: () => getChatRoomList(chatRoomId),
+    enabled: !productId && !!chatRoomId,
+    staleTime: 1 * 60 * 1000, // 1분간 캐시 유지
+  });
+
+  // 채팅방 정보에서 productId를 가져온 경우 상품 정보 다시 가져오기
+  const derivedProductId = chatRoomInfo?.productId?.toString() || productId;
+
+  const { data: derivedProductData, isLoading: isLoadingDerivedProduct } = useQuery({
+    queryKey: ["product", derivedProductId],
+    queryFn: () => getMapDetailById(derivedProductId!),
+    enabled: !!derivedProductId && !productId,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+
+  // 최종 상품 정보 결정
+  const finalProduct = useMemo(() => {
+    const data = productData || derivedProductData;
+    if (!data) return null;
+
+    return {
+      productId: data.productId,
+      itemId: data.itemId,
+      title: data.title,
+      pricePer10min: data.price,
+      memberName: data.memberName,
+      memberId: data.memberId,
+      imageUrls: data.imageUrls,
+    };
+  }, [productData, derivedProductData]);
+
+  const isLoadingProductInfo = isLoadingProduct || isLoadingDerivedProduct;
+
+  const isKeyboardVisible = useKeyboardDetection();
+  const headerHeight = useHeaderHeightDetection(
+    headerRef as React.RefObject<HTMLDivElement>,
+    finalProduct
+  );
+  const { addSenderIdToMessages, sortMessages } = useMessageProcessing(finalProduct);
+  const { handleRealTimeReadStatus, resetExitFlag } = useReadStatusHandler(messages);
 
   useEffect(() => {
     if (!chatRoomId) return;
@@ -59,7 +104,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
     setHasMore(true);
     setOldestMessageId(undefined);
     setCurrentMemberId(undefined);
-    clearCache();
     resetExitFlag();
 
     getChatHistory(chatRoomId)
@@ -93,33 +137,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   }, [chatRoomId]);
 
   useEffect(() => {
-    if (!productId) {
-      const fetchChatRoomInfo = async () => {
-        try {
-          const chatRoomInfo = await getChatRoomList(chatRoomId);
-          if (chatRoomInfo.productId) {
-            const productIdStr = chatRoomInfo.productId.toString();
-            await fetchProductWithCache(productIdStr);
-          }
-        } catch (error) {
-          console.error("채팅방 정보에서 상품 정보 가져오기 실패:", error);
-          setProduct(null);
-        }
-      };
-
-      fetchChatRoomInfo();
-      return;
-    }
-
-    const abortController = new AbortController();
-    fetchProductWithCache(productId, abortController);
-
-    return () => {
-      abortController.abort();
-    };
-  }, [productId, fetchProductWithCache]);
-
-  useEffect(() => {
     if (chatRoomId) {
       setActiveChatRoomId(chatRoomId);
     }
@@ -131,8 +148,13 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
   const addMessage = async (text: string) => {
     try {
+      const trimmedText = text.trim();
+      if (!trimmedText) {
+        return;
+      }
+
       const messagePayload = JSON.stringify({
-        message: text,
+        message: trimmedText,
       });
 
       sendMessage(chatRoomId, messagePayload);
@@ -242,7 +264,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const urlMemberName = searchParams.get("memberName");
   const urlAvatarUrl = searchParams.get("avatarUrl");
 
-  const senderName = urlMemberName || product?.memberName || "상대방";
+  const senderName = urlMemberName || finalProduct?.memberName || "상대방";
 
   useEffect(() => {
     setTitle(senderName);
@@ -251,7 +273,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
   return (
     <div className={`flex flex-col h-screen ${isKeyboardVisible ? "chat-keyboard-active" : ""}`}>
-      {product && (
+      {finalProduct && (
         <div
           ref={headerRef}
           className="fixed left-0 right-0 z-40 px-24 pt-12 pb-8 chat-header
@@ -263,13 +285,14 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
           }}
         >
           <ChatPostCard
-            title={product.title}
-            pricePer10min={product.pricePer10min}
-            productId={product.productId}
+            title={finalProduct.title}
+            pricePer10min={finalProduct.pricePer10min}
+            productId={finalProduct.productId}
+            imageUrls={finalProduct.imageUrls}
           />
         </div>
       )}
-      {!product && productId && isLoadingProduct && (
+      {!finalProduct && productId && isLoadingProductInfo && (
         <div
           className="fixed left-0 right-0 z-40 px-24 pt-12 pb-8 chat-header bg-white w-[100dvw] lg:w-[600px] mx-auto"
           style={{ top: "calc(env(safe-area-inset-top) + 54px)" }}
@@ -316,7 +339,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
                     avatarUrl={urlAvatarUrl || undefined}
                     memberId={message.senderId}
                     currentMemberId={currentMemberId}
-                    productId={product?.productId}
+                    productId={finalProduct?.productId}
                   />
                 ))}
               </div>

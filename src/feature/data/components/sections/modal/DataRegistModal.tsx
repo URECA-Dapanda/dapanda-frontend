@@ -10,8 +10,9 @@ import { useRegisterDataProduct } from "@feature/data/hooks/useRegisterDataProdu
 import { useUpdateDataProduct } from "@feature/data/hooks/useUpdateDataProduct";
 import { useMonthlyDataLimit } from "@feature/data/hooks/useMonthlyDataLimit";
 import { Switch } from "@ui/switch";
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { showErrorToast, showSuccessToast } from "@lib/toast";
+import { useMutation } from "@tanstack/react-query";
 
 interface DataRegistModalProps {
   onClose: () => void;
@@ -34,6 +35,7 @@ export default function DataRegistModal({
   const maxAmount = remainingSelling ?? 2;
   const [value, setValue] = useState([Math.min(defaultValues?.amount ?? 1, maxAmount)]);
   const [price, setPrice] = useState(defaultValues?.price?.toString() ?? "");
+  const [isFin, setIsFin] = useState<boolean>(false);
   const [isSplit, setIsSplit] = useState(defaultValues?.isSplitType ?? false);
   const dataAmount = Math.round(value[0] * 10) / 10;
 
@@ -41,32 +43,43 @@ export default function DataRegistModal({
   const { register } = useRegisterDataProduct();
   const { update } = useUpdateDataProduct();
 
+  const { mutate: registMutation, isPending: isRegistPending } = useMutation({
+    mutationKey: ["/api/products/mobile-data"],
+    mutationFn: register,
+  });
+
+  const { mutate: updateMutation, isPending: isUpdatePending } = useMutation({
+    mutationKey: ["/api/products/mobile-data"],
+    mutationFn: update,
+  });
+
   const handleSubmit = () => {
     const priceInt = parseInt(price, 10);
 
     if (isNaN(priceInt) || priceInt <= 0) {
-      toast.error("유효한 가격을 입력해주세요.");
+      showErrorToast("유효한 가격을 입력해주세요.");
       return;
     }
 
     if (mode === "edit" && defaultValues?.productId) {
-      update({
+      updateMutation({
         productId: defaultValues.productId,
         changedAmount: dataAmount,
         price: priceInt,
         isSplitType: isSplit,
         onSuccess: () => {
-          toast.success("수정 완료!");
+          showSuccessToast("수정 완료!");
           onClose();
           router.refresh();
         },
       });
     } else {
-      register({
+      registMutation({
         dataAmount,
         price: priceInt,
         isSplitType: isSplit,
         onSuccess: () => {
+          setIsFin(true);
           setPrice("");
           setValue([1]);
           setIsSplit(false);
@@ -89,7 +102,7 @@ export default function DataRegistModal({
         />
         {value[0] >= maxAmount && (
           <p className="body-xxs text-error mt-20">
-            이번 달 최대 판매 가능량을 모두 사용하셨습니다.
+            이번 달 최대 판매 가능량을 등록하시겠습니까?
           </p>
         )}
       </FlatCard>
@@ -130,8 +143,14 @@ export default function DataRegistModal({
         />
       </div>
       <button
-        className={buttonVariants({ variant: "secondary", size: "4xl" }) + " w-full mt-6"}
+        className={
+          buttonVariants({
+            variant: isRegistPending || isUpdatePending ? "loading" : "secondary",
+            size: "4xl",
+          }) + " w-full mt-6 body-md"
+        }
         onClick={handleSubmit}
+        disabled={isRegistPending || isUpdatePending || isFin}
       >
         {mode === "edit" ? "수정하기" : "등록하기"}
       </button>

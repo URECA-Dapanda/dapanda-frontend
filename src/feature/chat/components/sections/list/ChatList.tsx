@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useChatStore } from "@feature/chat/stores/useChatStore";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import ChatItem from "@feature/chat/components/sections/list/ChatItem";
@@ -10,11 +11,7 @@ import { ApiChatRoom, ChatSocketMessage } from "@feature/chat/types/chatType";
 import { ButtonComponent } from "@/components/common/button/ButtonComponent";
 import { formatRelativeTime } from "@/lib/time";
 import type { ChatRoomPreview } from "@feature/chat/stores/useChatStore";
-
-const productCache = new Map<
-  number,
-  { title: string; price: number; memberId: number; memberName: string }
->();
+import EmptyState from "@/components/common/empty/EmptyState";
 
 export default function ChatList() {
   const chatList = useChatStore((state) => state.chatList);
@@ -22,88 +19,111 @@ export default function ChatList() {
   const setChatListUpdateCallback = useWebSocketStore((state) => state.setChatListUpdateCallback);
   const { subscribe, unsubscribe } = useWebSocketStore();
   const [selectedFilter, setSelectedFilter] = useState<"ALL" | "BUYER" | "SELLER">("ALL");
+  const [isLoading, setIsLoading] = useState(true);
 
-  const fetchChatRooms = useCallback(async () => {
-    try {
-      const apiList = await getChatRoomList(10, selectedFilter);
+  // 채팅방 목록 가져오기
+  const { data: apiList, refetch: refetchChatRooms } = useQuery({
+    queryKey: ["chatRooms", selectedFilter],
+    queryFn: () => getChatRoomList(10, selectedFilter),
+    staleTime: 30 * 1000, // 30초간 캐시 유지
+    gcTime: 5 * 60 * 1000, // 5분간 메모리에 유지
+  });
 
-      // 메시지가 있는 채팅방만 필터링
-      const filteredApiList = apiList.filter(
-        (item: ApiChatRoom) => item.lastMessage && item.lastMessage.trim() !== ""
-      );
+  // 메시지가 있는 채팅방만 필터링
+  const filteredApiList = useMemo(() => {
+    if (!apiList) return [];
+    return apiList.filter(
+      (item: ApiChatRoom) => item.lastMessage && item.lastMessage.trim() !== ""
+    );
+  }, [apiList]);
 
-      // 상품 정보 가져오기 (캐시 활용)
-      const uniqueProductIds = [
-        ...new Set(filteredApiList.map((item: ApiChatRoom) => item.productId)),
-      ];
+  // 고유한 상품 ID 목록
+  const uniqueProductIds = useMemo(() => {
+    return [...new Set(filteredApiList.map((item: ApiChatRoom) => item.productId))] as number[];
+  }, [filteredApiList]);
 
-      const productDetailsMap: Record<
-        number,
-        { title: string; price: number; memberId: number; memberName: string }
-      > = {};
-
-      for (const productId of uniqueProductIds) {
+  // 모든 상품 정보를 한 번에 가져오기
+  const { data: allProductData } = useQuery({
+    queryKey: ["products", uniqueProductIds],
+    queryFn: async () => {
+      const productPromises = uniqueProductIds.map(async (productId) => {
         try {
-          const productIdNum = productId as number;
-          // 캐시에서 먼저 확인
-          if (productCache.has(productIdNum)) {
-            productDetailsMap[productIdNum] = productCache.get(productIdNum)!;
-          } else {
-            // 캐시에 없으면 API 호출
-            const productData = await getMapDetailById(String(productIdNum));
-            const productInfo = {
-              title: productData.title,
-              price: productData.price,
-              memberId: productData.memberId,
-              memberName: productData.memberName,
-            };
-
-            // 캐시에 저장
-            productCache.set(productIdNum, productInfo);
-            productDetailsMap[productIdNum] = productInfo;
-          }
+          const data = await getMapDetailById(productId.toString());
+          return { productId, data };
         } catch (error) {
           console.error(`상품 ${productId} 정보 가져오기 실패:`, error);
+          return { productId, data: null };
         }
-      }
-
-      const chatList = filteredApiList.map((item: ApiChatRoom) => {
-        const productDetail = productDetailsMap[item.productId];
-        return {
-          chatRoomId: item.chatRoomId,
-          itemId: item.itemId,
-          name: item.senderName,
-          title: productDetail?.title || "",
-          price: productDetail?.price || 0,
-          updatedAt: item.lastMessageAt,
-          productId: item.productId,
-          senderName: item.senderName,
-          avatarUrl: item.senderProfileImageUrl || "c",
-          senderId: item.senderId,
-          lastMessage: item.lastMessage || "",
-          unreadCount: item.unreadCount || 0,
-        };
       });
 
-      setChatList(chatList);
-    } catch (e) {
-      console.error("채팅방 목록 가져오기 실패:", e);
-    }
-  }, [selectedFilter, setChatList]);
+      const results = await Promise.all(productPromises);
+      const productMap = new Map();
 
-  // 채팅방 목록이 변경될 때마다 웹소켓 구독 관리
+      results.forEach(({ productId, data }) => {
+        if (data) {
+          productMap.set(productId, {
+            title: data.title,
+            price: data.price,
+            memberId: data.memberId,
+            memberName: data.memberName,
+            imageUrls: data.imageUrls,
+          });
+        }
+      });
+
+      return productMap;
+    },
+    enabled: uniqueProductIds.length > 0,
+    staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
+    gcTime: 10 * 60 * 1000, // 10분간 메모리에 유지
+  });
+
+  // 채팅 목록 생성
+  const processedChatList = useMemo(() => {
+    if (!allProductData) return [];
+
+    return filteredApiList.map((item: ApiChatRoom) => {
+      const productDetail = allProductData.get(item.productId);
+      return {
+        chatRoomId: item.chatRoomId,
+        itemId: item.itemId,
+        name: item.senderName,
+        title: productDetail?.title || "",
+        price: productDetail?.price || 0,
+        updatedAt: item.lastMessageAt,
+        productId: item.productId,
+        senderName: item.senderName,
+        avatarUrl: item.senderProfileImageUrl,
+        senderId: item.senderId,
+        lastMessage: item.lastMessage || "",
+        unreadCount: item.unreadCount || 0,
+      };
+    });
+  }, [filteredApiList, allProductData]);
+
+  // 채팅 목록 업데이트
+  useEffect(() => {
+    if (processedChatList.length > 0) {
+      setChatList(processedChatList);
+      setIsLoading(false);
+    }
+  }, [processedChatList, setChatList]);
+
+  // 웹소켓 구독 관리 최적화
+  const chatRoomIds = useMemo(() => chatList.map((chat) => chat.chatRoomId), [chatList]);
+
   useEffect(() => {
     // 기존 구독 해제
-    chatList.forEach((chat: ChatRoomPreview) => {
-      unsubscribe(chat.chatRoomId);
+    chatRoomIds.forEach((chatRoomId) => {
+      unsubscribe(chatRoomId);
     });
 
     // 새로운 채팅방들 구독
-    chatList.forEach((chat: ChatRoomPreview) => {
-      subscribe(chat.chatRoomId, (message) => {
+    chatRoomIds.forEach((chatRoomId) => {
+      subscribe(chatRoomId, (message) => {
         setChatList((prevChatList: ChatRoomPreview[]) => {
           return prevChatList.map((prevChat: ChatRoomPreview) => {
-            if (prevChat.chatRoomId === chat.chatRoomId) {
+            if (prevChat.chatRoomId === chatRoomId) {
               const extendedMessage = message as ChatSocketMessage & { unreadCount?: number };
 
               return {
@@ -118,29 +138,29 @@ export default function ChatList() {
         });
 
         if (!(message as ChatSocketMessage & { unreadCount?: number }).unreadCount) {
-          fetchChatRooms();
+          refetchChatRooms();
         }
       });
     });
 
     // 컴포넌트 언마운트 시 모든 구독 해제
     return () => {
-      chatList.forEach((chat: ChatRoomPreview) => {
-        unsubscribe(chat.chatRoomId);
+      chatRoomIds.forEach((chatRoomId) => {
+        unsubscribe(chatRoomId);
       });
     };
-  }, [chatList, subscribe, unsubscribe, fetchChatRooms]);
+  }, [chatRoomIds, subscribe, unsubscribe, refetchChatRooms, setChatList]);
 
   // 웹소켓 스토어에 채팅방 목록 업데이트 콜백 등록
   useEffect(() => {
-    setChatListUpdateCallback(fetchChatRooms);
+    setChatListUpdateCallback(refetchChatRooms);
     return () => setChatListUpdateCallback(null);
-  }, [selectedFilter, setChatListUpdateCallback, fetchChatRooms]);
+  }, [selectedFilter, setChatListUpdateCallback, refetchChatRooms]);
 
   // 컴포넌트 마운트 시와 필터 변경 시 API 호출
   useEffect(() => {
-    fetchChatRooms();
-  }, [selectedFilter, fetchChatRooms]);
+    refetchChatRooms();
+  }, [selectedFilter, refetchChatRooms]);
 
   return (
     <div className="flex flex-col px-24 pt-20">
@@ -173,25 +193,37 @@ export default function ChatList() {
 
       <div className="overflow-y-auto overflow-x-hidden scrollbar-track-transparent h-sheet-safe">
         <div className="py-24 mb-56">
-          {chatList.map((chat, index) => (
-            <div key={chat.chatRoomId}>
-              <ChatItem
-                chatRoomId={String(chat.chatRoomId)}
-                name={chat.name}
-                updatedAt={formatRelativeTime(chat.updatedAt)}
-                productId={chat.productId}
-                place={chat.title}
-                pricePer10min={chat.price}
-                avatarUrl={chat.avatarUrl}
-                senderId={chat.senderId}
-                lastMessage={chat.lastMessage}
-                unreadCount={chat.unreadCount}
-              />
-              {index < chatList.length - 1 && (
-                <div className="border-b border-gray-200 mx-24"></div>
-              )}
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-40">
+              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+              <p className="text-gray-500 mt-16">채팅방 목록을 불러오는 중...</p>
             </div>
-          ))}
+          ) : chatList.length === 0 ? (
+            <EmptyState
+              message="참여중인 채팅방이 없어요"
+              subMessage="새로운 거래를 시작해보세요"
+            />
+          ) : (
+            chatList.map((chat, index) => (
+              <div key={chat.chatRoomId}>
+                <ChatItem
+                  chatRoomId={String(chat.chatRoomId)}
+                  name={chat.name}
+                  updatedAt={formatRelativeTime(chat.updatedAt)}
+                  productId={chat.productId}
+                  place={chat.title}
+                  pricePer10min={chat.price}
+                  avatarUrl={chat.avatarUrl}
+                  senderId={chat.senderId}
+                  lastMessage={chat.lastMessage}
+                  unreadCount={chat.unreadCount}
+                />
+                {index < chatList.length - 1 && (
+                  <div className="border-b border-gray-200 mx-24"></div>
+                )}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

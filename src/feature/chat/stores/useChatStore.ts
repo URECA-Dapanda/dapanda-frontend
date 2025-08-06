@@ -34,3 +34,8 @@ export const useChatStore = create<ChatStore>((set) => ({
       chatList: typeof list === "function" ? list(state.chatList) : list,
     })),
 }));
+
+export const getTotalUnreadCount = () => {
+  const chatList = useChatStore.getState().chatList;
+  return chatList.reduce((sum, chat) => sum + (chat.unreadCount || 0), 0);
+};
