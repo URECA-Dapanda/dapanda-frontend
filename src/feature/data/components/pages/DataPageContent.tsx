@@ -15,6 +15,7 @@ import { useDataFilterStore } from "@feature/data/stores/useDataFilterStore";
 import { onboardingPages } from "@/components/common/onboarding";
 import ModalPortal from "@/lib/ModalPortal";
 import { updateMemberRole } from "@/apis/userProfile";
+import Image from "next/image";
 
 const OnboardingLayout = dynamic(
   () => import("@/components/common/onboarding").then((mod) => mod.OnboardingLayout),
@@ -120,7 +121,16 @@ export default function DataPageContent() {
 
   return (
     <>
-      <div className="w-full bg-primary2 datapagecontent h-[100dvh] bg-[url('/dpd-logo.svg')] bg-position-[-35_-37] bg-no-repeat bg-size-[237px]">
+      <div className="w-full bg-primary2 datapagecontent h-[100dvh] ">
+        <Image
+          src="/dpd-logo.svg"
+          alt="배경 로고"
+          width={237}
+          height={237}
+          className="absolute"
+          style={{ top: -37, left: -35 }}
+          priority
+        />
         {/* 상단 필터 영역 */}
         <div className="p-4 pt-[114px]">
           <DefaultFilterCard onSearch={() => setSheetOpen(true)} />
