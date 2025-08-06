@@ -43,7 +43,6 @@ export default function RootLayout({
             `,
           }}
         />
-        <link rel="preload" href="/dpd-logo.svg" as="image" type="image/svg+xml" />
       </head>
       <body className="flex flex-col box-border w-full bg-gray-300 justify-center items-center">
         <ProviderWrapper>
