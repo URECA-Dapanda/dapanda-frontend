@@ -1,5 +1,5 @@
 import { Package2, ShoppingCart } from "lucide-react";
-import HistoryButton from "./HistoryButton";
+import HistoryButton from "@feature/mypage/components/sections/HistoryButton";
 
 export default function TransactionHistory() {
   return (

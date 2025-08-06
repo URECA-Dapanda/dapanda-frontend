@@ -1,37 +1,28 @@
-export interface MapType {
-  productId: number;
+import { BaseProduct } from "@feature/map/types/mapBase";
+
+export interface MapType extends BaseProduct {
   type: "와이파이" | "핫스팟";
-  title: string;
-  address: string;
   location: string;
-  startTime: string;
-  endTime: string;
-  open: boolean;
   score: number;
   price: string;
   imageUrl?: string;
   memberName: string;
+  title: string;
 }
 
-export type MapDetailItem = {
-  itemId: number | undefined;
-  productId: number;
+export interface MapDetailItem extends BaseProduct {
+  itemId: number;
   wifiId: number;
   type: string;
+  title: string;
   imageUrl: string[];
   place: string;
-  address: string;
-  startTime: string;
-  endTime: string;
-  pricePer10min: number;
   description: string;
+  pricePer10min: number;
   recentPrice: number;
   averagePrice: number;
   memberName: string;
   memberId: number;
   myProduct: boolean;
   reviewCount: number;
-  longitude: number;
-  latitude: number;
-  open: boolean;
-};
+}

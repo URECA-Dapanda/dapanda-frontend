@@ -1,3 +1,4 @@
+import { MouseEventHandler } from "react";
 import AvatarIcon from "@components/common/AvatarIcon";
 import { ButtonComponent } from "@components/common/button";
 import CardComponent from "@components/common/card/CardComponent";
@@ -7,7 +8,6 @@ import { Rating, RatingButton } from "@components/common/rating/RatingScore";
 import { SkeletonCard } from "@components/common/skeleton";
 import { ReviewType } from "@feature/mypage/types/reviewType";
 import { cn } from "@lib/utils";
-import { MouseEventHandler } from "react";
 
 interface ReviewItemProps {
   data?: ReviewType;

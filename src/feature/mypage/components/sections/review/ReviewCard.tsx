@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 import ReviewTabs from "@components/common/tabs/ReviewTabs";
 import ReviewList from "@feature/mypage/components/sections/review/ReviewList";
-import OnSaleTabContent from "../sale/OnSaleTabContent";
+import OnSaleTabContent from "@feature/mypage/components/sections/sale/OnSaleTabContent";
 
 export default function ReviewCard() {
   const [currentTab, setCurrentTab] = useState<string>("review");

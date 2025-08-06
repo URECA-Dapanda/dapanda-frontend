@@ -1,12 +1,12 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 import TabTitle from "@feature/mypage/components/sections/TabTitle";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import { getSaleHistoryList } from "@feature/mypage/apis/mypageRequest";
 import { HistoryCard } from "@feature/mypage/components/sections/sale/HistoryCard";
 import { SaleHistoryType } from "@feature/mypage/types/mypageTypes";
-import { useSearchParams } from "next/navigation";
 
 export default function OnSaleTabContent() {
   const params = useSearchParams();

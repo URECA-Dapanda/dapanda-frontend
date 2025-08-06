@@ -25,6 +25,7 @@ export default function MapContainer() {
   useMapMarkers(map, storeList, {
     onMarkerClick: (store) => {
       setSelectedStore(store);
+      map?.setZoom(18);
     },
   });
 

@@ -1,4 +1,5 @@
 "use client";
+
 import { memo, useMemo } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";

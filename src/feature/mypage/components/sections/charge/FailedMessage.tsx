@@ -1,8 +1,8 @@
 "use client";
 
-import { ButtonComponent } from "@components/common/button";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { ButtonComponent } from "@components/common/button";
 
 export default function FailedMessage() {
   const searchParams = useSearchParams();

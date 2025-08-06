@@ -2,11 +2,11 @@
 
 import { MapPin, MessageCircle, User, Wifi } from "lucide-react";
 import { Fragment, PropsWithChildren } from "react";
-import NavigationButton from "@components/common/navigation/NavigationButton";
 import { usePathname } from "next/navigation";
+import NavigationButton from "@components/common/navigation/NavigationButton";
+import { useChatStore } from "@feature/chat/stores/useChatStore";
 
 import { cn } from "@lib/utils";
-import { useChatStore } from "@feature/chat/stores/useChatStore";
 
 interface BottomNavigationProps {
   id?: string;

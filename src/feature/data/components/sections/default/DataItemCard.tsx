@@ -1,9 +1,9 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { memo, useCallback } from "react";
 import DataItemContent from "@feature/data/components/pages/DataItemContent";
 import { DataType, ProductItemProps } from "@feature/data/types/dataType";
-import { useRouter } from "next/navigation";
 import ItemCard from "@components/common/card/ItemCard";
 
 interface DataItemCardProps extends Partial<ProductItemProps<DataType>> {

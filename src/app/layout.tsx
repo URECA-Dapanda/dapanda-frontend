@@ -1,8 +1,8 @@
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
-import ProviderWrapper from "@components/common/ProviderWrapper";
 import { Slide, ToastContainer } from "react-toastify";
+import ProviderWrapper from "@components/common/ProviderWrapper";
 import FcmInitializer from "@components/common/FcmInitializer";
 import "./globals.css";
 
@@ -43,7 +43,6 @@ export default function RootLayout({
             `,
           }}
         />
-        <link rel="preload" href="/dpd-logo.svg" as="image" type="image/svg+xml" />
       </head>
       <body className="flex flex-col box-border w-full bg-gray-300 justify-center items-center">
         <ProviderWrapper>

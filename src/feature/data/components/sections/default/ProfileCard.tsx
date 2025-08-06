@@ -1,10 +1,10 @@
 "use client";
 
+import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
 import AvatarIcon from "@/components/common/AvatarIcon";
 import { Rating, RatingButton } from "@components/common/rating/RatingScore";
 import { getMyInfo } from "@feature/mypage/apis/mypageRequest";
-import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
 
 interface SellerProfileCardProps {
   sellerId: number;

@@ -1,7 +1,7 @@
 "use client";
 
-import { MyDataProps } from "@feature/mypage/types/mypageTypes";
 import React, { useEffect, useMemo, useState } from "react";
+import { MyDataProps } from "@feature/mypage/types/mypageTypes";
 
 type DataUsageDonutProps = {
   unit?: string;

@@ -1,7 +1,7 @@
+import Link from "next/link";
 import { formatTimeToAmPm } from "@/lib/time";
 import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
 import AvatarIcon from "@/components/common/AvatarIcon";
-import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 

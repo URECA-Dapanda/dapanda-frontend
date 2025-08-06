@@ -2,9 +2,9 @@
 
 import { Siren } from "lucide-react";
 import { useCallback, useState } from "react";
+import ReportModal from "@components/common/modal/ReportModal";
 
 import { cn } from "@lib/utils";
-import ReportModal from "../modal/ReportModal";
 
 interface ReportTriggerButtonProps {
   targetName: string;

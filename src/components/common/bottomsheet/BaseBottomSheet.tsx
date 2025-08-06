@@ -1,9 +1,10 @@
 "use client";
 
-import { cn } from "@lib/utils";
-import { motion, PanInfo } from "framer-motion";
 import { ReactNode, useEffect, useRef, useState } from "react";
+import { motion, PanInfo } from "framer-motion";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
+
+import { cn } from "@lib/utils";
 
 interface BaseBottomSheetProps {
   isOpen: boolean;

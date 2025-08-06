@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import BottomSheetHeader from "@/components/common/bottomsheet/BottomSheetHeader";
 import FilterCardContent from "@/feature/data/components/sections/filter/FilterCardContent";
 import FlatCard from "@components/common/card/FlatCard";
@@ -10,9 +12,7 @@ import { useRegisterDataProduct } from "@feature/data/hooks/useRegisterDataProdu
 import { useUpdateDataProduct } from "@feature/data/hooks/useUpdateDataProduct";
 import { useMonthlyDataLimit } from "@feature/data/hooks/useMonthlyDataLimit";
 import { Switch } from "@ui/switch";
-import { useRouter } from "next/navigation";
 import { showErrorToast, showSuccessToast } from "@lib/toast";
-import { useMutation } from "@tanstack/react-query";
 
 interface DataRegistModalProps {
   onClose: () => void;
@@ -101,9 +101,7 @@ export default function DataRegistModal({
           max={maxAmount}
         />
         {value[0] >= maxAmount && (
-          <p className="body-xxs text-error mt-20">
-            이번 달 최대 판매 가능량을 등록하시겠습니까?
-          </p>
+          <p className="body-xxs text-error mt-20">이번 달 최대 판매 가능량을 등록하시겠습니까?</p>
         )}
       </FlatCard>
       <div className="flex gap-6 mt-4">

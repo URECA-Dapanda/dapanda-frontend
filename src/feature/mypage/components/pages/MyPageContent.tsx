@@ -4,11 +4,11 @@ import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import CurrentCashCard from "@feature/mypage/components/sections/profile/CurrentCashCard";
 import TransactionHistory from "@feature/mypage/components/sections/TransactionHistory";
-import LogOutButton from "../sections/LogOutButton";
+import LogOutButton from "@feature/mypage/components/sections/LogOutButton";
 import ProfileCard from "@feature/mypage/components/sections/profile/ProfileCard";
 import { useCashSuccessModalStore } from "@feature/mypage/stores/useCashSuccessModalStore";
 import CashSuccessModal from "@feature/mypage/components/sections/toss/CashSuccessModal";
-import DataStateComponent from "../sections/profile/DataStateComponent";
+import DataStateComponent from "@feature/mypage/components/sections/profile/DataStateComponent";
 
 export default function MyPageContent() {
   const searchParams = useSearchParams();

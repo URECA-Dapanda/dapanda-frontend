@@ -1,6 +1,6 @@
 import { Button } from "@ui/button";
-import { buttonVariants } from "./buttonVariants";
-import type { ButtonProps } from "./button.types";
+import { buttonVariants } from "@components/common/button/buttonVariants";
+import type { ButtonProps } from "@components/common/button/button.types";
 
 import { cn } from "@/lib/utils";
 

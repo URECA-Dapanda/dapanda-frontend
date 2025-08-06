@@ -1,6 +1,6 @@
+import { PropsWithChildren } from "react";
 import SlidingTabs from "@/components/common/tabs/SlidingTabs";
 import { PURCHASE_MODE_TABS } from "@/components/common/tabs/tabsConfig";
-import { PropsWithChildren } from "react";
 
 interface Props {
   value: string;

@@ -1,11 +1,11 @@
 "use client";
 
-import MonthPicker from "@components/common/calendar/MonthPicker";
-import dayjs, { Dayjs } from "dayjs";
 import { Suspense, useEffect, useRef, useState } from "react";
-import CashHistoryDateBox from "../sections/profile/CashHistoryDateBox";
+import dayjs, { Dayjs } from "dayjs";
+import CashHistoryDateBox from "@feature/mypage/components/sections/profile/CashHistoryDateBox";
+import MonthlyCashTotalBox from "@feature/mypage/components/sections/profile/MonthlyCashTotalBox";
+import MonthPicker from "@components/common/calendar/MonthPicker";
 import { useVirtualizedGroupedInfiniteQuery } from "@hooks/useGroupedVirtualizedInfiniteQuery";
-import MonthlyCashTotalBox from "../sections/profile/MonthlyCashTotalBox";
 
 export default function CashHistoryContent() {
   const [currentDate, setCurrentDate] = useState(dayjs());

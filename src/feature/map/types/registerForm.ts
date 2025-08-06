@@ -10,6 +10,20 @@ export interface RegisterFormValues {
   images?: string[];
 }
 
+export interface RegisterFormData extends RegisterFormValues {
+  lat: number;
+  lng: number;
+}
+
+export interface RegisterFormErrors {
+  title: boolean;
+  description: boolean;
+  price: boolean;
+  startTime: boolean;
+  endTime: boolean;
+  timeOrderInvalid: boolean;
+}
+
 export interface WifiRegisterRequest {
   price: number;
   title: string;
@@ -33,18 +47,4 @@ export interface WifiUpdateRequest {
   startTime: string;
   endTime: string;
   imageUrls: string[];
-}
-
-export interface RegisterFormErrors {
-  title: boolean;
-  description: boolean;
-  price: boolean;
-  startTime: boolean;
-  endTime: boolean;
-  timeOrderInvalid: boolean;
-}
-
-export interface RegisterFormData extends RegisterFormValues {
-  lat: number;
-  lng: number;
 }

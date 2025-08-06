@@ -1,9 +1,9 @@
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useEffect } from "react";
 import SocialButton from "@components/common/button/SocialButton";
 import LayoutBox from "@components/common/container/LayoutBox";
 import { useAuth } from "@hooks/useAuth";
-import Image from "next/image";
 
 export default function LandingPageContent() {
   const router = useRouter();

@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { Wallet } from "lucide-react";
 import BaseModal from "@/components/common/modal/BaseModal";
 import ModalHeader from "@/components/common/modal/ModalHeader";
 import { ButtonComponent } from "@/components/common/button/ButtonComponent";
 import { BadgeComponent } from "@/components/common/badge/BadgeComponent";
-import { Wallet } from "lucide-react";
 import CurrentCashCard from "@feature/mypage/components/sections/profile/CurrentCashCard";
-import { formatIsoToHHMM } from "@lib/time";
 import FullScreenModal from "@components/common/modal/FullScreenModal";
+import { formatIsoToHHMM } from "@lib/time";
 
 interface PaymentModalProps {
   isOpen: boolean;

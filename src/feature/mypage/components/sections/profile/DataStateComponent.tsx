@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { DataUsageDonut } from "./CicularProgressBar";
+import { DataUsageDonut } from "@feature/mypage/components/sections/profile/CicularProgressBar";
 import { getMyData, getSellingDataAmount } from "@feature/mypage/apis/mypageRequest";
 import { getBuyingDataAmount } from "@feature/data/api/dataRequest";
 
