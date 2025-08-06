@@ -59,7 +59,7 @@ export const postMobileDataProduct = async (
     dataAmount,
     isSplitType,
   });
-    return res.data;
+  return res.data;
 };
 
 export const getPriceRecommendation = async () => {
@@ -67,10 +67,11 @@ export const getPriceRecommendation = async () => {
     params: { productType: "MOBILE_DATA" },
   });
   const data = response.data?.data;
-  if (!data || data.average == null || data.recent == null) {
+  if (!data || data.averagePrice == null || data.recentPrice == null) {
     throw new Error("가격 추천 정보를 불러오지 못했습니다.");
   }
-  return response.data.data;
+
+  return data;
 };
 
 export async function deleteDataPost(postId: string) {
