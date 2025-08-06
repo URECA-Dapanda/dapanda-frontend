@@ -4,6 +4,8 @@ import {
   postScrapTrade,
   postWifiTrade,
 } from "@feature/payment/api/paymentRequest";
+import throttle from "lodash/throttle";
+
 
 jest.mock("@lib/axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -19,7 +21,7 @@ describe("📦 paymentRequest API", () => {
         data: { data: { tradeId: 123 } },
       });
 
-      const tradeId = await postDefaultTrade(1, 100);
+      const tradeId = await postDefaultTrade({ productId: 1, mobileDataId: 100 });
       expect(tradeId).toBe(123);
     });
 
@@ -28,7 +30,7 @@ describe("📦 paymentRequest API", () => {
         data: { data: { tradeId: 456 } },
       });
 
-      const tradeId = await postDefaultTrade(2, 200, 1.5);
+      const tradeId = await postDefaultTrade({ productId: 2, mobileDataId: 200, dataAmount: 1.5 });
       expect(tradeId).toBe(456);
     });
   });
@@ -64,10 +66,10 @@ describe("📦 paymentRequest API", () => {
         },
       ];
 
-      const tradeId = await postScrapTrade(1.5, 2200, combinations);
+      const tradeId = await postScrapTrade({ totalAmount: 1.5, totalPrice: 2200, combinations });
 
       expect(tradeId).toBe(789);
-      expect(mockedAxios.post).toHaveBeenCalledTimes(1); // ✅ 이제 1번만 호출됨
+      expect(mockedAxios.post).toHaveBeenCalledTimes(1);
       expect(mockedAxios.post).toHaveBeenCalledWith(
         "/api/trades/mobile-data/scrap",
         {
@@ -85,13 +87,7 @@ describe("📦 paymentRequest API", () => {
         data: { code: 0, data: { tradeId: 101 } },
       });
 
-      const tradeId = await postWifiTrade(
-        99,
-        888,
-        "2025-08-06T08:00:00Z",
-        "2025-08-06T10:00:00Z"
-      );
-
+      const tradeId = await postWifiTrade({ productId: 99, wifiId: 888, startTime: "2025-08-06T08:00:00Z", endTime: "2025-08-06T10:00:00Z" });
       expect(tradeId).toBe(101);
     });
 
@@ -101,7 +97,7 @@ describe("📦 paymentRequest API", () => {
       });
 
       await expect(
-        postWifiTrade(1, 1, "start", "end")
+        postWifiTrade({ productId: 1, wifiId: 1, startTime: "start", endTime: "end" })
       ).rejects.toThrow("결제 실패");
     });
 
@@ -113,37 +109,69 @@ describe("📦 paymentRequest API", () => {
       );
       mockedAxios.post.mockReturnValue(promise as any);
     
-      const result = postDefaultTrade(1, 100);
+      const result = postDefaultTrade({ productId: 1, mobileDataId: 100 });
       jest.advanceTimersByTime(2000);
       jest.runAllTimers();
       await result;
     });
-    it("빠르게 여러번 결제를 시도해도 한 번만 API가 호출된다", async () => {
-        mockedAxios.post.mockResolvedValue({ data: { data: { tradeId: 999 } } });
+
+    describe("postScrapTrade()", () => {
+        it("빠르게 여러 번 결제를 시도해도 한 번만 API가 호출된다", async () => {
+          jest.useFakeTimers(); // throttle 내부 타이머 제어
       
-        const combinations = [
-          {
-            productId: 1,
-            mobileDataId: 10,
-            memberName: "홍길동",
-            price: 1000,
-            purchasePrice: 500,
-            remainAmount: 1,
-            pricePer100MB: 100,
-            splitType: true,
-            updatedAt: "2025-08-06T08:00:00Z",
-          },
-        ];
+          mockedAxios.post.mockResolvedValue({
+            data: { data: { tradeId: 999 } },
+          });
       
-        const calls = [
-          postScrapTrade(1.5, 2200, combinations),
-          postScrapTrade(1.5, 2200, combinations),
-          postScrapTrade(1.5, 2200, combinations),
-        ];
+          const combinations = [
+            {
+              productId: 1,
+              mobileDataId: 10,
+              memberName: "홍길동",
+              price: 1000,
+              purchasePrice: 500,
+              remainAmount: 1,
+              pricePer100MB: 100,
+              splitType: true,
+              updatedAt: "2025-08-06T08:00:00Z",
+            },
+          ];
       
-        await Promise.all(calls);
+          const throttledFn = throttle(
+            () =>
+              postScrapTrade({
+                totalAmount: 1.5,
+                totalPrice: 2200,
+                combinations,
+              }),
+            500,
+            { trailing: false }
+          );
       
-        expect(mockedAxios.post).toHaveBeenCalledTimes(1);
-      });      
+          // 세 번 빠르게 호출
+          throttledFn();
+          throttledFn();
+          throttledFn();
+      
+          // 시간 경과를 시뮬레이션
+          jest.advanceTimersByTime(1000);
+      
+          // 실제로 호출될 수 있게 기다림
+          await Promise.resolve();
+      
+          expect(mockedAxios.post).toHaveBeenCalledTimes(1);
+          expect(mockedAxios.post).toHaveBeenCalledWith(
+            "/api/trades/mobile-data/scrap",
+            {
+              totalAmount: 1.5,
+              totalPrice: 2200,
+              combinations,
+            }
+          );
+      
+          jest.useRealTimers();
+        });
+      });
+      
   });
 });
