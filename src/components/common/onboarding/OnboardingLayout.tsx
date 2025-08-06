@@ -2,6 +2,7 @@ import React from "react";
 import { ButtonComponent } from "../button/ButtonComponent";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 
 export interface OnboardingPage {
   title: string;
@@ -62,16 +63,25 @@ export function OnboardingLayout({
           {currentPageData.description}
         </p>
 
-        <div className="items-center justify-center w-full flex flex-col pt-16">
-          <Image
-            src={currentPageData.image}
-            alt={currentPageData.imageAlt}
-            width={350}
-            height={450}
-            priority
-            className="w-full h-auto object-contain max-h-[36vh]"
-          />
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentPageData.image}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="items-center justify-center w-full flex flex-col pt-16"
+          >
+            <Image
+              src={currentPageData.image}
+              alt={currentPageData.imageAlt}
+              width={350}
+              height={450}
+              priority
+              className="w-full h-auto object-contain max-h-[36vh]"
+            />
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       <div className="flex justify-between items-center px-24">
