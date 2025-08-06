@@ -93,7 +93,7 @@ export default function ChatContainer() {
 
       return () => clearTimeout(timer);
     }
-  }, [user, isLoading, isLogin, setChatList]);
+  }, [user, isLoading, isLogin, setChatList, data]);
 
   return null;
 }
