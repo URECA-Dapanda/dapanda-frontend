@@ -53,8 +53,15 @@ export default function MapBottomSheet({
         latitude: myPosition?.lat() ?? 37.5665,
         longitude: myPosition?.lng() ?? 126.978,
         productSortOption: sortOptionMap[sortLabel],
+        open: availableOnly ? true : undefined,
       }),
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    getNextPageParam: (lastPage) => {
+      // 🔽 수정 포인트
+      if (availableOnly && lastPage.items.length === 0) {
+        return undefined;
+      }
+      return lastPage.nextCursor;
+    },
     estimateSize: () => 160,
   });
 
