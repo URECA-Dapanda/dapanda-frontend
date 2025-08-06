@@ -10,6 +10,13 @@ export default function LandingPageContent() {
   const { isLogin } = useAuth();
 
   useEffect(() => {
+    router.prefetch("/data");
+    router.prefetch("/data?tab=scrap");
+    router.prefetch("/data?tab=default");
+    router.prefetch("/data?on-boarding=true");
+  }, []);
+
+  useEffect(() => {
     if (isLogin) {
       router.push("/data");
     }

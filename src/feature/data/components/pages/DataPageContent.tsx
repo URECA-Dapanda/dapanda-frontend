@@ -11,7 +11,6 @@ import ScrapTabBody from "@feature/data/components/sections/scrap/ScrapTabConten
 import { PurchaseModeTabs } from "@/components/common/tabs";
 import { useHeaderStore } from "@stores/useHeaderStore";
 import DefaultFilterCard from "@feature/data/components/sections/filter/DefaultFilterCard";
-import DataRegistModal from "@feature/data/components/sections/modal/DataRegistModal";
 import { useDataFilterStore } from "@feature/data/stores/useDataFilterStore";
 import { onboardingPages } from "@/components/common/onboarding";
 import ModalPortal from "@/lib/ModalPortal";
@@ -21,6 +20,14 @@ const OnboardingLayout = dynamic(
   () => import("@/components/common/onboarding").then((mod) => mod.OnboardingLayout),
   {
     ssr: false,
+  }
+);
+
+const DataRegistModal = dynamic(
+  () => import("@feature/data/components/sections/modal/DataRegistModal"),
+  {
+    ssr: false,
+    loading: () => null,
   }
 );
 
@@ -36,6 +43,11 @@ export default function DataPageContent() {
   const [onboardingModalOpen, setOnboardingModalOpen] = useState(false);
   const [currentOnboardingPage, setCurrentOnboardingPage] = useState(0);
   const [isOnboardingLoading, setIsOnboardingLoading] = useState(false);
+
+  useEffect(() => {
+    router.prefetch("/data?tab=scrap");
+    router.prefetch("/data?tab=default");
+  }, []);
 
   useEffect(() => {
     const onboardingParam = searchParams.get("on-boarding");
