@@ -31,7 +31,7 @@ export default function CurrentCashCard({ isInterection }: CurrentCashCardProps)
             </div>
           </div>
 
-          <Image src="/creditIcon.png" alt="₩" width={48} height={48} />
+          <Image priority={true} src="/creditIcon.png" alt="₩" width={48} height={48} />
         </div>
         {isInterection && (
           <div className="flex gap-8">

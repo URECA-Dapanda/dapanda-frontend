@@ -9,8 +9,8 @@ import { useMutation } from "@tanstack/react-query";
 import { registReport } from "@apis/reportRequest";
 import ReportCompleteModal from "./ReportCompleteModal";
 import { AxiosError } from "axios";
-import { toast } from "react-toastify";
 import FullScreenModal from "./FullScreenModal";
+import { showErrorToast } from "@lib/toast";
 
 interface ReportModalProps {
   isOpen: boolean;
@@ -48,10 +48,10 @@ export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }:
     onError: (e: AxiosError) => {
       switch (e.status) {
         case 409:
-          return toast.error("이미 신고 처리중입니다.");
+          return showErrorToast("이미 신고 처리중입니다.");
         default:
           console.error(e.status);
-          return toast.error("신고 처리중 오류가 발생했습니다.");
+          return showErrorToast("신고 처리중 오류가 발생했습니다.");
       }
     },
   });
@@ -62,7 +62,7 @@ export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }:
   }, [setIsOpen]);
   const handleReportClick = useCallback(() => {
     if (!reportReason || reportReason === "") {
-      toast.error("신고 사유를 작성해 주세요.");
+      showErrorToast("신고 사유를 작성해 주세요.");
       ref.current?.focus();
     } else {
       reportMutation.mutate();

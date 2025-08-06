@@ -102,10 +102,21 @@ export default function TimeSelector({
                 key={idx}
                 onClick={() => {
                   if (disabled) return;
-                  setTemp((prev) => ({
-                    ...prev,
+                  const updated = {
+                    ...temp,
                     [field]: typeof item === "number" ? item : parseInt(item, 10),
-                  }));
+                  };
+
+                  setTemp(updated);
+                  onChange({
+                    hour: String(field === "hour" ? updated.hour : temp.hour).padStart(2, "0"),
+                    minute: String(field === "minute" ? updated.minute : temp.minute).padStart(
+                      2,
+                      "0"
+                    ),
+                    period: updated.period,
+                  });
+                  setActiveField(null);
                 }}
                 disabled={disabled}
                 className={cn(

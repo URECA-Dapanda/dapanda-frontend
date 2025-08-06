@@ -131,8 +131,13 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
   const addMessage = async (text: string) => {
     try {
+      const trimmedText = text.trim();
+      if (!trimmedText) {
+        return;
+      }
+
       const messagePayload = JSON.stringify({
-        message: text,
+        message: trimmedText,
       });
 
       sendMessage(chatRoomId, messagePayload);

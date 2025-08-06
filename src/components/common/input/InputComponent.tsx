@@ -92,7 +92,7 @@ const InputComponent = forwardRef<HTMLTextAreaElement | HTMLInputElement, InputC
 
     if (as === "textarea") {
       const textareaClass = cn(
-        "flex w-full min-w-0 px-3 py-1 rounded-6 border outline-none bg-transparent resize-none",
+        "flex w-full min-w-0 px-3 py-3 rounded-6 border outline-none bg-transparent resize-none",
         "font-pretendard body-md text-black placeholder:text-gray-400",
         "border-gray-400 shadow-xs transition-colors",
         "focus-visible:border-gray-500 focus-visible:ring-[3px] focus-visible:ring-gray-200",
@@ -116,6 +116,8 @@ const InputComponent = forwardRef<HTMLTextAreaElement | HTMLInputElement, InputC
           required={required}
           rows={rows}
           maxLength={maxLength}
+          autoComplete="off"
+          spellCheck="false"
         />
       );
     }
@@ -134,6 +136,8 @@ const InputComponent = forwardRef<HTMLTextAreaElement | HTMLInputElement, InputC
         className={cn(inputRadius, inputSize, color, className)}
         maxLength={maxLength}
         inputMode={inputMode}
+        autoComplete="off"
+        spellCheck="false"
       />
     );
   }

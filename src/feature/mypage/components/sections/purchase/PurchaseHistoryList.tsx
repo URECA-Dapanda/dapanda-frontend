@@ -34,7 +34,7 @@ export default function PurchaseHistoryList() {
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
         items={flatItems}
-        height="100%"
+        height="calc( 100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 108px - 30px - 24px - 12px )"
         renderItem={(index, item) => (
           <PurchaseHistoryCard data={item} key={item ? item.id : index} />
         )}
