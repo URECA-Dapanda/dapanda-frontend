@@ -33,7 +33,7 @@ export default function DataDetailContent() {
   const renderModals = UsePaymentModals();
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { recentPrice, avgPrice } = usePriceRecommendation();
+  const { recentPrice, averagePrice } = usePriceRecommendation();
   const handleDeleteModalOpen = useCallback(() => setIsOpen(true), []);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const { remainingBuying, remainingSelling, isLoading: isLimitLoading } = useMonthlyDataLimit();
@@ -59,8 +59,8 @@ export default function DataDetailContent() {
           price: data.price,
           unitPrice: data.pricePer100MB,
           uploadTime: formatRelativeTime(data.updatedAt),
-          recentPrice: recentPrice != null ? data.remainAmount * 10 * recentPrice : undefined,
-          averagePrice: avgPrice != null ? data.remainAmount * 10 * avgPrice : undefined,
+          recentPrice: recentPrice ? data.remainAmount * 10 * recentPrice : undefined,
+          averagePrice: averagePrice ? data.remainAmount * 10 * averagePrice : undefined,
           hasReported: false,
           memberName: data.memberName,
           isOwner,

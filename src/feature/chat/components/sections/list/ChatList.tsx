@@ -12,8 +12,10 @@ import { ButtonComponent } from "@/components/common/button/ButtonComponent";
 import EmptyState from "@/components/common/empty/EmptyState";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import { formatRelativeTime } from "@/lib/time";
+import { useAuth } from "@hooks/useAuth";
 
 export default function ChatList() {
+  const { isLogin } = useAuth();
   const chatList = useChatStore((state) => state.chatList);
   const setChatList = useChatStore((state) => state.setChatList);
   const setChatListUpdateCallback = useWebSocketStore((state) => state.setChatListUpdateCallback);
@@ -27,6 +29,7 @@ export default function ChatList() {
     queryFn: () => getChatRoomList(10, selectedFilter),
     staleTime: 30 * 1000, // 30초간 캐시 유지
     gcTime: 5 * 60 * 1000, // 5분간 메모리에 유지
+    enabled: !!isLogin,
   });
 
   // 메시지가 있는 채팅방만 필터링

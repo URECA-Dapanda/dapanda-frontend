@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { logOutRequest, getUserInfo } from "@apis/userProfile";
+import { logOutRequest } from "@apis/userProfile";
 import { useProfileStore } from "@/stores/useProfileStore";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import type { UserType } from "@/types/User";
@@ -17,12 +17,9 @@ export function useAuth() {
       .then((res) => res.json())
       .then(async (data) => {
         setIsLogin(data.isLogin);
-        return getUserInfo();
-      })
-      .then((userData) => {
-        if (userData && userData.data) {
-          setUser(userData.data);
-          setProfile(userData.data);
+        if (data && data.user) {
+          setUser(data.user);
+          setProfile(data.user);
 
           if (!isConnected) {
             connect().catch((error) => {
