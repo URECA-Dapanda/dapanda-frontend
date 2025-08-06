@@ -1,6 +1,6 @@
 import { MouseEventHandler, PropsWithChildren } from "react";
-import CardComponent from "./CardComponent";
-import CardContentComponent from "./CardContentComponent";
+import CardComponent from "@components/common/card/CardComponent";
+import CardContentComponent from "@components/common/card/CardContentComponent";
 
 interface ItemCardProps {
   handleClick?: MouseEventHandler;

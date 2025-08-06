@@ -1,7 +1,7 @@
 import { useCallback, useRef, useEffect } from "react";
 import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
 import { markMessageAsRead } from "@/feature/chat/api/chatRoomRequest";
-import { isTemporaryMessage } from "./chatUtils";
+import { isTemporaryMessage } from "@feature/chat/utils/chatUtils";
 
 export const useReadStatusHandler = (messages: ChatSocketMessage[]) => {
   const lastReadMessageId = useRef<number | null>(null);

@@ -1,7 +1,7 @@
+import { Suspense } from "react";
 import { ButtonComponent } from "@/components/common/button";
 import Slider from "@components/common/slider/SliderComponent";
 import { formatDataSize } from "@lib/formatters";
-import { Suspense } from "react";
 
 interface FilterCardContentProps {
   buttonText: string;

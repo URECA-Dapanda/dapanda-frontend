@@ -1,13 +1,13 @@
 "use client";
 
+import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
+import { CircleAlertIcon } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { ButtonComponent } from "@components/common/button";
 import BaseModal from "@components/common/modal/BaseModal";
 import ModalHeader from "@components/common/modal/ModalHeader";
 import { deleteDataPost } from "@feature/data/api/dataRequest";
-import { useMutation } from "@tanstack/react-query";
-import { CircleAlertIcon } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
 
 interface DeletePostModalProps {
   isOpen: boolean;

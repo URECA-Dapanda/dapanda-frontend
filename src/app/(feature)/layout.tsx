@@ -1,6 +1,6 @@
+import { ReactNode, Suspense } from "react";
 import AppHeader from "@components/common/header/AppHeader";
 import BottomNavigation from "@components/common/navigation/BottomNavigation";
-import { ReactNode, Suspense } from "react";
 
 export default function FeatureLayout({
   children,

@@ -1,9 +1,9 @@
 "use client";
 
-import { SalesHistoryTabs } from "@components/common/tabs";
 import { useCallback, useState } from "react";
-import OnSaleTabContent from "./OnSaleTabContent";
-import SoldoutTabContent from "./SoldoutTabContent";
+import { SalesHistoryTabs } from "@components/common/tabs";
+import OnSaleTabContent from "@feature/mypage/components/sections/sale/OnSaleTabContent";
+import SoldoutTabContent from "@feature/mypage/components/sections/sale/SoldoutTabContent";
 
 export default function SaleStateTab() {
   const [currentTab, setCurrentTab] = useState<string>("selling");

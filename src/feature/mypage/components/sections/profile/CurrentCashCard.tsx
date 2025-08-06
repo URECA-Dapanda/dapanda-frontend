@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { ButtonComponent } from "@components/common/button";
 import FlatCard from "@components/common/card/FlatCard";
-import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { getUserCash } from "@feature/mypage/apis/mypageRequest";
 import { formatPriceString } from "@lib/formatters";

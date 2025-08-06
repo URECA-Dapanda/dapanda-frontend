@@ -1,5 +1,5 @@
 import { BadgeComponent } from "@/components/common/badge";
-import { PostData } from "./topSheet.types";
+import { PostData } from "@components/common/topsheet/topSheet.types";
 import { Siren } from "lucide-react";
 
 export function PostTopSheetContent({ data, expanded }: { data: PostData; expanded: boolean }) {
@@ -43,7 +43,6 @@ export function PostTopSheetContent({ data, expanded }: { data: PostData; expand
             )}
           </>
         )}
-
       </div>
     </>
   );

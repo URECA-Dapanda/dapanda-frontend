@@ -1,8 +1,9 @@
 import React from "react";
-import { ButtonComponent } from "../button/ButtonComponent";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { ButtonComponent } from "@components/common/button/ButtonComponent";
 import { AnimatePresence, motion } from "framer-motion";
+
+import { cn } from "@/lib/utils";
 
 export interface OnboardingPage {
   title: string;

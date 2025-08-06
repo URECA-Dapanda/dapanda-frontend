@@ -1,9 +1,10 @@
 "use client";
 
-import { cn } from "@lib/utils";
+import { MouseEvent as ReactMouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { MouseEvent as ReactMouseEvent, useCallback, useEffect, useRef, useState } from "react";
+
+import { cn } from "@lib/utils";
 
 interface MonthNavigatorProps {
   value: Dayjs;

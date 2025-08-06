@@ -1,6 +1,7 @@
 "use client";
-import { useConfigStore } from "@/stores/useConfigStore";
+
 import { memo } from "react";
+import { useConfigStore } from "@/stores/useConfigStore";
 
 function HeaderTitle() {
   const title = useConfigStore((state) => state.title);

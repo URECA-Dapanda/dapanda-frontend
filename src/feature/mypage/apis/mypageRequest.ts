@@ -6,7 +6,7 @@ import {
   ParsedCashHistoryType,
   PurchaseHistoryType,
   SaleHistoryType,
-} from "../types/mypageTypes";
+} from "@feature/mypage/types/mypageTypes";
 import axios from "@lib/axios";
 import "dayjs/locale/ko";
 

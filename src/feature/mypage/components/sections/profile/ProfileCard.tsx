@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { Rating, RatingButton } from "@components/common/rating/RatingScore";
 import { useQuery } from "@tanstack/react-query";
 import { getMyInfo } from "@feature/mypage/apis/mypageRequest";
-import { UserType } from "@type/User";
 import AvatarUploader from "@feature/mypage/components/sections/profile/AvatarUploader";
+import { Rating, RatingButton } from "@components/common/rating/RatingScore";
+import { UserType } from "@type/User";
 
 export default function ProfileCard() {
   const { data } = useQuery<UserType>({
@@ -28,6 +28,5 @@ export default function ProfileCard() {
         </Rating>
       </Link>
     </div>
-
   );
 }

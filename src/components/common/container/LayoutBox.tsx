@@ -1,6 +1,6 @@
+import { PropsWithChildren } from "react";
 import { cva, VariantProps } from "class-variance-authority";
 import clsx from "clsx";
-import { PropsWithChildren } from "react";
 
 interface LayoutBoxProps {
   layout?: "flex" | "grid"; // flex vs grid 선택

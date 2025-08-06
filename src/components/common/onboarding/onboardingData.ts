@@ -1,4 +1,4 @@
-import type { OnboardingPage } from "./OnboardingLayout";
+import type { OnboardingPage } from "@components/common/onboarding/OnboardingLayout";
 
 export const onboardingPages: OnboardingPage[] = [
   {

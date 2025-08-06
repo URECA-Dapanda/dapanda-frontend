@@ -1,4 +1,3 @@
-// src/hooks/useLockBodyScroll.ts
 import { useLayoutEffect } from "react";
 
 export const useLockBodyScroll = (locked: boolean) => {

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
-import { isTemporaryMessage } from "./chatUtils";
+import { isTemporaryMessage } from "@feature/chat/utils/chatUtils";
 
 interface ProductInfo {
   productId: number;

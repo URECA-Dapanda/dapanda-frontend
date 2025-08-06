@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { registReview } from "../api/reviewRequest";
-import { ReviewRequest, ReviewResponse } from "../types/reviewType";
+import { registReview } from "@feature/map/api/reviewRequest";
+import { ReviewRequest, ReviewResponse } from "@feature/map/types/reviewType";
 import { AxiosError } from "axios";
 
 export function useReviewMutation(onSuccess?: () => void, onError?: (e: AxiosError) => void) {

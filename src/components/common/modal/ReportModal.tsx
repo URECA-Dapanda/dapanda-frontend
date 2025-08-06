@@ -1,16 +1,16 @@
-import { Dispatch, SetStateAction, useCallback, useMemo, useRef, useState } from "react";
-import ModalHeader from "./ModalHeader";
-import { Siren } from "lucide-react";
-import InputComponent from "../input/InputComponent";
-import { ButtonComponent } from "../button";
-import BaseModal from "./BaseModal";
 import { usePathname } from "next/navigation";
+import { Siren } from "lucide-react";
+import { Dispatch, SetStateAction, useCallback, useMemo, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import ModalHeader from "@components/common/modal/ModalHeader";
+import InputComponent from "@components/common/input/InputComponent";
+import { ButtonComponent } from "@components/common/button";
+import BaseModal from "@components/common/modal/BaseModal";
 import { registReport } from "@apis/reportRequest";
-import ReportCompleteModal from "./ReportCompleteModal";
-import { AxiosError } from "axios";
-import FullScreenModal from "./FullScreenModal";
+import ReportCompleteModal from "@components/common/modal/ReportCompleteModal";
+import FullScreenModal from "@components/common/modal/FullScreenModal";
 import { showErrorToast } from "@lib/toast";
+import { AxiosError } from "axios";
 
 interface ReportModalProps {
   isOpen: boolean;

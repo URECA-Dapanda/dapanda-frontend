@@ -1,8 +1,8 @@
+import { memo } from "react";
 import ItemCard from "@components/common/card/ItemCard";
 import { MonthlyCashTotalType } from "@feature/mypage/types/mypageTypes";
-import { CashHistoryLine } from "./CashHistoryDateBox";
+import { CashHistoryLine } from "@feature/mypage/components/sections/profile/CashHistoryDateBox";
 import { Separator } from "@ui/separator";
-import { memo } from "react";
 
 interface MonthlyCashTotalBoxProps {
   data: MonthlyCashTotalType;

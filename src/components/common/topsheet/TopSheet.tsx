@@ -2,6 +2,14 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import FullScreenModal from "@components/common/modal/FullScreenModal";
+import type { TopSheetProps } from "@components/common/topsheet/topSheet.types";
+import { PostTopSheetContent } from "@components/common/topsheet/PostTopSheetContent";
+import { WifiTopSheetContent } from "@components/common/topsheet/WifiTopSheetContent";
+import { useTopSheetExpanded } from "@components/common/topsheet/useTopSheetExpanded";
+import { useTopSheetImageStyle } from "@components/common/topsheet/useTopSheetImageStyle";
+import ReportTriggerButton from "@components/common/button/ReportTriggerButton";
 import {
   Carousel,
   CarouselContent,
@@ -9,14 +17,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import Image from "next/image";
-import FullScreenModal from "@components/common/modal/FullScreenModal";
-import type { TopSheetProps } from "@components/common/topsheet/topSheet.types";
-import { PostTopSheetContent } from "./PostTopSheetContent";
-import { WifiTopSheetContent } from "./WifiTopSheetContent";
-import { useTopSheetExpanded } from "./useTopSheetExpanded";
-import { useTopSheetImageStyle } from "./useTopSheetImageStyle";
-import ReportTriggerButton from "../button/ReportTriggerButton";
 import clsx from "clsx";
 
 const MotionImage = motion(Image);

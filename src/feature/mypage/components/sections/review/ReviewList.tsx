@@ -1,13 +1,13 @@
 "use client";
 
+import { MouseEvent, useCallback, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import VirtualizedInfiniteList from "@components/common/list/VirtualizedInfiniteList";
 import { getReviewList } from "@feature/mypage/apis/reviewRequest";
 import { ReviewType } from "@feature/mypage/types/reviewType";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import ReviewItem from "@feature/mypage/components/sections/review/ReviewItem";
-import { MouseEvent, useCallback, useState } from "react";
 import ReportModal from "@components/common/modal/ReportModal";
-import { useSearchParams } from "next/navigation";
 
 export default function ReviewList({ type }: { type?: "receive" | "post" }) {
   const searchParams = useSearchParams();

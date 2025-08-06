@@ -3,12 +3,12 @@ import ItemCard from "@components/common/card/ItemCard";
 import LayoutBox from "@components/common/container/LayoutBox";
 import { SkeletonCard } from "@components/common/skeleton";
 import { PurchaseHistoryType } from "@feature/mypage/types/mypageTypes";
+import WriteReview from "@feature/mypage/components/sections/purchase/WriteReview";
+import { getTradeImageUrl, TradeType } from "@feature/mypage/utils/getTradeImageUrl";
 import { formatDataSize } from "@lib/formatters";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
 import dayjs from "dayjs";
-import WriteReview from "@feature/mypage/components/sections/purchase/WriteReview";
-import { getTradeImageUrl, TradeType } from "@feature/mypage/utils/getTradeImageUrl";
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
@@ -62,7 +62,9 @@ export default function PurchaseHistoryCard({ data }: PurchaseHistoryCardProps) 
         <LayoutBox layout="flex" direction="column" gap={0}>
           <div className="flex flex-row items-center justify-between gap-48">
             <p className="title-sm">{tradeMapper[data.tradeType]}</p>
-            {data.tradeType === "PURCHASE_WIFI" && <WriteReview tradeId={data.tradeId} disabled={data.reviewed} />}
+            {data.tradeType === "PURCHASE_WIFI" && (
+              <WriteReview tradeId={data.tradeId} disabled={data.reviewed} />
+            )}
           </div>
           <p className="body-sm">거래 일자: {dayjs(data.createdAt).fromNow()}</p>
           <p className="body-sm text-gray-600">

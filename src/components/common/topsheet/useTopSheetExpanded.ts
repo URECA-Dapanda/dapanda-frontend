@@ -14,7 +14,6 @@ export function useTopSheetExpanded() {
     } else if (isVerticalSwipe) {
       setExpanded(false);
     }
-    // 👆 좌우 swipe인 경우 아무것도 안 함
   };
 
   return { expanded, setExpanded, handleDragEnd };

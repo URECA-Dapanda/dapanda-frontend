@@ -1,4 +1,4 @@
-import FailedMessage from "../sections/charge/FailedMessage";
+import FailedMessage from "@feature/mypage/components/sections/charge/FailedMessage";
 
 export default function ChargeFailPageContent() {
   return (

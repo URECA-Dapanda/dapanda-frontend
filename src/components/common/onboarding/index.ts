@@ -1,2 +1,2 @@
-export { OnboardingLayout } from "./OnboardingLayout";
-export { onboardingPages } from "./onboardingData";
+export { OnboardingLayout } from "@components/common/onboarding/OnboardingLayout";
+export { onboardingPages } from "@components/common/onboarding/onboardingData";
