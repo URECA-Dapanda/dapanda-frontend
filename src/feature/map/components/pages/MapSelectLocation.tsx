@@ -1,11 +1,11 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import InteractiveMap from "@/feature/map/components/sections/regist/InteractiveMap";
 import MapHeaderSearchBox from "@/feature/map/components/sections/regist/MapHeaderSearchBox";
 import MapSelectedInfoCard from "@/feature/map/components/sections/regist/MapSelectedInfoCard";
 import { useMapLocationSelector } from "@/feature/map/hooks/useMapLocationSelector";
-import { useParams } from "next/navigation";
 
 function typeGuard(target: unknown): target is "hotspot" | "wifi" {
   if (target === "hotspot" || target === "wifi") return true;

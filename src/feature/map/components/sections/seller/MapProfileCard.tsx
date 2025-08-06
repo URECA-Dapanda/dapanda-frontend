@@ -1,10 +1,10 @@
 import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
 import AvatarIcon from "@components/common/AvatarIcon";
 import { ButtonComponent } from "@components/common/button";
-import { useQuery } from "@tanstack/react-query";
 import { getMyInfo } from "@feature/mypage/apis/mypageRequest";
 import { Rating, RatingButton } from "@components/common/rating/RatingScore";
-import { useCallback } from "react";
 import axiosInstance from "@/lib/axios";
 import { showErrorToast, showInfoToast } from "@lib/toast";
 

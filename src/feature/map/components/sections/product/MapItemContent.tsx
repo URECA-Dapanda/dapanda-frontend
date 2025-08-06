@@ -1,14 +1,14 @@
 import { Fragment, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Star } from "lucide-react";
 import { ButtonComponent } from "@components/common/button";
 import type { ProductItemProps } from "@/feature/data/types/dataType";
 import type { MapType } from "@/feature/map/types/mapType";
-import axiosInstance from "@/lib/axios";
-import Image from "next/image";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
-import { showErrorToast } from "@lib/toast";
 import { useMapStore } from "@feature/map/stores/useMapStore";
+import axiosInstance from "@/lib/axios";
+import { showErrorToast } from "@lib/toast";
 
 export default function MapItemCardContent({
   data: { productId, address, price, score, title, startTime, endTime, open, imageUrl, location },

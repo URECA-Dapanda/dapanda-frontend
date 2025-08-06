@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { PlusIcon } from "lucide-react";
@@ -13,7 +14,6 @@ import { useDataFilterStore } from "@feature/data/stores/useDataFilterStore";
 import { onboardingPages } from "@/components/common/onboarding";
 import ModalPortal from "@/lib/ModalPortal";
 import { updateMemberRole } from "@/apis/userProfile";
-import Image from "next/image";
 
 const DefaultTabBody = dynamic(() => import("@feature/data/components/pages/DefaultTabContent"), {
   ssr: false,

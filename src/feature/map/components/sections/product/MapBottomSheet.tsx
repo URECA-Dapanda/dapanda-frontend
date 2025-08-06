@@ -8,11 +8,12 @@ import { UserDropdownMenu } from "@components/common/dropdown/UserDropdownMenu";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import MapItemCard from "@/feature/map/components/sections/product/MapItemCard";
 import type { DropdownOption } from "@/components/common/dropdown/dropdown.types";
-import { cn } from "@/lib/utils";
 import { useVirtualizedInfiniteQuery } from "@/hooks/useVirtualizedInfiniteQuery";
 import { getMapList } from "@/feature/map/api/mapRequest";
 import type { MapType } from "@/feature/map/types/mapType";
 import { sortOptionMap } from "@/components/common/dropdown/dropdownConfig";
+
+import { cn } from "@/lib/utils";
 
 interface Props {
   open: boolean;

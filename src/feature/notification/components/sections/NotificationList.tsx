@@ -1,6 +1,6 @@
 "use client";
 
-import NotificationCard from "./NotificationCard";
+import NotificationCard from "@feature/notification/components/sections/NotificationCard";
 import { BellOff } from "lucide-react";
 
 export interface NotificationItem {

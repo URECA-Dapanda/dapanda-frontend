@@ -80,6 +80,7 @@ export const useMapMarkers = (
           anchor: new window.naver.maps.Point(25, 26),
         },
       });
+      marker.setMap(map);
 
       if (options?.onMarkerClick) {
         window.naver.maps.Event.addListener(marker, "click", () => {
@@ -151,7 +152,9 @@ export const useMapMarkers = (
         retry++;
         if (retry >= maxRetry) {
           clearInterval(interval);
-          console.error("❌ MarkerClustering 로딩 실패");
+
+          markers.forEach((marker) => marker.setMap(map));
+          markerMapRef.current = newMarkerMap;
         }
       }
     }, 300);

@@ -1,9 +1,9 @@
-import { logOutRequest, getUserInfo } from "@apis/userProfile";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { logOutRequest, getUserInfo } from "@apis/userProfile";
 import { useProfileStore } from "@/stores/useProfileStore";
-import type { UserType } from "@/types/User";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
+import type { UserType } from "@/types/User";
 
 export function useAuth() {
   const router = useRouter();
@@ -21,7 +21,6 @@ export function useAuth() {
       })
       .then((userData) => {
         if (userData && userData.data) {
-
           setUser(userData.data);
           setProfile(userData.data);
 

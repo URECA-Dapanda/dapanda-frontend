@@ -1,19 +1,21 @@
 "use client";
-import { PropsWithChildren, useMemo, Suspense } from "react";
-import HeaderTimer from "./HeaderTimer";
+
 import Image from "next/image";
-import { cn } from "@lib/utils";
-import BackButton from "./BackButton";
-import HeaderTitle from "./HeaderTitle";
+import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useHeaderStore } from "@stores/useHeaderStore";
+import { PropsWithChildren, useMemo, Suspense } from "react";
+import { useState } from "react";
 import { MoreVertical } from "lucide-react";
+import HeaderTimer from "@components/common/header/HeaderTimer";
+import BackButton from "@components/common/header/BackButton";
+import HeaderTitle from "@components/common/header/HeaderTitle";
 import { UserDropdownMenu } from "@/components/common/dropdown/UserDropdownMenu";
 import { chatMenuOptions } from "@/components/common/dropdown/dropdownConfig";
-import ReportModal from "@/components/common/modal/ReportModal";
-import { useState } from "react";
 import NotificationIcon from "@components/common/NotificationIcon";
-import Link from "next/link";
+import ReportModal from "@/components/common/modal/ReportModal";
+import { useHeaderStore } from "@stores/useHeaderStore";
+
+import { cn } from "@lib/utils";
 
 interface AppHeaderProps {
   id?: string;

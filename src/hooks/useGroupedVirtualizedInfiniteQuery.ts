@@ -1,6 +1,6 @@
-import { getCashHistoryList } from "@feature/mypage/apis/mypageRequest";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRef } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getCashHistoryList } from "@feature/mypage/apis/mypageRequest";
 
 export function useVirtualizedGroupedInfiniteQuery({
   year,

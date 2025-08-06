@@ -1,3 +1,3 @@
 export { Skeleton } from "@/components/ui/skeleton";
-export { SkeletonCard } from "./SkeletonCard";
-export { SkeletonChatItem } from "./SkeletonChatItem";
+export { SkeletonCard } from "@components/common/skeleton/SkeletonCard";
+export { SkeletonChatItem } from "@components/common/skeleton/SkeletonChatItem";

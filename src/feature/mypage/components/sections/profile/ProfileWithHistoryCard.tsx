@@ -1,11 +1,11 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import AvatarIcon from "@components/common/AvatarIcon";
 import LayoutBox from "@components/common/container/LayoutBox";
 import { Rating, RatingButton } from "@components/common/rating/RatingScore";
 import { BadgeComponent } from "@components/common/badge";
-import { useQuery } from "@tanstack/react-query";
 import { getMyInfo } from "@feature/mypage/apis/mypageRequest";
 
 export default function ProfileWithHistoryCard() {

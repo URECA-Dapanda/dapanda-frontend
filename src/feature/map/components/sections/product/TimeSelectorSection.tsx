@@ -1,9 +1,9 @@
 "use client";
 
+import { Pencil, Trash2 } from "lucide-react";
 import TimeSelector from "@/feature/map/components/sections/product/TimeSelector";
 import type { Time } from "@type/Time";
 import { ButtonComponent } from "@components/common/button";
-import { Pencil, Trash2 } from "lucide-react";
 
 interface Props {
   startTime: Time;

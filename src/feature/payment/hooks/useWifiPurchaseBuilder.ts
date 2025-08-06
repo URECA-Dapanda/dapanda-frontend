@@ -1,7 +1,7 @@
-import { formatToIsoDate, formatToIsoDatePlusOneDay, getDurationMinutes } from "@/lib/time";
 import type { MapDetailItem } from "@/feature/map/types/mapType";
 import type { PaymentInfo } from "@/feature/payment/types/paymentTypes";
 import { Time } from "@type/Time";
+import { formatToIsoDate, formatToIsoDatePlusOneDay, getDurationMinutes } from "@/lib/time";
 
 export const buildWifiPaymentInfo = (
   data: MapDetailItem,

@@ -3,15 +3,15 @@
 import { useEffect, useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useChatStore } from "@feature/chat/stores/useChatStore";
-import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import ChatItem from "@feature/chat/components/sections/list/ChatItem";
 import { getChatRoomList } from "@feature/chat/api/chatRoomRequest";
 import { getMapDetailById } from "@feature/map/api/getMapDetailById";
+import type { ChatRoomPreview } from "@feature/chat/stores/useChatStore";
 import { ApiChatRoom, ChatSocketMessage } from "@feature/chat/types/chatType";
 import { ButtonComponent } from "@/components/common/button/ButtonComponent";
-import { formatRelativeTime } from "@/lib/time";
-import type { ChatRoomPreview } from "@feature/chat/stores/useChatStore";
 import EmptyState from "@/components/common/empty/EmptyState";
+import { useWebSocketStore } from "@/stores/useWebSocketStore";
+import { formatRelativeTime } from "@/lib/time";
 
 export default function ChatList() {
   const chatList = useChatStore((state) => state.chatList);

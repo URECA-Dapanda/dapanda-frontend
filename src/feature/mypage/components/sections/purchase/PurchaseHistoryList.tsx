@@ -5,7 +5,7 @@ import { getPurchaseHistoryList } from "@feature/mypage/apis/mypageRequest";
 import { PurchaseHistoryType } from "@feature/mypage/types/mypageTypes";
 import { useVirtualizedInfiniteQuery } from "@hooks/useVirtualizedInfiniteQuery";
 import PurchaseHistoryCard from "@feature/mypage/components/sections/purchase/PurchaseHistoryCard";
-import TabTitle from "../TabTitle";
+import TabTitle from "@feature/mypage/components/sections/TabTitle";
 
 export default function PurchaseHistoryList() {
   const {
