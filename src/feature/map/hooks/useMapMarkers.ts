@@ -109,8 +109,8 @@ export const useMapMarkers = (
         const clusterer = new Clustering({
           map,
           markers,
-          maxZoom: 15,
-          gridSize: 100,
+          maxZoom: 17,
+          gridSize: 60,
           disableClickZoom: false,
           minClusterSize: 2,
           icons: [
