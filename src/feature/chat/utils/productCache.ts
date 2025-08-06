@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 
 interface ProductInfo {
@@ -8,12 +9,12 @@ interface ProductInfo {
   pricePer10min: number;
   memberName: string;
   memberId: number;
+  imageUrls?: string[];
 }
 
 export const useProductCache = () => {
   const [product, setProduct] = useState<ProductInfo | null>(null);
   const [isLoadingProduct, setIsLoadingProduct] = useState(false);
-  const productCache = useRef<Map<string, ProductInfo>>(new Map());
   const isFetchingProduct = useRef(false);
 
   const createProductInfo = useCallback(
@@ -24,6 +25,7 @@ export const useProductCache = () => {
       price: number;
       memberName: string;
       memberId: number;
+      imageUrls?: string[];
     }): ProductInfo => ({
       productId: productData.productId,
       itemId: productData.itemId,
@@ -31,19 +33,13 @@ export const useProductCache = () => {
       pricePer10min: productData.price,
       memberName: productData.memberName,
       memberId: productData.memberId,
+      imageUrls: productData.imageUrls,
     }),
     []
   );
 
   const fetchProductWithCache = useCallback(
     async (productIdStr: string, abortController?: AbortController) => {
-      if (productCache.current.has(productIdStr)) {
-        const cachedProduct = productCache.current.get(productIdStr)!;
-        setProduct(cachedProduct);
-        setIsLoadingProduct(false);
-        return;
-      }
-
       if (isFetchingProduct.current) {
         return;
       }
@@ -57,8 +53,6 @@ export const useProductCache = () => {
         if (abortController?.signal.aborted) return;
 
         const productInfo = createProductInfo(productData);
-
-        productCache.current.set(productIdStr, productInfo);
         setProduct(productInfo);
       } catch (error) {
         if (!abortController?.signal.aborted) {
@@ -73,7 +67,6 @@ export const useProductCache = () => {
   );
 
   const clearCache = useCallback(() => {
-    productCache.current.clear();
     isFetchingProduct.current = false;
   }, []);
 
@@ -84,4 +77,15 @@ export const useProductCache = () => {
     fetchProductWithCache,
     clearCache,
   };
+};
+
+// React Query를 사용한 상품 정보 훅 (권장)
+export const useProductInfo = (productId: string | null) => {
+  return useQuery({
+    queryKey: ["product", productId],
+    queryFn: () => getMapDetailById(productId!),
+    enabled: !!productId,
+    staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
+    gcTime: 10 * 60 * 1000, // 10분간 메모리에 유지
+  });
 };
