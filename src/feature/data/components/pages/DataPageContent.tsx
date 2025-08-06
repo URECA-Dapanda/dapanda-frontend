@@ -6,8 +6,6 @@ import { useCallback, useEffect, useState } from "react";
 import { PlusIcon } from "lucide-react";
 import { ButtonComponent } from "@/components/common/button";
 import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
-import DefaultTabBody from "@feature/data/components/pages/DefaultTabContent";
-import ScrapTabBody from "@feature/data/components/sections/scrap/ScrapTabContent";
 import { PurchaseModeTabs } from "@/components/common/tabs";
 import { useHeaderStore } from "@stores/useHeaderStore";
 import DefaultFilterCard from "@feature/data/components/sections/filter/DefaultFilterCard";
@@ -16,6 +14,19 @@ import { onboardingPages } from "@/components/common/onboarding";
 import ModalPortal from "@/lib/ModalPortal";
 import { updateMemberRole } from "@/apis/userProfile";
 import Image from "next/image";
+
+const DefaultTabBody = dynamic(() => import("@feature/data/components/pages/DefaultTabContent"), {
+  ssr: false,
+  loading: () => null,
+});
+
+const ScrapTabBody = dynamic(
+  () => import("@feature/data/components/sections/scrap/ScrapTabContent"),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
 
 const OnboardingLayout = dynamic(
   () => import("@/components/common/onboarding").then((mod) => mod.OnboardingLayout),
