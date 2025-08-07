@@ -13,7 +13,6 @@ import EmptyState from "@/components/common/empty/EmptyState";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import { formatRelativeTime } from "@/lib/time";
 import { useAuth } from "@hooks/useAuth";
-import LoadingPanda from "@components/common/empty/Loading";
 import Image from "next/image";
 
 export default function ChatList() {
@@ -24,7 +23,6 @@ export default function ChatList() {
   const subscribe = useWebSocketStore((store) => store.subscribe);
   const unsubscribe = useWebSocketStore((store) => store.unsubscribe);
   const [selectedFilter, setSelectedFilter] = useState<"ALL" | "BUYER" | "SELLER">("ALL");
-  const [isLoading, setIsLoading] = useState(true);
 
   // 채팅방 목록 가져오기
   const {
@@ -113,10 +111,7 @@ export default function ChatList() {
 
   // 채팅 목록 업데이트
   useEffect(() => {
-    if (processedChatList.length > 0) {
-      setChatList(processedChatList);
-      setIsLoading(false);
-    }
+    if (processedChatList.length > 0) setChatList(processedChatList);
   }, [processedChatList, setChatList]);
 
   // 웹소켓 구독 관리 최적화
