@@ -6,19 +6,11 @@ import { useTimerStore } from "@/feature/map/stores/useTimerStore";
 import type { AlarmMessage } from "@type/Alarm";
 import { useAuth } from "./useAuth";
 
-export const useSubscribeTimer = (isLoading?: boolean) => {
-  const connect = useWebSocketStore((store) => store.connect);
+export const useSubscribeTimer = () => {
   const isConnected = useWebSocketStore((store) => store.isConnected);
   const subscribeToChannel = useWebSocketStore((store) => store.subscribeToChannel);
   const { startTimer } = useTimerStore();
   const { user } = useAuth();
-
-  useEffect(() => {
-    if (isLoading) return;
-    if (user?.memberId) {
-      connect().catch((err) => console.error("WebSocket 연결 실패:", err));
-    }
-  }, [isLoading, connect, user]);
 
   useEffect(() => {
     if (user?.memberId && isConnected) {
