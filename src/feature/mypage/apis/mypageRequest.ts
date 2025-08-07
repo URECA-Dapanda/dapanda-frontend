@@ -69,7 +69,6 @@ export async function getMyData() {
 }
 
 export async function getMyInfo(id?: string | number): Promise<UserType> {
-  console.log("id", id);
   const { data } = await axios.get("/api/members/info", { params: { memberId: id } });
 
   return data.data;

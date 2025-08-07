@@ -58,7 +58,7 @@ export default function MapProfileCard({
         }
       } catch (error) {
         showErrorToast("채팅방 생성 중 오류가 발생했습니다.");
-        console.error(error);
+        console.debug(error);
       }
     },
     [productId, router, isOwner, displayName]

@@ -28,7 +28,7 @@ export default function OnboardingPage() {
       await updateMemberRole();
       router.push("/data");
     } catch (error) {
-      console.error("온보딩 완료 처리 실패:", error);
+      console.debug("온보딩 완료 처리 실패:", error);
       router.push("/data");
     } finally {
       setIsLoading(false);

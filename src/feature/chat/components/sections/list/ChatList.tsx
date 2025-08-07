@@ -59,7 +59,7 @@ export default function ChatList() {
           const data = await getMapDetailById(productId.toString());
           return { productId, data };
         } catch (error) {
-          console.error(`상품 ${productId} 정보 가져오기 실패:`, error);
+          console.debug(`상품 ${productId} 정보 가져오기 실패:`, error);
           return { productId, data: null };
         }
       });
@@ -177,7 +177,6 @@ export default function ChatList() {
   useEffect(() => {
     refetchChatRooms();
   }, [selectedFilter, refetchChatRooms]);
-  console.log("ee", chatList);
 
   return (
     <div className="flex flex-col px-24 pt-20">

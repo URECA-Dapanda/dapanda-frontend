@@ -4,7 +4,6 @@ export async function GET(req: NextRequest) {
   const refreshToken = req.cookies.get("refreshToken");
 
   const isLogin = !!refreshToken;
-  console.log("로그인 상태 확인:", { isLogin, hasToken: !!refreshToken });
 
   if (isLogin) {
     try {
@@ -23,7 +22,7 @@ export async function GET(req: NextRequest) {
         });
       }
     } catch (error) {
-      console.error("사용자 정보 조회 실패:", error);
+      console.debug("사용자 정보 조회 실패:", error);
     }
   }
 

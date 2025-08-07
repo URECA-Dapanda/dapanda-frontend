@@ -50,7 +50,6 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
 
       onConnect: () => {
         set({ isConnected: true });
-        console.log("웹소켓 연결됨");
         const { subscriptions, subscriptionObjects, alarmSubscriptions } = get();
         const mergedSubscriptions = new Map(subscriptionObjects);
 
@@ -59,13 +58,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
           if (!mergedSubscriptions.has(chatRoomId)) {
             const subscription = newClient.subscribe(`/sub/${chatRoomId}`, (message) => {
               const payload: ChatSocketMessage = JSON.parse(message.body);
-              console.log("재연결 시 웹소켓 메시지 수신:", payload);
               callback(payload);
-
-              // ChatContainer에서 처리하므로 여기서는 호출하지 않음
-              // const { updateUnreadCount } = get();
-              // console.log("재연결 시 해당 채팅방 unreadCount +1");
-              // updateUnreadCount(chatRoomId);
             });
             mergedSubscriptions.set(chatRoomId, subscription);
           }
@@ -90,7 +83,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
               };
               callback(payload);
             } catch (e) {
-              console.error("🚨 WebSocket 메시지 파싱 오류:", e, message.body);
+              console.debug("🚨 WebSocket 메시지 파싱 오류:", e, message.body);
             }
           });
 
@@ -139,40 +132,27 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
 
   subscribe: (chatRoomId, onMessage) => {
     const { client, subscriptions, subscriptionObjects } = get();
-    console.log(`채팅방 ${chatRoomId} 구독 시도`);
 
     const newSubscriptions = new Map(subscriptions);
     newSubscriptions.set(chatRoomId, onMessage);
     set({ subscriptions: newSubscriptions });
 
     if (!client || !client.connected || subscriptionObjects.has(chatRoomId)) {
-      console.log(`채팅방 ${chatRoomId} 구독 실패:`, {
-        client: !!client,
-        connected: client?.connected,
-        alreadySubscribed: subscriptionObjects.has(chatRoomId),
-      });
       return;
     }
 
     const subscription = client.subscribe(`/sub/${chatRoomId}`, (message) => {
       try {
         const payload: ChatSocketMessage = JSON.parse(message.body);
-        console.log("웹소켓 메시지 수신:", payload);
         onMessage(payload);
-
-        // ChatContainer에서 처리하므로 여기서는 호출하지 않음
-        // const { updateUnreadCount } = get();
-        // console.log("해당 채팅방 unreadCount +1");
-        // updateUnreadCount(chatRoomId);
       } catch (e) {
-        console.error("채팅 메시지 파싱 오류:", e);
+        console.debug("채팅 메시지 파싱 오류:", e);
       }
     });
 
     const newSubscriptionObjects = new Map(subscriptionObjects);
     newSubscriptionObjects.set(chatRoomId, subscription);
     set({ subscriptionObjects: newSubscriptionObjects });
-    console.log(`채팅방 ${chatRoomId} 구독 성공`);
   },
 
   unsubscribe: (chatRoomId) => {
@@ -207,7 +187,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
           body: message,
         });
       } catch (e) {
-        console.error("채팅 메시지 전송 실패:", e);
+        console.debug("채팅 메시지 전송 실패:", e);
       }
     } else {
       console.warn("WebSocket이 연결되지 않았습니다.");
@@ -226,12 +206,10 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     if (chatRoomId) {
       // 특정 채팅방의 unreadCount만 +1
       const { chatListUpdateCallback } = get();
-      console.log(`채팅방 ${chatRoomId}의 unreadCount +1`);
       chatListUpdateCallback?.(chatRoomId);
     } else {
       // 전체 채팅 목록 업데이트 (기존 방식)
       const { chatListUpdateCallback } = get();
-      console.log("전체 채팅 목록 업데이트");
       chatListUpdateCallback?.();
     }
   },
@@ -268,7 +246,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
 
         onMessage(payload);
       } catch (e) {
-        console.error("WebSocket 메시지 파싱 오류:", e, message.body);
+        console.debug("WebSocket 메시지 파싱 오류:", e, message.body);
       }
     });
 

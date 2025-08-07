@@ -66,7 +66,7 @@ export const useMapInitializer = (options?: UseMapInitializerOptions) => {
             options?.onStoreListUpdate?.(res.items);
           } catch (e) {
             showErrorToast("와이파이 목록을 불러오는 데 실패했습니다.");
-            console.error(e);
+            console.debug(e);
           }
         },
         () => showErrorToast("위치 정보를 가져올 수 없습니다."),

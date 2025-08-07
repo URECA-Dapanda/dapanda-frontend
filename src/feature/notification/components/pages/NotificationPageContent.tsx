@@ -16,7 +16,7 @@ export default function NotificationPageContent() {
   useEffect(() => {
     fetchNotifications()
       .then((res) => setItems(res))
-      .catch((err) => console.error("알림 조회 실패", err))
+      .catch((err) => console.debug("알림 조회 실패", err))
       .finally(() => setIsLoading(false));
   }, []);
 

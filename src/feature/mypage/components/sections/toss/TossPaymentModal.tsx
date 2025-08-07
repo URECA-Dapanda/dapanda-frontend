@@ -19,7 +19,6 @@ export default function TossPaymentModal() {
     } else if (!rendered.current && charge) {
       rendered.current = true;
       renderTossPayment(charge);
-      console.log("호출됨: renderTossPayment with charge =", charge);
     }
   }, [isOpen, charge]);
 

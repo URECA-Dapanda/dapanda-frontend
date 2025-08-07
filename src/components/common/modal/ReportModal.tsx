@@ -50,7 +50,7 @@ export default function ReportModal({ isOpen, setIsOpen, targetId, targetName }:
         case 409:
           return showErrorToast("이미 신고 처리중입니다.");
         default:
-          console.error(e.status);
+          console.debug(e.status);
           return showErrorToast("신고 처리중 오류가 발생했습니다.");
       }
     },
