@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 const protectedRoutes = ["/mypage", "/data", "/chat", "/map"];
 
 export function middleware(req: NextRequest) {
-  const token = req.cookies.get("accessToken");
+  const token = req.cookies.get("refreshToken");
 
   const isProtected = protectedRoutes.some((path) => {
     return req.nextUrl.pathname.startsWith(path);
