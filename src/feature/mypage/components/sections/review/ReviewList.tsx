@@ -40,7 +40,7 @@ export default function ReviewList({ type }: { type?: "receive" | "post" }) {
 
   return (
     <>
-      <div className="flex flex-col h-full mt-24">
+      <div className="flex flex-col h-full mt-24 items-center">
         <VirtualizedInfiniteList
           parentRef={parentRef}
           rowVirtualizer={rowVirtualizer}

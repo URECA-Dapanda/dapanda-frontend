@@ -44,7 +44,7 @@ export async function getMapList({
       address: item.address,
       open: item.open,
       location: `${item.latitude},${item.longitude}`,
-      score: item.averageRate,
+      score: Math.round(item.averageRate * 10) / 10,
       type: "와이파이",
       startTime: item.startTime,
       endTime: item.endTime,
