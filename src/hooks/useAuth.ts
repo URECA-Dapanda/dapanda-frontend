@@ -8,7 +8,8 @@ import type { UserType } from "@/types/User";
 export function useAuth() {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState<boolean | null>(null);
-  const { connect, isConnected } = useWebSocketStore();
+  const connect = useWebSocketStore((store) => store.connect);
+  const isConnected = useWebSocketStore((store) => store.isConnected);
   const [user, setUser] = useState<UserType | null>(null);
   const { setProfile } = useProfileStore();
 
@@ -20,7 +21,6 @@ export function useAuth() {
         if (data && data.user) {
           setUser(data.user);
           setProfile(data.user);
-
           if (!isConnected) {
             connect().catch((error) => {
               console.error("웹소켓 연결 실패:", error);
@@ -29,7 +29,7 @@ export function useAuth() {
         }
       })
       .catch(() => setIsLogin(false));
-  }, []);
+  }, [connect, isConnected, setProfile]);
 
   const logout = async () => {
     await logOutRequest();

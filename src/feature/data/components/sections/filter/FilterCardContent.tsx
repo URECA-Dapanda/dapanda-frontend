@@ -4,7 +4,7 @@ import Slider from "@components/common/slider/SliderComponent";
 import { formatDataSize } from "@lib/formatters";
 
 interface FilterCardContentProps {
-  buttonText: string;
+  buttonText?: string;
   onButtonClick?: (selectedAmount: number) => void;
   value: number[];
   max: number;
@@ -33,18 +33,20 @@ export default function FilterCardContent({
 
         <Slider value={value} onValueChange={onValueChange} max={max} disabled={disabled} />
 
-        <ButtonComponent
-          variant="nonoutline"
-          className="w-[280px]"
-          onClick={() => {
-            if (!disabled && value[0] >= 0.1) {
-              onButtonClick?.(value[0]);
-            }
-          }}
-          disabled={disabled || value[0] < 0.1}
-        >
-          {buttonText}
-        </ButtonComponent>
+        {buttonText && (
+          <ButtonComponent
+            variant="nonoutline"
+            className="w-[280px]"
+            onClick={() => {
+              if (!disabled && value[0] >= 0.1) {
+                onButtonClick?.(value[0]);
+              }
+            }}
+            disabled={disabled || value[0] < 0.1}
+          >
+            {buttonText}
+          </ButtonComponent>
+        )}
       </div>
     </Suspense>
   );

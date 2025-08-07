@@ -9,16 +9,16 @@ interface WebSocketStore {
   subscriptions: Map<number, (message: ChatSocketMessage) => void>;
   subscriptionObjects: Map<number | string, { unsubscribe: () => void }>;
   alarmSubscriptions: Map<string, (message: AlarmMessage) => void>;
-  chatListUpdateCallback: (() => void) | null;
+  chatListUpdateCallback: ((chatRoomId?: number) => void) | null;
   activeChatRoomId: number | null;
   connect: () => Promise<void>;
   disconnect: () => void;
   subscribe: (chatRoomId: number, onMessage: (message: ChatSocketMessage) => void) => void;
   unsubscribe: (chatRoomId: number) => void;
   sendMessage: (chatRoomId: number, message: string) => void;
-  setChatListUpdateCallback: (callback: (() => void) | null) => void;
+  setChatListUpdateCallback: (callback: ((chatRoomId?: number) => void) | null) => void;
   setActiveChatRoomId: (chatRoomId: number | null) => void;
-  updateUnreadCount: () => void;
+  updateUnreadCount: (chatRoomId?: number) => void;
   subscribeToChannel: (channelId: string, onMessage: (message: AlarmMessage) => void) => void;
 }
 
@@ -50,7 +50,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
 
       onConnect: () => {
         set({ isConnected: true });
-
+        console.log("웹소켓 연결됨");
         const { subscriptions, subscriptionObjects, alarmSubscriptions } = get();
         const mergedSubscriptions = new Map(subscriptionObjects);
 
@@ -59,7 +59,13 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
           if (!mergedSubscriptions.has(chatRoomId)) {
             const subscription = newClient.subscribe(`/sub/${chatRoomId}`, (message) => {
               const payload: ChatSocketMessage = JSON.parse(message.body);
+              console.log("재연결 시 웹소켓 메시지 수신:", payload);
               callback(payload);
+
+              // ChatContainer에서 처리하므로 여기서는 호출하지 않음
+              // const { updateUnreadCount } = get();
+              // console.log("재연결 시 해당 채팅방 unreadCount +1");
+              // updateUnreadCount(chatRoomId);
             });
             mergedSubscriptions.set(chatRoomId, subscription);
           }
@@ -133,17 +139,31 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
 
   subscribe: (chatRoomId, onMessage) => {
     const { client, subscriptions, subscriptionObjects } = get();
+    console.log(`채팅방 ${chatRoomId} 구독 시도`);
 
     const newSubscriptions = new Map(subscriptions);
     newSubscriptions.set(chatRoomId, onMessage);
     set({ subscriptions: newSubscriptions });
 
-    if (!client || !client.connected || subscriptionObjects.has(chatRoomId)) return;
+    if (!client || !client.connected || subscriptionObjects.has(chatRoomId)) {
+      console.log(`채팅방 ${chatRoomId} 구독 실패:`, {
+        client: !!client,
+        connected: client?.connected,
+        alreadySubscribed: subscriptionObjects.has(chatRoomId),
+      });
+      return;
+    }
 
     const subscription = client.subscribe(`/sub/${chatRoomId}`, (message) => {
       try {
         const payload: ChatSocketMessage = JSON.parse(message.body);
+        console.log("웹소켓 메시지 수신:", payload);
         onMessage(payload);
+
+        // ChatContainer에서 처리하므로 여기서는 호출하지 않음
+        // const { updateUnreadCount } = get();
+        // console.log("해당 채팅방 unreadCount +1");
+        // updateUnreadCount(chatRoomId);
       } catch (e) {
         console.error("채팅 메시지 파싱 오류:", e);
       }
@@ -152,6 +172,7 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     const newSubscriptionObjects = new Map(subscriptionObjects);
     newSubscriptionObjects.set(chatRoomId, subscription);
     set({ subscriptionObjects: newSubscriptionObjects });
+    console.log(`채팅방 ${chatRoomId} 구독 성공`);
   },
 
   unsubscribe: (chatRoomId) => {
@@ -201,9 +222,18 @@ export const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     set({ activeChatRoomId: chatRoomId });
   },
 
-  updateUnreadCount: () => {
-    const { chatListUpdateCallback } = get();
-    chatListUpdateCallback?.();
+  updateUnreadCount: (chatRoomId?: number) => {
+    if (chatRoomId) {
+      // 특정 채팅방의 unreadCount만 +1
+      const { chatListUpdateCallback } = get();
+      console.log(`채팅방 ${chatRoomId}의 unreadCount +1`);
+      chatListUpdateCallback?.(chatRoomId);
+    } else {
+      // 전체 채팅 목록 업데이트 (기존 방식)
+      const { chatListUpdateCallback } = get();
+      console.log("전체 채팅 목록 업데이트");
+      chatListUpdateCallback?.();
+    }
   },
 
   subscribeToChannel: (channelId, onMessage) => {

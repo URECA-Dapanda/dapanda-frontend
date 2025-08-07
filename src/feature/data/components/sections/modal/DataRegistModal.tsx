@@ -94,12 +94,7 @@ export default function DataRegistModal({
     <div className="flex flex-col gap-24 p-24 bg-white">
       <BottomSheetHeader title={mode === "edit" ? "데이터 수정" : "데이터 판매"} />
       <FlatCard size="xl">
-        <FilterCardContent
-          buttonText="확정"
-          value={value}
-          onValueChange={setValue}
-          max={maxAmount}
-        />
+        <FilterCardContent value={value} onValueChange={setValue} max={maxAmount} />
         {value[0] >= maxAmount && (
           <p className="body-xxs text-error mt-20">이번 달 최대 판매 가능량을 등록하시겠습니까?</p>
         )}

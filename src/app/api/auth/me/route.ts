@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
         const userData = await response.json();
         return NextResponse.json({
           isLogin: !!accessToken,
-          user: userData,
+          user: userData.data,
         });
       }
     } catch (error) {
