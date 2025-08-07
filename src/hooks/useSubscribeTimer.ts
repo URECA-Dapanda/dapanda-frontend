@@ -4,22 +4,25 @@ import { useEffect } from "react";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import { useTimerStore } from "@/feature/map/stores/useTimerStore";
 import type { AlarmMessage } from "@type/Alarm";
+import { useAuth } from "./useAuth";
 
-export const useSubscribeTimer = (userId?: number, isLoading?: boolean) => {
-  const { connect, isConnected, subscribeToChannel } = useWebSocketStore();
+export const useSubscribeTimer = (isLoading?: boolean) => {
+  const connect = useWebSocketStore((store) => store.connect);
+  const isConnected = useWebSocketStore((store) => store.isConnected);
+  const subscribeToChannel = useWebSocketStore((store) => store.subscribeToChannel);
   const { startTimer } = useTimerStore();
+  const { user } = useAuth();
 
   useEffect(() => {
     if (isLoading) return;
-
-    if (userId) {
+    if (user?.memberId) {
       connect().catch((err) => console.error("WebSocket 연결 실패:", err));
     }
-  }, [isLoading, userId, connect]);
+  }, [isLoading, connect, user]);
 
   useEffect(() => {
-    if (userId && isConnected) {
-      const channelId = `alarm/${userId}`;
+    if (user?.memberId && isConnected) {
+      const channelId = `alarm/${user?.memberId}`;
 
       subscribeToChannel(channelId, (msg: AlarmMessage) => {
         try {
@@ -46,5 +49,5 @@ export const useSubscribeTimer = (userId?: number, isLoading?: boolean) => {
         }
       });
     }
-  }, [userId, isConnected, subscribeToChannel, startTimer]);
+  }, [isConnected, subscribeToChannel, startTimer, user]);
 };

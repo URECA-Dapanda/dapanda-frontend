@@ -1,13 +1,17 @@
 import { useEffect } from "react";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import { useProfileStore } from "@/stores/useProfileStore";
+import { useAuth } from "./useAuth";
 
 export const useWebSocketConnection = () => {
-  const { connect, disconnect, isConnected } = useWebSocketStore();
+  const connect = useWebSocketStore((store) => store.connect);
+  const disconnect = useWebSocketStore((store) => store.disconnect);
+  const isConnected = useWebSocketStore((store) => store.isConnected);
   const { id: userId } = useProfileStore();
+  const { user } = useAuth();
 
   useEffect(() => {
-    if (!userId) return;
+    if (!user?.memberId) return;
     if (!isConnected) {
       connect().catch((error) => {
         console.error("WebSocket 연결 실패:", error);
@@ -23,7 +27,7 @@ export const useWebSocketConnection = () => {
     return () => {
       // 앱 전체가 종료되는 경우에만 연결 해제, 개별 페이지 이동 시에는 연결 유지
     };
-  }, [userId, isConnected, connect]);
+  }, [userId, isConnected, connect, user]);
 
   const disconnectOnLogout = () => {
     disconnect();

@@ -4,28 +4,32 @@ import { useEffect } from "react";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import { useTimerStore } from "@/feature/map/stores/useTimerStore";
 import type { AlarmMessage } from "@type/Alarm";
+import { useAuth } from "./useAuth";
+import dayjs from "dayjs";
 
-export const useSubscribeTimerOnce = (userId?: number) => {
-  const { subscribeToChannel } = useWebSocketStore();
-  const { startTimer } = useTimerStore();
+export const useSubscribeTimerOnce = () => {
+  const subscribeToChannel = useWebSocketStore((store) => store.subscribeToChannel);
+  const startTimer = useTimerStore((state) => state.startTimer);
+  const remainingTime = useTimerStore((state) => state.remainingTime);
+  const { user } = useAuth();
 
   useEffect(() => {
-    if (!userId) return;
+    if (!user?.memberId) return;
+    const channelId = `alarm/${user?.memberId}`;
 
-    const channelId = `alarm/${userId}`;
-
-    subscribeToChannel(channelId, (msg: AlarmMessage) => {
-      try {
-        const now = new Date();
-        const end = new Date(`1970-01-01T${msg.endTime}`);
-        const remainingSec = Math.floor((end.getTime() - now.getTime()) / 1000);
-
-        if (remainingSec > 0) {
-          startTimer(remainingSec, msg.tradeId, msg.startTime, msg.endTime);
+    const tmp = () =>
+      subscribeToChannel(channelId, (msg: AlarmMessage) => {
+        try {
+          const now = new Date();
+          const end = dayjs(msg.endTime).toDate();
+          const remainingSec = Math.floor((end.getTime() - now.getTime()) / 1000);
+          if (remainingSec > 0) {
+            startTimer(remainingSec, msg.tradeId, msg.startTime, msg.endTime);
+          }
+        } catch (e) {
+          console.error("알림 처리 실패:", e);
         }
-      } catch (e) {
-        console.error("알림 처리 실패:", e);
-      }
-    });
-  }, [userId, subscribeToChannel, startTimer]);
+      });
+    tmp();
+  }, [subscribeToChannel, startTimer, user, remainingTime]);
 };
