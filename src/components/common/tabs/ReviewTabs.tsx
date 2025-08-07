@@ -4,13 +4,9 @@ import { useSearchParams } from "next/navigation";
 import { Children, PropsWithChildren } from "react";
 import SlidingTabs from "@components/common/tabs/SlidingTabs";
 import { REVIEW_TABS } from "@components/common/tabs/tabsConfig";
+import { TabProps } from "@type/CommonComponent";
 
-interface Props {
-  value: string;
-  onChange: (value: string) => void;
-}
-
-export default function ReviewTabs({ value, onChange, children }: PropsWithChildren<Props>) {
+export default function ReviewTabs({ value, onChange, children }: PropsWithChildren<TabProps>) {
   const searchParams = useSearchParams();
   const isMine = searchParams.get("isMine");
   const reviewTabs = isMine === "true" ? REVIEW_TABS.slice(0, 2) : REVIEW_TABS.slice(1);

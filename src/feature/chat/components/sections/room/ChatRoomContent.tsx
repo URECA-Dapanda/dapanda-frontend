@@ -133,7 +133,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         }
       })
       .catch((err) => {
-        console.error("채팅 기록 불러오기 실패:", err);
+        console.debug("채팅 기록 불러오기 실패:", err);
       });
 
     return () => {
@@ -149,7 +149,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
       setChatList((prevChatList) => {
         return prevChatList.map((chat) => {
           if (chat.chatRoomId === chatRoomId) {
-            console.log(`채팅방 ${chatRoomId} 입장 - unreadCount 0으로 설정`);
             return {
               ...chat,
               unreadCount: 0,
@@ -178,7 +177,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
 
       sendMessage(chatRoomId, messagePayload);
     } catch (error) {
-      console.error("메시지 전송 실패:", error);
+      console.debug("메시지 전송 실패:", error);
     }
   };
 
@@ -256,7 +255,7 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
         setHasMore(false);
       }
     } catch (error) {
-      console.error("이전 메시지 불러오기 실패:", error);
+      console.debug("이전 메시지 불러오기 실패:", error);
     } finally {
       setLoadingMore(false);
     }

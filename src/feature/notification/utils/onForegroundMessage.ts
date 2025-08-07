@@ -11,8 +11,6 @@ export const onForegroundMessage = () => {
 
   const messaging = getMessaging(app);
   onMessage(messaging, (payload) => {
-    console.log("Foreground message received:", payload);
-
     if (Notification.permission === "granted") {
       new Notification(payload.notification?.title ?? "DaPanDa", {
         body: payload.notification?.body ?? "",

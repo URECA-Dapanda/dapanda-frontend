@@ -36,7 +36,7 @@ export async function getDataList({
 
     return { items, nextCursor };
   } catch {
-    console.error("상품 목록 조회 실패:");
+    console.debug("상품 목록 조회 실패:");
 
     return { items: [], nextCursor: undefined };
   }

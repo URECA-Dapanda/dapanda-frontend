@@ -15,7 +15,6 @@ export const postDefaultTrade = async ({
     mobileDataId,
     dataAmount: dataAmount ?? null,
   };
-  console.log("구매요청 api호출:", payload);
   const res = await axios.post("/api/trades/mobile-data/default", payload);
   return res.data.data.tradeId;
 };
@@ -34,7 +33,6 @@ export const postScrapTrade = async ({
     totalPrice,
     combinations,
   });
-  console.log("자투리구매 api 호출", combinations);
   return res.data.data.tradeId;
 };
 

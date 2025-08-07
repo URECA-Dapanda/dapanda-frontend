@@ -56,7 +56,7 @@ export const useProductCache = () => {
         setProduct(productInfo);
       } catch (error) {
         if (!abortController?.signal.aborted) {
-          console.error("상품 정보 가져오기 실패:", error);
+          console.debug("상품 정보 가져오기 실패:", error);
         }
       } finally {
         setIsLoadingProduct(false);

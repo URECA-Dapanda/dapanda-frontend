@@ -64,13 +64,11 @@ export default function UsePaymentModals() {
                       }),
                     500
                   );
-                  const tradeId = throttledPostDefaultTrade();
-                  console.log("일반 구매 완료", tradeId);
+                  throttledPostDefaultTrade();
                 } else {
                   throw new Error("상품 정보가 누락되었습니다.");
                 }
               } else if (info.badge === "분할 구매") {
-                console.log(info);
                 // 분할 구매 (분할 가능 상품 일부 구매)
                 if (info.productId && info.mobileDataId && info.dataAmount) {
                   const throttledPostDefaultTrade = throttle(
@@ -82,8 +80,7 @@ export default function UsePaymentModals() {
                       }),
                     500
                   );
-                  const tradeId = await throttledPostDefaultTrade();
-                  console.log("분할 구매 완료", tradeId);
+                  throttledPostDefaultTrade();
                 } else {
                   throw new Error("분할 구매 정보가 누락되었습니다.");
                 }
@@ -99,8 +96,7 @@ export default function UsePaymentModals() {
                       }),
                     500
                   );
-                  const tradeId = await throttledPostScrapTrade();
-                  console.log("자투리 구매 완료", tradeId);
+                  throttledPostScrapTrade();
                 } else {
                   throw new Error("자투리 구매 정보가 누락되었습니다.");
                 }
@@ -118,8 +114,7 @@ export default function UsePaymentModals() {
                     }),
                   500
                 );
-                const tradeId = await throttledPostWifiTrade();
-                console.log("와이파이 구매 완료", tradeId);
+                throttledPostWifiTrade();
               } else {
                 throw new Error("구매 정보가 누락되었습니다.");
               }

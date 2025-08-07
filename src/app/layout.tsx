@@ -1,14 +1,14 @@
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Slide, ToastContainer } from "react-toastify";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import ProviderWrapper from "@components/common/ProviderWrapper";
 import FcmInitializer from "@components/common/FcmInitializer";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "DaPanDa",
-  description: "URECA final project DaPanDa",
+  description: "세상 모든 데이터 상품을 판매하자",
 };
 
 export const viewport = {
@@ -44,7 +44,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="flex flex-col box-border w-full bg-gray-300 justify-center items-center">
+      <body className="flex flex-col box-border w-full bg-white justify-center items-center">
         <ProviderWrapper>
           <FcmInitializer />
           <Analytics />

@@ -21,7 +21,7 @@ export const requestFcmToken = async () => {
       await postFcmToken(token);
     }
   } catch (error) {
-    console.error("FCM 토큰 요청 실패", error);
+    console.debug("FCM 토큰 요청 실패", error);
   }
 
   return "success";

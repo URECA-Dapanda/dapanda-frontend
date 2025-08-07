@@ -59,7 +59,7 @@ export async function getMapList({
       nextCursor: json.data.pageInfo.nextCursorId ?? undefined,
     };
   } catch (e) {
-    console.error("getMapList error:", e);
+    console.debug("getMapList error:", e);
     throw new Error("와이파이 목록 조회에 실패했습니다");
   }
 }
@@ -71,7 +71,7 @@ export async function postWifiRegister(data: WifiRegisterRequest): Promise<void>
       throw new Error(res.data.message || "등록 실패");
     }
   } catch (error) {
-    console.error("postWifiRegister error:", error);
+    console.debug("postWifiRegister error:", error);
     throw new Error("와이파이 등록에 실패했습니다.");
   }
 }
@@ -83,7 +83,7 @@ export async function putWifiUpdate(data: WifiUpdateRequest): Promise<void> {
       throw new Error(res.data.message || "수정 실패");
     }
   } catch (error) {
-    console.error("putWifiUpdate error:", error);
+    console.debug("putWifiUpdate error:", error);
     throw new Error("와이파이 상품 수정에 실패했습니다.");
   }
 }

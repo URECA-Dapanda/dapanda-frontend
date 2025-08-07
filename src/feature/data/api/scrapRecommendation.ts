@@ -18,7 +18,7 @@ export async function getScrapRecommendation(
 
     return { items: rawItems, summary };
   } catch (error) {
-    console.error("자투리 조합 조회 실패", error);
+    console.debug("자투리 조합 조회 실패", error);
     return {
       items: [],
       summary: { totalAmount: 0, totalPrice: 0 },

@@ -14,7 +14,7 @@ export const useWifiPriceRecommendation = () => {
         setRecentPrice(res.recentPrice);
         setAvgPrice(res.averagePrice);
       } catch (e) {
-        console.error("시세 조회 실패", e);
+        console.debug("시세 조회 실패", e);
       }
     };
 

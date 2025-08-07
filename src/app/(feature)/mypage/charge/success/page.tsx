@@ -1,7 +1,7 @@
 "use client";
 
-import { useHandleTossSuccess } from "@/feature/mypage/hooks/useHandleTossSuccess";
 import { Receipt } from "lucide-react";
+import { useHandleTossSuccess } from "@/feature/mypage/hooks/useHandleTossSuccess";
 
 export default function ChargeSuccessPage() {
   useHandleTossSuccess();

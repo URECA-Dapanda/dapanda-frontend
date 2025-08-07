@@ -26,7 +26,8 @@ export default function MapPage() {
     setSortLabel,
   } = useMapPageState();
 
-  const { setStoreList, myPosition } = useMapStore();
+  const setStoreList = useMapStore((state) => state.setStoreList);
+  const myPosition = useMapStore((state) => state.myPosition);
   const [sortOptions, setSortOptions] = useState<DropdownOption[]>([]);
 
   const handleSortChange = async (label: string) => {

@@ -12,7 +12,6 @@ export default function DefaultFilterCard({ onSearch }: DefaultFilterCardProps) 
   const setDataAmount = useDataFilterStore((state) => state.setDataAmount);
 
   const handleSearch = () => {
-    console.log("일반 구매 검색:", value[0]);
     setDataAmount(value[0]);
     onSearch?.();
   };

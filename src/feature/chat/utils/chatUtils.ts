@@ -16,7 +16,7 @@ export const formatMessageDate = (createdAt: string): string => {
     const day = date.getDate();
     return `${year}년 ${month}월 ${day}일`;
   } catch (error) {
-    console.error("날짜 파싱 오류:", error);
+    console.debug("날짜 파싱 오류:", error);
     return formatDateDivider();
   }
 };

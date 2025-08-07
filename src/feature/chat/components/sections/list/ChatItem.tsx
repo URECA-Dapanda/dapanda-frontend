@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AvatarIcon from "@/components/common/AvatarIcon";
 
-export interface ChatItemProps {
+interface ChatItemProps {
   chatRoomId: string;
   name: string;
   updatedAt: string;

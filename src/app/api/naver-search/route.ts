@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
-    console.error("네이버 검색 API 에러:", err);
+    console.debug("네이버 검색 API 에러:", err);
     return new Response(JSON.stringify({ message: "서버 에러" }), {
       status: 500,
       headers: { "Content-Type": "application/json" },

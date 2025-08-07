@@ -27,7 +27,7 @@ export const useSubscribeTimerOnce = () => {
             startTimer(remainingSec, msg.tradeId, msg.startTime, msg.endTime);
           }
         } catch (e) {
-          console.error("알림 처리 실패:", e);
+          console.debug("알림 처리 실패:", e);
         }
       });
     tmp();

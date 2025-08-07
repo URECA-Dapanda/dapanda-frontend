@@ -37,7 +37,7 @@ export const useSubscribeTimer = () => {
             startTimer(remainingSec, msg.tradeId, msg.startTime, msg.endTime);
           }
         } catch (e) {
-          console.error("알림 수신 처리 중 오류:", e);
+          console.debug("알림 수신 처리 중 오류:", e);
         }
       });
     }
