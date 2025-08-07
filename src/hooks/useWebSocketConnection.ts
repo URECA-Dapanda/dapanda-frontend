@@ -1,14 +1,9 @@
-import { useEffect } from "react";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import { useProfileStore } from "@/stores/useProfileStore";
-import { useAuth } from "./useAuth";
 
 export const useWebSocketConnection = () => {
-  const connect = useWebSocketStore((store) => store.connect);
   const disconnect = useWebSocketStore((store) => store.disconnect);
   const isConnected = useWebSocketStore((store) => store.isConnected);
-  const { id: userId } = useProfileStore();
-  const { user } = useAuth();
 
   const disconnectOnLogout = () => {
     disconnect();
