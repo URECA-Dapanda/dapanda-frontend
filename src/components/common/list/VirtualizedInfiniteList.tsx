@@ -77,7 +77,7 @@ function VirtualizedList<T>({
 
   if (items.length === 0 && !hasNextPage) {
     return (
-      <div className="flex-1 flex justify-self-center" style={{ height }}>
+      <div className="flex justify-self-center items-center mx-auto" style={{ height }}>
         <EmptyState message="목록이 없습니다." subMessage={subMessage} />
       </div>
     );
