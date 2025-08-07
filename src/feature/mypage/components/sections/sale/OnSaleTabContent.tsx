@@ -48,6 +48,7 @@ export default function OnSaleTabContent() {
             ? "calc( 100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 108px - 152px - 24px - 36px - 30px - 12px )"
             : "calc( 100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 108px - 102px - 8px - 12px - 44px - 24px )"
         }
+        subMessage="판매 중인 상품이 없습니다."
       />
     </div>
   );

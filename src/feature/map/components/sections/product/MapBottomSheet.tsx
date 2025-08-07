@@ -34,7 +34,7 @@ export default function MapBottomSheet({
   onSortChange,
   sortOptions,
 }: Props) {
-  const { myPosition } = useMapStore();
+  const myPosition = useMapStore((state) => state.myPosition);
   const [isSnapUp, setIsSnapUp] = useState<boolean>(false);
 
   const handleSnapUp = useCallback(() => {

@@ -10,10 +10,6 @@ import {
 import axios from "@lib/axios";
 import "dayjs/locale/ko";
 
-function isNumber(value: unknown): value is number {
-  return typeof value === "number";
-}
-
 export async function getPurchaseHistoryList({
   size = 4,
   pageParam,
@@ -42,7 +38,6 @@ export async function getSaleHistoryList({
   productState: string;
   id?: string;
 }): Promise<{ items: SaleHistoryType[]; nextCursor?: number; num?: number }> {
-  if (!isNumber(pageParam)) return { items: [], nextCursor: undefined };
   const { data } = await axios.get(
     id ? `/api/members/${id}/selling-products` : "/api/selling-products",
     {
@@ -74,7 +69,6 @@ export async function getMyData() {
 }
 
 export async function getMyInfo(id?: string | number): Promise<UserType> {
-  console.log("id", id);
   const { data } = await axios.get("/api/members/info", { params: { memberId: id } });
 
   return data.data;

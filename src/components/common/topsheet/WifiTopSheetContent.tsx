@@ -1,7 +1,7 @@
 import { BadgeComponent } from "@/components/common/badge";
-import { WifiData } from "@components/common/topsheet/topSheet.types";
+import { TopSheetContentProps, WifiData } from "@components/common/topsheet/topSheet.types";
 
-export function WifiTopSheetContent({ data, expanded }: { data: WifiData; expanded: boolean }) {
+export function WifiTopSheetContent({ data, expanded }: TopSheetContentProps<WifiData>) {
   return (
     <>
       <div className="space-y-8">

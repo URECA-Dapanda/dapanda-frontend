@@ -15,7 +15,6 @@ function DataItemCard({ data, type, size = "md" }: DataItemCardProps) {
   const router = useRouter();
 
   const handleClick = useCallback(() => {
-    console.log(type, data);
     if (data) router.push(`/data/${data.productId}`);
   }, [data, type, router]);
 

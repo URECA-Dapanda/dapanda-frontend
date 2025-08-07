@@ -37,7 +37,7 @@ export default function ChatInputBar({ onSend }: ChatInputBarProps) {
         }, 100);
       }
     } catch (error) {
-      console.error("메시지 전송 실패:", error);
+      console.debug("메시지 전송 실패:", error);
     } finally {
       setIsSending(false);
     }

@@ -129,7 +129,7 @@ export default function DataPageContent() {
       setIsOnboardingLoading(true);
       await updateMemberRole();
     } catch (error) {
-      console.error("온보딩 완료 - API 요청 실패:", error);
+      console.debug("온보딩 완료 - API 요청 실패:", error);
     } finally {
       setIsOnboardingLoading(false);
       setOnboardingModalOpen(false);

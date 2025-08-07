@@ -29,7 +29,7 @@ export const useReadStatusHandler = (messages: ChatSocketMessage[]) => {
         await markMessageAsRead(latestMessageId);
         lastReadMessageId.current = latestMessageId;
       } catch (error) {
-        console.error("읽음 처리 실패:", latestMessageId, error);
+        console.debug("읽음 처리 실패:", latestMessageId, error);
       }
     }
   }, [messages]);
@@ -40,7 +40,7 @@ export const useReadStatusHandler = (messages: ChatSocketMessage[]) => {
         await markMessageAsRead(messageId);
         lastReadMessageId.current = messageId;
       } catch (error) {
-        console.error("실시간 읽음 처리 실패:", messageId, error);
+        console.debug("실시간 읽음 처리 실패:", messageId, error);
       }
     }
   }, []);

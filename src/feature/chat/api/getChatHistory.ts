@@ -36,7 +36,7 @@ export async function getChatHistory(
       throw new Error(response.data.message || "채팅 기록 조회 실패");
     }
   } catch (error) {
-    console.error("채팅 기록 조회 실패:", error);
+    console.debug("채팅 기록 조회 실패:", error);
     throw error;
   }
 }

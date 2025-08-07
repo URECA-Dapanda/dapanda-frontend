@@ -33,7 +33,7 @@ export const useUpdateDataProduct = () => {
           onSuccess?.();
         }
       } catch (e) {
-        console.error(e);
+        console.debug(e);
         showSuccessToast("수정 중 오류가 발생했습니다.");
       }
     },

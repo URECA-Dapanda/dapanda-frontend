@@ -60,7 +60,7 @@ export default function ChatContainer() {
               productDetailsMap[productIdNum] = productInfo;
             }
           } catch (error) {
-            console.error(`상품 ${productId} 정보 가져오기 실패:`, error);
+            console.debug(`상품 ${productId} 정보 가져오기 실패:`, error);
           }
         }
 
@@ -84,7 +84,7 @@ export default function ChatContainer() {
 
         setChatList(chatList);
       } catch (error) {
-        console.error("채팅 데이터 초기화 실패:", error);
+        console.debug("채팅 데이터 초기화 실패:", error);
       }
     }
   };
@@ -93,12 +93,11 @@ export default function ChatContainer() {
   const handleChatUpdate = (chatRoomId?: number) => {
     if (chatRoomId) {
       // 특정 채팅방의 unreadCount만 +1
-      console.log(`채팅방 ${chatRoomId}의 unreadCount +1`);
+      console.debug(`채팅방 ${chatRoomId}의 unreadCount +1`);
       setChatList((prevChatList) => {
         const updatedList = prevChatList.map((chat) => {
           if (chat.chatRoomId === chatRoomId) {
             const newUnreadCount = (chat.unreadCount || 0) + 1;
-            console.log(`채팅방 ${chatRoomId}: ${chat.unreadCount || 0} -> ${newUnreadCount}`);
             return {
               ...chat,
               unreadCount: newUnreadCount,
@@ -106,12 +105,10 @@ export default function ChatContainer() {
           }
           return chat;
         });
-        console.log("업데이트된 chatList:", updatedList);
         return updatedList;
       });
     } else {
       // 전체 채팅 목록 업데이트
-      console.log("전체 채팅 목록 업데이트");
       initializeChatData();
     }
   };
@@ -123,15 +120,14 @@ export default function ChatContainer() {
 
     // 기존 구독 해제
     chatRoomIds.forEach((chatRoomId: number) => {
-      console.log("기존 구독 해제", chatRoomId);
       unsubscribe(chatRoomId);
     });
 
     // 모든 채팅방 구독
     chatRoomIds.forEach((chatRoomId: number) => {
       subscribe(chatRoomId, (message) => {
-        console.log(`ChatContainer에서 채팅방 ${chatRoomId} 메시지 수신:`, message);
         // 메시지가 오면 해당 채팅방의 unreadCount +1
+        console.debug(message);
         handleChatUpdate(chatRoomId);
       });
     });

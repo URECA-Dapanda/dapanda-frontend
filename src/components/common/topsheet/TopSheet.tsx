@@ -207,3 +207,14 @@ export default function TopSheet({
     </>
   );
 }
+
+TopSheet.Skeleton = function Skeleton() {
+  return (
+    <div
+      className={clsx(
+        "w-full lg:w-[600px] ",
+        "bg-gray-500 shadow-default rounded-b-30 overflow-hidden"
+      )}
+    />
+  );
+};

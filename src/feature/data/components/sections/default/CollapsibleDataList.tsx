@@ -38,8 +38,6 @@ export default function CollapsibleDataList({
     updatedAt: item.updatedAt,
   }));
 
-  console.log("transformedCombinations", transformedCombinations);
-
   return (
     <div className="relative w-full space-y-16">
       <div className="relative h-[calc(100dvh-env(safe-area-inset-bottom)-env(safe-area-inset-top)-368px)] overflow-y-scroll">

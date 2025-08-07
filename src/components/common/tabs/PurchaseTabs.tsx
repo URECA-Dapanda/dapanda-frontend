@@ -1,13 +1,9 @@
 import { PropsWithChildren } from "react";
 import SlidingTabs from "@/components/common/tabs/SlidingTabs";
 import { PURCHASE_MODE_TABS } from "@/components/common/tabs/tabsConfig";
+import { TabProps } from "@type/CommonComponent";
 
-interface Props {
-  value: string;
-  onChange: (value: string) => void;
-}
-
-export default function PurchaseModeTabs({ value, onChange, children }: PropsWithChildren<Props>) {
+export default function PurchaseModeTabs({ value, onChange, children }: PropsWithChildren<TabProps>) {
   return (
     <SlidingTabs
       tabs={PURCHASE_MODE_TABS}

@@ -9,12 +9,9 @@ import LayoutBox from "@components/common/container/LayoutBox";
 import InputComponent from "@components/common/input/InputComponent";
 import { useChargeStore } from "@feature/mypage/stores/useChargeStore";
 import { formatPriceString } from "@lib/formatters";
+import { PartialTitleProps } from "@type/CommonComponent";
 
-interface SelectChargeProps {
-  title?: string;
-}
-
-export default function SelectCharge({ title = "충전 금액 선택" }: SelectChargeProps) {
+export default function SelectCharge({ title = "충전 금액 선택" }: PartialTitleProps) {
   const selectValue = useChargeStore((state) => state.charge);
   const setSelectValue = useChargeStore((state) => state.setCharge);
 

@@ -20,7 +20,7 @@ import clsx from "clsx";
 export default function MapDetailPage() {
   const router = useRouter();
   const { postId } = useParams<{ postId: string }>();
-  const { setInfo } = usePaymentStore();
+  const setInfo = usePaymentStore((state) => state.setInfo);
 
   const { data, isLoading, isError } = useMapDetailData(postId);
 

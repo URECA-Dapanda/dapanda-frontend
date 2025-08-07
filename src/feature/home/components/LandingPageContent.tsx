@@ -10,17 +10,26 @@ export default function LandingPageContent() {
   const { isLogin } = useAuth();
 
   useEffect(() => {
-    router.prefetch("/data");
-    router.prefetch("/data?tab=scrap");
-    router.prefetch("/data?tab=default");
-    router.prefetch("/data?on-boarding=true");
-  }, []);
-
-  useEffect(() => {
     if (isLogin) {
       router.push("/data");
     }
   }, [isLogin]);
+
+  useEffect(() => {
+    if ("requestIdleCallback" in window) {
+      router.prefetch("/data");
+      router.prefetch("/data?tab=scrap");
+      router.prefetch("/data?tab=default");
+      router.prefetch("/data?on-boarding=true");
+    } else {
+      setTimeout(() => {
+        router.prefetch("/data");
+        router.prefetch("/data?tab=scrap");
+        router.prefetch("/data?tab=default");
+        router.prefetch("/data?on-boarding=true");
+      }, 200);
+    }
+  }, []);
 
   return (
     <div className="w-full lg:w-[600px] mx-auto h-main-safe bg-gradient-to-b from-[#f5e6f3] via-[#f0e1f1] to-[#ede0f0] flex flex-col items-center justify-center relative overflow-hidden">
