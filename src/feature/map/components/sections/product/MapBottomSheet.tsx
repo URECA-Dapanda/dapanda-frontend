@@ -56,7 +56,6 @@ export default function MapBottomSheet({
         open: availableOnly ? true : undefined,
       }),
     getNextPageParam: (lastPage) => {
-      // 🔽 수정 포인트
       if (availableOnly && lastPage.items.length === 0) {
         return undefined;
       }

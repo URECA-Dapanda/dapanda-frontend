@@ -3,7 +3,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { useTimerStore } from "@/feature/map/stores/useTimerStore";
-import { useTimerDisplay } from "@/feature/map/hooks/useTimerDisplay";
+import { useTimerDisplay } from "@feature/map/hooks/timer/useTimerDisplay";
 
 export default function TimerModal() {
   const openModal = useTimerStore((state) => state.openModal);

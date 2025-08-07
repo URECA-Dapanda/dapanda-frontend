@@ -7,10 +7,10 @@ import BasicInfoFields from "@/feature/map/components/sections/regist/BasicInfoF
 import TimeRangeField from "@/feature/map/components/sections/regist/TimeRangeField";
 import ImageUploader from "@/feature/map/components/sections/regist/ImageUploader";
 import RegisterSuccessModal from "@/feature/map/components/sections/regist/RegisterSuccessModal";
-import { useRegisterFormState, SaleType } from "@/feature/map/hooks/useRegisterFormState";
-import { useRegisterFormValidation } from "@feature/map/hooks/useRegisterFormValidation";
+import { useRegisterFormState, SaleType } from "@feature/map/hooks/register/useRegisterFormState";
+import { useRegisterFormValidation } from "@feature/map/hooks/register/useRegisterFormValidation";
 import type { RegisterFormData } from "@/feature/map/types/registerForm";
-import { usePostWifiRegister } from "@feature/map/hooks/usePostWifiRegister";
+import { usePostWifiRegister } from "@feature/map/hooks/register/usePostWifiRegister";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
 import { usePresignedUpload } from "@/hooks/usePresignedUpload";
 

@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import BaseBottomSheet from "@/components/common/bottomsheet/BaseBottomSheet";
 import { ButtonComponent } from "@components/common/button";
-import { useReviewMutation } from "@/feature/map/hooks/useReviewMutation";
 import InputComponent from "@components/common/input/InputComponent";
 import { ReviewResponse } from "@/feature/map/types/reviewType";
 import { showErrorToast } from "@lib/toast";
+import { useReviewMutation } from "@feature/map/hooks/review/useReviewMutation";
 
 export interface ReviewBottomSheetProps {
   isOpen: boolean;
