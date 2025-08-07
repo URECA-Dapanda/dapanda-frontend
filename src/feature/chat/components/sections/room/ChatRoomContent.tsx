@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { formatDateDivider } from "@/lib/time";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import { useConfigStore } from "@/stores/useConfigStore";
+import { useChatStore } from "@feature/chat/stores/useChatStore";
 import ChatBubble from "@feature/chat/components/sections/room/ChatBubble";
 import type { ChatSocketMessage } from "@/feature/chat/types/chatType";
 import ChatPostCard from "@feature/chat/components/sections/room/ChatPostCard";
@@ -36,8 +37,12 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   const searchParams = useSearchParams();
   const abortRef = useRef<AbortController | null>(null);
 
-  const { subscribe, unsubscribe, sendMessage, setActiveChatRoomId } = useWebSocketStore();
+  const subscribe = useWebSocketStore((store) => store.subscribe);
+  const unsubscribe = useWebSocketStore((store) => store.unsubscribe);
+  const sendMessage = useWebSocketStore((store) => store.sendMessage);
+  const setActiveChatRoomId = useWebSocketStore((store) => store.setActiveChatRoomId);
   const { setTitle } = useConfigStore();
+  const setChatList = useChatStore((state) => state.setChatList);
 
   // React Query를 사용한 상품 정보 가져오기
   const { data: productData, isLoading: isLoadingProduct } = useQuery({
@@ -139,12 +144,26 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
   useEffect(() => {
     if (chatRoomId) {
       setActiveChatRoomId(chatRoomId);
+
+      // 채팅방 입장 시 해당 채팅방의 unreadCount를 0으로 설정
+      setChatList((prevChatList) => {
+        return prevChatList.map((chat) => {
+          if (chat.chatRoomId === chatRoomId) {
+            console.log(`채팅방 ${chatRoomId} 입장 - unreadCount 0으로 설정`);
+            return {
+              ...chat,
+              unreadCount: 0,
+            };
+          }
+          return chat;
+        });
+      });
     }
 
     return () => {
       setActiveChatRoomId(null);
     };
-  }, [chatRoomId, setActiveChatRoomId]);
+  }, [chatRoomId, setActiveChatRoomId, setChatList]);
 
   const addMessage = async (text: string) => {
     try {
@@ -316,7 +335,6 @@ export default function ChatRoomContent({ chatRoomId, productId }: ChatRoomConte
           height: isKeyboardVisible
             ? `calc(100vh - ${headerHeight + 140}px)`
             : "calc(100vh - 84px - 120px)",
-
         }}
       >
         {loadingMore && (

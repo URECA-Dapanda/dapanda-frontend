@@ -70,10 +70,8 @@ export default function PurchaseHistoryCard({ data }: PurchaseHistoryCardProps) 
           <p className="body-sm text-gray-600">
             거래 상품:{" "}
             {data.title !== ""
-              ? data.title
-              : `${formatDataSize(data.dataAmount)} 모바일 데이터${
-                  data.timeAmount && ` (${data.timeAmount}분)`
-                }`}
+              ? `${data.title}${data.timeAmount > 0 ? ` (${data.timeAmount}분)` : ""}`
+              : `${formatDataSize(data.dataAmount)} 모바일 데이터`}
           </p>
         </LayoutBox>
       </LayoutBox>

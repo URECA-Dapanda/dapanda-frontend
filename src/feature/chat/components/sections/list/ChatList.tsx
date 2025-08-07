@@ -19,7 +19,8 @@ export default function ChatList() {
   const chatList = useChatStore((state) => state.chatList);
   const setChatList = useChatStore((state) => state.setChatList);
   const setChatListUpdateCallback = useWebSocketStore((state) => state.setChatListUpdateCallback);
-  const { subscribe, unsubscribe } = useWebSocketStore();
+  const subscribe = useWebSocketStore((store) => store.subscribe);
+  const unsubscribe = useWebSocketStore((store) => store.unsubscribe);
   const [selectedFilter, setSelectedFilter] = useState<"ALL" | "BUYER" | "SELLER">("ALL");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -156,8 +157,19 @@ export default function ChatList() {
 
   // 웹소켓 스토어에 채팅방 목록 업데이트 콜백 등록
   useEffect(() => {
-    setChatListUpdateCallback(refetchChatRooms);
-    return () => setChatListUpdateCallback(null);
+    const currentCallback = useWebSocketStore.getState().chatListUpdateCallback;
+
+    // 기존 콜백이 있으면 유지하면서 refetchChatRooms도 호출
+    const combinedCallback = (chatRoomId?: number) => {
+      currentCallback?.(chatRoomId);
+      if (!chatRoomId) {
+        // 전체 업데이트인 경우에만 refetchChatRooms 호출
+        refetchChatRooms();
+      }
+    };
+
+    setChatListUpdateCallback(combinedCallback);
+    return () => setChatListUpdateCallback(currentCallback);
   }, [selectedFilter, setChatListUpdateCallback, refetchChatRooms]);
 
   // 컴포넌트 마운트 시와 필터 변경 시 API 호출
