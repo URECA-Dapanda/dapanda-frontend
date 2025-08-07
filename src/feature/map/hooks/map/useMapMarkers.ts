@@ -24,11 +24,19 @@ export const useMapMarkers = (
   useEffect(() => {
     if (!map || typeof window === "undefined") return;
 
+    clustererRef.current?.setMap(null);
+    clustererRef.current = null;
+
+    markerMapRef.current.forEach((marker) => marker.setMap(null));
+    markerMapRef.current.clear();
+
+    currentMarkerRef.current?.setMap(null);
+    currentMarkerRef.current = null;
+
     const newMarkerMap = new Map<number, naver.maps.Marker>();
     const markers: naver.maps.Marker[] = [];
-    const currentPin = storeList.find((s) => s.title === "내 위치");
 
-    // "내 위치" 마커 따로 생성 및 지도에 표시
+    const currentPin = storeList.find((s) => s.title === "내 위치");
     if (currentPin) {
       const [lat, lng] = currentPin.location.split(",").map(Number);
       if (!isNaN(lat) && !isNaN(lng)) {
@@ -40,7 +48,6 @@ export const useMapMarkers = (
               <div style="
                 background: #e6007e;
                 width: 15px;
-                z-index: -10;
                 height: 15px;
                 border-radius: 50%;
                 border: 2px solid white;
@@ -53,7 +60,6 @@ export const useMapMarkers = (
       }
     }
 
-    // 나머지 마커들 생성 (clusterer가 표시할 마커)
     storeList.forEach((store) => {
       if (store.title === "내 위치") return;
 
@@ -80,7 +86,6 @@ export const useMapMarkers = (
           anchor: new window.naver.maps.Point(25, 26),
         },
       });
-      marker.setMap(map);
 
       if (options?.onMarkerClick) {
         window.naver.maps.Event.addListener(marker, "click", () => {
@@ -95,7 +100,6 @@ export const useMapMarkers = (
       newMarkerMap.set(store.productId, marker);
     });
 
-    // 클러스터러 로딩 대기 및 초기화
     let retry = 0;
     const maxRetry = 10;
 
@@ -104,14 +108,14 @@ export const useMapMarkers = (
       if (Clustering && typeof Clustering === "function") {
         clearInterval(interval);
 
-        // 기존 클러스터러 제거
-        clustererRef.current?.setMap(null);
+        const zoom = map.getZoom();
+        const gridSize = zoom >= 17 ? 60 : zoom >= 15 ? 90 : zoom >= 13 ? 120 : 150;
 
         const clusterer = new Clustering({
           map,
           markers,
           maxZoom: 17,
-          gridSize: 60,
+          gridSize,
           disableClickZoom: false,
           minClusterSize: 2,
           icons: [
@@ -144,15 +148,11 @@ export const useMapMarkers = (
         });
 
         clustererRef.current = clusterer;
-
-        // 마커 갱신
-        markerMapRef.current.forEach((marker) => marker.setMap(null));
         markerMapRef.current = newMarkerMap;
       } else {
         retry++;
         if (retry >= maxRetry) {
           clearInterval(interval);
-
           markers.forEach((marker) => marker.setMap(map));
           markerMapRef.current = newMarkerMap;
         }
