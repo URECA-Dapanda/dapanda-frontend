@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import VirtualizedInfiniteList from "@/components/common/list/VirtualizedInfiniteList";
 import MapItemCard from "@/feature/map/components/sections/product/MapItemCard";
-import { useMapInfiniteQuery } from "@/feature/map/hooks/useMapInfiniteQuery";
+import { useMapInfiniteQuery } from "@feature/map/hooks/query/useMapInfiniteQuery";
 import type { MapType } from "@/feature/map/types/mapType";
 import { showErrorToast } from "@lib/toast";
 

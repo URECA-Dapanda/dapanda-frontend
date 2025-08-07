@@ -1,6 +1,7 @@
 import { ReactNode, Suspense } from "react";
 import AppHeader from "@components/common/header/AppHeader";
 import BottomNavigation from "@components/common/navigation/BottomNavigation";
+import LoadingPanda from "@components/common/empty/Loading";
 
 export default function FeatureLayout({
   children,
@@ -13,7 +14,7 @@ export default function FeatureLayout({
     <div className="relative w-[100dvw] lg:w-[600px] overflow-hidden mx-auto bg-white flex flex-col">
       <AppHeader id="appHead" />
       <main className="h-main-safe overflow-y-visible antialiased w-full lg:w-[600px]">
-        <Suspense>
+        <Suspense fallback={<LoadingPanda />}>
           {children}
           {modal}
         </Suspense>

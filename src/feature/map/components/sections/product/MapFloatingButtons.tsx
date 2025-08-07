@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function MapFloatingButtons({ onOpenModal, onOpenSheet, isSnapOpen }: Props) {
-  const { map } = useMapStore();
+  const map = useMapStore((state) => state.map);
 
   const handleGoToCurrentLocation = () => {
     if (!map || !window.naver) return;

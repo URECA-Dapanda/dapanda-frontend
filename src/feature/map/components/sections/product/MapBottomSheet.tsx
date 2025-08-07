@@ -34,7 +34,7 @@ export default function MapBottomSheet({
   onSortChange,
   sortOptions,
 }: Props) {
-  const { myPosition } = useMapStore();
+  const myPosition = useMapStore((state) => state.myPosition);
   const [isSnapUp, setIsSnapUp] = useState<boolean>(false);
 
   const handleSnapUp = useCallback(() => {
@@ -56,7 +56,6 @@ export default function MapBottomSheet({
         open: availableOnly ? true : undefined,
       }),
     getNextPageParam: (lastPage) => {
-      // 🔽 수정 포인트
       if (availableOnly && lastPage.items.length === 0) {
         return undefined;
       }

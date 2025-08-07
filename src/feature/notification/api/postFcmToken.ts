@@ -9,7 +9,7 @@ export const postFcmToken = async (token: string) => {
     const res = await axios.post("/api/fcm/save", { token });
     return res.data;
   } catch (err) {
-    console.error("FCM 토큰 저장 실패:", err);
+    console.debug("FCM 토큰 저장 실패:", err);
     throw err;
   }
 };

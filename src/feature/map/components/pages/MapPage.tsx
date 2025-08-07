@@ -5,12 +5,12 @@ import MapContainer from "@/feature/map/components/sections/product/MapContainer
 import MapFloatingButtons from "@/feature/map/components/sections/product/MapFloatingButtons";
 import MapBottomSheet from "@/feature/map/components/sections/product/MapBottomSheet";
 import MapRegisterModal from "@/feature/map/components/sections/regist/MapRegisterModal";
-import { useMapPageState } from "@/feature/map/hooks/useMapState";
+import { useMapPageState } from "@feature/map/hooks/state/useMapState";
 import { getMapList } from "@/feature/map/api/mapRequest";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import { createDataSortOptions, sortOptionMap } from "@/components/common/dropdown/dropdownConfig";
 import type { DropdownOption } from "@/components/common/dropdown/dropdown.types";
-import { useInitialMapFetch } from "@feature/map/hooks/useMapIntialMapFetch";
+import { useInitialMapFetch } from "@feature/map/hooks/map/useMapIntialMapFetch";
 
 export default function MapPage() {
   useInitialMapFetch();
@@ -26,7 +26,8 @@ export default function MapPage() {
     setSortLabel,
   } = useMapPageState();
 
-  const { setStoreList, myPosition } = useMapStore();
+  const setStoreList = useMapStore((state) => state.setStoreList);
+  const myPosition = useMapStore((state) => state.myPosition);
   const [sortOptions, setSortOptions] = useState<DropdownOption[]>([]);
 
   const handleSortChange = async (label: string) => {

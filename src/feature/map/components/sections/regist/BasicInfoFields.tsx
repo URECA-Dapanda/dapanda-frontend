@@ -1,8 +1,8 @@
 import InputComponent from "@components/common/input/InputComponent";
 import { badgeVariants } from "@components/common/badge/badgeVariants";
-import type { SaleType } from "@/feature/map/hooks/useRegisterFormState";
+import type { SaleType } from "@feature/map/hooks/register/useRegisterFormState";
 import { RegisterFormValues, RegisterFormErrors } from "@/feature/map/types/registerForm";
-import { useWifiPriceRecommendation } from "@/feature/map/hooks/useWifiPriceRecommendation";
+import { useWifiPriceRecommendation } from "@feature/map/hooks/query/useWifiPriceRecommendation";
 
 import { cn } from "@/lib/utils";
 

@@ -25,7 +25,9 @@ export default function CashActionContent({ mode, buttonText }: CashActionConten
   const chargeAmount = useChargeStore((state) => state.charge);
   const setChargeAmount = useChargeStore((state) => state.setCharge);
   const openToss = useTossModalStore((state) => state.open);
-  const { isOpen, close, open } = useCashSuccessModalStore();
+  const isOpen = useCashSuccessModalStore((state) => state.isOpen);
+  const close = useCashSuccessModalStore((state) => state.close);
+  const open = useCashSuccessModalStore((state) => state.open);
   const [isFin, setIsFin] = useState<boolean>(false);
   const { mutateAsync: refundMutation, isPending } = useMutation({
     mutationFn: requestRefund,

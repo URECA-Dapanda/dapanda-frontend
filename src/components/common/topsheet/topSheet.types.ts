@@ -32,5 +32,10 @@ export type CommonTopSheetProps = {
 };
 
 export type TopSheetProps =
-  | (CommonTopSheetProps & { type: "post"; data: PostData & { isOwner?: boolean }})
+  | (CommonTopSheetProps & { type: "post"; data: PostData & { isOwner?: boolean } })
   | (CommonTopSheetProps & { type: "wifi"; data: WifiData });
+
+export interface TopSheetContentProps<T> {
+  data: T;
+  expanded: boolean;
+}

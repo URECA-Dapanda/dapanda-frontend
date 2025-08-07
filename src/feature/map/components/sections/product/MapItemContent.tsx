@@ -14,7 +14,7 @@ export default function MapItemCardContent({
   data: { productId, address, price, score, title, startTime, endTime, open, imageUrl, location },
 }: ProductItemProps<MapType> & { disableUseButton?: boolean }) {
   const router = useRouter();
-  const { setMapCenter } = useMapStore();
+  const setMapCenter = useMapStore((state) => state.setMapCenter);
   const [lat, lng] = location.split(",").map(Number);
 
   const handleCardClick = () => {
@@ -62,7 +62,7 @@ export default function MapItemCardContent({
         } else {
           showErrorToast("채팅방 생성 중 오류가 발생했습니다.");
         }
-        console.error(error);
+        console.debug(error);
       }
     },
     [productId, router]

@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import AvatarIcon from "@/components/common/AvatarIcon";
 import { Rating, RatingButton } from "@components/common/rating/RatingScore";
 import { getMyInfo } from "@feature/mypage/apis/mypageRequest";
+import { Skeleton } from "@ui/skeleton";
 
 interface SellerProfileCardProps {
   sellerId: number;
@@ -29,7 +30,7 @@ export default function SellerProfileCard({ sellerId }: SellerProfileCardProps) 
       </div>
 
       <div className="flex flex-col items-end justify-center gap-2">
-        <Rating readOnly value={data?.averageRating}>
+        <Rating readOnly value={Math.round((data?.averageRating || 0) * 10) / 10}>
           <RatingButton className="text-primary" />
         </Rating>
         <span className="text-gray-500 body-xs">({data?.reviewCount ?? 0}개의 리뷰)</span>
@@ -37,3 +38,7 @@ export default function SellerProfileCard({ sellerId }: SellerProfileCardProps) 
     </Link>
   );
 }
+
+SellerProfileCard.Skeleton = function SkeletonProfile() {
+  return <Skeleton className="flex items-center justify-between mx-24" />;
+};

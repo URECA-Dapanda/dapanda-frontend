@@ -3,10 +3,13 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { useTimerStore } from "@/feature/map/stores/useTimerStore";
-import { useTimerDisplay } from "@/feature/map/hooks/useTimerDisplay";
+import { useTimerDisplay } from "@feature/map/hooks/timer/useTimerDisplay";
 
 export default function TimerModal() {
-  const { openModal, setOpenModal, remainingTime, duration } = useTimerStore();
+  const openModal = useTimerStore((state) => state.openModal);
+  const setOpenModal = useTimerStore((state) => state.setOpenModal);
+  const remainingTime = useTimerStore((state) => state.remainingTime);
+  const duration = useTimerStore((state) => state.duration);
   const { minutes, seconds, percentage } = useTimerDisplay(remainingTime, duration);
 
   if (!openModal) return null;

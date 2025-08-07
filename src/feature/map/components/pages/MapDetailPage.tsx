@@ -6,21 +6,21 @@ import TopSheet from "@/components/common/topsheet/TopSheet";
 import { ButtonComponent } from "@components/common/button";
 import TimeSelectorSection from "@/feature/map/components/sections/product/TimeSelectorSection";
 import SellerSection from "@/feature/map/components/sections/seller/SellerSection";
-import { useMapDetailData } from "@/feature/map/hooks/useMapDetailData";
-import { useTimeState } from "@/feature/map/hooks/useTimeState";
+import { useMapDetailData } from "@feature/map/hooks/query/useMapDetailData";
 import DeletePostModal from "@/feature/data/components/sections/modal/DeletePostModal";
-import { useWifiPriceRecommendation } from "@/feature/map/hooks/useWifiPriceRecommendation";
+import { useWifiPriceRecommendation } from "@feature/map/hooks/query/useWifiPriceRecommendation";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
 import { buildWifiPaymentInfo } from "@feature/payment/hooks/useWifiPurchaseBuilder";
 import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
 import { showErrorToast, showInfoToast } from "@lib/toast";
 import { parseHHMMToTime, isWithinOperatingHours, getDurationMinutes } from "@/lib/time";
 import clsx from "clsx";
+import { useTimeState } from "@feature/map/hooks/state/useTimeState";
 
 export default function MapDetailPage() {
   const router = useRouter();
   const { postId } = useParams<{ postId: string }>();
-  const { setInfo } = usePaymentStore();
+  const setInfo = usePaymentStore((state) => state.setInfo);
 
   const { data, isLoading, isError } = useMapDetailData(postId);
 

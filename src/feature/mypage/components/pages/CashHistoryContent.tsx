@@ -6,6 +6,7 @@ import CashHistoryDateBox from "@feature/mypage/components/sections/profile/Cash
 import MonthlyCashTotalBox from "@feature/mypage/components/sections/profile/MonthlyCashTotalBox";
 import MonthPicker from "@components/common/calendar/MonthPicker";
 import { useVirtualizedGroupedInfiniteQuery } from "@hooks/useGroupedVirtualizedInfiniteQuery";
+import EmptyState from "@components/common/empty/EmptyState";
 
 export default function CashHistoryContent() {
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -54,8 +55,11 @@ export default function CashHistoryContent() {
                     )
                 )
               ) : (
-                <div className="h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-108px-219px-48px-32px)] items-center flex justify-center">
-                  <p className="text-center body-md text-gray-500">내역이 없습니다.</p>
+                <div className=" items-center flex justify-center">
+                  <EmptyState
+                    message="캐시 이용 내역이 없습니다."
+                    subMessage="서비스를 이용해 보세요."
+                  />
                 </div>
               )}
             </div>

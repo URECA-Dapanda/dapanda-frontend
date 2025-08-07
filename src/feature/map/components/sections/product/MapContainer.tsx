@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useMapInitializer } from "@/feature/map/hooks/useMapInitializer";
-import { useMapMarkers } from "@/feature/map/hooks/useMapMarkers";
+import { useMapInitializer } from "@feature/map/hooks/map/useMapInitializer";
+import { useMapMarkers } from "@feature/map/hooks/map/useMapMarkers";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
 import { MAP_CONTAINER_ID } from "@/feature/map/constants/map";
-import { useMyLocation } from "@feature/map/hooks/useMyLocation";
-import { useMapRefresh } from "@/feature/map/hooks/useMapRefresh";
+import { useMyLocation } from "@feature/map/hooks/map/useMyLocation";
+import { useMapRefresh } from "@feature/map/hooks/map/useMapRefresh";
 import MapItemCard from "@/feature/map/components/sections/product/MapItemCard";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";

@@ -20,7 +20,7 @@ export const createStompClient = (
       });
     },
     onStompError: (frame) => {
-      console.error("STOMP 오류", frame.headers["message"]);
+      console.debug("STOMP 오류", frame.headers["message"]);
     },
   });
 

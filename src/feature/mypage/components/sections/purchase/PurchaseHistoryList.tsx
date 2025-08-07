@@ -39,6 +39,7 @@ export default function PurchaseHistoryList() {
           <PurchaseHistoryCard data={item} key={item ? item.id : index} />
         )}
         mode="button"
+        subMessage="서비스를 이용해 보세요."
       />
     </>
   );

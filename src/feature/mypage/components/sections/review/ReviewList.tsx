@@ -21,7 +21,7 @@ export default function ReviewList({ type }: { type?: "receive" | "post" }) {
       queryFn: ({ pageParam }) =>
         getReviewList({
           pageParam,
-          size: 2,
+          size: 5,
           id,
           type,
         }),
@@ -58,6 +58,7 @@ export default function ReviewList({ type }: { type?: "receive" | "post" }) {
             />
           )}
           mode="button"
+          subMessage={type === "post" ? "리뷰를 등록해 보세요." : "받은 리뷰가 없습니다."}
         />
       </div>
       <ReportModal

@@ -1,6 +1,7 @@
 import React, { memo } from "react";
 import { VirtualItem, Virtualizer } from "@tanstack/react-virtual";
 import { ButtonComponent } from "@components/common/button";
+import EmptyState from "../empty/EmptyState";
 
 interface VirtualizedListProps<T> {
   mode?: "scroll" | "button";
@@ -12,6 +13,7 @@ interface VirtualizedListProps<T> {
   fetchNextPage: () => void;
   hasNextPage: boolean;
   renderItem: (index: number, item?: T) => React.ReactNode;
+  subMessage?: string;
 }
 
 /**
@@ -62,6 +64,7 @@ function VirtualizedList<T>({
   parentRef,
   rowVirtualizer,
   items,
+  subMessage = "",
   height = "400px",
   mode = "scroll",
   hasNextPage,
@@ -71,6 +74,14 @@ function VirtualizedList<T>({
 }: VirtualizedListProps<T>) {
   const virtualItems = rowVirtualizer.getVirtualItems();
   const totalHeight = rowVirtualizer.getTotalSize();
+
+  if (items.length === 0 && !hasNextPage) {
+    return (
+      <div className="flex-1 flex justify-self-center" style={{ height }}>
+        <EmptyState message="목록이 없습니다." subMessage={subMessage} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 min-h-0">
