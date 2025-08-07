@@ -73,7 +73,11 @@ export default function MapProfileCard({
 
       <div className="flex flex-col gap-4 flex-1 px-16">
         <span className="title-sm text-black">{displayName}</span>
-        <Rating readOnly value={data?.averageRating} defaultValue={data?.averageRating}>
+        <Rating
+          readOnly
+          value={Math.round((data?.averageRating || 0) * 10) / 10}
+          defaultValue={Math.round((data?.averageRating || 0) * 10) / 10}
+        >
           <RatingButton className="text-primary" />
         </Rating>
       </div>

@@ -7,6 +7,7 @@ import { useSlidingHighlight } from "@/components/common/tabs/useSlidingHighligh
 import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
+import { TabProps } from "@type/CommonComponent";
 
 interface TabItem {
   label: string;
@@ -14,15 +15,33 @@ interface TabItem {
   content?: React.ReactNode;
 }
 
-interface SlidingTabsProps {
+interface SlidingTabsProps extends TabProps {
   tabs: readonly TabItem[];
-  value: string;
   defaultValue?: string;
-  onChange: (value: string) => void;
   variant?: "pill" | "outline";
   delay?: number;
   contentClassName?: string;
 }
+
+const styleSet = {
+  pill: {
+    tabList: "w-[327px] h-44 bg-secondary rounded-full mb-12 flex items-center p-1",
+    highlight: "inset-y-1 rounded-full bg-secondary2 z-0",
+    trigger: cn(
+      "relative z-10 flex-1 h-full rounded-full text-center body-sm font-medium transition-colors  hover:cursor-pointer",
+      "text-gray-600 data-[state=active]:text-black data-[state=active]:bg-secondary2"
+    ),
+  },
+  outline: {
+    tabList: "bg-transparent flex gap-8 py-16",
+    highlight: "bottom-0 h-[2px] bg-primary",
+    trigger: cn(
+      "!shadow-none w-[140px] h-[30px] title-sm text-gray-400 text-center relative  hover:cursor-pointer",
+      "bg-transparent shadow-none border-none",
+      "data-[state=active]:text-primary data-[state=active]:font-bold"
+    ),
+  },
+};
 
 export default function SlidingTabs({
   tabs,
@@ -51,25 +70,7 @@ PropsWithChildren<SlidingTabsProps>) {
     router.replace(`?${params.toString()}`);
   };
 
-  const styles = {
-    pill: {
-      tabList: "w-[327px] h-44 bg-secondary rounded-full mb-12 flex items-center p-1",
-      highlight: "inset-y-1 rounded-full bg-secondary2 z-0",
-      trigger: cn(
-        "relative z-10 flex-1 h-full rounded-full text-center body-sm font-medium transition-colors  hover:cursor-pointer",
-        "text-gray-600 data-[state=active]:text-black data-[state=active]:bg-secondary2"
-      ),
-    },
-    outline: {
-      tabList: "bg-transparent flex gap-8 py-16",
-      highlight: "bottom-0 h-[2px] bg-primary",
-      trigger: cn(
-        "!shadow-none w-[140px] h-[30px] title-sm text-gray-400 text-center relative  hover:cursor-pointer",
-        "bg-transparent shadow-none border-none",
-        "data-[state=active]:text-primary data-[state=active]:font-bold"
-      ),
-    },
-  }[variant];
+  const styles = styleSet[variant];
 
   return (
     <Tabs

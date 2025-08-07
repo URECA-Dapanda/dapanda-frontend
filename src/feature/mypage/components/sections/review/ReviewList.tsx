@@ -21,7 +21,7 @@ export default function ReviewList({ type }: { type?: "receive" | "post" }) {
       queryFn: ({ pageParam }) =>
         getReviewList({
           pageParam,
-          size: 2,
+          size: 5,
           id,
           type,
         }),

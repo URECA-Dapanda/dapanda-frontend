@@ -1,8 +1,6 @@
-interface BottomSheetHeaderProps {
-  title?: string;
-}
+import { PartialTitleProps } from "@type/CommonComponent";
 
-export default function BottomSheetHeader({ title }: BottomSheetHeaderProps) {
+export default function BottomSheetHeader({ title }: PartialTitleProps) {
   return (
     <div className="bg-white z-10">
       <div className="w-50 h-1.5 bg-gray-300 rounded-full mx-auto mt-8 mb-8" />

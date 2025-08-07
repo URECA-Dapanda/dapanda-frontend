@@ -1,5 +1,5 @@
 import LoadingPanda from "@components/common/empty/Loading";
 
-export default function HistoryLoading() {
+export default function NotificationLoading() {
   return <LoadingPanda />;
 }

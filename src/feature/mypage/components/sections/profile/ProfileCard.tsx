@@ -23,8 +23,12 @@ export default function ProfileCard() {
       >
         <p className="title-sm text-black">{data?.name ?? "-"}</p>
         <p className="body-sm text-gray-500">가입일: {data?.joinedAt ?? "-"}</p>
-        <Rating defaultValue={data?.averageRating} readOnly value={data?.averageRating}>
-          <RatingButton className="text-amber-300" />
+        <Rating
+          defaultValue={Math.round((data?.averageRating || 0) * 10) / 10}
+          readOnly
+          value={Math.round((data?.averageRating || 0) * 10) / 10}
+        >
+          <RatingButton className="text-primary" />
         </Rating>
       </Link>
     </div>

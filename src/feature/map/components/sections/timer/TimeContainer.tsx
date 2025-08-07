@@ -5,7 +5,9 @@ import TimerEndModal from "@/feature/map/components/sections/timer/TimerEndModal
 import { useTimerStore } from "@/feature/map/stores/useTimerStore";
 
 export default function TimerContainer() {
-  const { hasEnded, openModal, reset } = useTimerStore();
+  const hasEnded = useTimerStore((state) => state.hasEnded);
+  const openModal = useTimerStore((state) => state.openModal);
+  const reset = useTimerStore((state) => state.reset);
 
   return (
     <>

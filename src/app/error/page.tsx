@@ -1,6 +1,6 @@
-import { ButtonComponent } from "@components/common/button";
 import Image from "next/image";
 import Link from "next/link";
+import { ButtonComponent } from "@components/common/button";
 
 export default function ErrorPage() {
   return (

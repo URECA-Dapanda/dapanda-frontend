@@ -21,6 +21,7 @@ export default function SoldoutTabContent() {
     estimateSize: () => 162,
     mode: "button",
   });
+
   return (
     <div className="mt-12">
       <TabTitle listLength={totalNum ?? 0}></TabTitle>

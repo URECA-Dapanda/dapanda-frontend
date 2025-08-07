@@ -34,7 +34,11 @@ export default function ReviewItem({ data, handleClick, type }: ReviewItemProps)
               <p className="title-sm truncate w-[200px]">
                 {data.reviewerName ?? data.revieweeName}
               </p>
-              <Rating defaultValue={data.rating} readOnly value={data.rating}>
+              <Rating
+                defaultValue={Math.round((data.rating || 0) * 10) / 10}
+                readOnly
+                value={Math.round((data.rating || 0) * 10) / 10}
+              >
                 <RatingButton className="text-primary" />
               </Rating>
             </div>

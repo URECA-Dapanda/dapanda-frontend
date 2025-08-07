@@ -7,7 +7,8 @@ import { useTossPayment } from "@feature/mypage/hooks/useTossPayment";
 import { ButtonComponent } from "@components/common/button";
 
 export default function TossPaymentModal() {
-  const { isOpen, close } = useTossModalStore();
+  const isOpen = useTossModalStore((state) => state.isOpen);
+  const close = useTossModalStore((state) => state.close);
   const charge = useChargeStore((state) => state.charge);
   const { renderTossPayment, requestTossPayment } = useTossPayment();
   const rendered = useRef(false);
@@ -21,7 +22,6 @@ export default function TossPaymentModal() {
       console.log("호출됨: renderTossPayment with charge =", charge);
     }
   }, [isOpen, charge]);
-  
 
   if (!isOpen) return null;
 

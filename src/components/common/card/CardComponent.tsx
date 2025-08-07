@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
-import { Card } from "@ui/card";
 import { cva, type VariantProps } from "class-variance-authority";
+import { Card } from "@ui/card";
 
 import { cn } from "@lib/utils";
 

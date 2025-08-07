@@ -30,7 +30,7 @@ export default function SellerProfileCard({ sellerId }: SellerProfileCardProps) 
       </div>
 
       <div className="flex flex-col items-end justify-center gap-2">
-        <Rating readOnly value={data?.averageRating}>
+        <Rating readOnly value={Math.round((data?.averageRating || 0) * 10) / 10}>
           <RatingButton className="text-primary" />
         </Rating>
         <span className="text-gray-500 body-xs">({data?.reviewCount ?? 0}개의 리뷰)</span>
