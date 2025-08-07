@@ -1,7 +1,7 @@
 import { CheckCircle2 } from "lucide-react";
 import BaseModal from "@components/common/modal/BaseModal";
 import { ButtonComponent } from "@components/common/button";
-import type { SaleType } from "@/feature/map/hooks/useRegisterFormState";
+import type { SaleType } from "@feature/map/hooks/register/useRegisterFormState";
 
 interface Props {
   isOpen: boolean;
