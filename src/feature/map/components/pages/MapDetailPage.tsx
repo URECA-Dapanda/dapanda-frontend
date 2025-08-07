@@ -7,7 +7,6 @@ import { ButtonComponent } from "@components/common/button";
 import TimeSelectorSection from "@/feature/map/components/sections/product/TimeSelectorSection";
 import SellerSection from "@/feature/map/components/sections/seller/SellerSection";
 import { useMapDetailData } from "@feature/map/hooks/query/useMapDetailData";
-import { useTimeState } from "@/feature/map/hooks/useTimeState";
 import DeletePostModal from "@/feature/data/components/sections/modal/DeletePostModal";
 import { useWifiPriceRecommendation } from "@feature/map/hooks/query/useWifiPriceRecommendation";
 import { usePaymentStore } from "@feature/payment/stores/paymentStore";
@@ -16,6 +15,7 @@ import UsePaymentModals from "@feature/payment/hooks/usePaymentModals";
 import { showErrorToast, showInfoToast } from "@lib/toast";
 import { parseHHMMToTime, isWithinOperatingHours, getDurationMinutes } from "@/lib/time";
 import clsx from "clsx";
+import { useTimeState } from "@feature/map/hooks/state/useTimeState";
 
 export default function MapDetailPage() {
   const router = useRouter();
