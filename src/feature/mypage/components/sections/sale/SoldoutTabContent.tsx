@@ -39,6 +39,7 @@ export default function SoldoutTabContent() {
         height={
           "calc( 100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 108px - 102px - 8px - 12px - 44px - 24px )"
         }
+        subMessage="판매 완료된 상품이 없습니다."
       />
     </div>
   );

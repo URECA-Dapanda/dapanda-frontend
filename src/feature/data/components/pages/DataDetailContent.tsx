@@ -17,17 +17,27 @@ import {
 import { useDataDetail } from "@feature/data/hooks/useDataDetail";
 import { usePriceRecommendation } from "@feature/data/hooks/usePriceRecommendation";
 import { useMonthlyDataLimit } from "@feature/data/hooks/useMonthlyDataLimit";
-import DeletePostModal from "@feature/data/components/sections/modal/DeletePostModal";
-import DataRegistModal from "@feature/data/components/sections/modal/DataRegistModal";
 import OverLimitAlert from "@feature/data/components/sections/default/OverLimitAlert";
 import { BadgeComponent } from "@components/common/badge";
 import FlatCard from "@components/common/card/FlatCard";
 import { formatDataSize } from "@lib/formatters";
 import { formatRelativeTime } from "@lib/time";
+import { Skeleton } from "@ui/skeleton";
+import dynamic from "next/dynamic";
+
+const DeletePostModal = dynamic(import("@feature/data/components/sections/modal/DeletePostModal"), {
+  ssr: false,
+  loading: () => null,
+});
+
+const DataRegistModal = dynamic(import("@feature/data/components/sections/modal/DataRegistModal"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function DataDetailContent() {
   const { postId } = useParams<{ postId: string }>();
-  const { data, isPending, refetch } = useDataDetail(postId);
+  const { data, refetch } = useDataDetail(postId);
   const { setInfo } = usePaymentStore();
   const isOwner = data?.myProduct;
   const renderModals = UsePaymentModals();
@@ -38,61 +48,70 @@ export default function DataDetailContent() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const { remainingBuying, remainingSelling, isLoading: isLimitLoading } = useMonthlyDataLimit();
 
-  if (isPending || !data) return <div className="text-center mt-20">로딩 중...</div>;
-  const isOverLimit = remainingBuying !== undefined && data.remainAmount > remainingBuying;
-  const effectiveMaxAmount = Math.min(data.remainAmount, remainingBuying ?? data.remainAmount);
+  const isOverLimit = data && remainingBuying !== undefined && data.remainAmount > remainingBuying;
+  const effectiveMaxAmount = data
+    ? Math.min(data.remainAmount, remainingBuying ?? data.remainAmount)
+    : 0;
 
-  const handleSplitPurchase = () => {
-    setInfo(buildSplitPaymentInfo(data, selectedAmount));
-  };
-  const handleDefaultPurchase = () => {
-    setInfo(buildDefaultPaymentInfo(data));
-  };
+  const handleSplitPurchase = useCallback(() => {
+    if (data) setInfo(buildSplitPaymentInfo(data, selectedAmount));
+  }, [data, selectedAmount]);
+  const handleDefaultPurchase = useCallback(() => {
+    if (data) setInfo(buildDefaultPaymentInfo(data));
+  }, []);
 
   return (
     <div className="relative">
-      <TopSheet
-        type="post"
-        data={{
-          imageUrl: `/${data.remainAmount}.png`,
-          title: `${data.remainAmount}GB`,
-          price: data.price,
-          unitPrice: data.pricePer100MB,
-          uploadTime: formatRelativeTime(data.updatedAt),
-          recentPrice: recentPrice ? data.remainAmount * 10 * recentPrice : undefined,
-          averagePrice: averagePrice ? data.remainAmount * 10 * averagePrice : undefined,
-          hasReported: false,
-          memberName: data.memberName,
-          isOwner,
-        }}
-        onImageClick={() => {}}
-      />
+      {data ? (
+        <TopSheet
+          type="post"
+          data={{
+            imageUrl: `/${data.remainAmount}.png`,
+            title: `${data.remainAmount}GB`,
+            price: data.price,
+            unitPrice: data.pricePer100MB,
+            uploadTime: formatRelativeTime(data.updatedAt),
+            recentPrice: recentPrice ? data.remainAmount * 10 * recentPrice : undefined,
+            averagePrice: averagePrice ? data.remainAmount * 10 * averagePrice : undefined,
+            hasReported: false,
+            memberName: data.memberName,
+            isOwner,
+          }}
+          onImageClick={() => {}}
+        />
+      ) : (
+        <TopSheet.Skeleton />
+      )}
 
       <div className="space-y-28 pt-16">
-        <div className="flex items-center justify-between mx-24 mb-16">
-          <div className="title-md">판매자</div>
-          {isOwner && data.productState === "ACTIVE" && (
-            <div className="flex flex-row gap-4">
-              <ButtonComponent variant={"outlineGray"} size="xs" onClick={handleDeleteModalOpen}>
-                <Trash2 className="w-12 h-12 mr-2" />
-                삭제하기
-              </ButtonComponent>
-              <ButtonComponent
-                variant={"outlineGray"}
-                size="xs"
-                onClick={() => setEditModalOpen(true)}
-              >
-                <Pencil className="w-12 h-12 mr-2" />
-                수정하기
-              </ButtonComponent>
-            </div>
-          )}
-        </div>
+        {data ? (
+          <div className="flex items-center justify-between mx-24 mb-16">
+            <div className="title-md">판매자</div>
+            {isOwner && data.productState === "ACTIVE" && (
+              <div className="flex flex-row gap-4">
+                <ButtonComponent variant={"outlineGray"} size="xs" onClick={handleDeleteModalOpen}>
+                  <Trash2 className="w-12 h-12 mr-2" />
+                  삭제하기
+                </ButtonComponent>
+                <ButtonComponent
+                  variant={"outlineGray"}
+                  size="xs"
+                  onClick={() => setEditModalOpen(true)}
+                >
+                  <Pencil className="w-12 h-12 mr-2" />
+                  수정하기
+                </ButtonComponent>
+              </div>
+            )}
+          </div>
+        ) : (
+          <Skeleton className="flex items-center justify-between mx-24 mb-16" />
+        )}
 
-        <ProfileCard sellerId={data.memberId} />
+        {data ? <ProfileCard sellerId={data.memberId} /> : <ProfileCard.Skeleton />}
 
         <div className="space-y-12 px-24 pb-28">
-          {data.splitType && (
+          {data?.splitType && (
             <FlatCard size="xxl">
               <FilterCardContent
                 buttonText={isOwner ? "내 게시글입니다" : "구매하기"}
@@ -117,14 +136,16 @@ export default function DataDetailContent() {
             </div>
           )}
           {/* 구매 가능 초과 경고 */}
-          <OverLimitAlert
-            isSplitType={data.splitType}
-            selectedAmount={selectedAmount}
-            remainAmount={data.remainAmount}
-            remainingBuying={remainingBuying}
-          />
+          {data && (
+            <OverLimitAlert
+              isSplitType={data.splitType}
+              selectedAmount={selectedAmount}
+              remainAmount={data.remainAmount}
+              remainingBuying={remainingBuying}
+            />
+          )}
 
-          {!data.splitType && (
+          {!data?.splitType && (
             <div className="flex justify-center mt-24 mb-32">
               <ButtonComponent
                 variant={"primary"}
@@ -139,27 +160,32 @@ export default function DataDetailContent() {
         </div>
       </div>
 
-      <DeletePostModal isOpen={isOpen} setIsOpen={setIsOpen} />
-      <BaseBottomSheet
-        isOpen={editModalOpen}
-        onClose={() => setEditModalOpen(false)}
-        variant="modal"
-        zIndex={105}
-      >
-        <DataRegistModal
-          mode="edit"
-          onClose={() => {
-            setEditModalOpen(false);
-            refetch();
-          }}
-          defaultValues={{
-            productId: data.productId,
-            price: data.price,
-            amount: data.remainAmount,
-            isSplitType: data.splitType,
-          }}
-        />
-      </BaseBottomSheet>
+      {data && (
+        <>
+          <DeletePostModal isOpen={isOpen} setIsOpen={setIsOpen} />
+
+          <BaseBottomSheet
+            isOpen={editModalOpen}
+            onClose={() => setEditModalOpen(false)}
+            variant="modal"
+            zIndex={105}
+          >
+            <DataRegistModal
+              mode="edit"
+              onClose={() => {
+                setEditModalOpen(false);
+                refetch();
+              }}
+              defaultValues={{
+                productId: data.productId,
+                price: data.price,
+                amount: data.remainAmount,
+                isSplitType: data.splitType,
+              }}
+            />
+          </BaseBottomSheet>
+        </>
+      )}
 
       {renderModals}
     </div>

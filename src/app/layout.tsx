@@ -44,7 +44,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="flex flex-col box-border w-full bg-gray-300 justify-center items-center">
+      <body className="flex flex-col box-border w-full bg-white justify-center items-center">
         <ProviderWrapper>
           <FcmInitializer />
           <Analytics />

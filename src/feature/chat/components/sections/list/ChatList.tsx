@@ -13,6 +13,8 @@ import EmptyState from "@/components/common/empty/EmptyState";
 import { useWebSocketStore } from "@/stores/useWebSocketStore";
 import { formatRelativeTime } from "@/lib/time";
 import { useAuth } from "@hooks/useAuth";
+import LoadingPanda from "@components/common/empty/Loading";
+import Image from "next/image";
 
 export default function ChatList() {
   const { isLogin } = useAuth();
@@ -25,7 +27,11 @@ export default function ChatList() {
   const [isLoading, setIsLoading] = useState(true);
 
   // 채팅방 목록 가져오기
-  const { data: apiList, refetch: refetchChatRooms } = useQuery({
+  const {
+    data: apiList,
+    refetch: refetchChatRooms,
+    isPending,
+  } = useQuery({
     queryKey: ["chatRooms", selectedFilter],
     queryFn: () => getChatRoomList(10, selectedFilter),
     staleTime: 30 * 1000, // 30초간 캐시 유지
@@ -176,6 +182,7 @@ export default function ChatList() {
   useEffect(() => {
     refetchChatRooms();
   }, [selectedFilter, refetchChatRooms]);
+  console.log("ee", chatList);
 
   return (
     <div className="flex flex-col px-24 pt-20">
@@ -206,12 +213,17 @@ export default function ChatList() {
         </ButtonComponent>
       </div>
 
-      <div className="overflow-y-auto overflow-x-hidden scrollbar-track-transparent h-sheet-safe">
+      <div className="overflow-y-auto overflow-x-hidden scrollbar-track-transparent h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-107px-60px)]">
         <div className="py-24 mb-56">
-          {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-40">
-              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-              <p className="text-gray-500 mt-16">채팅방 목록을 불러오는 중...</p>
+          {isPending ? (
+            <div className="flex justify-center items-center overflow-hidden my-auto mt-[60px] pt-safe-top">
+              <Image
+                src={"/loading-panda.gif"}
+                priority
+                width={426}
+                height={240}
+                alt="loading panda"
+              />
             </div>
           ) : chatList.length === 0 ? (
             <EmptyState
