@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { getMapList } from "@/feature/map/api/mapRequest";
 import { useMapStore } from "@/feature/map/stores/useMapStore";
-import { useMapPageState } from "@/feature/map/hooks/useMapState";
+import { useMapPageState } from "@feature/map/hooks/state/useMapState";
 import { sortOptionMap } from "@/components/common/dropdown/dropdownConfig";
 
 // hooks/useInitialMapFetch.ts

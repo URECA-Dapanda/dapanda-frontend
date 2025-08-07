@@ -2,10 +2,10 @@
 
 import { useSearchParams } from "next/navigation";
 import { useRef } from "react";
-import { useInitializeMap } from "@/feature/map/hooks/useInitializeMap";
-import { useMyLocation } from "@/feature/map/hooks/useMyLocation";
+import { useInitializeMap } from "@feature/map/hooks/map/useInitializeMap";
+import { useMyLocation } from "@feature/map/hooks/map/useMyLocation";
 import { getMapDetailById } from "@/feature/map/api/getMapDetailById";
-import { useInteractiveMapMarker } from "@/feature/map/hooks/useInteractiveMapMarker";
+import { useInteractiveMapMarker } from "@feature/map/hooks/map/useInteractiveMapMarker";
 
 interface InteractiveMapProps {
   onLocationSelect: (lat: number, lng: number) => void;
