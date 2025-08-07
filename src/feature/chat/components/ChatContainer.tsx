@@ -127,6 +127,7 @@ export default function ChatContainer() {
     chatRoomIds.forEach((chatRoomId: number) => {
       subscribe(chatRoomId, (message) => {
         // 메시지가 오면 해당 채팅방의 unreadCount +1
+        console.debug(message);
         handleChatUpdate(chatRoomId);
       });
     });

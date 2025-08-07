@@ -2,7 +2,7 @@ export interface TitleProps {
   title: string;
 }
 
-export interface PartialTitleProps extends Partial<TitleProps> {}
+export type PartialTitleProps = Partial<TitleProps>;
 
 export interface TabProps {
   value: string;
